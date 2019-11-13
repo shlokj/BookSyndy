@@ -1,8 +1,10 @@
 package co.in.prodigyschool.passiton;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -21,9 +23,23 @@ public class SignInActivity extends AppCompatActivity {
             public void onClick(View view) {
                 userPhoneNumber = phnofield.getText().toString();
                 if (userPhoneNumber.length()==10) {
-                    Intent takeOTP = new Intent(SignInActivity.this, EnterOTPActivity.class);
-                    takeOTP.putExtra("USER_MOB", userPhoneNumber);
-                    startActivity(takeOTP);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(SignInActivity.this);
+                        builder.setTitle("Number Verification");
+                        builder.setMessage("We will be verifying the phone number you entered.\n\nPlease confirm that this is the correct number: "+userPhoneNumber);
+                        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Intent takeOTP = new Intent(SignInActivity.this, EnterOTPActivity.class);
+                                takeOTP.putExtra("USER_MOB", userPhoneNumber);
+                                startActivity(takeOTP);
+                            }
+                        });
+                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                            }
+                        });
+                        builder.show();
                 }
                 else {
                     View parentLayout = findViewById(android.R.id.content);

@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">BookSyndy</string>
     <string name="india_country_code">+91</string>
+    <string name="student">Student</string>
+    <string name="parent">Parent/guardian of a student</string>
+    <string name="i_am_a">I am a:</string>
+    <string name="enter_otp">Please enter the OTP we sent to your mobile number</string>
 </resources>
