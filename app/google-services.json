@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "619780025148",
+    "firebase_url": "https://booksyndy-e8ef6.firebaseio.com",
+    "project_id": "booksyndy-e8ef6",
+    "storage_bucket": "booksyndy-e8ef6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:619780025148:android:8ee36a2c4934e0b3258c39",
+        "android_client_info": {
+          "package_name": "co.in.prodigyschool.passiton"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "619780025148-a2kcnnjk2es2311lt0vnrjor8e5r3ufh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "co.in.prodigyschool.passiton",
+            "certificate_hash": "8f8a2c915da4edd98a77e54f13a402754ac2dd82"
+          }
+        },
+        {
+          "client_id": "619780025148-p7lk5ddbi16akimatg7g8mcjct2h6mdj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFv-Pb57N1LSzVR213kB2M5n8arDzX4Hs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "619780025148-p7lk5ddbi16akimatg7g8mcjct2h6mdj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
