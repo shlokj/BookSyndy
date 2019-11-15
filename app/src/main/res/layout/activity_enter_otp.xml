@@ -16,7 +16,7 @@
         android:ems="10"
         android:gravity="center"
         android:inputType="number"
-        android:maxLength="4"
+        android:maxLength="6"
         android:textSize="26sp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
