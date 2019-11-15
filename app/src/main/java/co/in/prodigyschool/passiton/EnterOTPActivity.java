@@ -85,7 +85,7 @@ public class EnterOTPActivity extends AppCompatActivity {
                 }
                 else {
                     View parentLayout = findViewById(android.R.id.content);
-                    Snackbar.make(parentLayout, "A valid verification code has 6 digits", Snackbar.LENGTH_SHORT)
+                    Snackbar.make(parentLayout, "Incorrect verification code", Snackbar.LENGTH_SHORT)
                             .setAction("OKAY", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
