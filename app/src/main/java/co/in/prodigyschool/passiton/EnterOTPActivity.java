@@ -49,9 +49,7 @@ public class EnterOTPActivity extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent startposact = new Intent(EnterOTPActivity.this, ParOrStudActivity.class);
-                startposact.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(startposact);
+
                 //check if otp is correct here
                 if (otpField.getText().toString().length()==6) {
                     verifyCode(otpField.getText().toString().trim());
