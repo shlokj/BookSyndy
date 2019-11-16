@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-    Button    signOut = findViewById(R.id.btnSignOut);
+        Button signOut = findViewById(R.id.btnSignOut);
         if(FirebaseAuth.getInstance().getCurrentUser() == null){
             //new user or session expired
             Intent signInIntent = new Intent(MainActivity.this, SignInActivity.class);

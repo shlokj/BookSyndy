@@ -6,4 +6,79 @@
     android:layout_height="match_parent"
     tools:context=".GetBoardActivity">
 
+    <RadioGroup
+        android:id="@+id/boardsButtonList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="24dp">
+
+        <RadioButton
+            android:id="@+id/cbseBoard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CBSE"
+            android:textSize="20sp"
+            android:layout_marginBottom="8dp"/>
+
+        <RadioButton
+            android:id="@+id/icseBoard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ICSE/ISC"
+            android:textSize="20sp"
+            android:layout_marginBottom="8dp"/>
+
+        <RadioButton
+            android:id="@+id/ibBoard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="IB"
+            android:textSize="20sp"
+            android:layout_marginBottom="8dp"/>
+
+        <RadioButton
+            android:id="@+id/igcseBoard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="IGCSE"
+            android:textSize="20sp"
+            android:layout_marginBottom="8dp"/>
+
+        <RadioButton
+            android:id="@+id/stateBoard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="State Board"
+            android:textSize="20sp"
+            android:layout_marginBottom="8dp"/>
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/boardQuestionTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Which board do you study under?"
+        android:layout_marginBottom="24dp"
+        android:layout_marginStart="16dp"
+        android:textSize="22sp"
+        android:textColor="@color/colorTextBlack"
+        app:layout_constraintBottom_toTopOf="@+id/gradesButtonList"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_navigate_next_24px"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
