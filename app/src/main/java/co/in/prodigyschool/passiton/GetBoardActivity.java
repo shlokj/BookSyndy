@@ -72,7 +72,9 @@ public class GetBoardActivity extends AppCompatActivity {
                     boardNumber=5;
                 }
                 getFinalAnswer.putExtra("BOARD_NUMBER",boardNumber);
-                startActivity(getFinalAnswer);
+                if (board!=-1) {
+                    startActivity(getFinalAnswer);
+                }
             }
         });
     }
