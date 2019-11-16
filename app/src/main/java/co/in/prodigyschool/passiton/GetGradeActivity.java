@@ -40,7 +40,6 @@ public class GetGradeActivity extends AppCompatActivity {
         }
         grades = (RadioGroup) findViewById(R.id.gradesButtonList);
         grades.clearCheck();
-        grade = grades.getCheckedRadioButtonId();
         getBoard = new Intent(GetGradeActivity.this, GetBoardActivity.class);
         getBoard.putExtra("IS_PARENT", isParent);
         getBoard.putExtra("FIRST_NAME",firstName);
@@ -49,7 +48,7 @@ public class GetGradeActivity extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                grade = grades.getCheckedRadioButtonId();
                 if (grade==-1) {
                     View parentLayout = findViewById(android.R.id.content);
                     Snackbar.make(parentLayout, "Please select an option", Snackbar.LENGTH_SHORT)
@@ -81,7 +80,9 @@ public class GetGradeActivity extends AppCompatActivity {
                     gradeNumber=6;
                 }
                 getBoard.putExtra("GRADE_NUMBER",gradeNumber);
-                startActivity(getBoard);
+                if (grade!=-1) {
+                    startActivity(getBoard);
+                }
             }
         });
     }

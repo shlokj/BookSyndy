@@ -30,12 +30,11 @@ public class GetBoardActivity extends AppCompatActivity {
         gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
         boardQuestion = (TextView) findViewById(R.id.boardQuestionTV);
         if (isParent) {
-            boardQuestion.setText("Which board is your child studying in?");
+            boardQuestion.setText("Which board is your child studying under?");
         }
         boards = (RadioGroup) findViewById(R.id.boardsButtonList);
         boards.clearCheck();
-        board = boards.getCheckedRadioButtonId();
-        getFinalAnswer = new Intent(GetBoardActivity.this, GetBoardActivity.class);
+        getFinalAnswer = new Intent(GetBoardActivity.this, GetJoinPurposeActivity.class);
         getFinalAnswer.putExtra("IS_PARENT", isParent);
         getFinalAnswer.putExtra("FIRST_NAME",firstName);
         getFinalAnswer.putExtra("LAST_NAME",lastName);
@@ -44,7 +43,7 @@ public class GetBoardActivity extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                board = boards.getCheckedRadioButtonId();
                 if (board==-1) {
                     View parentLayout = findViewById(android.R.id.content);
                     Snackbar.make(parentLayout, "Please select an option", Snackbar.LENGTH_SHORT)

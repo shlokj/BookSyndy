@@ -4,10 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GetBoardActivity">
+    tools:context=".GetJoinPurposeActivity">
+
 
     <RadioGroup
-        android:id="@+id/boardsButtonList"
+        android:id="@+id/reasonsButtonList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -16,66 +17,37 @@
         android:layout_marginLeft="24dp">
 
         <RadioButton
-            android:id="@+id/cbseBoard"
+            android:id="@+id/toSell"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/cbse"
-            android:textSize="20sp"
-            android:paddingStart="8dp"
-            android:layout_marginBottom="8dp"/>
-
-        <RadioButton
-            android:id="@+id/icseBoard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/icse"
-            android:paddingStart="8dp"
+            android:text="@string/to_sell"
             android:textSize="20sp"
             android:layout_marginBottom="8dp"/>
 
         <RadioButton
-            android:id="@+id/ibBoard"
+            android:id="@+id/toBuy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/ib"
+            android:text="@string/to_buy"
             android:textSize="20sp"
-            android:paddingStart="8dp"
-            android:layout_marginBottom="8dp"/>
-
-        <RadioButton
-            android:id="@+id/igcseBoard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/igcse"
-            android:paddingStart="8dp"
-            android:textSize="20sp"
-            android:layout_marginBottom="8dp"/>
-
-        <RadioButton
-            android:id="@+id/stateBoard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/state_board"
-            android:textSize="20sp"
-            android:paddingStart="8dp"
             android:layout_marginBottom="8dp"/>
 
     </RadioGroup>
 
     <TextView
-        android:id="@+id/boardQuestionTV"
+        android:id="@+id/reasonQuestionTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/board_question"
+        android:text="@string/im_here_to"
         android:layout_marginBottom="24dp"
         android:layout_marginStart="16dp"
         android:textSize="22sp"
         android:textColor="@color/colorTextBlack"
-        app:layout_constraintBottom_toTopOf="@+id/boardsButtonList"
+        app:layout_constraintBottom_toTopOf="@+id/reasonsButtonList"
         app:layout_constraintStart_toStartOf="parent"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab6"
+        android:id="@+id/fab7"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_width="wrap_content"
@@ -85,5 +57,6 @@
         android:layout_alignParentEnd="true"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_navigate_next_24px"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
