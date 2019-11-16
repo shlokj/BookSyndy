@@ -4,6 +4,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RadioGroup;
@@ -31,7 +33,7 @@ public class ParOrStudActivity extends AppCompatActivity {
                 if (studOrPar==-1) {
                     View parentLayout = findViewById(android.R.id.content);
                     Snackbar.make(parentLayout, "Please select an option", Snackbar.LENGTH_SHORT)
-                            .setAction("Okay", new View.OnClickListener() {
+                            .setAction("OKAY", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
 
@@ -42,9 +44,15 @@ public class ParOrStudActivity extends AppCompatActivity {
                 }
                 else if (studOrPar==R.id.studentoption) {
                     isParent=false;
+                    Intent getName = new Intent(ParOrStudActivity.this, CustNameActivity.class);
+                    getName.putExtra("IS_PARENT", isParent);
+                    startActivity(getName);
                 }
                 else {
                     isParent=true;
+                    Intent getName = new Intent(ParOrStudActivity.this, CustNameActivity.class);
+                    getName.putExtra("IS_PARENT", isParent);
+                    startActivity(getName);
                 }
             }
         });

@@ -2,13 +2,87 @@ package co.in.prodigyschool.passiton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.RadioGroup;
+import android.widget.TextView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 public class GetGradeActivity extends AppCompatActivity {
-
+    boolean isParent;
+    TextView gradeQuestion;
+    RadioGroup grades;
+    String firstName, lastName;
+    int grade;
+    int gradeNumber;
+//     Grade numbers:
+//     1 to 5: 1
+//     6 to 8: 2
+//     9: 3
+//     10: 4
+//     11:5
+//     12: 6
+//
+    Intent getBoard;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_grade);
+        isParent = getIntent().getBooleanExtra("IS_PARENT", false);
+        firstName = getIntent().getStringExtra("FIRST_NAME");
+        lastName = getIntent().getStringExtra("LAST_NAME");
+        gradeQuestion = (TextView) findViewById(R.id.gradeQuestionTV);
+        if (isParent) {
+            gradeQuestion.setText("Which grade is your child studying in?");
+        }
+        grades = (RadioGroup) findViewById(R.id.gradesButtonList);
+        grades.clearCheck();
+        grade = grades.getCheckedRadioButtonId();
+        getBoard = new Intent(GetGradeActivity.this, GetBoardActivity.class);
+        getBoard.putExtra("IS_PARENT", isParent);
+        getBoard.putExtra("FIRST_NAME",firstName);
+        getBoard.putExtra("LAST_NAME",lastName);
+        FloatingActionButton next = (FloatingActionButton) findViewById(R.id.fab5);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (grade==-1) {
+                    View parentLayout = findViewById(android.R.id.content);
+                    Snackbar.make(parentLayout, "Please select an option", Snackbar.LENGTH_SHORT)
+                            .setAction("OKAY", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                }
+                            })
+                            .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                            .show();
+                }
+                else if (grade==R.id.grade5OrBelow) {
+                    gradeNumber=1;
+                }
+                else if (grade==R.id.grade6to8) {
+                    gradeNumber=2;
+                }
+                else if (grade==R.id.grade9) {
+                    gradeNumber=3;
+                }
+                else if (grade==R.id.grade10) {
+                    gradeNumber=4;
+                }
+                else if (grade==R.id.grade11) {
+                    gradeNumber=5;
+                }
+                else if (grade==R.id.grade12) {
+                    gradeNumber=6;
+                }
+                getBoard.putExtra("GRADE_NUMBER",gradeNumber);
+                startActivity(getBoard);
+            }
+        });
     }
 }

@@ -6,4 +6,86 @@
     android:layout_height="match_parent"
     tools:context=".GetGradeActivity">
 
+    <RadioGroup
+        android:id="@+id/gradesButtonList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="24dp">
+
+        <RadioButton
+            android:id="@+id/grade5OrBelow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="5 or below"
+            android:textSize="20sp"
+            android:layout_marginBottom="8dp"/>
+
+        <RadioButton
+            android:id="@+id/grade6to8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="6 to 8"
+            android:textSize="20sp"
+            android:layout_marginBottom="8dp"/>
+
+        <RadioButton
+            android:id="@+id/grade9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="9"
+            android:textSize="20sp"
+            android:layout_marginBottom="8dp"/>
+
+        <RadioButton
+            android:id="@+id/grade10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="10"
+            android:textSize="20sp"
+            android:layout_marginBottom="8dp"/>
+
+        <RadioButton
+            android:id="@+id/grade11"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="11"
+            android:textSize="20sp"
+            android:layout_marginBottom="8dp"/>
+
+        <RadioButton
+            android:id="@+id/grade12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="12"
+            android:textSize="20sp"
+            android:layout_marginBottom="8dp"/>
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/gradeQuestionTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Which grade are you in?"
+        android:layout_marginBottom="24dp"
+        android:layout_marginStart="16dp"
+        android:textSize="22sp"
+        android:textColor="@color/colorTextBlack"
+        app:layout_constraintBottom_toTopOf="@+id/gradesButtonList"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_navigate_next_24px"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.concurrent.TimeUnit;
@@ -28,18 +29,29 @@ public class EnterOTPActivity extends AppCompatActivity {
     private String ctryCode = "+91";
     private String verificationId;
     private FirebaseAuth mAuth;
+    private TextView resendOtp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter_otp);
         final EditText otpField = (EditText) findViewById(R.id.editTextOtp);
         userPhoneNumber = getIntent().getStringExtra("USER_MOB");
+        resendOtp = (TextView) findViewById(R.id.resendOTPButton);
+        resendOtp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendVerificationCode(userPhoneNumber);
+            }
+        });
         mAuth = FirebaseAuth.getInstance();
         FloatingActionButton next = findViewById(R.id.fab2);
         sendVerificationCode(userPhoneNumber);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent startposact = new Intent(EnterOTPActivity.this, ParOrStudActivity.class);
+                startposact.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(startposact);
                 //check if otp is correct here
                 if (otpField.getText().toString().length()==6) {
                     verifyCode(otpField.getText().toString().trim());

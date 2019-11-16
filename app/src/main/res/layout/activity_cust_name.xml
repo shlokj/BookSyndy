@@ -21,8 +21,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="First"
-            android:inputType="textPersonName"
-            android:text="Name" />
+            android:layout_weight="1"
+            android:inputType="textPersonName" />
 
         <EditText
             android:id="@+id/lastName"
@@ -31,8 +31,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:hint="Last"
-            android:inputType="textPersonName"
-            android:text="Name" />
+            android:inputType="textPersonName" />
     </LinearLayout>
 
     <TextView
