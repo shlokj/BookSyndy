@@ -12,9 +12,14 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -25,13 +30,14 @@ import java.util.concurrent.TimeUnit;
 
 public class EnterOTPActivity extends AppCompatActivity {
     String userPhoneNumber;
-    boolean otpCorrect=false;
-    boolean isRegisteredUser=false;
+    boolean otpCorrect = false;
     private String ctryCode = "+91";
     private String verificationId;
     private FirebaseAuth mAuth;
     private TextView resendOtp, enterOtpMessage;
     private ProgressDialog progressDialog;
+    FirebaseFirestore db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,11 +64,10 @@ public class EnterOTPActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //check if otp is correct here
-                if (otpField.getText().toString().length()==6) {
+                if (otpField.getText().toString().length() == 6) {
                     verifyCode(otpField.getText().toString().trim());
                     progressDialog.show();
-                }
-                else {
+                } else {
                     View parentLayout = findViewById(android.R.id.content);
                     Snackbar.make(parentLayout, "A valid verification code has 6 digits", Snackbar.LENGTH_SHORT)
                             .setAction("OKAY", new View.OnClickListener() {
@@ -78,7 +83,7 @@ public class EnterOTPActivity extends AppCompatActivity {
         });
     }
 
-    private void verifyCode(String code){
+    private void verifyCode(String code) {
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
         signInwithCredential(credential);
     }
@@ -87,23 +92,10 @@ public class EnterOTPActivity extends AppCompatActivity {
         mAuth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
+                    isRegisteredUser();
 
-                    if (!isRegisteredUser) {
-                        progressDialog.dismiss();
-                        Intent startposact = new Intent(EnterOTPActivity.this, ParOrStudActivity.class);
-                        startposact.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(startposact);
-                    }
-                    else {
-                        progressDialog.dismiss();
-                        Intent startmainact = new Intent(EnterOTPActivity.this, MainActivity.class);
-                        startmainact.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(startmainact);
-                    }
-
-                }
-                else {
+                } else {
                     progressDialog.dismiss();
                     View parentLayout = findViewById(android.R.id.content);
                     Snackbar.make(parentLayout, "Incorrect verification code", Snackbar.LENGTH_SHORT)
@@ -121,7 +113,7 @@ public class EnterOTPActivity extends AppCompatActivity {
 
     }
 
-    private void sendVerificationCode(String number){
+    private void sendVerificationCode(String number) {
         final String phoneNumber = ctryCode + number;
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 phoneNumber,        // Phone number to verify
@@ -142,16 +134,62 @@ public class EnterOTPActivity extends AppCompatActivity {
         @Override
         public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
             String code = phoneAuthCredential.getSmsCode();
-            if(code != null){
+            if (code != null) {
                 verifyCode(code);
             }
         }
 
         @Override
         public void onVerificationFailed(@NonNull FirebaseException e) {
-            Toast.makeText(EnterOTPActivity.this,e.getMessage(),Toast.LENGTH_LONG).show();
+            Toast.makeText(EnterOTPActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
     };
 
+    private void isRegisteredUser() {
+
+        final String userId = ctryCode + userPhoneNumber;
+        db = FirebaseFirestore.getInstance();
+        db.collection("users")
+                //.whereEqualTo("phone", userId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if (document.getId().equalsIgnoreCase(userId)) {
+
+                                    Intent startmainact = new Intent(EnterOTPActivity.this, MainActivity.class);
+                                    startmainact.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(startmainact);
+                                    finish();
+                                    return;
+                                }
+                                //Log.d(TAG, document.getId() + " => " + document.getData());
+                            }
+
+                            Intent startposact = new Intent(EnterOTPActivity.this, ParOrStudActivity.class);
+
+                            startposact.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(startposact);
+                            finish();
+
+                        } else {
+                            View parentLayout = findViewById(android.R.id.content);
+                            Snackbar.make(parentLayout, "DataBase Error: Try Again", Snackbar.LENGTH_SHORT)
+                                    .setAction("OKAY", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+
+                                        }
+                                    })
+                                    .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                                    .show();
+                        }
+                    }
+
+                });
+
+    }
 
 }
