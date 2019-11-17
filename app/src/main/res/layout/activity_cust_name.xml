@@ -41,7 +41,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="56dp"
         android:layout_marginBottom="24dp"
-        android:fontFamily="@font/open_sans"
+        android:fontFamily="@font/roboto_light"
         android:text="Great!\nWhat's your name?"
         android:textColor="@color/colorTextBlack"
         android:textSize="26sp"

@@ -13,7 +13,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginLeft="24dp">
+        android:layout_marginLeft="24dp"
+        android:fontFamily="@font/roboto_light">
 
         <RadioButton
             android:id="@+id/cbseBoard"
@@ -21,6 +22,7 @@
             android:layout_height="wrap_content"
             android:text="@string/cbse"
             android:textSize="20sp"
+            android:fontFamily="@font/roboto_light"
             android:paddingStart="8dp"
             android:layout_marginBottom="8dp"/>
 
@@ -29,6 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/icse"
+            android:fontFamily="@font/roboto_light"
             android:paddingStart="8dp"
             android:textSize="20sp"
             android:layout_marginBottom="8dp"/>
@@ -39,6 +42,7 @@
             android:layout_height="wrap_content"
             android:text="@string/ib"
             android:textSize="20sp"
+            android:fontFamily="@font/roboto_light"
             android:paddingStart="8dp"
             android:layout_marginBottom="8dp"/>
 
@@ -47,6 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/igcse"
+            android:fontFamily="@font/roboto_light"
             android:paddingStart="8dp"
             android:textSize="20sp"
             android:layout_marginBottom="8dp"/>
@@ -57,6 +62,7 @@
             android:layout_height="wrap_content"
             android:text="@string/state_board"
             android:textSize="20sp"
+            android:fontFamily="@font/roboto_light"
             android:paddingStart="8dp"
             android:layout_marginBottom="8dp"/>
 
@@ -71,6 +77,7 @@
         android:layout_marginStart="16dp"
         android:textSize="22sp"
         android:textColor="@color/colorTextBlack"
+        android:fontFamily="@font/roboto_light"
         app:layout_constraintBottom_toTopOf="@+id/boardsButtonList"
         app:layout_constraintStart_toStartOf="parent"/>
 

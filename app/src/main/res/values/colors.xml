@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#06768D</color>
-    <color name="colorPrimaryDark">#046276</color>
-    <color name="colorAccent">#1B1B1B</color>
+    <color name="colorPrimary">#202020</color>
+    <color name="colorPrimaryDark">#151515</color>
+    <color name="colorAccent">#06768D</color>
     <color name="colorLink">#05C5CF</color>
     <color name="colorTextBlack">#151515</color>
 </resources>

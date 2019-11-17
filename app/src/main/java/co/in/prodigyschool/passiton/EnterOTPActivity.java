@@ -1,5 +1,6 @@
 package co.in.prodigyschool.passiton;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -29,7 +30,8 @@ public class EnterOTPActivity extends AppCompatActivity {
     private String ctryCode = "+91";
     private String verificationId;
     private FirebaseAuth mAuth;
-    private TextView resendOtp;
+    private TextView resendOtp, enterOtpMessage;
+    private ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,13 +48,19 @@ public class EnterOTPActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         FloatingActionButton next = findViewById(R.id.fab2);
         sendVerificationCode(userPhoneNumber);
+        enterOtpMessage = (TextView) findViewById(R.id.aboutotpverif);
+        enterOtpMessage.setText(enterOtpMessage.getText().toString() + " +91 " + userPhoneNumber);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Please wait while we check your verification code");
+        progressDialog.setTitle("Verification");
+        progressDialog.setCancelable(false);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 //check if otp is correct here
                 if (otpField.getText().toString().length()==6) {
                     verifyCode(otpField.getText().toString().trim());
+                    progressDialog.show();
                 }
                 else {
                     View parentLayout = findViewById(android.R.id.content);
@@ -82,11 +90,13 @@ public class EnterOTPActivity extends AppCompatActivity {
                 if(task.isSuccessful()){
 
                     if (!isRegisteredUser) {
+                        progressDialog.dismiss();
                         Intent startposact = new Intent(EnterOTPActivity.this, ParOrStudActivity.class);
                         startposact.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(startposact);
                     }
                     else {
+                        progressDialog.dismiss();
                         Intent startmainact = new Intent(EnterOTPActivity.this, MainActivity.class);
                         startmainact.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(startmainact);
@@ -94,6 +104,7 @@ public class EnterOTPActivity extends AppCompatActivity {
 
                 }
                 else {
+                    progressDialog.dismiss();
                     View parentLayout = findViewById(android.R.id.content);
                     Snackbar.make(parentLayout, "Incorrect verification code", Snackbar.LENGTH_SHORT)
                             .setAction("OKAY", new View.OnClickListener() {

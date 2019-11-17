@@ -20,6 +20,7 @@
             android:id="@+id/toSell"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_light"
             android:text="@string/to_sell"
             android:textSize="20sp"
             android:layout_marginBottom="8dp"/>
@@ -29,6 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/to_buy"
+            android:fontFamily="@font/roboto_light"
             android:textSize="20sp"
             android:layout_marginBottom="8dp"/>
 
@@ -41,6 +43,7 @@
         android:text="@string/im_here_to"
         android:layout_marginBottom="24dp"
         android:layout_marginStart="16dp"
+        android:fontFamily="@font/roboto_light"
         android:textSize="22sp"
         android:textColor="@color/colorTextBlack"
         app:layout_constraintBottom_toTopOf="@+id/reasonsButtonList"

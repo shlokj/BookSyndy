@@ -20,6 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="5 or below"
+            android:fontFamily="@font/roboto_light"
             android:textSize="20sp"
             android:layout_marginBottom="8dp"/>
 
@@ -28,6 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="6 to 8"
+            android:fontFamily="@font/roboto_light"
             android:textSize="20sp"
             android:layout_marginBottom="8dp"/>
 
@@ -36,6 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="9"
+            android:fontFamily="@font/roboto_light"
             android:textSize="20sp"
             android:layout_marginBottom="8dp"/>
 
@@ -43,6 +46,7 @@
             android:id="@+id/grade10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_light"
             android:text="10"
             android:textSize="20sp"
             android:layout_marginBottom="8dp"/>
@@ -50,6 +54,7 @@
         <RadioButton
             android:id="@+id/grade11"
             android:layout_width="match_parent"
+            android:fontFamily="@font/roboto_light"
             android:layout_height="wrap_content"
             android:text="11"
             android:textSize="20sp"
@@ -60,6 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="12"
+            android:fontFamily="@font/roboto_light"
             android:textSize="20sp"
             android:layout_marginBottom="8dp"/>
 
@@ -67,11 +73,13 @@
 
     <TextView
         android:id="@+id/gradeQuestionTV"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_light"
         android:text="Which grade are you in?"
         android:layout_marginBottom="24dp"
         android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:textSize="22sp"
         android:textColor="@color/colorTextBlack"
         app:layout_constraintBottom_toTopOf="@+id/gradesButtonList"
