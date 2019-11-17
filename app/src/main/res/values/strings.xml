@@ -5,8 +5,8 @@
     <string name="parent">Parent/guardian of a student</string>
     <string name="i_am_a">I am a:</string>
     <string name="enter_otp">Please enter the OTP we sent to your mobile number</string>
-    <string name="to_buy">To find used books</string>
-    <string name="to_sell">To sell / give away books</string>
+    <string name="to_buy">Find used books</string>
+    <string name="to_sell">Sell / give away books</string>
     <string name="im_here_to">I\'m here to:</string>
     <string name="cbse">CBSE</string>
     <string name="icse">ICSE/ISC</string>
