@@ -85,7 +85,22 @@ public class EnterOTPActivity extends AppCompatActivity {
 
     private void verifyCode(String code) {
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
-        signInwithCredential(credential);
+        try {
+            signInwithCredential(credential);
+        }
+        catch (Exception e) {
+            progressDialog.dismiss();
+            View parentLayout = findViewById(android.R.id.content);
+            Snackbar.make(parentLayout, "Incorrect verification code", Snackbar.LENGTH_SHORT)
+                    .setAction("OKAY", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                        }
+                    })
+                    .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                    .show();
+        }
     }
 
     private void signInwithCredential(PhoneAuthCredential credential) {

@@ -25,7 +25,8 @@ public class GetGradeActivity extends AppCompatActivity {
 //     10: 4
 //     11:5
 //     12: 6
-//
+
+    boolean tmp=true;
     Intent getBoard;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,8 +80,15 @@ public class GetGradeActivity extends AppCompatActivity {
                 else if (grade==R.id.grade12) {
                     gradeNumber=6;
                 }
+                else if (grade==R.id.university) {
+                    gradeNumber=7;
+                    Intent getDegree = new Intent(GetGradeActivity.this, GetCollegeSpecificsActivity.class);
+                    getDegree.putExtra("GRADE_NUMBER",gradeNumber);
+                    startActivity(getDegree);
+                    tmp = false;
+                }
                 getBoard.putExtra("GRADE_NUMBER",gradeNumber);
-                if (grade!=-1) {
+                if (grade!=-1 && grade!=7 && tmp) {
                     startActivity(getBoard);
                 }
             }

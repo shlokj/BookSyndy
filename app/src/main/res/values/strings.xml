@@ -14,4 +14,14 @@
     <string name="igcse">IGCSE</string>
     <string name="state_board">State Board</string>
     <string name="board_question">Which board do you study under?</string>
+    <string name="b_tech">B. Tech</string>
+    <string name="b_sc">B. Sc</string>
+    <string name="b_com">B. Com</string>
+    <string name="ba">BA</string>
+    <string name="b_ed">B. Ed</string>
+    <string name="bba">BBA</string>
+    <string name="bca">BCA</string>
+    <string name="llb">LLB</string>
+    <string name="mbbs">MBBS</string>
+    <string name="degree_question">What are you currently studying?</string>
 </resources>

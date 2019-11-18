@@ -87,6 +87,7 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
             lastName = getIntent().getStringExtra("LAST_NAME");
             gradeNumber = getIntent().getIntExtra("GRADE_NUMBER", 4);
             boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 1);
+            boardNumber = getIntent().getIntExtra("DEGREE_NUMBER", boardNumber);
             phoneNumber = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
             curFirebaseUser = new User(firstName, lastName, phoneNumber, isParent, toSell, gradeNumber, boardNumber);
             db = FirebaseFirestore.getInstance();
