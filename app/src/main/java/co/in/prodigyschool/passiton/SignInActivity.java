@@ -40,7 +40,7 @@ public class SignInActivity extends AppCompatActivity {
                 userPhoneNumber = phnofield.getText().toString();
                 if (userPhoneNumber.length() == 10) {
                     if (!checkConnection(getApplicationContext())) {
-                        Toast.makeText(getApplicationContext(),"Internet Permission Required",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(),"Internet Required",Toast.LENGTH_LONG).show();
                         return;
                     }
                     AlertDialog.Builder builder = new AlertDialog.Builder(SignInActivity.this);
