@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 
 public class EnterOTPActivity extends AppCompatActivity {
     String userPhoneNumber;
-    boolean otpCorrect = false;
+
     private String ctryCode = "+91";
     private String verificationId;
     private FirebaseAuth mAuth;
@@ -44,7 +44,7 @@ public class EnterOTPActivity extends AppCompatActivity {
         setContentView(R.layout.activity_enter_otp);
         final EditText otpField = (EditText) findViewById(R.id.editTextOtp);
         userPhoneNumber = getIntent().getStringExtra("USER_MOB");
-        resendOtp = (TextView) findViewById(R.id.resendOTPButton);
+        resendOtp =  findViewById(R.id.resendOTPButton);
         resendOtp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -54,8 +54,8 @@ public class EnterOTPActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         FloatingActionButton next = findViewById(R.id.fab2);
         sendVerificationCode(userPhoneNumber);
-        enterOtpMessage = (TextView) findViewById(R.id.aboutotpverif);
-        enterOtpMessage.setText(enterOtpMessage.getText().toString() + " +91 " + userPhoneNumber);
+        enterOtpMessage =  findViewById(R.id.aboutotpverif);
+        enterOtpMessage.setText(enterOtpMessage.getText().toString() + ctryCode + userPhoneNumber);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Please wait while we check your verification code");
         progressDialog.setTitle("Verification");
@@ -168,8 +168,10 @@ public class EnterOTPActivity extends AppCompatActivity {
                 //.whereEqualTo("phone", userId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        try{
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 if (document.getId().equalsIgnoreCase(userId)) {
@@ -202,9 +204,24 @@ public class EnterOTPActivity extends AppCompatActivity {
                                     .show();
                         }
                     }
+                        catch(Exception e){
+                            View parentLayout = findViewById(android.R.id.content);
+                            Snackbar.make(parentLayout, "DataBase Error: Try Again", Snackbar.LENGTH_SHORT)
+                                    .setAction("OKAY", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+
+                                        }
+                                    })
+                                    .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                                    .show();
+                        }
+                    }
 
                 });
 
+
     }
+
 
 }

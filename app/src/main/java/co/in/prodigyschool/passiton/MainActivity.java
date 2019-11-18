@@ -88,6 +88,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void populateUserDetails() {
-        Toast.makeText(getApplicationContext(), "User Login Successful", Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), "User Login Successful", Toast.LENGTH_LONG).show();
     }
 }

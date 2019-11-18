@@ -83,6 +83,9 @@ public class GetGradeActivity extends AppCompatActivity {
                 else if (grade==R.id.university) {
                     gradeNumber=7;
                     Intent getDegree = new Intent(GetGradeActivity.this, GetCollegeSpecificsActivity.class);
+                    getDegree.putExtra("IS_PARENT", isParent);
+                    getDegree.putExtra("FIRST_NAME",firstName);
+                    getDegree.putExtra("LAST_NAME",lastName);
                     getDegree.putExtra("GRADE_NUMBER",gradeNumber);
                     startActivity(getDegree);
                     tmp = false;
