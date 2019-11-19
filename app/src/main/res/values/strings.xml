@@ -24,4 +24,6 @@
     <string name="llb">LLB</string>
     <string name="mbbs">MBBS</string>
     <string name="degree_question">What are you currently studying?</string>
+    <string name="open">open</string>
+    <string name="close">close</string>
 </resources>

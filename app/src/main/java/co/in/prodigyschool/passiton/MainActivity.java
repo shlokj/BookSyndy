@@ -2,13 +2,16 @@ package co.in.prodigyschool.passiton;
 
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -16,6 +19,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -24,13 +28,49 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 public class MainActivity extends AppCompatActivity {
 
-
+    private DrawerLayout dl;
+    private ActionBarDrawerToggle t;
+    private NavigationView nv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        dl = (DrawerLayout)findViewById(R.id.activity_main);
+        t = new ActionBarDrawerToggle(this, dl,R.string.open, R.string.close);
+
+        dl.addDrawerListener(t);
+        t.syncState();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        nv = (NavigationView)findViewById(R.id.nv);
+
+        nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                int id = menuItem.getItemId();
+                switch(id)
+                {
+                    case R.id.account:
+                        Toast.makeText(MainActivity.this, "My Account",Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.mybooks:
+                        Toast.makeText(MainActivity.this, "My books",Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.help:
+                        Toast.makeText(MainActivity.this, "Help",Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.logout:
+                        Toast.makeText(MainActivity.this, "Logout",Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        return true;
+                }
+                return true;
+            }
+        });
         Button signOut = findViewById(R.id.btnSignOut);
         doesSessionExist();
         signOut.setOnClickListener(new View.OnClickListener() {
