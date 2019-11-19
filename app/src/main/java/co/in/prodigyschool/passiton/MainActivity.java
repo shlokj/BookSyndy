@@ -31,18 +31,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button signOut = findViewById(R.id.btnSignOut);
-        doesSessionExist();
-        signOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                Intent signout = new Intent(MainActivity.this, SignInActivity.class);
-                signout.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(signout);
 
-            }
-        });
+        doesSessionExist();
+
     }
 
 
@@ -70,7 +61,9 @@ public class MainActivity extends AppCompatActivity {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
                                         if (document.getId().equalsIgnoreCase(userId)) {
                                             //user session exist
-                                            populateUserDetails();
+                                            Intent homeActivity = new Intent(MainActivity.this,HomeActivity.class);
+                                            homeActivity.putExtra("userDetails",document.getData().toString());
+                                            startActivity(homeActivity);
                                             return;
                                         }
 
@@ -100,9 +93,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void populateUserDetails() {
-        //Toast.makeText(getApplicationContext(), "User Login Successful", Toast.LENGTH_LONG).show();
-    }
+
 
 
     public static boolean checkConnection(Context context) {

@@ -84,9 +84,11 @@ public class EnterOTPActivity extends AppCompatActivity {
     }
 
     private void verifyCode(String code) {
-        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
+
         try {
+            PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
             signInwithCredential(credential);
+
         }
         catch (Exception e) {
             progressDialog.dismiss();
