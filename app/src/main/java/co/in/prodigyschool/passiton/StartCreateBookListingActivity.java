@@ -24,7 +24,7 @@ public class StartCreateBookListingActivity extends AppCompatActivity {
         materialTypeButtons = (RadioGroup) findViewById(R.id.materialTypeRadioGroup);
         materialTypeButtons.clearCheck();
 
-        FloatingActionButton next = findViewById(R.id.fab12);
+        FloatingActionButton next = findViewById(R.id.fab11);
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override

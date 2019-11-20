@@ -15,12 +15,12 @@
         <item
             android:id="@+id/nav_chats"
             android:icon="@drawable/ic_chat_24px"
-            android:title="@string/starred" />
+            android:title="My chats" />
 
         <item
-            android:id="@+id/nav_settings"
+            android:id="@+id/nav_starred"
             android:icon="@drawable/ic_settings_applications_24px"
-            android:title="@string/settings" />
+            android:title="@string/starred" />
 
         <item
             android:id="@+id/nav_help"
