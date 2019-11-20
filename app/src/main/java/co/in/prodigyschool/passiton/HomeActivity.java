@@ -38,8 +38,9 @@ public class HomeActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent startBookPub = new Intent(HomeActivity.this, StartCreateBookListingActivity.class);
+                startBookPub.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(startBookPub);
             }
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
