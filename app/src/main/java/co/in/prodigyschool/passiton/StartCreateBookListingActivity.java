@@ -46,4 +46,10 @@ public class StartCreateBookListingActivity extends AppCompatActivity {
         });
 
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent homeActivity = new Intent(StartCreateBookListingActivity.this,HomeActivity.class);
+        startActivity(homeActivity);
+    }
 }
