@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".StartCreateBookListingActivity"></activity>
+        <activity android:name=".GetBookNameActivity"></activity>
+        <activity android:name=".StartCreateBookListingActivity" />
         <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"

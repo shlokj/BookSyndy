@@ -46,4 +46,6 @@
     <string name="get_started">Let\'s get started.</string>
     <string name="list_book_simple">Just a few simple steps to list your book.</string>
     <string name="book_desc_q">What best describes what you\'re here to put up?</string>
+    <string name="title_question">What\'s the title of your book?</string>
+    <string name="a_detailed_name">A detailed name</string>
 </resources>
