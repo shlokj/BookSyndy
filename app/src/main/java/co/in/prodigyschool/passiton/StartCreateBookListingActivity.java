@@ -14,6 +14,7 @@ public class StartCreateBookListingActivity extends AppCompatActivity {
 
     RadioGroup materialTypeButtons;
     int bookTypeId;
+    boolean isTextbook;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,18 @@ public class StartCreateBookListingActivity extends AppCompatActivity {
                             })
                             .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
                             .show();
+                }
+                else if (bookTypeId==R.id.textbookOption) {
+                    isTextbook=true;
+                    Intent getBookName = new Intent(StartCreateBookListingActivity.this, GetBookNameActivity.class);
+                    getBookName.putExtra("IS_TEXTBOOK", isTextbook);
+                    startActivity(getBookName);
+                }
+                else if (bookTypeId==R.id.notesOption) {
+                    isTextbook=false;
+                    Intent getBookName = new Intent(StartCreateBookListingActivity.this, GetBookNameActivity.class);
+                    getBookName.putExtra("IS_TEXTBOOK", isTextbook);
+                    startActivity(getBookName);
                 }
             }
         });

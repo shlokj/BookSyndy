@@ -79,7 +79,6 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(signout);
             finish();
         }
-
         return super.onOptionsItemSelected(item);
     }
 

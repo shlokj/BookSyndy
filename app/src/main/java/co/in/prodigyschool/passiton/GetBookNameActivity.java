@@ -2,13 +2,52 @@ package co.in.prodigyschool.passiton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 public class GetBookNameActivity extends AppCompatActivity {
+
+    boolean isTextbook;
+    String bookName;
+    EditText bookNameField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_book_name);
+        isTextbook = getIntent().getBooleanExtra("IS_TEXTBOOK",true);
+
+        bookNameField = (EditText) findViewById(R.id.bookName);
+        FloatingActionButton next = (FloatingActionButton) findViewById(R.id.fab12);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bookName = bookNameField.getText().toString();
+                if (bookName.length() < 10) {
+                    View parentLayout = findViewById(android.R.id.content);
+                    Snackbar.make(parentLayout, "Please enter at least 10 characters", Snackbar.LENGTH_SHORT)
+                            .setAction("OKAY", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                }
+                            })
+                            .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                            .show();
+                }
+                else {
+                    Intent getBookGradeAndBoard = new Intent(GetBookNameActivity.this, GetBookBoardAndClassActivity.class);
+                    getBookGradeAndBoard.putExtra("IS_TEXTBOOK", isTextbook);
+                    getBookGradeAndBoard.putExtra("BOOK_NAME",bookName);
+                    startActivity(getBookGradeAndBoard);
+                }
+            }
+        });
+
     }
 }
