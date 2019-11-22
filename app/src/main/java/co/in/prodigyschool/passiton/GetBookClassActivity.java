@@ -4,11 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class GetBookBoardAndClassActivity extends AppCompatActivity {
+public class GetBookClassActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_get_book_board_and_class);
+        setContentView(R.layout.activity_get_book_class);
     }
 }

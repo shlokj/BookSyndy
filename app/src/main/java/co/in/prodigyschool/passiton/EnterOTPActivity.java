@@ -56,7 +56,7 @@ public class EnterOTPActivity extends AppCompatActivity {
         });
         FloatingActionButton next = findViewById(R.id.fab2);
         enterOtpMessage =  findViewById(R.id.aboutotpverif);
-        enterOtpMessage.setText(enterOtpMessage.getText().toString() + ctryCode + userPhoneNumber);
+        enterOtpMessage.setText(enterOtpMessage.getText().toString() + " " + ctryCode + userPhoneNumber);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Please wait while we check your verification code");
         progressDialog.setTitle("Verification");

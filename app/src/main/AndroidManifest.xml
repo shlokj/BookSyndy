@@ -14,9 +14,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".GetBookDescriptionActivity"
-            android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".GetBookBoardAndClassActivity" />
+        <activity android:name=".GetBookBoardActivity"></activity>
+        <activity
+            android:name=".GetBookDescriptionActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".GetBookClassActivity" />
         <activity
             android:name=".GetBookNameActivity"
             android:windowSoftInputMode="adjustResize" />

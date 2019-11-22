@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -42,7 +41,7 @@ public class GetBookDescriptionActivity extends AppCompatActivity {
                             .show();
                 }
                 else {
-                    Intent getBookDescription = new Intent(GetBookDescriptionActivity.this, GetBookBoardAndClassActivity.class);
+                    Intent getBookDescription = new Intent(GetBookDescriptionActivity.this, GetBookClassActivity.class);
                     getBookDescription.putExtra("IS_TEXTBOOK", isTextbook);
                     getBookDescription.putExtra("BOOK_NAME",bookName);
                     startActivity(getBookDescription);
