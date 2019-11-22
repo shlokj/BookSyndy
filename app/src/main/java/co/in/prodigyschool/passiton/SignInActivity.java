@@ -37,12 +37,12 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                userPhoneNumber = phnofield.getText().toString();
+                userPhoneNumber = phnofield.getText().toString().trim();
                 if (userPhoneNumber.length() == 10) {
                     if (!checkConnection(getApplicationContext())) {
                         Toast.makeText(getApplicationContext(),"Internet Required",Toast.LENGTH_LONG).show();
                         return;
-                    }
+                }
                     AlertDialog.Builder builder = new AlertDialog.Builder(SignInActivity.this);
                     builder.setTitle("Number Verification");
                     builder.setMessage("We will be verifying the phone number you entered.\n\nPlease confirm that this is the correct number: " + userPhoneNumber);

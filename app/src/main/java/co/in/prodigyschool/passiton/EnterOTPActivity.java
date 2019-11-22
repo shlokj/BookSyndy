@@ -31,19 +31,22 @@ import java.util.concurrent.TimeUnit;
 public class EnterOTPActivity extends AppCompatActivity {
     String userPhoneNumber;
 
-    private String ctryCode = "+91";
+    private final String ctryCode = "+91";
     private String verificationId;
     private FirebaseAuth mAuth;
     private TextView resendOtp, enterOtpMessage;
     private ProgressDialog progressDialog;
+    private EditText otpField;
     FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter_otp);
-        final EditText otpField = (EditText) findViewById(R.id.editTextOtp);
+        mAuth = FirebaseAuth.getInstance();
+        otpField = findViewById(R.id.editTextOtp);
         userPhoneNumber = getIntent().getStringExtra("USER_MOB");
+        sendVerificationCode(userPhoneNumber);
         resendOtp =  findViewById(R.id.resendOTPButton);
         resendOtp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,9 +54,7 @@ public class EnterOTPActivity extends AppCompatActivity {
                 sendVerificationCode(userPhoneNumber);
             }
         });
-        mAuth = FirebaseAuth.getInstance();
         FloatingActionButton next = findViewById(R.id.fab2);
-        sendVerificationCode(userPhoneNumber);
         enterOtpMessage =  findViewById(R.id.aboutotpverif);
         enterOtpMessage.setText(enterOtpMessage.getText().toString() + ctryCode + userPhoneNumber);
         progressDialog = new ProgressDialog(this);
@@ -153,12 +154,14 @@ public class EnterOTPActivity extends AppCompatActivity {
             String code = phoneAuthCredential.getSmsCode();
             if (code != null) {
                 verifyCode(code);
+                otpField.setText(code);
+                progressDialog.show();
             }
         }
 
         @Override
         public void onVerificationFailed(@NonNull FirebaseException e) {
-            Toast.makeText(EnterOTPActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
         }
     };
 
