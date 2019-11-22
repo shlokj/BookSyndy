@@ -19,7 +19,7 @@
         android:maxLength="60"
         android:hint="@string/a_detailed_name"
         android:layout_weight="1"
-        android:inputType="textMultiLine" />
+        android:inputType="textCapSentences" />
 
 
     <TextView
@@ -27,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="40dp"
         android:layout_marginBottom="24dp"
         android:fontFamily="@font/roboto_light"
         android:text="@string/title_question"
@@ -54,7 +54,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:text="@string/textbook_naming_instructions"
-        app:layout_constraintTop_toBottomOf="@+id/bookName"
-        tools:layout_editor_absoluteX="23dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bookName" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -20,9 +20,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="First"
+            android:hint="@string/first"
             android:layout_weight="1"
-            android:inputType="textPersonName" />
+            android:inputType="textCapWords|textPersonName" />
 
         <EditText
             android:id="@+id/lastName"
@@ -30,8 +30,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="Last"
-            android:inputType="textPersonName" />
+            android:hint="@string/last"
+            android:inputType="textCapWords|textPersonName" />
     </LinearLayout>
 
     <TextView
@@ -58,7 +58,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_navigate_next_24px"/>
+        app:srcCompat="@drawable/ic_navigate_next_24px"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

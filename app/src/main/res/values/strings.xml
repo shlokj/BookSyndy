@@ -48,5 +48,12 @@
     <string name="book_desc_q">What best describes what you\'re here to put up?</string>
     <string name="title_question">What\'s the title of your book?</string>
     <string name="a_detailed_name">A detailed name</string>
-    <string name="textbook_naming_instructions">Make the title as clear and comprehensive as possible. Try to inlcude all basic details.\n\nFor example, \'NCERT Geography Class 10 Contemporary India Part 2\' is more likely to be found than is \'Geography Textbook Class X\'.</string>
+    <string name="textbook_naming_instructions">Make the title as clear and comprehensive as possible. Try to include all basic details.\n\nFor example, \'NCERT Geography Class 10 Contemporary India Part 2\' is more likely to be found than is \'Geography Textbook Class X\'.</string>
+    <string name="notes_name_question">What material is this?</string>
+    <string name="othermaterial_naming_instructions">Make the title as clear and comprehensive as possible. Try to include all basic details. Since what you\'re putting up isn\'t a published textbook, make sure the name you enter adequately describes it.\n\nFor example, \'Class 11 chemistry worksheets chapter 2\' details your listing well.</string>
+    <string name="first">First</string>
+    <string name="last">Last</string>
+    <string name="description">Description</string>
+    <string name="description_req">Please provide a brief description.</string>
+    <string name="desc_desc">Mention all relevant details, like the condition of the book/material, here.</string>
 </resources>

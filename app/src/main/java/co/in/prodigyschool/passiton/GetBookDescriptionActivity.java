@@ -11,31 +11,25 @@ import android.widget.TextView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
-public class GetBookNameActivity extends AppCompatActivity {
+public class GetBookDescriptionActivity extends AppCompatActivity {
 
     boolean isTextbook;
-    String bookName;
-    EditText bookNameField;
-    TextView nameQuestion, namingInstructuions;
+    String bookName, bookDescription;
+    EditText bookDescField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_get_book_name);
+        setContentView(R.layout.activity_get_book_description);
+        bookName = getIntent().getStringExtra("BOOK_NAME");
         isTextbook = getIntent().getBooleanExtra("IS_TEXTBOOK",true);
-        nameQuestion = (TextView)findViewById(R.id.titleQTV);
-        namingInstructuions = (TextView) findViewById(R.id.namingInstructions);
-        if(!isTextbook) {
-            nameQuestion.setText(R.string.notes_name_question);
-            namingInstructuions.setText(R.string.othermaterial_naming_instructions);
-        }
-        bookNameField = (EditText) findViewById(R.id.bookName);
-        FloatingActionButton next = (FloatingActionButton) findViewById(R.id.fab12);
+        bookDescField = (EditText) findViewById(R.id.bookDescription);
+        FloatingActionButton next = (FloatingActionButton) findViewById(R.id.fab13);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                bookName = bookNameField.getText().toString();
-                if (bookName.length() < 10) {
+                bookDescription = bookDescField.getText().toString();
+                if ( bookDescription.length() < 10) {
                     View parentLayout = findViewById(android.R.id.content);
                     Snackbar.make(parentLayout, "Please enter at least 10 characters", Snackbar.LENGTH_SHORT)
                             .setAction("OKAY", new View.OnClickListener() {
@@ -48,7 +42,7 @@ public class GetBookNameActivity extends AppCompatActivity {
                             .show();
                 }
                 else {
-                    Intent getBookDescription = new Intent(GetBookNameActivity.this, GetBookDescriptionActivity.class);
+                    Intent getBookDescription = new Intent(GetBookDescriptionActivity.this, GetBookBoardAndClassActivity.class);
                     getBookDescription.putExtra("IS_TEXTBOOK", isTextbook);
                     getBookDescription.putExtra("BOOK_NAME",bookName);
                     startActivity(getBookDescription);
