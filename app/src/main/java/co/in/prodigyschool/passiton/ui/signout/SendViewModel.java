@@ -1,4 +1,4 @@
-package co.in.prodigyschool.passiton.ui.send;
+package co.in.prodigyschool.passiton.ui.signout;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

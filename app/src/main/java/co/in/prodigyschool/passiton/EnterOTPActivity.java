@@ -170,7 +170,7 @@ public class EnterOTPActivity extends AppCompatActivity {
         final String userId = ctryCode + userPhoneNumber;
         db = FirebaseFirestore.getInstance();
         db.collection("users")
-                //.whereEqualTo("phone", userId)
+                .whereEqualTo("phone", userId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
 

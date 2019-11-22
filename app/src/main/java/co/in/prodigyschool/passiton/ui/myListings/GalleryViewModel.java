@@ -1,16 +1,16 @@
-package co.in.prodigyschool.passiton.ui.tools;
+package co.in.prodigyschool.passiton.ui.myListings;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class ToolsViewModel extends ViewModel {
+public class GalleryViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public ToolsViewModel() {
+    public GalleryViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is tools fragment");
+        mText.setValue("This is gallery fragment");
     }
 
     public LiveData<String> getText() {

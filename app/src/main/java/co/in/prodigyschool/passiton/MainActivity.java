@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
                                             Intent homeActivity = new Intent(MainActivity.this,HomeActivity.class);
                                             homeActivity.putExtra("userDetails",document.getData().toString());
                                             startActivity(homeActivity);
+                                            finish();
                                             return;
                                         }
 

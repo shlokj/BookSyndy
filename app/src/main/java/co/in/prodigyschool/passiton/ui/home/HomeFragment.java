@@ -43,7 +43,7 @@ public class HomeFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        // specify an adapter (see also next example)
+        // specify an adapter
         mAdapter = new HomeAdapter(HomeItem.mText,HomeItem.picPath);
         recyclerView.setAdapter(mAdapter);
 

@@ -1,4 +1,4 @@
-package co.in.prodigyschool.passiton.ui.slideshow;
+package co.in.prodigyschool.passiton.ui.myChats;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

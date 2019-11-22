@@ -72,13 +72,7 @@ public class HomeActivity extends AppCompatActivity {
         if(id == R.id.action_settings){
 
         }
-        else if(id == R.id.action_signout){
-            FirebaseAuth.getInstance().signOut();
-            Intent signout = new Intent(HomeActivity.this, SignInActivity.class);
-            signout.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(signout);
-            finish();
-        }
+
         return super.onOptionsItemSelected(item);
     }
 
