@@ -126,6 +126,8 @@ public class EnterOTPActivity extends AppCompatActivity {
                             })
                             .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
                             .show();
+                    progressDialog.dismiss();
+
                 }
             }
         });
@@ -225,9 +227,5 @@ public class EnterOTPActivity extends AppCompatActivity {
                     }
 
                 });
-
-
     }
-
-
 }
