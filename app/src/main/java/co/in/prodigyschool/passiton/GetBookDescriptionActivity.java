@@ -28,7 +28,7 @@ public class GetBookDescriptionActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 bookDescription = bookDescField.getText().toString();
-                if ( bookDescription.length() < 10) {
+                if (bookDescription.length() < 10) {
                     View parentLayout = findViewById(android.R.id.content);
                     Snackbar.make(parentLayout, "Please enter at least 10 characters", Snackbar.LENGTH_SHORT)
                             .setAction("OKAY", new View.OnClickListener() {
@@ -44,6 +44,7 @@ public class GetBookDescriptionActivity extends AppCompatActivity {
                     Intent getBookDescription = new Intent(GetBookDescriptionActivity.this, GetBookClassActivity.class);
                     getBookDescription.putExtra("IS_TEXTBOOK", isTextbook);
                     getBookDescription.putExtra("BOOK_NAME",bookName);
+                    getBookDescription.putExtra("BOOK_DESCRIPTION",bookDescription);
                     startActivity(getBookDescription);
                 }
             }

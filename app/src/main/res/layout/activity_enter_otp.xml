@@ -61,7 +61,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_navigate_next_24px"/>
+        app:srcCompat="@drawable/ic_navigate_next_24px"/>
 
     <TextView
         android:id="@+id/aboutotpverif"
