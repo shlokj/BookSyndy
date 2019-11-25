@@ -1,10 +1,12 @@
 package co.in.prodigyschool.passiton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -19,7 +21,8 @@ public class GetBoardActivity extends AppCompatActivity {
     String firstName, lastName;
     int gradeNumber, board, boardNumber;
     Intent getFinalAnswer;
-    
+    CheckBox competitiveExam;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +42,8 @@ public class GetBoardActivity extends AppCompatActivity {
         getFinalAnswer.putExtra("FIRST_NAME",firstName);
         getFinalAnswer.putExtra("LAST_NAME",lastName);
         getFinalAnswer.putExtra("GRADE_NUMBER",gradeNumber);
+        competitiveExam = (CheckBox) findViewById(R.id.competitiveExam);
+        competitiveExam.setTypeface(ResourcesCompat.getFont(getApplicationContext(), R.font.roboto_light));
         FloatingActionButton next = (FloatingActionButton) findViewById(R.id.fab6);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +80,7 @@ public class GetBoardActivity extends AppCompatActivity {
                     boardNumber=6;
                 }
                 getFinalAnswer.putExtra("BOARD_NUMBER",boardNumber);
+                getFinalAnswer.putExtra("COMPETITIVE_EXAM",competitiveExam.isChecked());
                 if (board!=-1) {
                     startActivity(getFinalAnswer);
                 }

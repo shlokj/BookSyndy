@@ -21,7 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class GetJoinPurposeActivity extends AppCompatActivity {
 
-    boolean isParent, toSell;
+    boolean isParent, toSell, competitiveExam;
     TextView reasonsQuestion;
     RadioGroup reasons;
     String firstName, lastName,phoneNumber;
@@ -34,11 +34,6 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_join_purpose);
-
-
-
-
-
 
         reasonsQuestion = (TextView) findViewById(R.id.reasonQuestionTV);
         reasons = (RadioGroup) findViewById(R.id.reasonsButtonList);
@@ -81,13 +76,14 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
     }
     private void registerUser() {
         try {
-
+            competitiveExam = getIntent().getBooleanExtra("COMPETITIVE_EXAM", false);
             isParent = getIntent().getBooleanExtra("IS_PARENT", false);
             firstName = getIntent().getStringExtra("FIRST_NAME");
             lastName = getIntent().getStringExtra("LAST_NAME");
             gradeNumber = getIntent().getIntExtra("GRADE_NUMBER", 4);
             boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 1);
             boardNumber = getIntent().getIntExtra("DEGREE_NUMBER", boardNumber);
+
             phoneNumber = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
             curFirebaseUser = new User(firstName, lastName, phoneNumber, isParent, toSell, gradeNumber, boardNumber);
             db = FirebaseFirestore.getInstance();

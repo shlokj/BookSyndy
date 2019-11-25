@@ -58,4 +58,5 @@
     <string name="notes_grade_question">Which grade is this material for?</string>
     <string name="my_chats">My chats</string>
     <string name="home">Home</string>
+    <string name="comp_exam_interest">I\'m interested in competitive exam prep</string>
 </resources>

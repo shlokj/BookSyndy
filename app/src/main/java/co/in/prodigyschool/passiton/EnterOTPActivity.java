@@ -92,6 +92,7 @@ public class EnterOTPActivity extends AppCompatActivity {
 
         }
         catch (Exception e) {
+            progressDialog.dismiss();
             View parentLayout = findViewById(android.R.id.content);
             Snackbar.make(parentLayout, "Incorrect verification code (t1)", Snackbar.LENGTH_SHORT)
                     .setAction("OKAY", new View.OnClickListener() {
@@ -103,7 +104,6 @@ public class EnterOTPActivity extends AppCompatActivity {
                     .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
                     .show();
             progressDialog.dismiss();
-
         }
     }
 
@@ -201,7 +201,7 @@ public class EnterOTPActivity extends AppCompatActivity {
 
                         } else {
                             View parentLayout = findViewById(android.R.id.content);
-                            Snackbar.make(parentLayout, "DataBase Error: Try Again", Snackbar.LENGTH_SHORT)
+                            Snackbar.make(parentLayout, "Database error: please try again", Snackbar.LENGTH_SHORT)
                                     .setAction("OKAY", new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
@@ -214,7 +214,7 @@ public class EnterOTPActivity extends AppCompatActivity {
                     }
                         catch(Exception e){
                             View parentLayout = findViewById(android.R.id.content);
-                            Snackbar.make(parentLayout, "DataBase Error: Try Again", Snackbar.LENGTH_SHORT)
+                            Snackbar.make(parentLayout, "Database error: please try again", Snackbar.LENGTH_SHORT)
                                     .setAction("OKAY", new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
