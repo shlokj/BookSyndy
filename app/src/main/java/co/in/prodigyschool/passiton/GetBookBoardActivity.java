@@ -19,7 +19,7 @@ public class GetBookBoardActivity extends AppCompatActivity {
     String bookName, bookDescription;
     int board;
     int gradeNumber, boardNumber;
-    Intent getBookPic;
+    Intent getPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +35,11 @@ public class GetBookBoardActivity extends AppCompatActivity {
             bookBoardQuestion.setText("Which educational board is your material for?");
         }
         boards = (RadioGroup) findViewById(R.id.bookBoardsButtonList);
-        getBookPic = new Intent(GetBookBoardActivity.this, GetBookPictureActivity.class);
-        getBookPic.putExtra("IS_TEXTBOOK", isTextbook);
-        getBookPic.putExtra("BOOK_NAME",bookName);
-        getBookPic.putExtra("BOOK_DESCRIPTION",bookDescription);
-        getBookPic.putExtra("GRADE_NUMBER",gradeNumber);
+        getPrice = new Intent(GetBookBoardActivity.this, GetBookPriceActivity.class);
+        getPrice.putExtra("IS_TEXTBOOK", isTextbook);
+        getPrice.putExtra("BOOK_NAME",bookName);
+        getPrice.putExtra("BOOK_DESCRIPTION",bookDescription);
+        getPrice.putExtra("GRADE_NUMBER",gradeNumber);
         FloatingActionButton next = (FloatingActionButton) findViewById(R.id.fab15);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,9 +75,9 @@ public class GetBookBoardActivity extends AppCompatActivity {
                 else if (board==R.id.otherBoardBook) {
                     boardNumber=6;
                 }
-                getBookPic.putExtra("BOARD_NUMBER",boardNumber);
+                getPrice.putExtra("BOARD_NUMBER",boardNumber);
                 if (board!=-1) {
-                    startActivity(getBookPic);
+                    startActivity(getPrice);
                 }
             }
         });

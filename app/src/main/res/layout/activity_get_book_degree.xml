@@ -8,7 +8,7 @@
 
 
     <RadioGroup
-        android:id="@+id/degreesButtonList"
+        android:id="@+id/bookDegreesButtonList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -17,7 +17,7 @@
         android:layout_marginLeft="24dp">
 
         <RadioButton
-            android:id="@+id/btech"
+            android:id="@+id/btechBook"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/b_tech"
@@ -26,7 +26,7 @@
             android:layout_marginBottom="8dp"/>
 
         <RadioButton
-            android:id="@+id/bsc"
+            android:id="@+id/bscBook"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/b_sc"
@@ -35,7 +35,7 @@
             android:layout_marginBottom="8dp"/>
 
         <RadioButton
-            android:id="@+id/bcom"
+            android:id="@+id/bcomBook"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/b_com"
@@ -44,7 +44,7 @@
             android:layout_marginBottom="8dp"/>
 
         <RadioButton
-            android:id="@+id/ba"
+            android:id="@+id/baBook"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_light"
@@ -53,7 +53,7 @@
             android:layout_marginBottom="8dp"/>
 
         <RadioButton
-            android:id="@+id/bba"
+            android:id="@+id/bbaBook"
             android:layout_width="match_parent"
             android:fontFamily="@font/roboto_light"
             android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
             android:layout_marginBottom="8dp"/>
 
         <RadioButton
-            android:id="@+id/bca"
+            android:id="@+id/bcaBook"
             android:layout_width="match_parent"
             android:fontFamily="@font/roboto_light"
             android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
             android:layout_marginBottom="8dp"/>
 
         <RadioButton
-            android:id="@+id/bed"
+            android:id="@+id/bedBook"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/b_ed"
@@ -80,7 +80,7 @@
             android:layout_marginBottom="8dp"/>
 
         <RadioButton
-            android:id="@+id/llb"
+            android:id="@+id/llbBook"
             android:layout_width="match_parent"
             android:fontFamily="@font/roboto_light"
             android:layout_height="wrap_content"
@@ -89,7 +89,7 @@
             android:layout_marginBottom="8dp"/>
 
         <RadioButton
-            android:id="@+id/mbbs"
+            android:id="@+id/mbbsBook"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/mbbs"
@@ -104,13 +104,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto_light"
-        android:text="Which degree is this book for?"
+        android:text="@string/which_degree_book"
         android:layout_marginBottom="24dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:textSize="22sp"
         android:textColor="@color/colorTextBlack"
-        app:layout_constraintBottom_toTopOf="@+id/degreesButtonList"
+        app:layout_constraintBottom_toTopOf="@+id/bookDegreesButtonList"
         app:layout_constraintStart_toStartOf="parent"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -120,7 +120,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/ic_navigate_next_24px"/>

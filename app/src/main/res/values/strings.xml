@@ -42,7 +42,7 @@
     <string name="starred">Starred</string>
     <string name="my_listings">My listings</string>
     <string name="settings">Settings</string>
-    <string name="get_started">Let\'s get started.</string>
+    <string name="get_started">Let\'s get started!</string>
     <string name="list_book_simple">Just a few simple steps to list your book.</string>
     <string name="book_desc_q">What best describes what you\'re here to put up?</string>
     <string name="title_question">What\'s the title of your book?</string>
@@ -62,4 +62,5 @@
     <string name="book_for_free_q">Would you be giving this book for free?</string>
     <string name="rupee_symbol">\u20B9</string>
     <string name="book_pricing_instructions">Keep this price nominal and as low as possible, keeping in mind that you no longer need this book.\n\nFor example, if the book\'s MRP is Rs. 200, give it at less than Rs. 30.</string>
+    <string name="which_degree_book">Which degree is this book for?</string>
 </resources>
