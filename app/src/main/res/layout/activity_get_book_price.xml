@@ -6,4 +6,97 @@
     android:layout_height="match_parent"
     tools:context=".GetBookPriceActivity">
 
+    <TextView
+        android:id="@+id/bookPriceQTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/roboto_light"
+        android:text="@string/book_for_free_q"
+        android:textColor="@color/colorTextBlack"
+        android:textSize="26sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleX="1.6"
+        android:scaleY="1.6"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="20dp"
+        android:checked="true"
+        app:layout_constraintStart_toEndOf="@+id/switchNo"
+        app:layout_constraintTop_toBottomOf="@+id/bookPriceQTV" />
+
+    <TextView
+        android:id="@+id/switchNo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="24dp"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bookPriceQTV" />
+
+    <TextView
+        android:id="@+id/switchYes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="20dp"
+        android:text="Yes"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/switch1"
+        app:layout_constraintTop_toBottomOf="@+id/bookPriceQTV" />
+
+    <TextView
+        android:id="@+id/reqEnterPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="If not, please enter a price below."
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switch1" />
+
+    <EditText
+        android:id="@+id/bookPriceField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:inputType="number"
+        android:enabled="false"
+        android:focusable="false"
+        app:layout_constraintStart_toEndOf="@+id/rupeeSymbolTV"
+        app:layout_constraintTop_toBottomOf="@+id/reqEnterPrice" />
+
+    <TextView
+        android:id="@+id/rupeeSymbolTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/rupee_symbol"
+        android:textColor="#505050"
+        android:textSize="26sp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reqEnterPrice" />
+
+    <TextView
+        android:id="@+id/pricingInstructions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/book_pricing_instructions"
+        android:layout_margin="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bookPriceField" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
