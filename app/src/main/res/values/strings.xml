@@ -61,5 +61,5 @@
     <string name="comp_exam_interest">I\'m interested in competitive exam prep</string>
     <string name="book_for_free_q">Would you be giving this book for free?</string>
     <string name="rupee_symbol">\u20B9</string>
-    <string name="book_pricing_instructions">Keep this price nominal and as low as possible, keeping in mind that you no longer need this book.\n\nFor example, if the book's MRP is Rs. 200, give it at less than Rs. 30.</string>
+    <string name="book_pricing_instructions">Keep this price nominal and as low as possible, keeping in mind that you no longer need this book.\n\nFor example, if the book\'s MRP is Rs. 200, give it at less than Rs. 30.</string>
 </resources>

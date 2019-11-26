@@ -3,14 +3,15 @@ package co.in.prodigyschool.passiton.Data;
 public class User {
 
     private String firstName,lastName,phone;
-    private boolean isParent,toSell;
+    private boolean isParent,toSell,competitiveExam;
     private int gradeNumber,boardNumber;
+
 
 
     public User() {
     }
 
-    public User(String firstName, String lastName,String phone, boolean isParent, boolean toSell, int gradeNumber, int boardNumber) {
+    public User(String firstName, String lastName,String phone, boolean isParent, boolean toSell, int gradeNumber, int boardNumber,boolean competitiveExam) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
@@ -18,6 +19,7 @@ public class User {
         this.toSell = toSell;
         this.gradeNumber = gradeNumber;
         this.boardNumber = boardNumber;
+        this.competitiveExam = competitiveExam;
     }
 
     public String getPhone() {
@@ -74,5 +76,12 @@ public class User {
 
     public void setBoardNumber(int boardNumber) {
         this.boardNumber = boardNumber;
+    }
+    public boolean isCompetitiveExam() {
+        return competitiveExam;
+    }
+
+    public void setCompetitiveExam(boolean competitiveExam) {
+        this.competitiveExam = competitiveExam;
     }
 }

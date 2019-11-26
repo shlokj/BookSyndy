@@ -87,7 +87,7 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
                 competitiveExam=false;
             }
             phoneNumber = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
-            curFirebaseUser = new User(firstName, lastName, phoneNumber, isParent, toSell, gradeNumber, boardNumber);
+            curFirebaseUser = new User(firstName, lastName, phoneNumber, isParent, toSell, gradeNumber, boardNumber,competitiveExam);
             db = FirebaseFirestore.getInstance();
 
             // Add a new document with a generated ID
@@ -111,7 +111,7 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
 
 
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "User Register Unsuccessful: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "User Register Failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 }
