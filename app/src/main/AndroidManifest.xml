@@ -15,13 +15,14 @@
         android:roundIcon="@drawable/ic_booksyndy_logo_smallc"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".GetBookSellerLocationActivity"></activity>
+
         <service
             android:name=".GetAddressIntentService"
             android:exported="false" />
 
         <activity android:name=".GetBookPictureActivity" />
         <activity android:name=".GetBookPriceActivity" />
-
         <activity android:name=".GetBookDegreeActivity" />
         <activity android:name=".GetBookBoardActivity" />
         <activity
