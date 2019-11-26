@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -18,6 +19,7 @@ public class GetBookDegreeActivity extends AppCompatActivity {
     RadioGroup degrees;
     Intent getPrice;
 
+    TextView bookDegreeQ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +34,10 @@ public class GetBookDegreeActivity extends AppCompatActivity {
         boardNumber = getIntent().getIntExtra("BOARD_NUMBER",1);
 //TODO: Change default board number
         getPrice = new Intent(GetBookDegreeActivity.this, GetBookPriceActivity.class);
+        bookDegreeQ = (TextView) findViewById(R.id.bookDegreeQuestionTV);
+        if (isTextbook) {
 
+        }
         FloatingActionButton next = (FloatingActionButton) findViewById(R.id.fab16);
         next.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -22,7 +22,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Switch
-        android:id="@+id/switch1"
+        android:id="@+id/switchFree"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scaleX="1.6"
@@ -53,28 +53,28 @@
         android:layout_marginStart="20dp"
         android:text="Yes"
         android:textSize="20sp"
-        app:layout_constraintStart_toEndOf="@+id/switch1"
+        app:layout_constraintStart_toEndOf="@+id/switchFree"
         app:layout_constraintTop_toBottomOf="@+id/bookPriceQTV" />
 
     <TextView
         android:id="@+id/reqEnterPrice"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
-        android:text="If not, please enter a price below."
+        android:text="If you aren't giving this book for free, please enter a price below."
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switch1" />
+        app:layout_constraintTop_toBottomOf="@+id/switchFree" />
 
     <EditText
         android:id="@+id/bookPriceField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:layout_marginStart="8dp"
         android:ems="10"
         android:inputType="number"
-        android:enabled="false"
-        android:focusable="false"
+        android:text="0"
         app:layout_constraintStart_toEndOf="@+id/rupeeSymbolTV"
         app:layout_constraintTop_toBottomOf="@+id/reqEnterPrice" />
 

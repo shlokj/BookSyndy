@@ -10,5 +10,6 @@ public class GetBookSellerLocationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_book_seller_location);
+//        TODO: Comes after get price activity
     }
 }
