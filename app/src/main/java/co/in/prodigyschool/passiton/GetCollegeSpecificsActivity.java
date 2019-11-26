@@ -31,7 +31,6 @@ public class GetCollegeSpecificsActivity extends AppCompatActivity {
         gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
         degreeQuestion = (TextView) findViewById(R.id.degreeQuestionTV);
         degrees = (RadioGroup) findViewById(R.id.degreesButtonList);
-        degrees.clearCheck();
         getFinalAnswer = new Intent(GetCollegeSpecificsActivity.this, GetJoinPurposeActivity.class);
         getFinalAnswer.putExtra("IS_PARENT", isParent);
         getFinalAnswer.putExtra("FIRST_NAME",firstName);

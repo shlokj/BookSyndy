@@ -35,7 +35,6 @@ public class GetBookBoardActivity extends AppCompatActivity {
             bookBoardQuestion.setText("Which educational board is your material for?");
         }
         boards = (RadioGroup) findViewById(R.id.bookBoardsButtonList);
-        boards.clearCheck();
         getBookPic = new Intent(GetBookBoardActivity.this, GetBookPictureActivity.class);
         getBookPic.putExtra("IS_TEXTBOOK", isTextbook);
         getBookPic.putExtra("BOOK_NAME",bookName);

@@ -36,7 +36,6 @@ public class GetBoardActivity extends AppCompatActivity {
             boardQuestion.setText("Which board is your child studying under?");
         }
         boards = (RadioGroup) findViewById(R.id.boardsButtonList);
-        boards.clearCheck();
         getFinalAnswer = new Intent(GetBoardActivity.this, GetJoinPurposeActivity.class);
         getFinalAnswer.putExtra("IS_PARENT", isParent);
         getFinalAnswer.putExtra("FIRST_NAME",firstName);
@@ -44,6 +43,9 @@ public class GetBoardActivity extends AppCompatActivity {
         getFinalAnswer.putExtra("GRADE_NUMBER",gradeNumber);
         competitiveExam = (CheckBox) findViewById(R.id.competitiveExam);
         competitiveExam.setTypeface(ResourcesCompat.getFont(getApplicationContext(), R.font.roboto_light));
+        if (gradeNumber<3 || gradeNumber>6) {
+            competitiveExam.setVisibility(View.GONE);
+        }
         FloatingActionButton next = (FloatingActionButton) findViewById(R.id.fab6);
         next.setOnClickListener(new View.OnClickListener() {
             @Override

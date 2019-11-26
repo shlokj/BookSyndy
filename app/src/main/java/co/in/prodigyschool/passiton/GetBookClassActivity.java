@@ -34,7 +34,6 @@ public class GetBookClassActivity extends AppCompatActivity {
             gradeQuestion.setText(R.string.notes_grade_question);
         }
         grades = (RadioGroup) findViewById(R.id.bookGradesButtonList);
-        grades.clearCheck();
         getBookBoard = new Intent(GetBookClassActivity.this, GetBookBoardActivity.class);
         getBookBoard.putExtra("IS_TEXTBOOK", isTextbook);
         getBookBoard.putExtra("BOOK_NAME",bookName);

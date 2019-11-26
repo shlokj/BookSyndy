@@ -22,8 +22,6 @@ public class ParOrStudActivity extends AppCompatActivity {
         setContentView(R.layout.activity_par_or_stud);
 
         studOrParButtons = (RadioGroup) findViewById(R.id.studentOrParentRadioGroup);
-        studOrParButtons.clearCheck();
-
         FloatingActionButton next = findViewById(R.id.fab3);
 
         next.setOnClickListener(new View.OnClickListener() {

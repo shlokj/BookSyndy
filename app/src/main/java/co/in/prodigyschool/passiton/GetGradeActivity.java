@@ -40,7 +40,6 @@ public class GetGradeActivity extends AppCompatActivity {
             gradeQuestion.setText("Which grade is your child studying in?");
         }
         grades = (RadioGroup) findViewById(R.id.gradesButtonList);
-        grades.clearCheck();
         getBoard = new Intent(GetGradeActivity.this, GetBoardActivity.class);
         getBoard.putExtra("IS_PARENT", isParent);
         getBoard.putExtra("FIRST_NAME",firstName);

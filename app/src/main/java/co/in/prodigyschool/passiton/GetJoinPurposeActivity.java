@@ -37,7 +37,6 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
 
         reasonsQuestion = (TextView) findViewById(R.id.reasonQuestionTV);
         reasons = (RadioGroup) findViewById(R.id.reasonsButtonList);
-        reasons.clearCheck();
         startMainActivity = new Intent(GetJoinPurposeActivity.this, MainActivity.class);
 //        startMainActivity.putExtra("IS_PARENT", isParent);
 //        startMainActivity.putExtra("FIRST_NAME",firstName);
@@ -84,6 +83,9 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
             boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 1);
             boardNumber = getIntent().getIntExtra("DEGREE_NUMBER", boardNumber);
 
+            if (gradeNumber<3 || gradeNumber>6) {
+                competitiveExam=false;
+            }
             phoneNumber = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
             curFirebaseUser = new User(firstName, lastName, phoneNumber, isParent, toSell, gradeNumber, boardNumber);
             db = FirebaseFirestore.getInstance();
