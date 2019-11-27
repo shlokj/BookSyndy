@@ -40,8 +40,8 @@ public class GetBookPriceActivity extends AppCompatActivity {
         gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
         boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 1);
         boardNumber = getIntent().getIntExtra("DEGREE_NUMBER", boardNumber);
-        if(isTextbook) {
-            pricingInstructions.setText("Keep the price nominal and as low as possible, keeping in mind that you no longer need this material.\n\nFor example, if the MRP is Rs. 200, give it at less than Rs. 30.");
+        if(!isTextbook) {
+            pricingInstructions.setText(R.string.material_pricing_instructions);
         }
 
         FloatingActionButton next = (FloatingActionButton) findViewById(R.id.fab17);

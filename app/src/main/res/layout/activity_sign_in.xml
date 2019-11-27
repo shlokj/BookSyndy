@@ -67,15 +67,16 @@
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/ic_navigate_next_24px"/>
 
+<!--
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/smsRateInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="@string/std_rates"
-        android:layout_margin="8dp"
+        android:layout_margin="10dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
+-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
