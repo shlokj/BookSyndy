@@ -22,7 +22,8 @@
             android:exported="false" />
 
         <activity android:name=".GetBookPictureActivity" />
-        <activity android:name=".GetBookPriceActivity" />
+        <activity android:name=".GetBookPriceActivity"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".GetBookDegreeActivity" />
         <activity android:name=".GetBookBoardActivity" />
         <activity

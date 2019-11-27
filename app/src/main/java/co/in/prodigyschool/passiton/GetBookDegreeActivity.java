@@ -83,6 +83,9 @@ public class GetBookDegreeActivity extends AppCompatActivity {
                 else if (degree==R.id.mbbs) {
                     degreeNumber=15;
                 }
+                else if (degree==R.id.otherDegreeBook) {
+                    degreeNumber=16;
+                }
                 getPrice.putExtra("DEGREE_NUMBER",degreeNumber);
                 if (degree!=-1) {
                     startActivity(getPrice);

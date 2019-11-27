@@ -32,7 +32,7 @@ public class GetBookBoardActivity extends AppCompatActivity {
         gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
         bookBoardQuestion = (TextView) findViewById(R.id.bookBoardQuestionTV);
         if (!isTextbook) {
-            bookBoardQuestion.setText("Which educational board is your material for?");
+            bookBoardQuestion.setText(R.string.material_board_q);
         }
         boards = (RadioGroup) findViewById(R.id.bookBoardsButtonList);
         getPrice = new Intent(GetBookBoardActivity.this, GetBookPriceActivity.class);
@@ -74,6 +74,9 @@ public class GetBookBoardActivity extends AppCompatActivity {
                 }
                 else if (board==R.id.otherBoardBook) {
                     boardNumber=6;
+                }
+                else if (board==R.id.competitiveExamBook) {
+                    boardNumber=20;
                 }
                 getPrice.putExtra("BOARD_NUMBER",boardNumber);
                 if (board!=-1) {

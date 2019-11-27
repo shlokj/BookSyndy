@@ -97,6 +97,14 @@
             android:textSize="20sp"
             android:layout_marginBottom="8dp"/>
 
+        <RadioButton
+            android:id="@+id/otherDegreeBook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Other"
+            android:fontFamily="@font/roboto_light"
+            android:textSize="20sp"
+            android:layout_marginBottom="8dp"/>
     </RadioGroup>
 
     <TextView

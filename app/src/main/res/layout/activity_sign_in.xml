@@ -53,6 +53,7 @@
             android:inputType="phone"
             android:textSize="26sp"
             android:maxLength="10"/>
+
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -65,5 +66,16 @@
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/ic_navigate_next_24px"/>
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/std_rates"
+        android:layout_margin="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

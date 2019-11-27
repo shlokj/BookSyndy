@@ -2,6 +2,7 @@ package co.in.prodigyschool.passiton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -21,6 +22,7 @@ public class GetBookPriceActivity extends AppCompatActivity {
     TextView pricingInstructions;
     EditText priceField;
     int price=0;
+    Intent getLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +73,14 @@ public class GetBookPriceActivity extends AppCompatActivity {
                 if (priceField.getText().toString().length()>0) {
                     try {
                         price = Integer.parseInt(priceField.getText().toString());
-                        int x = price / 1;
+                        getLocation = new Intent(GetBookPriceActivity.this, GetBookSellerLocationActivity.class);
+                        getLocation.putExtra("IS_TEXTBOOK", isTextbook);
+                        getLocation.putExtra("BOOK_NAME",bookName);
+                        getLocation.putExtra("BOOK_DESCRIPTION",bookDescription);
+                        getLocation.putExtra("GRADE_NUMBER",gradeNumber);
+                        getLocation.putExtra("BOARD_NUMBER",boardNumber);
+                        getLocation.putExtra("BOOK_PRICE",price);
+                        startActivity(getLocation);
                     } catch (Exception e) {
                         View parentLayout = findViewById(android.R.id.content);
                         Snackbar.make(parentLayout, "Please enter a valid price", Snackbar.LENGTH_SHORT)
@@ -84,6 +93,18 @@ public class GetBookPriceActivity extends AppCompatActivity {
                                 .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
                                 .show();
                     }
+                }
+                else {
+                    View parentLayout = findViewById(android.R.id.content);
+                    Snackbar.make(parentLayout, "Please enter a valid price or be generous :)", Snackbar.LENGTH_SHORT)
+                            .setAction("OKAY", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                }
+                            })
+                            .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                            .show();
                 }
             }
         });
