@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+<!--TODO: make this a rounded square-->
     <ImageView
         android:id="@+id/bookPicture"
         android:layout_width="100dp"

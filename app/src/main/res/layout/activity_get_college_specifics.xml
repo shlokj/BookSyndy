@@ -133,4 +133,17 @@
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/ic_navigate_next_24px"/>
 
+    <EditText
+        android:id="@+id/yearField"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:ems="10"
+        android:hint="Year"
+        android:inputType="number"
+        android:maxLength="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/degreesButtonList"
+        app:layout_constraintTop_toBottomOf="@+id/degreeQuestionTV" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

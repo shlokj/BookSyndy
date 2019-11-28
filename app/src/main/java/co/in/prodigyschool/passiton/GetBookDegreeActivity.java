@@ -93,4 +93,18 @@ public class GetBookDegreeActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void displaySnackbarYears(int year) {
+        String yearNum = Integer.valueOf(year).toString();
+        View parentLayout = findViewById(android.R.id.content);
+        Snackbar.make(parentLayout, "Please enter a year " + yearNum + " or below", Snackbar.LENGTH_SHORT)
+                .setAction("OKAY", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                })
+                .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                .show();
+    }
 }
