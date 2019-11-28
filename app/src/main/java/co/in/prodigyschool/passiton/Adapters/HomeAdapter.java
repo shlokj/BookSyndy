@@ -20,18 +20,19 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
     // you provide access to all the views for a data item in a view holder
     public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // each data item is just a string in this case
-        public TextView mTextView;
-        public ImageView mImageView;
+        public TextView bookNameTextView, bookPriceTextView;
+        public ImageView bookPicImageView;
         public MyViewHolder(View itemView) {
             super(itemView);
-            mTextView = itemView.findViewById(R.id.home_text_view);
-            mImageView = itemView.findViewById(R.id.home_image_view);
+            bookNameTextView = itemView.findViewById(R.id.bookMaterialName);
+            bookPriceTextView = itemView.findViewById(R.id.bookMaterialPrice);
+            bookPicImageView = itemView.findViewById(R.id.bookPicture);
             itemView.setOnClickListener(this);
         }
 
         public void bindView(int position){
-            mTextView.setText(HomeItem.mText[position]);
-            mImageView.setImageResource(HomeItem.picPath[position]);
+            bookNameTextView.setText(HomeItem.mText[position]);
+            bookPicImageView.setImageResource(HomeItem.picPath[position]);
         }
 
         @Override

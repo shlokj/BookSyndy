@@ -15,15 +15,17 @@
         android:roundIcon="@drawable/ic_booksyndy_logo_smallc"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".GetBookSellerLocationActivity"></activity>
+        <activity android:name=".UserProfileActivity"></activity>
+        <activity android:name=".GetBookSellerLocationActivity" />
 
         <service
             android:name=".GetAddressIntentService"
             android:exported="false" />
 
         <activity android:name=".GetBookPictureActivity" />
-        <activity android:name=".GetBookPriceActivity"
-            android:windowSoftInputMode="adjustResize"/>
+        <activity
+            android:name=".GetBookPriceActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".GetBookDegreeActivity" />
         <activity android:name=".GetBookBoardActivity" />
         <activity
