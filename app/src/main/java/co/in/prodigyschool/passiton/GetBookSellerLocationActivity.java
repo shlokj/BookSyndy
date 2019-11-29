@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -37,21 +38,29 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
     boolean isTextbook;
     String bookName, bookDescription,phoneNumber,userId,bookAddress;
     int gradeNumber, boardNumber;
-    private EditText inputAddress;
+    private EditText locSearchDummy;
     private int bookPrice;
-
+    private TextView locationTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_book_seller_location);
-        inputAddress = findViewById(R.id.locationEditTextDummy);
-        inputAddress.requestFocus();
+        locationTV = (TextView) findViewById(R.id.localityArea);
+        locSearchDummy = findViewById(R.id.locationEditTextDummy);
+        locSearchDummy.setFocusable(false);
+        locSearchDummy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent searchLoc = new Intent(GetBookSellerLocationActivity.this, EnterLocationManuallyActivity.class);
+                startActivity(searchLoc);
+                overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+            }
+        });
 //        TODO: Comes after get price activity
         initFireBase();
         populateUserLocation();
         findViewById(R.id.fab18).setOnClickListener(this);
-
     }
 
     private void populateUserLocation() {
@@ -66,11 +75,12 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
                         if (document.exists()) {
                             String area = document.getString("addr2");
                             String city = document.getString("locality");
+                            locationTV.setText("");
                             if(area != null ){
-                                inputAddress.append(area+" , ");
+                                locationTV.append(area+" , ");
                             }
                             if(city != null){
-                                inputAddress.append(city);
+                                locationTV.append(city);
                             }
                             else {
                                 Log.d(TAG, "no address found");
@@ -131,7 +141,7 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
     @Override
     public void onClick(View v) {
         try {
-            if(inputAddress.getText().toString().isEmpty()){
+            if(locationTV.getText().toString().isEmpty()){
                 Toast.makeText(getApplicationContext(),"Please enter valid Address",Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -142,7 +152,7 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
             boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 1);
             boardNumber = getIntent().getIntExtra("DEGREE_NUMBER", boardNumber);
             bookPrice = getIntent().getIntExtra("BOOK_PRICE",0);
-            bookAddress = inputAddress.getText().toString();
+            bookAddress = locationTV.getText().toString();
             if(userId == null){
                 userId = mAuth.getCurrentUser().getPhoneNumber();
             }
