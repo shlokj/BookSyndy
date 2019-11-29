@@ -76,7 +76,7 @@ public class GetBookClassActivity extends AppCompatActivity {
                 else if (grade==R.id.universityBook) {
                     gradeNumber=7;
                     Intent getBookDegree = new Intent(GetBookClassActivity.this, GetBookDegreeActivity.class);
-                    getBookDegree.putExtra("IS_PARENT", isTextbook);
+                    getBookDegree.putExtra("IS_TEXTBOOK", isTextbook);
                     getBookDegree.putExtra("BOOK_NAME",bookName);
                     getBookDegree.putExtra("BOOK_DESCRIPTION",bookDescription);
                     getBookDegree.putExtra("GRADE_NUMBER",gradeNumber);

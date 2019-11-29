@@ -69,5 +69,6 @@
     <string name="material_board_q">Which educational board is this material for?</string>
     <string name="material_pricing_instructions">Keep the price nominal and as low as possible. Do keep in mind the condition of your material and its original price, if any.</string>
     <string name="book_reqs">Book requests</string>
+    <string name="message_no_results">Oops, couldn\'t find any results\n Try adding some</string>
 
 </resources>
