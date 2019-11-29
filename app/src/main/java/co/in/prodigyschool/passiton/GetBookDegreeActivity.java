@@ -35,9 +35,9 @@ public class GetBookDegreeActivity extends AppCompatActivity {
 //TODO: Change default board number
         getPrice = new Intent(GetBookDegreeActivity.this, GetBookPriceActivity.class);
         bookDegreeQ = (TextView) findViewById(R.id.bookDegreeQuestionTV);
-        if (isTextbook) {
-
-        }
+//        if (isTextbook) {
+//
+//        }
         FloatingActionButton next = (FloatingActionButton) findViewById(R.id.fab16);
         next.setOnClickListener(new View.OnClickListener() {
             @Override

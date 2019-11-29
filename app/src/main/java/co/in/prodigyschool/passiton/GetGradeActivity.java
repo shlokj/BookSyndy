@@ -32,6 +32,7 @@ public class GetGradeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_grade);
+        tmp=true;
         isParent = getIntent().getBooleanExtra("IS_PARENT", false);
         firstName = getIntent().getStringExtra("FIRST_NAME");
         lastName = getIntent().getStringExtra("LAST_NAME");
@@ -95,5 +96,11 @@ public class GetGradeActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        tmp=true;
     }
 }
