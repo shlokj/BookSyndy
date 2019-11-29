@@ -114,7 +114,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:layout_marginStart="8dp"
-            android:hint="Search"
+            android:hint="@string/search_on_maps"
             android:inputType="textPersonName" />
     </LinearLayout>
 

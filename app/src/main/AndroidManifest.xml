@@ -15,7 +15,8 @@
         android:roundIcon="@drawable/ic_booksyndy_logo_smallc"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".UserProfileActivity"/>
+        <activity android:name=".EnterLocationManuallyActivity"></activity>
+        <activity android:name=".UserProfileActivity" />
         <activity android:name=".GetBookSellerLocationActivity" />
 
         <service
@@ -40,8 +41,9 @@
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".GetCollegeSpecificsActivity"
-            android:windowSoftInputMode="adjustResize"/>
+        <activity
+            android:name=".GetCollegeSpecificsActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".GetJoinPurposeActivity" />
         <activity android:name=".GetBoardActivity" />
         <activity android:name=".GetGradeActivity" />
