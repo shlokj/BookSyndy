@@ -134,15 +134,14 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
            }
             }
         });
-
     }
 
 
     @Override
     public void onClick(View v) {
         try {
-            if(locationTV.getText().toString().isEmpty()){
-                Toast.makeText(getApplicationContext(),"Please enter valid Address",Toast.LENGTH_SHORT).show();
+            if(locationTV.getText().toString().isEmpty() || locationTV.getText().toString().equals("") || locationTV.getText().toString().length() == 0){
+                Toast.makeText(getApplicationContext(),"Please enter a valid address",Toast.LENGTH_SHORT).show();
                 return;
             }
             isTextbook = getIntent().getBooleanExtra("IS_TEXTBOOK", true);

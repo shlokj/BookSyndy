@@ -71,4 +71,5 @@
     <string name="book_reqs">Book requests</string>
     <string name="message_no_results">Oops, couldn\'t find any results\n Try adding some</string>
     <string name="search_on_maps">Search on Maps</string>
+    <string name="getting_loc">Getting your location...</string>
 </resources>
