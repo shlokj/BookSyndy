@@ -47,9 +47,9 @@
     <string name="book_desc_q">What best describes what you\'re here to put up?</string>
     <string name="title_question">What\'s the title of your book?</string>
     <string name="a_detailed_name">A detailed name</string>
-    <string name="textbook_naming_instructions">Make the title as clear and comprehensive as possible. Try to include all basic details.\n\nFor example, \'NCERT Geography Class 10 Contemporary India Part 2\' is more likely to be found than is \'Geography Textbook Class X\'.</string>
+    <string name="textbook_naming_instructions">Make the title as clear and comprehensive as possible. Try to include all basic details.</string>
     <string name="notes_name_question">What material is this?</string>
-    <string name="othermaterial_naming_instructions">Make the title as clear and comprehensive as possible. Try to include all basic details. Since what you\'re putting up isn\'t a published textbook, make sure the name you enter adequately describes it.\n\nFor example, something like \'Class 11 chemistry worksheets chapter 2\' would detail your listing well.</string>
+    <string name="othermaterial_naming_instructions">Make the title as clear and comprehensive as possible. Try to include all basic details. Since what you\'re putting up isn\'t a published textbook, make sure the name you enter adequately describes it.</string>
     <string name="first">First</string>
     <string name="last">Last</string>
     <string name="description">Description</string>
@@ -72,4 +72,5 @@
     <string name="message_no_results">Oops, couldn\'t find any results\n Try adding some</string>
     <string name="search_on_maps">Search on Maps</string>
     <string name="getting_loc">Getting your location...</string>
+    <string name="grade_choosing_instructions">If you just completed a grade, choose the option that corresponds to the one you just completed and not the one you will be entering.\n\nIf you\'re a college student, choose \'Undergraduate\' and you will later be asked for your year.</string>
 </resources>

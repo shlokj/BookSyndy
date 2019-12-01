@@ -140,7 +140,7 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
     @Override
     public void onClick(View v) {
         try {
-            if(locationTV.getText().toString().isEmpty() || locationTV.getText().toString().equals("") || locationTV.getText().toString().length() == 0){
+            if(locationTV.getText().toString().equals(R.string.getting_loc) || locationTV.getText().toString().isEmpty() || locationTV.getText().toString().equals("") || locationTV.getText().toString().length() == 0){
                 Toast.makeText(getApplicationContext(),"Please enter a valid address",Toast.LENGTH_SHORT).show();
                 return;
             }
