@@ -73,4 +73,5 @@
     <string name="search_on_maps">Search on Maps</string>
     <string name="getting_loc">Getting your location...</string>
     <string name="grade_choosing_instructions">If you just completed a grade, choose the option that corresponds to the one you just completed and not the one you will be entering.\n\nIf you\'re a college student, choose \'Undergraduate\' and you will later be asked for your year.</string>
+    <string name="divider_bullet">•</string>
 </resources>

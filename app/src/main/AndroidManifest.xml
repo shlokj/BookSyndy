@@ -15,7 +15,8 @@
         android:roundIcon="@drawable/ic_booksyndy_logo_square"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".GetFeedbackActivity"></activity>
+        <activity android:name=".BookDetailsActivity"></activity>
+        <activity android:name=".GetFeedbackActivity" />
         <activity android:name=".EnterLocationManuallyActivity" />
         <activity android:name=".UserProfileActivity" />
         <activity android:name=".GetBookSellerLocationActivity" />

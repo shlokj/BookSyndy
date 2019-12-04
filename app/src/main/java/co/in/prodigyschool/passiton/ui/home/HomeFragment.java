@@ -1,5 +1,6 @@
 package co.in.prodigyschool.passiton.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +22,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 
 import co.in.prodigyschool.passiton.Adapters.BookAdapter;
+import co.in.prodigyschool.passiton.BookDetailsActivity;
+import co.in.prodigyschool.passiton.Data.Book;
 import co.in.prodigyschool.passiton.R;
 
 public class HomeFragment extends Fragment implements BookAdapter.OnBookSelectedListener {
@@ -114,7 +117,10 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
 
     @Override
     public void onBookSelected(DocumentSnapshot snapshot) {
-
+        String book_id = snapshot.getId();
+        Intent bookDetails = new Intent(getActivity(), BookDetailsActivity.class);
+        bookDetails.putExtra("bookid",book_id);
+        startActivity(bookDetails);
 
     }
 }

@@ -263,7 +263,7 @@ public class HomeActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(Void aVoid) {
                             Log.d("firestore_address", "DocumentSnapshot successfully written!");
-                            Toast.makeText(getApplicationContext(), "Address successfully saved!", Toast.LENGTH_LONG).show();
+                            //Toast.makeText(getApplicationContext(), "Address successfully saved!", Toast.LENGTH_LONG).show();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
