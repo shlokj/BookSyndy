@@ -21,6 +21,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import co.in.prodigyschool.passiton.Data.User;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -59,8 +61,10 @@ public class MainActivity extends AppCompatActivity {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
                                         if (document.getId().equalsIgnoreCase(userId)) {
                                             //user session exist
+                                            User user = document.toObject(User.class);
                                             Intent homeActivity = new Intent(MainActivity.this,HomeActivity.class);
-                                            homeActivity.putExtra("userDetails",document.getData().toString());
+                                            homeActivity.putExtra("username",user.getFirstName() + " " + user.getLastName());
+                                            homeActivity.putExtra("userphone",user.getPhone());
                                             startActivity(homeActivity);
                                             finish();
                                             return;

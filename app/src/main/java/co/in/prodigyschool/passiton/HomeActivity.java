@@ -43,6 +43,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.HashMap;
@@ -50,7 +51,7 @@ import java.util.Map;
 
 import co.in.prodigyschool.passiton.Data.HomeItem;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private AppBarConfiguration mAppBarConfiguration;
 
@@ -60,6 +61,9 @@ public class HomeActivity extends AppCompatActivity {
     private LocationAddressResultReceiver addressResultReceiver;
     private Location currentLocation;
     private LocationCallback locationCallback;
+    NavigationView navigationView;
+    String userTitle,userPhone;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +81,8 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -91,11 +96,25 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        /* user title */
+        userTitle = getIntent().getStringExtra("username");
+         userPhone = getIntent().getStringExtra("userphone");
+        if(userTitle != null && userPhone != null){
+            View headerView = navigationView.getHeaderView(0);
+            TextView navUsername =  headerView.findViewById(R.id.user_title);
+            TextView navUserphone = headerView.findViewById(R.id.user_phone);
+            navUsername.setText(userTitle);
+            navUserphone.setText(userPhone);
+            navUsername.setOnClickListener(this);
+            navUserphone.setOnClickListener(this);
+
+        }
         /* location service */
         addressResultReceiver = new LocationAddressResultReceiver(new Handler());
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -210,6 +229,22 @@ public class HomeActivity extends AppCompatActivity {
             }
 
         }
+    }
+
+
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+        return false;
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent profileIntent = new Intent(HomeActivity.this,UserProfileActivity.class);
+        profileIntent.putExtra("userid",userPhone);
+        startActivity(profileIntent);
+
     }
 
     private class LocationAddressResultReceiver extends ResultReceiver {
