@@ -7,8 +7,6 @@
     tools:context=".ChatActivity"
     android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
-
-
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
