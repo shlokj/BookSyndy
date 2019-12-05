@@ -15,7 +15,11 @@
         android:roundIcon="@drawable/ic_booksyndy_logo_square"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".BookDetailsActivity"></activity>
+        <activity
+            android:name=".ChatActivity"
+            android:label="@string/title_activity_chat"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".BookDetailsActivity" />
         <activity android:name=".GetFeedbackActivity" />
         <activity android:name=".EnterLocationManuallyActivity" />
         <activity android:name=".UserProfileActivity" />
