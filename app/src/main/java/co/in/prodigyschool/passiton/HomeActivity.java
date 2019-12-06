@@ -1,12 +1,16 @@
 package co.in.prodigyschool.passiton;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 
@@ -34,6 +38,9 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -49,11 +56,14 @@ import android.widget.Toast;
 import java.util.HashMap;
 import java.util.Map;
 
+import co.in.prodigyschool.passiton.Data.Book;
 import co.in.prodigyschool.passiton.Data.HomeItem;
+import co.in.prodigyschool.passiton.Data.User;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private AppBarConfiguration mAppBarConfiguration;
+    private static final String TAG = " HOMEACTIVITY" ;
 
     /*location variables */
     private FusedLocationProviderClient fusedLocationClient;
@@ -61,8 +71,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private LocationAddressResultReceiver addressResultReceiver;
     private Location currentLocation;
     private LocationCallback locationCallback;
-    NavigationView navigationView;
-    String userTitle,userPhone;
+    private NavigationView navigationView;
+    private View headerView;
+    private TextView navUsername,navUserphone;
+    private FirebaseFirestore mFirestore;
+    private String curUserId;
+
 
 
     @Override
@@ -93,28 +107,52 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+        View headerView = navigationView.getHeaderView(0);
+        navUsername =  headerView.findViewById(R.id.user_title);
+        navUserphone = headerView.findViewById(R.id.user_phone);
+        navUsername.setOnClickListener(this);
+        navUserphone.setOnClickListener(this);
+
+        populateUserDetails();
 
 
+    }
 
+    private void populateUserDetails() {
+        if (!checkConnection(getApplicationContext())) {
+            Toast.makeText(getApplicationContext(),"Internet Required",Toast.LENGTH_LONG).show();
+            return;
+        }
+        mFirestore = FirebaseFirestore.getInstance();
+        try{
+            curUserId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
+            DocumentReference userReference =  mFirestore.collection("users").document(curUserId);
+            userReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot snapshot) {
+                    User user = snapshot.toObject(User.class);
+                    if(user != null) {
+                        navUsername.setText(user.getUserName());
+                        navUserphone.setText(user.getPhone());
+                    }
 
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e(TAG, "onFailure: ",e );
+                }
+            });
+
+        }
+        catch(Exception e){
+            Log.e(TAG, "PopulateUserDetails method failed with  ",e);
+        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        /* user title */
-        userTitle = getIntent().getStringExtra("username");
-         userPhone = getIntent().getStringExtra("userphone");
-        if(userTitle != null && userPhone != null){
-            View headerView = navigationView.getHeaderView(0);
-            TextView navUsername =  headerView.findViewById(R.id.user_title);
-            TextView navUserphone = headerView.findViewById(R.id.user_phone);
-            navUsername.setText(userTitle);
-            navUserphone.setText(userPhone);
-            navUsername.setOnClickListener(this);
-            navUserphone.setOnClickListener(this);
-
-        }
         /* location service */
         addressResultReceiver = new LocationAddressResultReceiver(new Handler());
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -128,6 +166,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         startLocationUpdates();
 
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -242,7 +282,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onClick(View v) {
         Intent profileIntent = new Intent(HomeActivity.this,UserProfileActivity.class);
-        profileIntent.putExtra("userid",userPhone);
+        profileIntent.putExtra("userid",curUserId);
         startActivity(profileIntent);
 
     }
@@ -323,6 +363,23 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     protected void onPause() {
         super.onPause();
         fusedLocationClient.removeLocationUpdates(locationCallback);
+    }
+
+    public static boolean checkConnection(Context context) {
+        final ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (connMgr != null) {
+            NetworkInfo activeNetworkInfo = connMgr.getActiveNetworkInfo();
+
+            if (activeNetworkInfo != null) { // connected to the internet
+                // connected to the mobile provider's data plan
+                if (activeNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+                    // connected to wifi
+                    return true;
+                } else return activeNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE;
+            }
+        }
+        return false;
     }
 
 }
