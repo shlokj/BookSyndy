@@ -84,4 +84,12 @@ public class User {
     public void setCompetitiveExam(boolean competitiveExam) {
         this.competitiveExam = competitiveExam;
     }
+
+    public String getFullName() {
+        return this.getFirstName() + " " + this.getLastName();
+    }
+
+    public String getUserName() {
+    return this.firstName + " " + this.lastName;
+    }
 }
