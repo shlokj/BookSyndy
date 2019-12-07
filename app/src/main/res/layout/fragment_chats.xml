@@ -1,23 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.chatUtil.PlaceholderFragment">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#E0E0E0">
 
-    <TextView
-        android:id="@+id/section_label"
+    <!-- Main Books recycler -->
+    <androidx.recyclerview.widget.RecyclerView android:id="@+id/chat_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="6dp"
+        tools:listitem="@layout/chat_list_item"
+        />
+
+
+    <!-- Empty list view -->
+    <LinearLayout
+        android:id="@+id/chat_view_empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/constraintLayout"
-        tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintTop_creator="1" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:layout_marginBottom="280dp"
+        tools:visibility="gone">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            style="@style/AppTheme.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/chat_empty_1"
+            android:textColor="@color/greyDisabled" />
+
+        <ImageView
+            android:id="@+id/chat_empty_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="8dp"
+            android:padding="8dp"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/ic_booksyndy_logo_smallc" />
+
+        <TextView
+            style="@style/AppTheme.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/chat_empty_2"
+            android:textColor="@color/greyDisabled" />
+
+    </LinearLayout>
+</RelativeLayout>
