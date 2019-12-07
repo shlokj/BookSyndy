@@ -18,27 +18,52 @@
             android:id="@+id/chat_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:navigationIcon="@drawable/ic_back_arrow_48"
-            >
+            app:navigationIcon="@drawable/ic_back_arrow_48">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/visit_profile_image"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginEnd="10dp"
-                android:cropToPadding="true"
-                android:src="@drawable/profile_image" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
 
-            <TextView
-                android:id="@+id/visit_profile_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="4dp"
-                android:text="@string/display_username"
-                android:textColor="@android:color/background_light"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/visit_profile_image"
+                    android:layout_width="47dp"
+                    android:layout_height="47dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:src="@drawable/profile_image"
+                    android:cropToPadding="true"
+                    android:layout_marginRight="10dp"
+                    />
+
+                <TextView
+                    android:id="@+id/visit_profile_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@+id/visit_profile_image"
+                    android:layout_alignParentTop="true"
+                    android:text="Display UserName"
+                    android:textColor="@android:color/background_light"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    />
+
+
+                <TextView
+                    android:id="@+id/user_last_seen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/visit_profile_name"
+                    android:layout_alignStart="@+id/visit_profile_name"
+                    android:layout_marginTop="3dp"
+                    android:text="Last Seen"
+                    android:textColor="@android:color/background_light"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    />
+
+            </RelativeLayout>
+
 
         </androidx.appcompat.widget.Toolbar>
 

@@ -2,7 +2,7 @@ package co.in.prodigyschool.passiton.Data;
 
 public class User {
 
-    private String firstName,lastName,phone;
+    private String firstName,lastName,phone,userId,imageUrl;
     private boolean isParent,toSell,competitiveExam;
     private int gradeNumber,boardNumber;
 
@@ -20,6 +20,35 @@ public class User {
         this.gradeNumber = gradeNumber;
         this.boardNumber = boardNumber;
         this.competitiveExam = competitiveExam;
+    }
+
+    public User(String firstName, String lastName,String phone, boolean isParent, boolean toSell, int gradeNumber, int boardNumber,boolean competitiveExam,String userId,String imageUrl) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.isParent = isParent;
+        this.toSell = toSell;
+        this.gradeNumber = gradeNumber;
+        this.boardNumber = boardNumber;
+        this.competitiveExam = competitiveExam;
+        this.userId = userId;
+        this.imageUrl = imageUrl;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getPhone() {

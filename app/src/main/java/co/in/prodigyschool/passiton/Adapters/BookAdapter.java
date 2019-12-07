@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
@@ -74,26 +75,29 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder> {
                          final OnBookSelectedListener listener) {
 
             Book book = snapshot.toObject(Book.class);
+            String userId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
             Resources resources = itemView.getResources();
 
             // Load image
+                if(!book.getUserId().equalsIgnoreCase(userId)) {
+                    Glide.with(imageView.getContext())
+                            .load(book.getBookPhoto())
+                            .into(imageView);
 
-            Glide.with(imageView.getContext())
-                    .load(book.getBookPhoto())
-                    .into(imageView);
+                    nameView.setText(book.getBookName());
+                    cityView.setText(book.getBookAddress());
+                    priceView.setText("₹" + book.getBookPrice());
+                    // Click listener
+                    itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (listener != null) {
+                                listener.onBookSelected(snapshot);
+                            }
+                        }
+                    });
 
-            nameView.setText(book.getBookName());
-            cityView.setText(book.getBookAddress());
-            priceView.setText("₹"+book.getBookPrice());
-            // Click listener
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (listener != null) {
-                        listener.onBookSelected(snapshot);
-                    }
                 }
-            });
         }
 
     }

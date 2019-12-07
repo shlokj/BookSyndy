@@ -45,7 +45,7 @@ public class EnterOTPActivity extends AppCompatActivity {
         setContentView(R.layout.activity_enter_otp);
         mAuth = FirebaseAuth.getInstance();
         otpField = findViewById(R.id.editTextOtp);
-        userPhoneNumber = getIntent().getStringExtra("USER_MOB");
+        userPhoneNumber = getIntent().getStringExtra("USER_MOB").trim();
         sendVerificationCode(userPhoneNumber);
         resendOtp =  findViewById(R.id.resendOTPButton);
         resendOtp.setOnClickListener(new View.OnClickListener() {
