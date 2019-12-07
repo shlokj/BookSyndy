@@ -76,4 +76,12 @@
     <string name="divider_bullet">•</string>
     <string name="name_question">Great! What\'s your name?</string>
     <string name="username">Username</string>
+    <string name="title_activity_chat">ChatActivity</string>
+    <string name="tab_title_chats">CHATS</string>
+    <string name="tab_title_contacts">CONTACTS</string>
+    <string name="tab_title_requests">Requests</string>
+    <string name="chat_empty_1">No messages</string>
+    <string name="chat_empty_2">Sending text messages is fun. You should try it some time.</string>
+    <string name="display_username">Display UserName</string>
+    <string name="last_seen">Last Seen</string>
 </resources>
