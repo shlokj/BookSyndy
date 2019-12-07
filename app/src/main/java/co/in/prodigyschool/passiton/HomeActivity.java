@@ -10,7 +10,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 
@@ -38,7 +37,6 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -56,14 +54,12 @@ import android.widget.Toast;
 import java.util.HashMap;
 import java.util.Map;
 
-import co.in.prodigyschool.passiton.Data.Book;
-import co.in.prodigyschool.passiton.Data.HomeItem;
 import co.in.prodigyschool.passiton.Data.User;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private AppBarConfiguration mAppBarConfiguration;
-    private static final String TAG = " HOMEACTIVITY" ;
+    private static final String TAG = "HOMEACTIVITY" ;
 
     /*location variables */
     private FusedLocationProviderClient fusedLocationClient;

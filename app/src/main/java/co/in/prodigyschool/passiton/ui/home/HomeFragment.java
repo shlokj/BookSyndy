@@ -23,7 +23,6 @@ import com.google.firebase.firestore.Query;
 
 import co.in.prodigyschool.passiton.Adapters.BookAdapter;
 import co.in.prodigyschool.passiton.BookDetailsActivity;
-import co.in.prodigyschool.passiton.Data.Book;
 import co.in.prodigyschool.passiton.R;
 
 public class HomeFragment extends Fragment implements BookAdapter.OnBookSelectedListener {

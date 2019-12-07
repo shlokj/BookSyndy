@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:background="#E0E0E0"
+    >
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/custom_profile_image"
+        android:layout_width="67dp"
+        android:layout_height="67dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:cropToPadding="true"
+        android:src="@drawable/profile_image" />
+
+
+    <TextView
+        android:id="@+id/custom_profile_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/custom_profile_image"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="90dp"
+        android:layout_marginTop="14dp"
+        android:text="@string/display_username"
+        android:textColor="@android:color/background_dark"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/custom_user_last_seen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/custom_profile_name"
+        android:layout_alignStart="@+id/custom_profile_name"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/last_seen"
+        android:textColor="@android:color/background_dark"
+        android:textSize="14sp"
+         />
+
+</RelativeLayout>
