@@ -8,4 +8,6 @@
     <color name="greyDisabled">#61000000</color>
     <color name="greySecondary">#8B000000</color>
     <color name="orange">#ffa500</color>
+    <color name="color_grey">#D1C8C8</color>
+    <color name="color_green">#006400	</color>
 </resources>

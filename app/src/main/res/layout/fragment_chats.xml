@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="#E0E0E0">
+    android:background="@android:color/background_light">
 
     <!-- Main Books recycler -->
     <androidx.recyclerview.widget.RecyclerView android:id="@+id/chat_recycler_view"
@@ -46,7 +46,7 @@
             android:layout_margin="8dp"
             android:padding="8dp"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/ic_booksyndy_logo_smallc" />
+            app:srcCompat="@drawable/empty_book" />
 
         <TextView
             style="@style/AppTheme.Body1"

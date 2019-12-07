@@ -1,5 +1,6 @@
 package co.in.prodigyschool.passiton.ui.myChats;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,6 +39,8 @@ public class ChatsFragment extends Fragment {
     private DatabaseReference ChatsRef, UsersRef;
     private FirebaseAuth mAuth;
     private String currentUserID="";
+    private FirebaseRecyclerAdapter<Chat, ChatsViewHolder> adapter;
+
 
     public ChatsFragment(){
 
@@ -45,6 +48,8 @@ public class ChatsFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
+
         slideshowViewModel =
                 ViewModelProviders.of(this).get(SlideshowViewModel.class);
         PrivateChatsView = inflater.inflate(R.layout.fragment_chats, container, false);
@@ -80,24 +85,42 @@ public class ChatsFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        FirebaseRecyclerOptions<Chat> options =
+        final FirebaseRecyclerOptions<Chat> options =
                 new FirebaseRecyclerOptions.Builder<Chat>()
                         .setQuery(ChatsRef, Chat.class)
                         .build();
 
 
-        FirebaseRecyclerAdapter<Chat, ChatsViewHolder> adapter =
+        adapter =
                 new FirebaseRecyclerAdapter<Chat, ChatsViewHolder>(options) {
+
+                    @Override
+                    public int getItemCount() {
+
+                        return options.getSnapshots().size();
+                    }
+
                     @Override
                     protected void onBindViewHolder(@NonNull final ChatsViewHolder holder, int position, @NonNull Chat model)
                     {
                         final String usersIDs = getRef(position).getKey();
                         final String[] retImage = {"default_image"};
 
+                        if(getItemCount() == 0){
+                            Log.d(TAG, "getItemCount: "+options.getSnapshots().size());
+                            chatsList.setVisibility(View.GONE);
+                            mEmptyView.setVisibility(View.VISIBLE);
+                        }
+                        else{
+                            chatsList.setVisibility(View.VISIBLE);
+                            mEmptyView.setVisibility(View.GONE);
+                        }
+
                         ChatsRef.child(usersIDs).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot)
                             {
+
                                 if (dataSnapshot.exists())
                                 {
                                     if (dataSnapshot.hasChild("imageUrl"))
@@ -154,6 +177,8 @@ public class ChatsFragment extends Fragment {
                             public void onCancelled(DatabaseError databaseError) {
 
                             }
+
+
                         });
                     }
 
@@ -169,12 +194,14 @@ public class ChatsFragment extends Fragment {
         chatsList.setAdapter(adapter);
         adapter.startListening();
 
-
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        if(adapter != null){
+            adapter.stopListening();
+        }
 
 
 
