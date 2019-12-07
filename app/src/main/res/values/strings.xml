@@ -74,4 +74,12 @@
     <string name="getting_loc">Getting your location...</string>
     <string name="grade_choosing_instructions">If you just completed a grade, choose the option that corresponds to the one you just completed and not the one you will be entering.\n\nIf you\'re a college student, choose \'Undergraduate\' and you will later be asked for your year.</string>
     <string name="divider_bullet">•</string>
+    <string name="title_activity_chat">ChatActivity</string>
+    <string name="tab_title_chats">CHATS</string>
+    <string name="tab_title_contacts">CONTACTS</string>
+    <string name="tab_title_requests">Requests</string>
+    <string name="chat_empty_1">No messages</string>
+    <string name="chat_empty_2">Sending text messages is fun. You should try it some time.</string>
+    <string name="display_username">Display UserName</string>
+    <string name="last_seen">Last Seen</string>
 </resources>
