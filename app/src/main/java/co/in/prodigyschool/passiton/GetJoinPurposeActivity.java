@@ -24,7 +24,7 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
     boolean isParent, toSell, competitiveExam;
     TextView reasonsQuestion;
     RadioGroup reasons;
-    String firstName, lastName,phoneNumber;
+    String firstName, lastName, username, phoneNumber;
     int gradeNumber, reason, boardNumber;
     Intent startMainActivity;
     User curFirebaseUser;
@@ -34,7 +34,6 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_join_purpose);
-
         reasonsQuestion = (TextView) findViewById(R.id.reasonQuestionTV);
         reasons = (RadioGroup) findViewById(R.id.reasonsButtonList);
         startMainActivity = new Intent(GetJoinPurposeActivity.this, MainActivity.class);
@@ -82,7 +81,7 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
             gradeNumber = getIntent().getIntExtra("GRADE_NUMBER", 4);
             boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 1);
             boardNumber = getIntent().getIntExtra("DEGREE_NUMBER", boardNumber);
-
+            username = getIntent().getStringExtra("USERNAME");
             if (gradeNumber<3 || gradeNumber>6) {
                 competitiveExam=false;
             }

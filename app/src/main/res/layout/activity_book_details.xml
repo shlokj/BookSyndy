@@ -115,6 +115,16 @@
         android:layout_marginStart="-5dp"
         android:layout_marginEnd="26dp"
         android:layout_marginBottom="-489dp"
-        app:srcCompat="@drawable/ic_chat_24px" />
+        app:srcCompat="@drawable/ic_chat_24px_outlined_white" />
+
+    <TextView
+        android:id="@+id/bookDescriptionTV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Loading description"
+        android:scrollbars = "vertical"
+        android:layout_margin="16dp"
+        android:gravity="top"
+        android:layout_below="@id/book_top_card" />
 
 </RelativeLayout>

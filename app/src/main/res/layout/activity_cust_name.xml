@@ -7,21 +7,24 @@
     tools:context=".CustNameActivity">
 
     <LinearLayout
+        android:id="@+id/nameETLL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginTop="30dp"
-        android:layout_marginStart="16dp"
+        android:orientation="horizontal"
         android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3">
 
         <EditText
             android:id="@+id/firstName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:ems="10"
             android:hint="@string/first"
-            android:layout_weight="1"
             android:inputType="textCapWords|textPersonName" />
 
         <EditText
@@ -42,12 +45,25 @@
         android:layout_marginTop="56dp"
         android:layout_marginBottom="24dp"
         android:fontFamily="@font/roboto_light"
-        android:text="Great!\nWhat's your name?"
+        android:text="@string/name_question"
         android:textColor="@color/colorTextBlack"
         android:textSize="26sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/usernameQTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/roboto_light"
+        android:text="Create a unique username."
+        android:textColor="@color/colorTextBlack"
+        android:textSize="24sp"
+
+        app:layout_constraintTop_toBottomOf="@id/nameETLL"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab4"
@@ -59,6 +75,17 @@
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/ic_navigate_next_24px"/>
+
+    <EditText
+        android:id="@+id/usernameField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:layout_margin="16dp"
+        android:inputType="textPersonName|textNoSuggestions"
+        android:hint="@string/username"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/usernameQTV" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,7 +17,7 @@ public class GetCollegeSpecificsActivity extends AppCompatActivity {
     boolean isParent, validYear;
     TextView degreeQuestion;
     RadioGroup degrees;
-    String firstName, lastName;
+    String firstName, lastName, username;
     int gradeNumber, degree, degreeNumber, yearNumber; // degree number is same as board number
     Intent getFinalAnswer;
     EditText yearField;
@@ -32,6 +32,7 @@ public class GetCollegeSpecificsActivity extends AppCompatActivity {
         firstName = getIntent().getStringExtra("FIRST_NAME");
         lastName = getIntent().getStringExtra("LAST_NAME");
         gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
+        username = getIntent().getStringExtra("USERNAME");
         degreeQuestion = (TextView) findViewById(R.id.degreeQuestionTV);
         degrees = (RadioGroup) findViewById(R.id.degreesButtonList);
 //        degrees.requestFocus();
@@ -40,6 +41,7 @@ public class GetCollegeSpecificsActivity extends AppCompatActivity {
         getFinalAnswer.putExtra("FIRST_NAME",firstName);
         getFinalAnswer.putExtra("LAST_NAME",lastName);
         getFinalAnswer.putExtra("GRADE_NUMBER",gradeNumber);
+        getFinalAnswer.putExtra("USERNAME",username);
         degrees.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -138,7 +140,6 @@ public class GetCollegeSpecificsActivity extends AppCompatActivity {
                 }
             }
         });
-        
     }
 
     public void displaySnackbarYears(int year) {

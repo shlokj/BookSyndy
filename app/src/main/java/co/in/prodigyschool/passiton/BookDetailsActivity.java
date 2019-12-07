@@ -29,7 +29,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     private String bookid;
     FirebaseFirestore mFirestore;
     Query mQuery;
-    private TextView view_bookname,view_address,view_price,view_category;
+    private TextView view_bookname,view_address,view_price,view_category,view_description;
     private ImageView view_bookimage;
 
     private static final String TAG = "BOOK DETAILS";
@@ -45,10 +45,10 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         view_category = findViewById(R.id.book_category);
         view_price = findViewById(R.id.book_price);
         view_bookimage = findViewById(R.id.book_image);
+        view_description = findViewById(R.id.bookDescriptionTV);
         findViewById(R.id.book_button_back).setOnClickListener(this);
         findViewById(R.id.fab_chat).setOnClickListener(this);
         findViewById(R.id.fab_favorite).setOnClickListener(this);
-
 
     }
 
@@ -72,6 +72,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                     Book book = snapshot.toObject(Book.class);
 
                     view_bookname.setText(book.getBookName());
+                    view_description.setText(book.getBookDescription());
                     view_address.setText(book.getBookAddress());
                     view_price.setText("₹"+book.getBookPrice());
                     if(book.isTextbook()){

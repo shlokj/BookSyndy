@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -77,7 +78,7 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
                             String city = document.getString("locality");
                             locationTV.setText("");
                             if(area != null ){
-                                locationTV.append(area+" , ");
+                                locationTV.append(area+", ");
                             }
                             if(city != null){
                                 locationTV.append(city);
@@ -87,11 +88,29 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
                             }
                         } else {
                             Log.d(TAG, "No address found in firebase");
-                            Toast.makeText(getApplicationContext(), "failed to get Address", Toast.LENGTH_SHORT).show();
+                            View parentLayout = findViewById(android.R.id.content);
+                            Snackbar.make(parentLayout, "Failed to get address", Snackbar.LENGTH_SHORT)
+                                    .setAction("OKAY", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+
+                                        }
+                                    })
+                                    .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                                    .show();
                         }
                     } else {
                         Log.d(TAG, "get failed with ", task.getException());
-                        Toast.makeText(getApplicationContext(), "failed to get Address", Toast.LENGTH_SHORT).show();
+                        View parentLayout = findViewById(android.R.id.content);
+                        Snackbar.make(parentLayout, "Failed to get address", Snackbar.LENGTH_SHORT)
+                                .setAction("OKAY", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+
+                                    }
+                                })
+                                .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                                .show();
                     }
                 }
             });

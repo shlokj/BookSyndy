@@ -18,7 +18,7 @@ public class GetBoardActivity extends AppCompatActivity {
     boolean isParent;
     TextView boardQuestion;
     RadioGroup boards;
-    String firstName, lastName;
+    String firstName, lastName, username;
     int gradeNumber, board, boardNumber;
     Intent getFinalAnswer;
     CheckBox competitiveExam;
@@ -31,6 +31,7 @@ public class GetBoardActivity extends AppCompatActivity {
         firstName = getIntent().getStringExtra("FIRST_NAME");
         lastName = getIntent().getStringExtra("LAST_NAME");
         gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
+        username = getIntent().getStringExtra("USERNAME");
         boardQuestion = (TextView) findViewById(R.id.boardQuestionTV);
         if (isParent) {
             boardQuestion.setText("Which board is your child studying under?");

@@ -15,7 +15,7 @@ public class GetGradeActivity extends AppCompatActivity {
     boolean isParent;
     TextView gradeQuestion;
     RadioGroup grades;
-    String firstName, lastName;
+    String firstName, lastName, username;
     int grade;
     int gradeNumber;
 //     Grade numbers:
@@ -36,6 +36,7 @@ public class GetGradeActivity extends AppCompatActivity {
         isParent = getIntent().getBooleanExtra("IS_PARENT", false);
         firstName = getIntent().getStringExtra("FIRST_NAME");
         lastName = getIntent().getStringExtra("LAST_NAME");
+        username = getIntent().getStringExtra("USERNAME");
         gradeQuestion = (TextView) findViewById(R.id.gradeQuestionTV);
         if (isParent) {
             gradeQuestion.setText("Which grade is your child studying in?");
@@ -43,8 +44,10 @@ public class GetGradeActivity extends AppCompatActivity {
         grades = (RadioGroup) findViewById(R.id.gradesButtonList);
         getBoard = new Intent(GetGradeActivity.this, GetBoardActivity.class);
         getBoard.putExtra("IS_PARENT", isParent);
+        getBoard.putExtra("USERNAME", isParent);
         getBoard.putExtra("FIRST_NAME",firstName);
         getBoard.putExtra("LAST_NAME",lastName);
+        getBoard.putExtra("USERNAME",username);
         FloatingActionButton next = (FloatingActionButton) findViewById(R.id.fab5);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,6 +90,7 @@ public class GetGradeActivity extends AppCompatActivity {
                     getDegree.putExtra("FIRST_NAME",firstName);
                     getDegree.putExtra("LAST_NAME",lastName);
                     getDegree.putExtra("GRADE_NUMBER",gradeNumber);
+                    getDegree.putExtra("USERNAME",username);
                     startActivity(getDegree);
                     tmp = false;
                 }

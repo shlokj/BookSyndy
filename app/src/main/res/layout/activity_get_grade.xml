@@ -10,10 +10,10 @@
         android:id="@+id/gradesButtonList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="24dp">
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="24dp"
+        app:layout_constraintTop_toBottomOf="@id/gradeQuestionTV"
+        app:layout_constraintStart_toStartOf="parent">
 
         <RadioButton
             android:id="@+id/grade5OrBelow"
@@ -90,9 +90,11 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:textSize="22sp"
-        android:textColor="@color/colorTextBlack"
-        app:layout_constraintBottom_toTopOf="@+id/gradesButtonList"
-        app:layout_constraintStart_toStartOf="parent"/>
+        android:layout_marginTop="36dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/colorTextBlack"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab5"
@@ -101,14 +103,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/ic_navigate_next_24px"/>
 
     <TextView
         android:id="@+id/textView5"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/grade_choosing_instructions"
         android:layout_margin="16dp"
