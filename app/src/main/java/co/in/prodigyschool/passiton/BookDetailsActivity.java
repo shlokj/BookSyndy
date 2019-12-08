@@ -25,6 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import co.in.prodigyschool.passiton.Data.Book;
 import co.in.prodigyschool.passiton.Data.User;
 
+
 public class BookDetailsActivity extends AppCompatActivity implements View.OnClickListener {
 
     private String bookid;
