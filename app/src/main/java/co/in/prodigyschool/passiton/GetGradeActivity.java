@@ -44,7 +44,6 @@ public class GetGradeActivity extends AppCompatActivity {
         grades = (RadioGroup) findViewById(R.id.gradesButtonList);
         getBoard = new Intent(GetGradeActivity.this, GetBoardActivity.class);
         getBoard.putExtra("IS_PARENT", isParent);
-        getBoard.putExtra("USERNAME", isParent);
         getBoard.putExtra("FIRST_NAME",firstName);
         getBoard.putExtra("LAST_NAME",lastName);
         getBoard.putExtra("USERNAME",username);

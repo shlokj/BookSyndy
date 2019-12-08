@@ -43,6 +43,7 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         /* recycler view */
         recyclerView =  root.findViewById(R.id.home_recycler_view);
+
         mEmptyView = root.findViewById(R.id.view_empty);
 
 

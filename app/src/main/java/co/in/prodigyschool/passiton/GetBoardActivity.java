@@ -32,22 +32,23 @@ public class GetBoardActivity extends AppCompatActivity {
         lastName = getIntent().getStringExtra("LAST_NAME");
         gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
         username = getIntent().getStringExtra("USERNAME");
-        boardQuestion = (TextView) findViewById(R.id.boardQuestionTV);
+        boardQuestion =  findViewById(R.id.boardQuestionTV);
         if (isParent) {
             boardQuestion.setText("Which board is your child studying under?");
         }
-        boards = (RadioGroup) findViewById(R.id.boardsButtonList);
+        boards = findViewById(R.id.boardsButtonList);
         getFinalAnswer = new Intent(GetBoardActivity.this, GetJoinPurposeActivity.class);
         getFinalAnswer.putExtra("IS_PARENT", isParent);
         getFinalAnswer.putExtra("FIRST_NAME",firstName);
         getFinalAnswer.putExtra("LAST_NAME",lastName);
         getFinalAnswer.putExtra("GRADE_NUMBER",gradeNumber);
-        competitiveExam = (CheckBox) findViewById(R.id.competitiveExam);
+        getFinalAnswer.putExtra("USERNAME",username);
+        competitiveExam =  findViewById(R.id.competitiveExam);
         competitiveExam.setTypeface(ResourcesCompat.getFont(getApplicationContext(), R.font.roboto_light));
         if (gradeNumber<3 || gradeNumber>6) {
             competitiveExam.setVisibility(View.GONE);
         }
-        FloatingActionButton next = (FloatingActionButton) findViewById(R.id.fab6);
+        FloatingActionButton next =  findViewById(R.id.fab6);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

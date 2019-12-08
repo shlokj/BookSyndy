@@ -62,7 +62,7 @@ import co.in.prodigyschool.passiton.Data.User;
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private AppBarConfiguration mAppBarConfiguration;
-    private static final String TAG = " HOMEACTIVITY" ;
+    private static final String TAG = "HOMEACTIVITY" ;
 
     /*location variables */
     private FusedLocationProviderClient fusedLocationClient;
@@ -71,7 +71,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private Location currentLocation;
     private LocationCallback locationCallback;
     private NavigationView navigationView;
-    private View headerView;
+
     private TextView navUsername,navUserphone;
     private FirebaseFirestore mFirestore;
     private String curUserId;
@@ -131,7 +131,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 public void onSuccess(DocumentSnapshot snapshot) {
                     User user = snapshot.toObject(User.class);
                     if(user != null) {
-                        navUsername.setText(user.getUserName());
+                        navUsername.setText(user.getUserId());
                         navUserphone.setText(user.getPhone());
                     }
 

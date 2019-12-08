@@ -11,16 +11,7 @@ public class User {
     public User() {
     }
 
-    public User(String firstName, String lastName, String phone, boolean isParent, boolean toSell, int gradeNumber, int boardNumber,boolean competitiveExam) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phone = phone;
-        this.isParent = isParent;
-        this.toSell = toSell;
-        this.gradeNumber = gradeNumber;
-        this.boardNumber = boardNumber;
-        this.competitiveExam = competitiveExam;
-    }
+
 
     public User(String firstName, String lastName, String phone, boolean isParent, boolean toSell, int gradeNumber, int boardNumber,boolean competitiveExam,String userId,String imageUrl) {
         this.firstName = firstName;
@@ -118,7 +109,4 @@ public class User {
         return this.getFirstName() + " " + this.getLastName();
     }
 
-    public String getUserName() {
-    return this.firstName + " " + this.lastName;
-    }
 }

@@ -4,9 +4,9 @@ public class Chat {
     private String imageUrl;
     private String userName,userStatus;
 
-    public Chat() {
-    }
+    public Chat(){
 
+    }
     public Chat(String imageUrl, String userName, String userStatus) {
         this.imageUrl = imageUrl;
         this.userName = userName;

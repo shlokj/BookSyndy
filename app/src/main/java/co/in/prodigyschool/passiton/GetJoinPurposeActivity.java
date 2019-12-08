@@ -21,6 +21,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class GetJoinPurposeActivity extends AppCompatActivity {
 
+    public static final String default_pic_url = "https://firebasestorage.googleapis.com/v0/b/booksyndy-e8ef6.appspot.com/o/default_photos%2Fdefault_profile_image.png?alt=media&token=3dc5c2c2-2b7b-4ae7-8f50-23ea58874fb9";
+
     boolean isParent, toSell, competitiveExam;
     TextView reasonsQuestion;
     RadioGroup reasons;
@@ -86,7 +88,7 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
                 competitiveExam=false;
             }
             phoneNumber = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
-            curFirebaseUser = new User(firstName, lastName, phoneNumber, isParent, toSell, gradeNumber, boardNumber,competitiveExam, username, null);
+            curFirebaseUser = new User(firstName, lastName, phoneNumber, isParent, toSell, gradeNumber, boardNumber,competitiveExam, username, default_pic_url);
             db = FirebaseFirestore.getInstance();
 
             // Add a new document with a generated ID

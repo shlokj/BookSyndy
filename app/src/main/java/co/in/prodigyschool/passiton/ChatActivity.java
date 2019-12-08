@@ -8,6 +8,7 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +18,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -25,6 +28,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -38,60 +44,61 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import co.in.prodigyschool.passiton.Adapters.MessageAdapter;
+import co.in.prodigyschool.passiton.Data.Chat;
 import co.in.prodigyschool.passiton.Data.Messages;
+import co.in.prodigyschool.passiton.Data.User;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatActivity extends AppCompatActivity implements View.OnClickListener {
     public static final int DEFAULT_MSG_LENGTH_LIMIT = 1000;
     private static final int RC_PHOTO_PICKER = 2;
-
+    private static final String TAG = "CHAT ACTIVITY";
     /*firebase */
     private FirebaseAuth mAuth;
-    private FirebaseDatabase mDatabase;
+    private FirebaseFirestore mFirestore;
     private DatabaseReference RootRef;
 
-    private CircleImageView visiter_profile_picture;
+    private CircleImageView visitor_profile_picture;
     private String receiver_user_id,visit_user_name,visit_image,message_sender_id;
-    private TextView visiter_name,userLastSeen;
+    private TextView visitor_name,userLastSeen;
     private ImageButton mPhotoPickerButton;
     private EditText mMessageEditText;
     private Button mSendButton;
 
     private final List<Messages> messagesList = new ArrayList<>();
-    private LinearLayoutManager linearLayoutManager;
     private MessageAdapter messageAdapter;
     private RecyclerView userMessagesList;
 
     private String saveCurrentTime, saveCurrentDate;
 
+    //chats entry
+    private Map chatBodyDetails;
+    private User user = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         Toolbar toolbar = findViewById(R.id.chat_toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_back_arrow_white);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_24px);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        visiter_profile_picture = findViewById(R.id.visit_profile_image);
+        visitor_profile_picture = findViewById(R.id.visit_profile_image);
         mPhotoPickerButton =  findViewById(R.id.photoPickerButton);
         mMessageEditText = findViewById(R.id.messageEditText);
-        visiter_name = findViewById(R.id.visit_profile_name);
+        visitor_name = findViewById(R.id.visit_profile_name);
         userLastSeen =  findViewById(R.id.user_last_seen);
         mSendButton = findViewById(R.id.sendButton);
         mAuth = FirebaseAuth.getInstance();
+        mFirestore = FirebaseFirestore.getInstance();
         RootRef = FirebaseDatabase.getInstance().getReference();
-        mSendButton.setOnClickListener(this);
-
 
         initializeChatRoom();
-
-
-
         DisplayLastSeen();
 
     }
@@ -101,21 +108,17 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         visit_image = getIntent().getStringExtra("visit_image");
         receiver_user_id = getIntent().getStringExtra("visit_user_id");
         visit_user_name = getIntent().getStringExtra("visit_user_name");
-        Glide.with(getApplicationContext()).load(visit_image).into(visiter_profile_picture);
-        visiter_name.setText(visit_user_name);
-        message_sender_id = mAuth.getCurrentUser().getPhoneNumber();
+        Glide.with(getApplicationContext()).load(visit_image).into(visitor_profile_picture);
+        visitor_name.setText(visit_user_name);
+        message_sender_id = Objects.requireNonNull(mAuth.getCurrentUser()).getPhoneNumber();
 
+        //chats update
+        populateUserDetails();
+
+        
         /* buttons and listeners */
-        // ImagePickerButton shows an image picker to upload a image for a message
-        mPhotoPickerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/jpeg");
-                intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
-                startActivityForResult(Intent.createChooser(intent, "Complete action using"), RC_PHOTO_PICKER);
-            }
-        });
+        mSendButton.setOnClickListener(this);
+        mPhotoPickerButton.setOnClickListener(this);
 
         // Enable Send button when there's text to send
         mMessageEditText.addTextChangedListener(new TextWatcher() {
@@ -141,7 +144,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         /* messages adpater */
         messageAdapter = new MessageAdapter(messagesList);
         userMessagesList =  findViewById(R.id.private_messages_list_of_users);
-        linearLayoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         userMessagesList.setLayoutManager(linearLayoutManager);
         userMessagesList.setAdapter(messageAdapter);
 
@@ -153,6 +156,56 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
         SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm a");
         saveCurrentTime = currentTime.format(calendar.getTime());
+
+    }
+
+    private void populateUserDetails() {
+        DocumentReference reference = mFirestore.collection("users").document(message_sender_id);
+        reference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot snapshot) {
+           if(snapshot.exists()){
+               user = snapshot.toObject(User.class);
+           }
+           else{
+               Log.d(TAG, "onSuccess: snapshot does not exist");
+           }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "onFailure: populateuserdetails failed",e); 
+            }
+        });
+    }
+
+    private void populateChatDetails() {
+        if(user != null) {
+            String chat_sender_ref = "chats/" + message_sender_id + "/" + receiver_user_id;
+            String chat_receiver_ref = "chats/" + receiver_user_id + "/" + message_sender_id;
+            DatabaseReference userChatKeyRef = RootRef.child("chats").child(message_sender_id).child(receiver_user_id).push();
+            String chatPushId = userChatKeyRef.getKey();
+            Chat senderchat = new Chat(visit_image, visit_user_name, "online");
+            Chat receiverchat = new Chat(user.getImageUrl(), user.getUserId(), "online");
+
+            Map chatBodyDetails = new HashMap();
+            chatBodyDetails.put(chat_sender_ref , senderchat);
+            chatBodyDetails.put(chat_receiver_ref , receiverchat);
+
+            RootRef.updateChildren(chatBodyDetails).addOnCompleteListener(new OnCompleteListener() {
+                @Override
+                public void onComplete(@NonNull Task task) {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "onComplete: chat update successful");
+                    } else {
+                        Log.d(TAG, "onComplete: chat update failed", task.getException());
+                    }
+                }
+            });
+        }
+        else{
+            Log.d(TAG, "populateChatDetails: failed with user object null");
+        }
 
     }
 
@@ -170,7 +223,18 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        SendMessage();
+        switch (v.getId()){
+            case R.id.photoPickerButton:
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/jpeg");
+                intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+                startActivityForResult(Intent.createChooser(intent, "Complete action using"), RC_PHOTO_PICKER);
+                break;
+            case R.id.sendButton:
+                SendMessage();
+                break;
+                default:
+        }
     }
 
     private void DisplayLastSeen()
@@ -303,6 +367,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                     if (task.isSuccessful())
                     {
                         Toast.makeText(ChatActivity.this, "Message Sent Successfully...", Toast.LENGTH_SHORT).show();
+                        populateChatDetails();
                     }
                     else
                     {
@@ -311,6 +376,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                     mMessageEditText.setText("");
                 }
             });
+
+
+
         }
     }
 }
