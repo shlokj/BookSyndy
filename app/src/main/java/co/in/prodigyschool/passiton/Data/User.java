@@ -11,7 +11,7 @@ public class User {
     public User() {
     }
 
-    public User(String firstName, String lastName,String phone, boolean isParent, boolean toSell, int gradeNumber, int boardNumber,boolean competitiveExam) {
+    public User(String firstName, String lastName, String phone, boolean isParent, boolean toSell, int gradeNumber, int boardNumber,boolean competitiveExam) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
@@ -22,7 +22,7 @@ public class User {
         this.competitiveExam = competitiveExam;
     }
 
-    public User(String firstName, String lastName,String phone, boolean isParent, boolean toSell, int gradeNumber, int boardNumber,boolean competitiveExam,String userId,String imageUrl) {
+    public User(String firstName, String lastName, String phone, boolean isParent, boolean toSell, int gradeNumber, int boardNumber,boolean competitiveExam,String userId,String imageUrl) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;

@@ -86,7 +86,7 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
                 competitiveExam=false;
             }
             phoneNumber = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
-            curFirebaseUser = new User(firstName, lastName, phoneNumber, isParent, toSell, gradeNumber, boardNumber,competitiveExam);
+            curFirebaseUser = new User(firstName, lastName, phoneNumber, isParent, toSell, gradeNumber, boardNumber,competitiveExam, username, null);
             db = FirebaseFirestore.getInstance();
 
             // Add a new document with a generated ID
