@@ -17,8 +17,8 @@ public class UserProfileActivity extends AppCompatActivity {
         if(getSupportActionBar()!= null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-
         }
+        getSupportActionBar().setTitle("Profile");
     }
 
     @Override

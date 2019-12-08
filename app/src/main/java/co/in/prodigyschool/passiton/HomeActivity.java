@@ -183,6 +183,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         if(id == R.id.action_settings){
             Log.d("user click", "onOptionsItemSelected: ");
         }
+        if (id == R.id.filter) {
+            //open filter activity to apply and change filters
+        }
 
         return super.onOptionsItemSelected(item);
     }
