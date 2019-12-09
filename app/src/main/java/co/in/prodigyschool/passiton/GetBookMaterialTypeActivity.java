@@ -19,9 +19,8 @@ public class GetBookMaterialTypeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start_create_book_listing);
+        setContentView(R.layout.activity_get_book_material_type);
         getSupportActionBar().setTitle("List a book");
-
         materialTypeButtons = (RadioGroup) findViewById(R.id.materialTypeRadioGroup);
         FloatingActionButton next = findViewById(R.id.fab11);
         next.setOnClickListener(new View.OnClickListener() {
