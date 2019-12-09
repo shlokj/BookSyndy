@@ -38,6 +38,7 @@ public class ChatsFragment extends Fragment {
     private DatabaseReference ChatsRef, UsersRef;
     private FirebaseAuth mAuth;
     private String currentUserID="";
+    FirebaseRecyclerAdapter<Chat, ChatsViewHolder> adapter;
 
     public ChatsFragment(){
 
@@ -51,11 +52,10 @@ public class ChatsFragment extends Fragment {
 
         chatsList =  PrivateChatsView.findViewById(R.id.chat_recycler_view);
         mEmptyView = PrivateChatsView.findViewById(R.id.chat_view_empty);
-
-        initFireStore();
-
         chatsList =  PrivateChatsView.findViewById(R.id.chat_recycler_view);
         chatsList.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        initFireStore();
 
         return PrivateChatsView;
     }
@@ -67,8 +67,6 @@ public class ChatsFragment extends Fragment {
         currentUserID = mAuth.getCurrentUser().getPhoneNumber();
         ChatsRef = FirebaseDatabase.getInstance().getReference().child("chats").child(currentUserID);
         UsersRef = FirebaseDatabase.getInstance().getReference().child("users");
-
-
 
     }
     catch(Exception e){
@@ -86,7 +84,7 @@ public class ChatsFragment extends Fragment {
                         .build();
 
 
-        FirebaseRecyclerAdapter<Chat, ChatsViewHolder> adapter =
+        adapter =
                 new FirebaseRecyclerAdapter<Chat, ChatsViewHolder>(options) {
                     @Override
                     protected void onBindViewHolder(@NonNull final ChatsViewHolder holder, int position, @NonNull Chat model)
@@ -176,7 +174,7 @@ public class ChatsFragment extends Fragment {
     public void onStop() {
         super.onStop();
 
-
+adapter.stopListening();
 
     }
 

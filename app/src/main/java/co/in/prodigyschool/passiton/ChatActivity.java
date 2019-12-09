@@ -30,9 +30,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -52,7 +56,7 @@ import co.in.prodigyschool.passiton.Data.Messages;
 import co.in.prodigyschool.passiton.Data.User;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ChatActivity extends AppCompatActivity implements View.OnClickListener {
+public class ChatActivity extends AppCompatActivity implements View.OnClickListener, EventListener<DocumentSnapshot> {
     public static final int DEFAULT_MSG_LENGTH_LIMIT = 1000;
     private static final int RC_PHOTO_PICKER = 2;
     private static final String TAG = "CHAT ACTIVITY";
@@ -60,7 +64,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private FirebaseAuth mAuth;
     private FirebaseFirestore mFirestore;
     private DatabaseReference RootRef;
-
+private DocumentReference messageSenderRef;
     private CircleImageView visitor_profile_picture;
     private String receiver_user_id,visit_user_name,visit_image,message_sender_id;
     private TextView visitor_name,userLastSeen;
@@ -77,6 +81,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     //chats entry
     private Map chatBodyDetails;
     private User user = null;
+    private ListenerRegistration  messageSenderRegistration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,11 +116,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         Glide.with(getApplicationContext()).load(visit_image).into(visitor_profile_picture);
         visitor_name.setText(visit_user_name);
         message_sender_id = Objects.requireNonNull(mAuth.getCurrentUser()).getPhoneNumber();
+        messageSenderRef = mFirestore.collection("users").document(message_sender_id);
+        messageSenderRegistration = messageSenderRef.addSnapshotListener(this);
 
-        //chats update
-        populateUserDetails();
-
-        
         /* buttons and listeners */
         mSendButton.setOnClickListener(this);
         mPhotoPickerButton.setOnClickListener(this);
@@ -157,26 +160,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm a");
         saveCurrentTime = currentTime.format(calendar.getTime());
 
-    }
-
-    private void populateUserDetails() {
-        DocumentReference reference = mFirestore.collection("users").document(message_sender_id);
-        reference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot snapshot) {
-           if(snapshot.exists()){
-               user = snapshot.toObject(User.class);
-           }
-           else{
-               Log.d(TAG, "onSuccess: snapshot does not exist");
-           }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, "onFailure: populateuserdetails failed",e); 
-            }
-        });
     }
 
     private void populateChatDetails() {
@@ -320,6 +303,10 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     protected void onStop() {
         super.onStop();
         messagesList.clear();
+        if(messageSenderRegistration != null){
+            messageSenderRegistration.remove();
+            messageSenderRegistration = null;
+        }
     }
 
     @Override
@@ -380,5 +367,15 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
 
         }
+    }
+
+    @Override
+    public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+        if(e != null){
+            Log.w(TAG, "onEvent: error",e );
+        return;
+        }
+
+        user = snapshot.toObject(User.class);
     }
 }

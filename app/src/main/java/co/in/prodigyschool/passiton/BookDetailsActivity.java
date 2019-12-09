@@ -1,6 +1,7 @@
 package co.in.prodigyschool.passiton;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -20,23 +21,26 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.security.spec.ECField;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 
 import co.in.prodigyschool.passiton.Data.Book;
 import co.in.prodigyschool.passiton.Data.User;
 
 
-public class BookDetailsActivity extends AppCompatActivity implements View.OnClickListener {
+public class BookDetailsActivity extends AppCompatActivity implements View.OnClickListener, EventListener<DocumentSnapshot> {
 
     private String bookid;
-    FirebaseFirestore mFirestore;
-    Book currentBook;
-    User bookOwner;
+    private FirebaseFirestore mFirestore;
+    private Book currentBook;
+    private User bookOwner;
     private FloatingActionButton fab_favourite;
     private TextView view_bookname,view_address,view_price,view_category,view_description;
     private ImageView view_bookimage;
+    private ListenerRegistration mBookUserRegistration,mBookRegistration;
+    private DocumentReference bookUserRef, bookRef;
 
     private static final String TAG = "BOOK DETAILS";
 
@@ -62,7 +66,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         mFirestore = FirebaseFirestore.getInstance();
 
         if(mFirestore != null){
-            populateBookDetails();
+            bookRef =  mFirestore.collection("books").document(bookid);
 
         }
         else{
@@ -72,14 +76,10 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
 
 
 
-    private void populateBookDetails() {
-        //
-        try{
-            DocumentReference bookReference =  mFirestore.collection("books").document(bookid);
-            bookReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot snapshot) {
-                    currentBook = snapshot.toObject(Book.class);
+    private void populateBookDetails(Book book) {
+
+                    currentBook = book;
+                    bookUserRef = mFirestore.collection("users").document(currentBook.getUserId());
                     view_bookname.setText(currentBook.getBookName());
                     view_description.setText(currentBook.getBookDescription());
                     view_address.setText(currentBook.getBookAddress());
@@ -93,50 +93,18 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                     Glide.with(view_bookimage.getContext())
                             .load(currentBook.getBookPhoto())
                             .into(view_bookimage);
-
-                    populateUserDetails();
-
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.e(TAG, "onFailure: ",e );
-                }
-            });
-
-        }
-        catch(Exception e){
-            Log.e(TAG, "populateBookDetails failed with  ",e);
-        }
-    }
-
-    /*
-    method to get user details;
-     */
-    private void populateUserDetails() {
-        if (!checkConnection(getApplicationContext())) {
-            Toast.makeText(getApplicationContext(),"Internet Required",Toast.LENGTH_LONG).show();
-            return;
-        }
-        DocumentReference reference = mFirestore.collection("users").document(currentBook.getUserId());
-        reference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        mBookUserRegistration =  bookUserRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
-            public void onSuccess(DocumentSnapshot snapshot) {
-           if(snapshot.exists()){
-               bookOwner = snapshot.toObject(User.class);
-           }
-           else{
-               Log.d(TAG, "onSuccess: no user found for the book");
-           }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e(TAG, "onFailure: populateuserdetails" ,e );
+            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "book:onEvent", e);
+                    return;
+                }
+                bookOwner = snapshot.toObject(User.class);
             }
         });
-    }
 
+    }
 
     @Override
     public void onClick(View v) {
@@ -187,4 +155,35 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         return false;
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        mBookRegistration = bookRef.addSnapshotListener(this);
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(mBookUserRegistration != null){
+            mBookUserRegistration.remove();
+            mBookUserRegistration = null;
+        }
+        if(mBookRegistration != null){
+            mBookRegistration.remove();
+            mBookRegistration = null;
+        }
+    }
+
+    @Override
+    public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+        if (e != null) {
+            Log.w(TAG, "book:onEvent", e);
+            return;
+        }
+
+            populateBookDetails(snapshot.toObject(Book.class));
+
+    }
 }
