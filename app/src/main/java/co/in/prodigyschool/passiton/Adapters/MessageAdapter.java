@@ -34,7 +34,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     public class MessageViewHolder extends RecyclerView.ViewHolder
     {
         public TextView senderMessageText, receiverMessageText;
-        public CircleImageView receiverProfileImage;
+
         public ImageView messageSenderPicture, messageReceiverPicture;
 
 
@@ -42,8 +42,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         {
             super(itemView);
 
-            senderMessageText = (TextView) itemView.findViewById(R.id.sender_messsage_text);
-            receiverMessageText = (TextView) itemView.findViewById(R.id.receiver_message_text);
+            senderMessageText =  itemView.findViewById(R.id.sender_messsage_text);
+            receiverMessageText =  itemView.findViewById(R.id.receiver_message_text);
 
             messageReceiverPicture = itemView.findViewById(R.id.message_receiver_image_view);
             messageSenderPicture = itemView.findViewById(R.id.message_sender_image_view);
@@ -70,7 +70,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     @Override
     public void onBindViewHolder(@NonNull final MessageViewHolder messageViewHolder, int i)
     {
-        String messageSenderId = mAuth.getCurrentUser().getUid();
+        String messageSenderId = mAuth.getCurrentUser().getPhoneNumber();
         Messages messages = userMessagesList.get(i);
 
         String fromUserID = messages.getFrom();
@@ -90,7 +90,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                 messageViewHolder.senderMessageText.setVisibility(View.VISIBLE);
 
                 messageViewHolder.senderMessageText.setBackgroundResource(R.drawable.sender_messages_layout);
-                messageViewHolder.senderMessageText.setTextColor(Color.BLACK);
+                messageViewHolder.senderMessageText.setTextColor(Color.WHITE);
                 messageViewHolder.senderMessageText.setText(messages.getMessage() + "\n \n" + messages.getTime() + " - " + messages.getDate());
             }
             else

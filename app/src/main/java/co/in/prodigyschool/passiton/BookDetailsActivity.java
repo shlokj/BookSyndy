@@ -22,6 +22,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.security.spec.ECField;
+
 import co.in.prodigyschool.passiton.Data.Book;
 import co.in.prodigyschool.passiton.Data.User;
 
@@ -151,11 +153,16 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void startChatActivity() {
-        Intent chatIntent = new Intent(BookDetailsActivity.this, ChatActivity.class);
-        chatIntent.putExtra("visit_user_id", currentBook.getUserId()); // phone number
-        chatIntent.putExtra("visit_user_name", bookOwner.getUserId()); // unique user id
-        chatIntent.putExtra("visit_image", bookOwner.getImageUrl());
-        startActivity(chatIntent);
+        try {
+            Intent chatIntent = new Intent(BookDetailsActivity.this, ChatActivity.class);
+            chatIntent.putExtra("visit_user_id", currentBook.getUserId()); // phone number
+            chatIntent.putExtra("visit_user_name", bookOwner.getUserId()); // unique user id
+            chatIntent.putExtra("visit_image", bookOwner.getImageUrl());
+            startActivity(chatIntent);
+        }
+        catch(Exception e){
+            Toast.makeText(getApplicationContext(), "Please Try Again", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
