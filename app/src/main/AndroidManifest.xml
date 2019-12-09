@@ -43,7 +43,7 @@
         <activity
             android:name=".GetBookNameActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".StartCreateBookListingActivity" />
+        <activity android:name=".GetBookMaterialTypeActivity" />
         <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"

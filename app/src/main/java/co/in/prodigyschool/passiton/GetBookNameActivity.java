@@ -22,6 +22,7 @@ public class GetBookNameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_book_name);
+        getSupportActionBar().setTitle("List a book");
         isTextbook = getIntent().getBooleanExtra("IS_TEXTBOOK",true);
         nameQuestion = (TextView)findViewById(R.id.titleQTV);
         namingInstructuions = (TextView) findViewById(R.id.namingInstructions);

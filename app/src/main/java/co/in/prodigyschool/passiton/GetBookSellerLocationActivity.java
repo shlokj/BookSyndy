@@ -47,6 +47,7 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_book_seller_location);
+        getSupportActionBar().setTitle("List a book");
         locationTV = (TextView) findViewById(R.id.localityArea);
         locSearchDummy = findViewById(R.id.locationEditTextDummy);
         locSearchDummy.setFocusable(false);

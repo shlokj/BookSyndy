@@ -10,7 +10,7 @@ import android.widget.RadioGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
-public class StartCreateBookListingActivity extends AppCompatActivity {
+public class GetBookMaterialTypeActivity extends AppCompatActivity {
 
     RadioGroup materialTypeButtons;
     int bookTypeId;
@@ -20,6 +20,7 @@ public class StartCreateBookListingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_create_book_listing);
+        getSupportActionBar().setTitle("List a book");
 
         materialTypeButtons = (RadioGroup) findViewById(R.id.materialTypeRadioGroup);
         FloatingActionButton next = findViewById(R.id.fab11);
@@ -41,13 +42,13 @@ public class StartCreateBookListingActivity extends AppCompatActivity {
                 }
                 else if (bookTypeId==R.id.textbookOption) {
                     isTextbook=true;
-                    Intent getBookName = new Intent(StartCreateBookListingActivity.this, GetBookNameActivity.class);
+                    Intent getBookName = new Intent(GetBookMaterialTypeActivity.this, GetBookNameActivity.class);
                     getBookName.putExtra("IS_TEXTBOOK", isTextbook);
                     startActivity(getBookName);
                 }
                 else if (bookTypeId==R.id.notesOption) {
                     isTextbook=false;
-                    Intent getBookName = new Intent(StartCreateBookListingActivity.this, GetBookNameActivity.class);
+                    Intent getBookName = new Intent(GetBookMaterialTypeActivity.this, GetBookNameActivity.class);
                     getBookName.putExtra("IS_TEXTBOOK", isTextbook);
                     startActivity(getBookName);
                 }
@@ -58,7 +59,7 @@ public class StartCreateBookListingActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent homeActivity = new Intent(StartCreateBookListingActivity.this,HomeActivity.class);
+        Intent homeActivity = new Intent(GetBookMaterialTypeActivity.this,HomeActivity.class);
         startActivity(homeActivity);
     }
 }

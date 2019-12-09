@@ -24,6 +24,7 @@ public class GetBookDegreeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_book_degree);
+        getSupportActionBar().setTitle("List a book");
 
         degrees = (RadioGroup) findViewById(R.id.bookDegreesButtonList);
 

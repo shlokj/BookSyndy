@@ -20,6 +20,7 @@ public class GetBookDescriptionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_book_description);
+        getSupportActionBar().setTitle("List a book");
         bookName = getIntent().getStringExtra("BOOK_NAME");
         isTextbook = getIntent().getBooleanExtra("IS_TEXTBOOK",true);
         bookDescField = (EditText) findViewById(R.id.bookDescription);

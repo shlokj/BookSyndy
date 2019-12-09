@@ -28,6 +28,7 @@ public class GetBookPriceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_book_price);
+        getSupportActionBar().setTitle("List a book");
         pricingInstructions = (TextView) findViewById(R.id.pricingInstructions);
         pricingInstructions.setVisibility(View.INVISIBLE);
         priceField = (EditText) findViewById(R.id.bookPriceField);

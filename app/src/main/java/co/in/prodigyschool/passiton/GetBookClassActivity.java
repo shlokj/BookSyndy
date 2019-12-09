@@ -26,6 +26,7 @@ public class GetBookClassActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_book_class);
+        getSupportActionBar().setTitle("List a book");
         isTextbook = getIntent().getBooleanExtra("IS_TEXTBOOK", true);
         bookName = getIntent().getStringExtra("BOOK_NAME");
         bookDescription = getIntent().getStringExtra("BOOK_DESCRIPTION");

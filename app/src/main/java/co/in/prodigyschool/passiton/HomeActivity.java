@@ -10,7 +10,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 
@@ -55,8 +54,6 @@ import android.widget.Toast;
 import java.util.HashMap;
 import java.util.Map;
 
-import co.in.prodigyschool.passiton.Data.Book;
-import co.in.prodigyschool.passiton.Data.HomeItem;
 import co.in.prodigyschool.passiton.Data.User;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -88,7 +85,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent startBookPub = new Intent(HomeActivity.this, StartCreateBookListingActivity.class);
+                Intent startBookPub = new Intent(HomeActivity.this, GetBookMaterialTypeActivity.class);
                 startBookPub.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(startBookPub);
             }

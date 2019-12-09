@@ -10,5 +10,7 @@ public class GetBookPictureActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_book_picture);
+        getSupportActionBar().setTitle("List a book");
+
     }
 }
