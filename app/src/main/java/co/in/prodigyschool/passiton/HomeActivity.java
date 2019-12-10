@@ -181,6 +181,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             Log.d("user click", "onOptionsItemSelected: ");
         }
         if (id == R.id.filter) {
+            Intent openFilters = new Intent(HomeActivity.this,FilterActivity.class);
+            startActivity(openFilters);
             //open filter activity to apply and change filters
         }
 

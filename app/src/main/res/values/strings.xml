@@ -82,4 +82,8 @@
     <string name="name_question">Great! What\'s your name?</string>
     <string name="username">Username</string>
     <string name="search">Search</string>
+    <string name="free_only">Free only</string>
+    <string name="sort_by">Sort by</string>
+    <string name="relevance">Relevance</string>
+    <string name="date_newest_first">Date (newest first)</string>
 </resources>
