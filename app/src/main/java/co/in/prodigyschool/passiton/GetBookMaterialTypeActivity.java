@@ -56,9 +56,4 @@ public class GetBookMaterialTypeActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public void onBackPressed() {
-        Intent homeActivity = new Intent(GetBookMaterialTypeActivity.this,HomeActivity.class);
-        startActivity(homeActivity);
-    }
 }

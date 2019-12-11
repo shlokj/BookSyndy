@@ -73,8 +73,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseFirestore mFirestore;
     private String curUserId;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +83,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent startBookPub = new Intent(HomeActivity.this, GetBookMaterialTypeActivity.class);
+                Intent startBookPub = new Intent(HomeActivity.this, GetBookPictureActivity.class);
                 startBookPub.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(startBookPub);
             }
