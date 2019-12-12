@@ -17,7 +17,7 @@ public class BookUtil {
     private static final ThreadPoolExecutor EXECUTOR = new ThreadPoolExecutor(2, 4, 60,
             TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
 
-    private static final String BOOK_URL_FMT = "https://storage.googleapis.com/firestorequickstarts.appspot.com/food_%d.png";
+    private static final String BOOK_URL_FMT = "https://firebasestorage.googleapis.com/v0/b/booksyndy-e8ef6.appspot.com/o/default_photos%2Fdefault_book_image.png?alt=media&token=ba51ce8f-91bd-4c2d-bdea-d527b0667fc8";
 
     private static final int MAX_IMAGE_NUM = 2;
 
@@ -37,7 +37,7 @@ public class BookUtil {
         // Integer between 1 and MAX_IMAGE_NUM (inclusive)
         int id = random.nextInt(MAX_IMAGE_NUM) + 1;
 
-        return String.format(Locale.getDefault(), BOOK_URL_FMT, id);
+        return BOOK_URL_FMT;
     }
 
     private static double getRandomRating(Random random) {

@@ -1,4 +1,4 @@
-package co.in.prodigyschool.passiton.ui.home;
+package co.in.prodigyschool.passiton.ui.myListings;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,49 +7,41 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.ArrayList;
 
 import co.in.prodigyschool.passiton.Adapters.BookAdapter;
 import co.in.prodigyschool.passiton.BookDetailsActivity;
-import co.in.prodigyschool.passiton.Data.User;
 import co.in.prodigyschool.passiton.R;
 
-public class HomeFragment extends Fragment implements BookAdapter.OnBookSelectedListener {
+public class MyListingsFragment extends Fragment implements BookAdapter.OnBookSelectedListener{
 
-    private static String TAG = "HOME FRAGMENT";
-    private HomeViewModel homeViewModel;
+    private static String TAG = "MY LISTINGS";
+
     private RecyclerView recyclerView;
     private ViewGroup mEmptyView;
-    private BookAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
+    private BookAdapter mAdapter;
     private static final int LIMIT = 50;
     private FirebaseFirestore mFirestore;
     private Query mQuery;
+    private GalleryViewModel galleryViewModel;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
+        galleryViewModel =
+                ViewModelProviders.of(this).get(GalleryViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
         /* recycler view */
@@ -62,17 +54,21 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mAdapter);
-
+        mAdapter.startListening();
         return root;
     }
 
     private void initFireStore() {
+        try {
+            /* firestore */
+            mFirestore = FirebaseFirestore.getInstance();
+            String userId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
+            mQuery = mFirestore.collection("books").whereEqualTo("userId", userId).limit(LIMIT);
+            populateBookAdapter();
 
-        /* firestore */
-        mFirestore = FirebaseFirestore.getInstance();
-        mQuery = mFirestore.collection("books").orderBy("bookPrice", Query.Direction.ASCENDING).limit(LIMIT);
-        populateBookAdapter();
-        removeUserBooks();
+        } catch (Exception e) {
+            Log.e(TAG, "initFireStore: ", e);
+        }
 
     }
 
@@ -105,27 +101,7 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
             }
         };
 
-    }
 
-    private void removeUserBooks() {
-        final String curUserId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
-        final ArrayList<String> usersList = new ArrayList<>();
-        mFirestore.collection("users").addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.e(TAG, "onEvent: exception", e);
-                    return;
-                }
-                for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                    String otherUserId = snapshot.toObject(User.class).getPhone();
-                    usersList.add(otherUserId);
-                }
-                usersList.remove(curUserId);
-                Query query = mFirestore.collection("books").whereIn("userId", usersList).limit(LIMIT);
-                mAdapter.setQuery(query);
-            }
-        });
     }
 
     @Override
@@ -133,6 +109,8 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
         super.onStart();
         if (mAdapter != null)
             mAdapter.startListening();
+
+
     }
 
     @Override
@@ -151,6 +129,7 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
         Intent bookDetails = new Intent(getActivity(), BookDetailsActivity.class);
         bookDetails.putExtra("bookid", book_id);
         startActivity(bookDetails);
-
     }
+
+
 }

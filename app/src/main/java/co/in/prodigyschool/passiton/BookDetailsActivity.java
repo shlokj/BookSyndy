@@ -78,32 +78,35 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
 
     private void populateBookDetails(Book book) {
 
-                    currentBook = book;
-                    bookUserRef = mFirestore.collection("users").document(currentBook.getUserId());
-                    view_bookname.setText(currentBook.getBookName());
-                    view_description.setText(currentBook.getBookDescription());
-                    view_address.setText(currentBook.getBookAddress());
-                    view_price.setText("₹"+currentBook.getBookPrice());
-                    if(currentBook.isTextbook()){
-                        view_category.setText("Text Book");
-                    }
-                    else{
-                        view_category.setText("Notes");
-                    }
-                    Glide.with(view_bookimage.getContext())
-                            .load(currentBook.getBookPhoto())
-                            .into(view_bookimage);
-        mBookUserRegistration =  bookUserRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w(TAG, "book:onEvent", e);
-                    return;
-                }
-                bookOwner = snapshot.toObject(User.class);
+        try {
+            currentBook = book;
+            bookUserRef = mFirestore.collection("users").document(currentBook.getUserId());
+            view_bookname.setText(currentBook.getBookName());
+            view_description.setText(currentBook.getBookDescription());
+            view_address.setText(currentBook.getBookAddress());
+            view_price.setText("₹" + currentBook.getBookPrice());
+            if (currentBook.isTextbook()) {
+                view_category.setText("Text Book");
+            } else {
+                view_category.setText("Notes");
             }
-        });
-
+            Glide.with(view_bookimage.getContext())
+                    .load(currentBook.getBookPhoto())
+                    .into(view_bookimage);
+            mBookUserRegistration = bookUserRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+                    if (e != null) {
+                        Log.w(TAG, "book:onEvent", e);
+                        return;
+                    }
+                    bookOwner = snapshot.toObject(User.class);
+                }
+            });
+        }
+        catch(Exception e){
+            Log.e(TAG, "populateBookDetails: exception",e );
+        }
     }
 
     @Override
