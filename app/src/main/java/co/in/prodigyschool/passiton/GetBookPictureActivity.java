@@ -51,6 +51,7 @@ public class GetBookPictureActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent getBookType = new Intent(GetBookPictureActivity.this, GetBookMaterialTypeActivity.class);
+                // To find an efficient way to pass on the image of the book; mostly the uri
                 startActivity(getBookType);
 
             }
