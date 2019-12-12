@@ -33,6 +33,7 @@ import co.in.prodigyschool.passiton.Data.User;
 public class BookDetailsActivity extends AppCompatActivity implements View.OnClickListener, EventListener<DocumentSnapshot> {
 
     private String bookid;
+    private boolean isHome;
     private FirebaseFirestore mFirestore;
     private Book currentBook;
     private User bookOwner;
@@ -49,6 +50,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_details);
         bookid = getIntent().getStringExtra("bookid");
+        isHome = getIntent().getBooleanExtra("isHome",false);
         initFireStore();
         view_bookname = findViewById(R.id.book_name);
         view_address = findViewById(R.id.book_address);
@@ -78,32 +80,35 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
 
     private void populateBookDetails(Book book) {
 
-                    currentBook = book;
-                    bookUserRef = mFirestore.collection("users").document(currentBook.getUserId());
-                    view_bookname.setText(currentBook.getBookName());
-                    view_description.setText(currentBook.getBookDescription());
-                    view_address.setText(currentBook.getBookAddress());
-                    view_price.setText("₹"+currentBook.getBookPrice());
-                    if(currentBook.isTextbook()){
-                        view_category.setText("Text Book");
-                    }
-                    else{
-                        view_category.setText("Notes");
-                    }
-                    Glide.with(view_bookimage.getContext())
-                            .load(currentBook.getBookPhoto())
-                            .into(view_bookimage);
-        mBookUserRegistration =  bookUserRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w(TAG, "book:onEvent", e);
-                    return;
-                }
-                bookOwner = snapshot.toObject(User.class);
+        try {
+            currentBook = book;
+            bookUserRef = mFirestore.collection("users").document(currentBook.getUserId());
+            view_bookname.setText(currentBook.getBookName());
+            view_description.setText(currentBook.getBookDescription());
+            view_address.setText(currentBook.getBookAddress());
+            view_price.setText("₹" + currentBook.getBookPrice());
+            if (currentBook.isTextbook()) {
+                view_category.setText("Text Book");
+            } else {
+                view_category.setText("Notes");
             }
-        });
-
+            Glide.with(view_bookimage.getContext())
+                    .load(currentBook.getBookPhoto())
+                    .into(view_bookimage);
+            mBookUserRegistration = bookUserRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+                    if (e != null) {
+                        Log.w(TAG, "book:onEvent", e);
+                        return;
+                    }
+                    bookOwner = snapshot.toObject(User.class);
+                }
+            });
+        }
+        catch(Exception e){
+            Log.e(TAG, "populateBookDetails: exception",e );
+        }
     }
 
     @Override
@@ -158,9 +163,15 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onStart() {
         super.onStart();
-
         mBookRegistration = bookRef.addSnapshotListener(this);
-
+        if(isHome){
+            findViewById(R.id.fab_chat).setVisibility(View.VISIBLE);
+            findViewById(R.id.fab_favorite).setVisibility(View.VISIBLE);
+        }
+        else{
+            findViewById(R.id.fab_chat).setVisibility(View.INVISIBLE);
+            findViewById(R.id.fab_favorite).setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override

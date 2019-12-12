@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import co.in.prodigyschool.passiton.Data.Book;
 import co.in.prodigyschool.passiton.R;
@@ -52,8 +53,13 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder> {
 
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.bind(getSnapshot(position),mListener);
+
+
+            holder.bind(getSnapshot(position), mListener);
+
+
     }
+
 
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -79,25 +85,35 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder> {
             Resources resources = itemView.getResources();
 
             // Load image
-                if(!book.getUserId().equalsIgnoreCase(userId)) {
-                    Glide.with(imageView.getContext())
-                            .load(book.getBookPhoto())
-                            .into(imageView);
 
-                    nameView.setText(book.getBookName());
-                    cityView.setText(book.getBookAddress());
-                    priceView.setText("₹" + book.getBookPrice());
-                    // Click listener
-                    itemView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (listener != null) {
-                                listener.onBookSelected(snapshot);
-                            }
-                        }
-                    });
 
-                }
+
+
+               Glide.with(imageView.getContext())
+                       .load(book.getBookPhoto())
+                       .into(imageView);
+
+               nameView.setText(book.getBookName());
+               cityView.setText(book.getBookAddress());
+               if(book.getBookPrice() == 0){
+                   priceView.setText("Free");
+               }
+               else{
+                   priceView.setText("₹" + book.getBookPrice());
+               }
+               // Click listener
+               itemView.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View view) {
+                       if (listener != null) {
+                           listener.onBookSelected(snapshot);
+                       }
+                   }
+               });
+
+
+
+
         }
 
     }

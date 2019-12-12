@@ -1,6 +1,5 @@
 package co.in.prodigyschool.passiton.Data;
 
-import co.in.prodigyschool.passiton.util.BookUtil;
 
 /**
 *Book POJO.

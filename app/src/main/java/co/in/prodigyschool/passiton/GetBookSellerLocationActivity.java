@@ -37,7 +37,7 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
     private static final String TAG = "getLocationActivity";
     private FirebaseAuth mAuth;
     boolean isTextbook;
-    String bookName, bookDescription,phoneNumber,userId,bookAddress;
+    String bookName, bookDescription,phoneNumber,userId,bookAddress,bookImageUrl;
     int gradeNumber, boardNumber;
     private EditText locSearchDummy;
     private int bookPrice;
@@ -171,11 +171,15 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
             boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 1);
             boardNumber = getIntent().getIntExtra("DEGREE_NUMBER", boardNumber);
             bookPrice = getIntent().getIntExtra("BOOK_PRICE",0);
+            bookImageUrl = getIntent().getStringExtra("BOOK_IMAGE_URL");
             bookAddress = locationTV.getText().toString();
             if(userId == null){
                 userId = mAuth.getCurrentUser().getPhoneNumber();
             }
             Book book = BookUtil.addBook(userId,isTextbook,bookName,bookDescription,gradeNumber,boardNumber,bookPrice,bookAddress);
+            if(bookImageUrl != null && !bookImageUrl.isEmpty()){
+                book.setBookPhoto("https://firebasestorage.googleapis.com/v0/b/booksyndy-e8ef6.appspot.com/o/book_photos%2Fbook_photo_1.png?alt=media&token=df4a96f3-3162-4832-b95c-feea08ffcaaa");
+            }
             addBook(book);
 
 
