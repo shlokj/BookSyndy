@@ -6,6 +6,8 @@ import androidx.core.content.res.ResourcesCompat;
 import android.os.Bundle;
 import android.widget.CheckBox;
 
+import java.util.Objects;
+
 public class FilterActivity extends AppCompatActivity {
 
     CheckBox filterGrade5orBelow, filterGrade6to8, filterGrade9, filterGrade10, filterGrade11, filterGrade12;
@@ -16,6 +18,9 @@ public class FilterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter_school);
+
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Filters");
+
         filterGrade5orBelow = findViewById(R.id.filterGrade5orBelow);
         filterGrade6to8 = findViewById(R.id.filterGrade6to8);
         filterGrade9 = findViewById(R.id.filterGrade9);
