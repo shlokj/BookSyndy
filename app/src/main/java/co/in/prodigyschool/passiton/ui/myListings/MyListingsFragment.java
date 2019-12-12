@@ -128,6 +128,7 @@ public class MyListingsFragment extends Fragment implements BookAdapter.OnBookSe
         String book_id = snapshot.getId();
         Intent bookDetails = new Intent(getActivity(), BookDetailsActivity.class);
         bookDetails.putExtra("bookid", book_id);
+        bookDetails.putExtra("isHome",false);
         startActivity(bookDetails);
     }
 

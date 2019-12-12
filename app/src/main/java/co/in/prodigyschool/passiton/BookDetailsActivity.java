@@ -33,6 +33,7 @@ import co.in.prodigyschool.passiton.Data.User;
 public class BookDetailsActivity extends AppCompatActivity implements View.OnClickListener, EventListener<DocumentSnapshot> {
 
     private String bookid;
+    private boolean isHome;
     private FirebaseFirestore mFirestore;
     private Book currentBook;
     private User bookOwner;
@@ -49,6 +50,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_details);
         bookid = getIntent().getStringExtra("bookid");
+        isHome = getIntent().getBooleanExtra("isHome",false);
         initFireStore();
         view_bookname = findViewById(R.id.book_name);
         view_address = findViewById(R.id.book_address);
@@ -161,9 +163,15 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onStart() {
         super.onStart();
-
         mBookRegistration = bookRef.addSnapshotListener(this);
-
+        if(isHome){
+            findViewById(R.id.fab_chat).setVisibility(View.VISIBLE);
+            findViewById(R.id.fab_favorite).setVisibility(View.VISIBLE);
+        }
+        else{
+            findViewById(R.id.fab_chat).setVisibility(View.INVISIBLE);
+            findViewById(R.id.fab_favorite).setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override

@@ -150,6 +150,7 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
         String book_id = snapshot.getId();
         Intent bookDetails = new Intent(getActivity(), BookDetailsActivity.class);
         bookDetails.putExtra("bookid", book_id);
+        bookDetails.putExtra("isHome",true);
         startActivity(bookDetails);
 
     }

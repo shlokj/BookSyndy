@@ -95,7 +95,12 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder> {
 
                nameView.setText(book.getBookName());
                cityView.setText(book.getBookAddress());
-               priceView.setText("₹" + book.getBookPrice());
+               if(book.getBookPrice() == 0){
+                   priceView.setText("Free");
+               }
+               else{
+                   priceView.setText("₹" + book.getBookPrice());
+               }
                // Click listener
                itemView.setOnClickListener(new View.OnClickListener() {
                    @Override
