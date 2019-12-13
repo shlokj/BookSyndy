@@ -106,6 +106,23 @@
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/ic_navigate_next_24px"/>
 
+
+    <CheckBox
+        android:id="@+id/competitiveExamBookCB"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="30dp"
+        android:fontFamily="@font/roboto_light"
+        android:padding="16dp"
+        android:text="For competitive exams"
+        android:textColor="@color/colorTextBlack"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/fab14"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bookGradesButtonList" />
+
 <!--TODO: Create textview telling users to select UG if in college-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

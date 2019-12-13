@@ -3,6 +3,7 @@ package co.in.prodigyschool.passiton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -42,6 +45,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     private ImageView view_bookimage;
     private ListenerRegistration mBookUserRegistration,mBookRegistration;
     private DocumentReference bookUserRef, bookRef;
+    private Menu menu;
 
     private static final String TAG = "BOOK DETAILS";
 
@@ -193,8 +197,22 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
             Log.w(TAG, "book:onEvent", e);
             return;
         }
-
             populateBookDetails(snapshot.toObject(Book.class));
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_edit_profile, menu);
+        this.menu = menu;
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.bookmark:
+//                menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_bookmark_filled_24px));
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

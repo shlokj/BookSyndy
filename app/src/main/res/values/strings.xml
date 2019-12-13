@@ -88,4 +88,8 @@
     <string name="date_newest_first">Date (newest first)</string>
     <string name="take_a_picture">Take a picture</string>
     <string name="pic_q">To get started, please upload a picture of your book.</string>
+    <string name="type">Type</string>
+    <string name="textbook">Textbook</string>
+    <string name="notes">Notes</string>
+    <string name="for_comp_exams">This material is for competitive exams</string>
 </resources>

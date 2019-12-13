@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -14,13 +17,14 @@ import com.google.android.material.snackbar.Snackbar;
 public class GetBookClassActivity extends AppCompatActivity {
 
     boolean isTextbook;
-    TextView gradeQuestion;
-    RadioGroup grades;
-    String bookName, bookDescription;
+    private TextView gradeQuestion;
+    private RadioGroup grades;
+    private String bookName, bookDescription;
     int grade;
-    int gradeNumber;
+    int gradeNumber, boardNumber;
     boolean tmp=true;
-    Intent getBookBoard;
+    Intent getBookBoard, getPrice;
+    private CheckBox compExamBook;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +39,28 @@ public class GetBookClassActivity extends AppCompatActivity {
             gradeQuestion.setText(R.string.notes_grade_question);
         }
         grades = (RadioGroup) findViewById(R.id.bookGradesButtonList);
+        compExamBook = findViewById(R.id.competitiveExamBookCB);
+        compExamBook.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (compExamBook.isChecked()) {
+                    grades.clearCheck();
+                    grades.setEnabled(false);
+                    for(int i = 0; i < grades.getChildCount(); i++){
+                        ((RadioButton)grades.getChildAt(i)).setEnabled(false);
+                    }
+                    gradeNumber=0;
+                    boardNumber = 20;
+                }
+                else {
+                    grades.setEnabled(true);
+                    for(int i = 0; i < grades.getChildCount(); i++){
+                        ((RadioButton)grades.getChildAt(i)).setEnabled(true);
+                    }
+                    boardNumber = 0;
+                }
+            }
+        });
         getBookBoard = new Intent(GetBookClassActivity.this, GetBookBoardActivity.class);
         getBookBoard.putExtra("IS_TEXTBOOK", isTextbook);
         getBookBoard.putExtra("BOOK_NAME",bookName);
@@ -44,7 +70,7 @@ public class GetBookClassActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 grade = grades.getCheckedRadioButtonId();
-                if (grade==-1) {
+                if (grade==-1 && boardNumber!=20) {
                     View parentLayout = findViewById(android.R.id.content);
                     Snackbar.make(parentLayout, "Please select an option", Snackbar.LENGTH_SHORT)
                             .setAction("OKAY", new View.OnClickListener() {
@@ -84,8 +110,17 @@ public class GetBookClassActivity extends AppCompatActivity {
                     startActivity(getBookDegree);
                     tmp = false;
                 }
+                else if (boardNumber==20) {
+                    getPrice = new Intent(GetBookClassActivity.this, GetBookPriceActivity.class);
+                    getPrice.putExtra("IS_TEXTBOOK", isTextbook);
+                    getPrice.putExtra("BOOK_NAME",bookName);
+                    getPrice.putExtra("BOOK_DESCRIPTION",bookDescription);
+                    getPrice.putExtra("GRADE_NUMBER",gradeNumber);
+                    getPrice.putExtra("BOARD_NUMBER",boardNumber);
+                    startActivity(getPrice);
+                }
                 getBookBoard.putExtra("GRADE_NUMBER",gradeNumber);
-                if (grade!=-1 && grade!=7 && tmp) {
+                if (grade!=-1 && grade!=7 && tmp && boardNumber!=20) {
                     startActivity(getBookBoard);
                 }
             }

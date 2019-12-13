@@ -1,6 +1,7 @@
 package co.in.prodigyschool.passiton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,6 +23,9 @@ public class UserProfileActivity extends AppCompatActivity {
     Spinner gradeSpinner, boardSpinner, degreeSpinner;
     FloatingActionButton saveChanges;
     TextWatcher checkChange;
+    private Menu menu;
+    private int clickCount;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +59,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                saveChanges.show();
+//                saveChanges.show();
             }
 
             @Override
@@ -74,6 +78,7 @@ public class UserProfileActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_edit_profile, menu);
+        this.menu = menu;
         return true;
     }
 
@@ -81,10 +86,24 @@ public class UserProfileActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.edit_profile:
-                fName.setEnabled(true);
-                lName.setEnabled(true);
-                year.setEnabled(true);
-//                phoneNumber.setEnabled(true);
+                if (clickCount%2==0) {
+                    fName.setEnabled(true);
+                    lName.setEnabled(true);
+                    year.setEnabled(true);
+                    // phoneNumber.setEnabled(true);
+                    menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_check_24px));
+                    clickCount = clickCount + 1;
+                }
+                else {
+                    fName.setEnabled(false);
+                    lName.setEnabled(false);
+                    year.setEnabled(false);
+                    // phoneNumber.setEnabled(false);
+                    menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_edit_24px));
+                    clickCount = clickCount + 1;
+                    //TODO: save profile changes and exit to home
+                }
+
         }
         return super.onOptionsItemSelected(item);
     }
