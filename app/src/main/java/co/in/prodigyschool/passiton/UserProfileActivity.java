@@ -91,7 +91,8 @@ public class UserProfileActivity extends AppCompatActivity {
                     lName.setEnabled(true);
                     year.setEnabled(true);
                     // phoneNumber.setEnabled(true);
-                    menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_check_24px));
+                    menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_check_24px))
+                            .setTitle("Save changes");
                     clickCount = clickCount + 1;
                 }
                 else {
@@ -99,7 +100,8 @@ public class UserProfileActivity extends AppCompatActivity {
                     lName.setEnabled(false);
                     year.setEnabled(false);
                     // phoneNumber.setEnabled(false);
-                    menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_edit_24px));
+                    menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_edit_24px))
+                            .setTitle("Edit profile");
                     clickCount = clickCount + 1;
                     //TODO: save profile changes and exit to home
                 }
