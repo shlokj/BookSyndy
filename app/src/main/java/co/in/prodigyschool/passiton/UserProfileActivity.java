@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -18,13 +19,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class UserProfileActivity extends AppCompatActivity {
 
-    ImageView profilePic;
-    EditText fName, lName, year, phoneNumber;
-    Spinner gradeSpinner, boardSpinner, degreeSpinner;
-    FloatingActionButton saveChanges;
-    TextWatcher checkChange;
+    private ImageView profilePic;
+    private EditText fName, lName, year, phoneNumber;
+    private Spinner gradeSpinner, boardSpinner, degreeSpinner;
+    private FloatingActionButton saveChanges;
+    private TextWatcher checkChange;
     private Menu menu;
     private int clickCount;
+    private CheckBox compExams;
 
 
     @Override
@@ -50,6 +52,8 @@ public class UserProfileActivity extends AppCompatActivity {
 
         saveChanges = findViewById(R.id.fab_save);
         saveChanges.hide();
+
+        compExams = findViewById(R.id.profileCompetitiveExams);
 
         checkChange = new TextWatcher() {
             @Override
@@ -90,6 +94,7 @@ public class UserProfileActivity extends AppCompatActivity {
                     fName.setEnabled(true);
                     lName.setEnabled(true);
                     year.setEnabled(true);
+                    compExams.setEnabled(true);
                     // phoneNumber.setEnabled(true);
                     menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_check_24px))
                             .setTitle("Save changes");
@@ -99,12 +104,17 @@ public class UserProfileActivity extends AppCompatActivity {
                     fName.setEnabled(false);
                     lName.setEnabled(false);
                     year.setEnabled(false);
+                    compExams.setEnabled(false);
                     // phoneNumber.setEnabled(false);
                     menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_edit_24px))
                             .setTitle("Edit profile");
                     clickCount = clickCount + 1;
                     //TODO: save profile changes and exit to home
                 }
+                break;
+            case android.R.id.home:
+                this.finish();
+                break;
 
         }
         return super.onOptionsItemSelected(item);

@@ -92,4 +92,8 @@
     <string name="textbook">Textbook</string>
     <string name="notes">Notes</string>
     <string name="for_comp_exams">This material is for competitive exams</string>
+    <string name="competitive_exams">Competitive exams</string>
+    <string name="first_name">First name</string>
+    <string name="help">Help</string>
+    <string name="bookmarks">Bookmarks</string>
 </resources>

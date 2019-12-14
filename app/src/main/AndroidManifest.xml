@@ -15,7 +15,8 @@
         android:roundIcon="@drawable/ic_booksyndy_logo_square"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".GetCollegeBranchActivity"></activity>
+        <activity android:name=".ConfirmListingActivity"></activity>
+        <activity android:name=".GetCollegeBranchActivity" />
         <activity android:name=".FilterActivity" />
         <activity
             android:name=".ChatActivity"

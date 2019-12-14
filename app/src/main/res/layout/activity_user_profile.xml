@@ -36,7 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="First name" />
+                android:text="@string/first_name" />
 
             <EditText
                 android:id="@+id/firstNameProfile"
@@ -182,7 +182,7 @@
         app:layout_constraintTop_toBottomOf="@id/nameAndPicLL">
 
         <TextView
-            android:id="@+id/textView8"
+            android:id="@+id/phoneNumberLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Phone number" />
@@ -222,7 +222,18 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:visibility="gone"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/ic_check_24px"/>
+
+    <CheckBox
+        android:id="@+id/profileCompetitiveExams"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/competitive_exams"
+        android:layout_margin="16dp"
+        android:enabled="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/boardLL" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

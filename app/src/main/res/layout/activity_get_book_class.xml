@@ -123,6 +123,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bookGradesButtonList" />
 
-<!--TODO: Create textview telling users to select UG if in college-->
-
 </androidx.constraintlayout.widget.ConstraintLayout>

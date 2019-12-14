@@ -32,8 +32,7 @@ public class GetBookDegreeActivity extends AppCompatActivity {
         bookName = getIntent().getStringExtra("BOOK_NAME");
         bookDescription = getIntent().getStringExtra("BOOK_DESCRIPTION");
         gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
-        boardNumber = getIntent().getIntExtra("BOARD_NUMBER",1);
-//TODO: Change default board number
+        boardNumber = getIntent().getIntExtra("BOARD_NUMBER",6);
         getPrice = new Intent(GetBookDegreeActivity.this, GetBookPriceActivity.class);
         bookDegreeQ = (TextView) findViewById(R.id.bookDegreeQuestionTV);
 //        if (isTextbook) {

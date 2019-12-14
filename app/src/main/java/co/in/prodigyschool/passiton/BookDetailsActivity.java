@@ -36,7 +36,7 @@ import co.in.prodigyschool.passiton.Data.User;
 public class BookDetailsActivity extends AppCompatActivity implements View.OnClickListener, EventListener<DocumentSnapshot> {
 
     private String bookid;
-    private boolean isHome;
+    private boolean isHome, saved;
     private FirebaseFirestore mFirestore;
     private Book currentBook;
     private User bookOwner;
@@ -65,6 +65,12 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         findViewById(R.id.book_button_back).setOnClickListener(this);
         findViewById(R.id.fab_chat).setOnClickListener(this);
         findViewById(R.id.fab_favorite).setOnClickListener(this);
+
+        if(getSupportActionBar()!= null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
 
     }
 
@@ -125,7 +131,6 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 startChatActivity();
                 break;
             case R.id.fab_favorite:
-                //break;
         }
     }
 
@@ -202,7 +207,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_edit_profile, menu);
+        getMenuInflater().inflate(R.menu.menu_book_listing, menu);
         this.menu = menu;
         return true;
     }
@@ -211,7 +216,17 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.bookmark:
-//                menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_bookmark_filled_24px));
+                if (!saved) {
+                    //add to bookmarks
+                    menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_bookmark_filled_24px));
+                    saved = true;
+                }
+                else {
+                    //remove from bookmarks
+                    menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_bookmark_border_24px));
+                    saved = false;
+                }
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

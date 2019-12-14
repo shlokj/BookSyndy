@@ -105,7 +105,6 @@ private DocumentReference messageSenderRef;
         mAuth = FirebaseAuth.getInstance();
         mFirestore = FirebaseFirestore.getInstance();
         RootRef = FirebaseDatabase.getInstance().getReference();
-//TODO: test the following code and push
 
         Window window = ChatActivity.this.getWindow();
 

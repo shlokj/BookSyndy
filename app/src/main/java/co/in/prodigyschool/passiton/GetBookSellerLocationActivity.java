@@ -59,7 +59,6 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
                 overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
             }
         });
-//        TODO: Comes after get price activity
         initFireBase();
         populateUserLocation();
         findViewById(R.id.fab18).setOnClickListener(this);

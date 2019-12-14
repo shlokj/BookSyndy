@@ -23,13 +23,13 @@
 
         <item
             android:id="@+id/nav_starred"
-            android:icon="@drawable/ic_stars_24px"
-            android:title="@string/starred" />
+            android:icon="@drawable/ic_bookmarks_24px"
+            android:title="@string/bookmarks" />
 
         <item
             android:id="@+id/nav_help"
             android:icon="@drawable/ic_help_outline_24px"
-            android:title="Help" />
+            android:title="@string/help" />
         <item
             android:id="@+id/nav_signout"
             android:icon="@drawable/ic_exit_to_app_24px"
