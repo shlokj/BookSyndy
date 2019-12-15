@@ -42,13 +42,14 @@
 
             <ImageView
                 android:id="@+id/picTakenIV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:scaleType="center"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:visibility="invisible"
                 tools:srcCompat="@tools:sample/avatars[0]" />
 
             <TextView
@@ -132,8 +133,9 @@
 
             <ImageView
                 android:id="@+id/picChosenIV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:scaleType="center"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
