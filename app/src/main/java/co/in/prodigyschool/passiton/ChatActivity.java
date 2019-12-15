@@ -2,7 +2,9 @@ package co.
 
 in.prodigyschool.passiton;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -36,6 +39,10 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,11 +52,14 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -67,7 +77,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private FirebaseAuth mAuth;
     private FirebaseFirestore mFirestore;
     private DatabaseReference RootRef;
-private DocumentReference messageSenderRef;
+    private StorageReference bookPhotosStorageReference;
+    private FirebaseStorage mFirebaseStorage;
+    private DocumentReference messageSenderRef;
     private CircleImageView visitor_profile_picture;
     private String receiver_user_id,visit_user_name,visit_image,message_sender_id;
     private TextView visitor_name,userLastSeen;
@@ -105,6 +117,8 @@ private DocumentReference messageSenderRef;
         mAuth = FirebaseAuth.getInstance();
         mFirestore = FirebaseFirestore.getInstance();
         RootRef = FirebaseDatabase.getInstance().getReference();
+        mFirebaseStorage = FirebaseStorage.getInstance();
+        bookPhotosStorageReference = mFirebaseStorage.getReference().child("chat_photos");
 
         Window window = ChatActivity.this.getWindow();
 
@@ -222,15 +236,29 @@ private DocumentReference messageSenderRef;
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.photoPickerButton:
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/jpeg");
-                intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
-                startActivityForResult(Intent.createChooser(intent, "Complete action using"), RC_PHOTO_PICKER);
+
+                Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                pickPhoto.setType("image/*");
+                startActivityForResult(pickPhoto, RC_PHOTO_PICKER);
                 break;
             case R.id.sendButton:
-                SendMessage();
+                SendMessage(mMessageEditText.getText().toString().trim(),"text");
                 break;
                 default:
+        }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+
+        switch (requestCode) {
+            case RC_PHOTO_PICKER:// gallery intent
+                if (resultCode == RESULT_OK && imageReturnedIntent != null && imageReturnedIntent.getData() != null) {
+                    Uri selectedImage = imageReturnedIntent.getData();
+                    storeBookImage(selectedImage);
+                }
+                break;
         }
     }
 
@@ -330,9 +358,9 @@ private DocumentReference messageSenderRef;
     }
 
 
-    private void SendMessage()
+    private void SendMessage(String msg,String messageType)
     {
-        String messageText = mMessageEditText.getText().toString();
+        String messageText =  msg;
 
         if (TextUtils.isEmpty(messageText))
         {
@@ -350,7 +378,7 @@ private DocumentReference messageSenderRef;
 
             Map messageTextBody = new HashMap();
             messageTextBody.put("message", messageText);
-            messageTextBody.put("type", "text");
+            messageTextBody.put("type", messageType);
             messageTextBody.put("from", message_sender_id);
             messageTextBody.put("to", receiver_user_id);
             messageTextBody.put("messageID", messagePushID);
@@ -382,6 +410,70 @@ private DocumentReference messageSenderRef;
 
         }
     }
+
+    private void storeBookImage(Uri selectedImageUri) {
+        //show progress
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Uploading");
+        progressDialog.show();
+        try {
+            String timeStamp =
+                    new SimpleDateFormat("yyyyMMdd_HHmmss",
+                            Locale.getDefault()).format(new Date());
+            // Get a reference to store file at book_photos/<FILENAME>
+            final StorageReference photoRef = bookPhotosStorageReference.child(timeStamp + "_" + selectedImageUri.getLastPathSegment());
+
+            // Upload file to Firebase Storage
+            UploadTask uploadTask = photoRef.putFile(selectedImageUri);
+
+            uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                    if (!task.isSuccessful()) {
+                        Log.e(TAG, "then: failure download url", task.getException());
+                        progressDialog.dismiss();
+                    }
+
+                    // Continue with the task to get the download URL
+                    return photoRef.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
+                        String url = task.getResult().toString();
+                        Toast.makeText(getApplicationContext(), "upload success", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                        SendMessage(url,"photo");
+                        Log.d(TAG, "onComplete: success url: " + url);
+                    } else {
+                        // Handle failures
+                        progressDialog.dismiss();
+                        Log.e(TAG, "onComplete: failure", task.getException());
+                    }
+                }
+            });
+
+            uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                    //calculating progress percentage
+                    double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+
+                    //displaying percentage in progress dialog
+                    progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
+                }
+            });
+
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            progressDialog.dismiss();
+        }
+
+
+    }
+
+
 
     @Override
     public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {

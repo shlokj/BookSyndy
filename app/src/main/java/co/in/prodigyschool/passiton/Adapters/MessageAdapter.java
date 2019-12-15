@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
@@ -44,7 +45,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
             senderMessageText =  itemView.findViewById(R.id.sender_messsage_text);
             receiverMessageText =  itemView.findViewById(R.id.receiver_message_text);
-
             messageReceiverPicture = itemView.findViewById(R.id.message_receiver_image_view);
             messageSenderPicture = itemView.findViewById(R.id.message_sender_image_view);
         }
@@ -77,7 +77,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         String fromMessageType = messages.getType();
 
         messageViewHolder.receiverMessageText.setVisibility(View.GONE);
-
         messageViewHolder.senderMessageText.setVisibility(View.GONE);
         messageViewHolder.messageSenderPicture.setVisibility(View.GONE);
         messageViewHolder.messageReceiverPicture.setVisibility(View.GONE);
@@ -100,6 +99,30 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                 messageViewHolder.receiverMessageText.setBackgroundResource(R.drawable.receiver_messages_layout);
                 messageViewHolder.receiverMessageText.setTextColor(Color.BLACK);
                 messageViewHolder.receiverMessageText.setText(messages.getMessage() + "\n \n" + messages.getTime() + " - " + messages.getDate());
+            }
+        }
+        else if(fromMessageType.equals("photo")){
+            if (fromUserID.equals(messageSenderId))
+            {
+                messageViewHolder.messageSenderPicture.setVisibility(View.VISIBLE);
+
+                messageViewHolder.senderMessageText.setBackgroundResource(R.drawable.sender_messages_layout);
+                //messageViewHolder.senderMessageText.setTextColor(Color.WHITE);
+                Glide.with(messageViewHolder.messageSenderPicture.getContext())
+                        .load(messages.getMessage())
+                        .into(messageViewHolder.messageSenderPicture);
+                //messageViewHolder.senderMessageText.setText(messages.getMessage() + "\n \n" + messages.getTime() + " - " + messages.getDate());
+            }
+            else
+            {
+                messageViewHolder.messageReceiverPicture.setVisibility(View.VISIBLE);
+
+                messageViewHolder.receiverMessageText.setBackgroundResource(R.drawable.receiver_messages_layout);
+                Glide.with(messageViewHolder.messageReceiverPicture.getContext())
+                        .load(messages.getMessage())
+                        .into(messageViewHolder.messageReceiverPicture);
+                //messageViewHolder.receiverMessageText.setTextColor(Color.BLACK);
+                //messageViewHolder.receiverMessageText.setText(messages.getMessage() + "\n \n" + messages.getTime() + " - " + messages.getDate());
             }
         }
     }
