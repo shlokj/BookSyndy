@@ -3,6 +3,7 @@ package co.in.prodigyschool.passiton;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -12,7 +13,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 public class CustNameActivity extends AppCompatActivity {
 
-    boolean isParent, isValidUsername=true, isAvailableUsername=true;
+    boolean isParent, isValidUsername, isAvailableUsername;
     EditText firstNameField, lastNameField, userIdField;
     String firstName, lastName, username;
 
@@ -32,6 +33,9 @@ public class CustNameActivity extends AppCompatActivity {
                 firstName = firstNameField.getText().toString();
                 lastName = lastNameField.getText().toString();
                 username = userIdField.getText().toString();
+                isValidUsername = false;
+                isValidUsername = (username != null) && username.matches("[A-Za-z0-9_]+");
+
                 if (firstName.length()==0 || lastName.length()==0) {
                     Snackbar.make(parentLayout, "Please fill in both name fields", Snackbar.LENGTH_SHORT)
                             .setAction("OKAY", new View.OnClickListener() {
@@ -44,6 +48,7 @@ public class CustNameActivity extends AppCompatActivity {
                             .show();
                 }
                 else if (!(isValidUsername && isAvailableUsername)) {
+//                    userIdField.getBackground().setColorFilter("#EE0000", PorterDuff.Mode.SRC_IN);
                     if (!isValidUsername) {
                         Snackbar.make(parentLayout, "The username you entered is not valid. A valid username has only letters (a-z) and numbers (0-9) and is at least 5 characters long.", Snackbar.LENGTH_SHORT)
                                 .setAction("OKAY", new View.OnClickListener() {
