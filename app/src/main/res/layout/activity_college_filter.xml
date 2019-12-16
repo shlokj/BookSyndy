@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FilterActivity">
+    tools:context=".CollegeFilterActivity">
 
     <TextView
         android:id="@+id/filterQuestionTV"
@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:id="@+id/gradeAndBoardFilterLL"
+        android:id="@+id/degreeLL"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -31,7 +31,7 @@
         app:layout_constraintTop_toBottomOf="@+id/filterQuestionTV">
 
         <LinearLayout
-            android:id="@+id/gradeFilterLL"
+            android:id="@+id/degreeLL1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
@@ -39,52 +39,47 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/gradeFilterLabel"
+                android:id="@+id/degreeFilterLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:text="Grade" />
+                android:text="Degree" />
 
             <CheckBox
-                android:id="@+id/filterGrade5orBelow"
+                android:id="@+id/filterBtech"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="5 and below" />
+                android:text="@string/b_tech" />
 
             <CheckBox
-                android:id="@+id/filterGrade6to8"
+                android:id="@+id/filterBsc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="6 to 8" />
+                android:text="@string/b_sc" />
 
             <CheckBox
-                android:id="@+id/filterGrade9"
+                android:id="@+id/filterBcom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="9" />
+                android:text="@string/b_com" />
 
             <CheckBox
-                android:id="@+id/filterGrade10"
+                android:id="@+id/filterBa"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="10" />
+                android:text="@string/ba" />
 
             <CheckBox
-                android:id="@+id/filterGrade11"
+                android:id="@+id/filterBba"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="11" />
+                android:text="@string/bba" />
 
-            <CheckBox
-                android:id="@+id/filterGrade12"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="12" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/boardFilterLL"
+            android:id="@+id/degreeLL2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
@@ -93,54 +88,43 @@
             app:layout_constraintStart_toEndOf="@+id/gradeFilterLL"
             app:layout_constraintTop_toBottomOf="@+id/filterQuestionTV">
 
+
             <TextView
                 android:id="@+id/boardFilterLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:text="Board" />
+                android:text="" />
 
             <CheckBox
-                android:id="@+id/filterBoardCbse"
+                android:id="@+id/filterBca"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/cbse" />
+                android:text="@string/bca" />
 
             <CheckBox
-                android:id="@+id/filterBoardIcse"
+                android:id="@+id/filterBed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/icse" />
+                android:text="@string/b_ed" />
 
             <CheckBox
-                android:id="@+id/filterBoardIb"
+                android:id="@+id/filterLlb"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/ib" />
+                android:text="@string/llb" />
 
             <CheckBox
-                android:id="@+id/filterBoardIgcse"
+                android:id="@+id/filterMbbs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/igcse" />
+                android:text="@string/mbbs" />
 
             <CheckBox
-                android:id="@+id/filterBoardState"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/state_board" />
-
-            <CheckBox
-                android:id="@+id/filterBoardOther"
+                android:id="@+id/filterOtherDegree"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Other" />
-
-            <CheckBox
-                android:id="@+id/filterBoardCompetitiveExams"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Competitive exams" />
         </LinearLayout>
 
 
@@ -154,7 +138,7 @@
         android:layout_marginStart="16dp"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gradeAndBoardFilterLL">
+        app:layout_constraintTop_toBottomOf="@+id/degreeLL">
 
         <TextView
             android:id="@+id/priceFilterLabel"
@@ -217,7 +201,7 @@
         android:orientation="vertical"
         android:layout_marginStart="16dp"
         app:layout_constraintStart_toEndOf="@+id/linearLayout5"
-        app:layout_constraintTop_toBottomOf="@+id/gradeAndBoardFilterLL">
+        app:layout_constraintTop_toBottomOf="@+id/degreeLL">
 
         <TextView
             android:id="@+id/typeFilterLabel"

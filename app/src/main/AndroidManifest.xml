@@ -7,7 +7,9 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-feature android:name="android.hardware.camera"
+
+    <uses-feature
+        android:name="android.hardware.camera"
         android:required="true" />
 
     <application
@@ -18,7 +20,8 @@
         android:roundIcon="@drawable/ic_booksyndy_logo_square"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ConfirmListingActivity"></activity>
+        <activity android:name=".CollegeFilterActivity"></activity>
+        <activity android:name=".ConfirmListingActivity" />
         <activity android:name=".GetCollegeBranchActivity" />
         <activity android:name=".FilterActivity" />
         <activity
@@ -85,8 +88,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths">
-            </meta-data>
+                android:resource="@xml/file_paths"></meta-data>
         </provider>
 
         <meta-data
