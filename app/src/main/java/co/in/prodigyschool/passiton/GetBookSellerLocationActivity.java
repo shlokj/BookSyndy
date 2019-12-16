@@ -11,10 +11,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,6 +31,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import co.in.prodigyschool.passiton.Data.Book;
@@ -42,26 +50,43 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
     private EditText locSearchDummy;
     private int bookPrice;
     private TextView locationTV;
-
+    PlacesClient placesClient;
+    List<Place.Field> placeFields = Arrays.asList(Place.Field.ID,Place.Field.NAME,Place.Field.ADDRESS);
+    AutocompleteSupportFragment places_fragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_book_seller_location);
         getSupportActionBar().setTitle("List a book");
         locationTV = (TextView) findViewById(R.id.localityArea);
-        locSearchDummy = findViewById(R.id.locationEditTextDummy);
-        locSearchDummy.setFocusable(false);
-        locSearchDummy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent searchLoc = new Intent(GetBookSellerLocationActivity.this, EnterLocationManuallyActivity.class);
-                startActivity(searchLoc);
-                overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
-            }
-        });
         initFireBase();
+        initPlaces();
         populateUserLocation();
+        setupPlaceAutoComplete();
+
         findViewById(R.id.fab18).setOnClickListener(this);
+    }
+
+    private void setupPlaceAutoComplete() {
+    places_fragment = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+    places_fragment.setPlaceFields(placeFields);
+    places_fragment.setCountry("IN");
+    places_fragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+        @Override
+        public void onPlaceSelected(@NonNull Place place) {
+            locationTV.setText(place.getName()+","+place.getAddress());
+        }
+
+        @Override
+        public void onError(@NonNull Status status) {
+            Toast.makeText(GetBookSellerLocationActivity.this, status.getStatusMessage(), Toast.LENGTH_SHORT).show();
+        }
+    });
+    }
+
+    private void initPlaces() {
+        Places.initialize(this,getString(R.string.places_api_key));
+        placesClient = Places.createClient(this);
     }
 
     private void populateUserLocation() {

@@ -96,4 +96,6 @@
     <string name="first_name">First name</string>
     <string name="help">Help</string>
     <string name="bookmarks">Bookmarks</string>
+    <string name="places_api_key">AIzaSyDFv-Pb57N1LSzVR213kB2M5n8arDzX4Hs</string>
+
 </resources>
