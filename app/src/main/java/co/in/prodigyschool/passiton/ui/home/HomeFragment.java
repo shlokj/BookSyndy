@@ -74,7 +74,12 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
         populateBookAdapter();
         removeUserBooks();
 
+
     }
+
+
+
+
 
     private void populateBookAdapter() {
 

@@ -22,10 +22,10 @@ public class BookUtil {
     private static final int MAX_IMAGE_NUM = 2;
 
 
-    public static Book addBook(String userId, boolean isTextbook, String bookName, String bookDescription, int gradeNumber, int boardNumber,int bookPrice, String bookAddress){
+    public static Book addBook(String userId, boolean isTextbook, String bookName, String bookDescription, int gradeNumber, int boardNumber,int bookPrice, String bookAddress,double lat,double lng){
     Book book = new Book();
     Random random = new Random();
-    book = new Book(userId,isTextbook,bookName,bookDescription,gradeNumber,boardNumber,bookPrice,bookAddress,getRandomImageUrl(new Random()));
+    book = new Book(userId,isTextbook,bookName,bookDescription,gradeNumber,boardNumber,bookPrice,bookAddress,getRandomImageUrl(new Random()),lat,lng);
     return book;
     }
 

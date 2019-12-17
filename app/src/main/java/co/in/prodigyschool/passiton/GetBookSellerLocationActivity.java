@@ -53,6 +53,7 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
     PlacesClient placesClient;
     List<Place.Field> placeFields = Arrays.asList(Place.Field.ID,Place.Field.NAME,Place.Field.ADDRESS);
     AutocompleteSupportFragment places_fragment;
+    private double book_lat,book_lng;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,6 +102,8 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
                         if (document.exists()) {
                             String area = document.getString("addr2");
                             String city = document.getString("locality");
+                            book_lat = document.getDouble("lat");
+                            book_lng = document.getDouble("lng");
                             locationTV.setText("");
                             if(area != null ){
                                 locationTV.append(area+", ");
@@ -200,7 +203,7 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
             if(userId == null){
                 userId = mAuth.getCurrentUser().getPhoneNumber();
             }
-            Book book = BookUtil.addBook(userId,isTextbook,bookName,bookDescription,gradeNumber,boardNumber,bookPrice,bookAddress);
+            Book book = BookUtil.addBook(userId,isTextbook,bookName,bookDescription,gradeNumber,boardNumber,bookPrice,bookAddress,book_lat,book_lng);
             if(bookImageUrl != null && !bookImageUrl.isEmpty()){
                 book.setBookPhoto("https://firebasestorage.googleapis.com/v0/b/booksyndy-e8ef6.appspot.com/o/book_photos%2Fbook_photo_1.png?alt=media&token=df4a96f3-3162-4832-b95c-feea08ffcaaa");
             }

@@ -322,6 +322,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             address.put("state", resultData.getString("state"));
             address.put("country", resultData.getString("country"));
             address.put("post", resultData.getString("post"));
+            address.put("lat",resultData.getDouble("lat"));
+            address.put("lng",resultData.getDouble("lng"));
             showResults(address);
         }
     }

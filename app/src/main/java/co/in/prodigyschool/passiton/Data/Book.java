@@ -17,12 +17,13 @@ public class Book {
     private int bookPrice;
     private int gradeNumber,boardNumber;
     private String userId;
+    private double lat,lng;
 
     public  Book(){
 
     }
     //for user entry
-    public Book(String userId, boolean isTextbook, String bookName, String bookDescription, int gradeNumber, int boardNumber,int bookPrice, String bookAddress,String bookPhoto){
+    public Book(String userId, boolean isTextbook, String bookName, String bookDescription, int gradeNumber, int boardNumber,int bookPrice, String bookAddress,String bookPhoto,double lat,double lng){
 
         this.userId = userId;
         this.bookName = bookName;
@@ -33,6 +34,25 @@ public class Book {
         this.bookPrice = bookPrice;
         this.isTextbook = isTextbook;
         this.bookPhoto = bookPhoto;
+        this.lat = lat;
+        this.lng = lng;
+    }
+
+
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLng() {
+        return lng;
+    }
+
+    public void setLng(double lng) {
+        this.lng = lng;
     }
 
     public String getBookName() {

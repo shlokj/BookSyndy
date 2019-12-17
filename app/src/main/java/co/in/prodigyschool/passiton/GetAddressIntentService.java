@@ -19,6 +19,7 @@ import javax.annotation.Nullable;
 public class GetAddressIntentService extends IntentService {
     private static final String IDENTIFIER = "GetAddressIntentService";
     private ResultReceiver addressResultReceiver;
+    private double lat,lng;
 
     public GetAddressIntentService() {
         super(IDENTIFIER);
@@ -43,7 +44,7 @@ public class GetAddressIntentService extends IntentService {
         //send no location error to results receiver
         if (location == null) {
             msg = "No location, can't go further without location";
-            sendResultsToReceiver(0, msg,null,null,null,null,null,null);
+            sendResultsToReceiver(0, msg,null,null,null,null,null,null,0.0,0.0);
             return;
         }
         //call GeoCoder getFromLocation to get address
@@ -62,10 +63,11 @@ public class GetAddressIntentService extends IntentService {
 
         if (addresses == null || addresses.size()  == 0) {
             msg = "No address found for the location";
-            sendResultsToReceiver(1, msg,null,null,null,null,null,null);
+            sendResultsToReceiver(1, msg,null,null,null,null,null,null,0.0,0.0);
         } else {
             Address address = addresses.get(0);
-
+            lat = address.getLatitude();
+            lng = address.getLongitude();
             addr_1 = address.getFeatureName() + ", "+ address.getThoroughfare();
             addr_2 = address.getSubLocality();
             locality = address.getLocality();
@@ -74,11 +76,11 @@ public class GetAddressIntentService extends IntentService {
             country = address.getCountryName();
             post = address.getPostalCode();
 
-            sendResultsToReceiver(2,addr_1,addr_2,locality,county,state,country,post);
+            sendResultsToReceiver(2,addr_1,addr_2,locality,county,state,country,post,lat,lng);
         }
     }
     //to send results to receiver in the source activity
-    private void sendResultsToReceiver(int resultCode, String Addr1,String Addr2,String Locality,String County,String State,String Country,String Post) {
+    private void sendResultsToReceiver(int resultCode, String Addr1,String Addr2,String Locality,String County,String State,String Country,String Post,double latt,double lngg) {
         Bundle bundle = new Bundle();
         bundle.putString("addr1", Addr1);
         bundle.putString("addr2", Addr2);
@@ -87,6 +89,8 @@ public class GetAddressIntentService extends IntentService {
         bundle.putString("state", State);
         bundle.putString("country", Country);
         bundle.putString("post", Post);
+        bundle.putDouble("lat",latt);
+        bundle.putDouble("lng",lngg);
         addressResultReceiver.send(resultCode, bundle);
     }
 }
