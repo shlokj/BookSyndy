@@ -53,6 +53,7 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
     PlacesClient placesClient;
     List<Place.Field> placeFields = Arrays.asList(Place.Field.ID,Place.Field.NAME,Place.Field.ADDRESS);
     AutocompleteSupportFragment places_fragment;
+
     private double book_lat,book_lng;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,44 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
         setupPlaceAutoComplete();
 
         findViewById(R.id.fab18).setOnClickListener(this);
+
+        isTextbook = getIntent().getBooleanExtra("IS_TEXTBOOK", true);
+        bookName = getIntent().getStringExtra("BOOK_NAME");
+        bookDescription = getIntent().getStringExtra("BOOK_DESCRIPTION");
+        gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
+        boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 1);
+        boardNumber = getIntent().getIntExtra("DEGREE_NUMBER", boardNumber);
+        bookPrice = getIntent().getIntExtra("BOOK_PRICE",0);
+        bookImageUrl = getIntent().getStringExtra("BOOK_IMAGE_URL");
+        findViewById(R.id.fab18).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent finalizeListing = new Intent(GetBookSellerLocationActivity.this, ConfirmListingActivity.class);
+                finalizeListing.putExtra("IS_TEXTBOOK", isTextbook);
+                finalizeListing.putExtra("BOOK_NAME",bookName);
+                finalizeListing.putExtra("BOOK_DESCRIPTION",bookDescription);
+                finalizeListing.putExtra("GRADE_NUMBER",gradeNumber);
+                finalizeListing.putExtra("BOARD_NUMBER",boardNumber);
+                finalizeListing.putExtra("BOOK_PRICE",bookPrice);
+                if (!(locationTV.getText().toString().equals(R.string.getting_loc))) {
+                    finalizeListing.putExtra("BOOK_LOCATION", locationTV.getText().toString());
+                    startActivity(finalizeListing);
+                }
+                else {
+                    View parentLayout = findViewById(android.R.id.content);
+                    Snackbar.make(parentLayout, "Please wait while we get your location", Snackbar.LENGTH_SHORT)
+                            .setAction("OKAY", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                }
+                            })
+                            .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                            .show();
+                }
+            }
+        });
     }
 
     private void setupPlaceAutoComplete() {

@@ -18,8 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:alpha="1.0"
-            android:scaleType="centerCrop"
-            tools:src="@drawable/empty_book" />
+            android:scaleType="centerCrop"/>
 
         <!-- Back button -->
 

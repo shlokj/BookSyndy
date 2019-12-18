@@ -66,7 +66,7 @@
             android:layout_margin="8dp"
             android:padding="8dp"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/empty_book" />
+            app:srcCompat="@drawable/ic_book_24px" />
 
         <TextView
             style="@style/AppTheme.Body1"

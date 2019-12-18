@@ -76,9 +76,6 @@ public class GetBookBoardActivity extends AppCompatActivity {
                 else if (board==R.id.otherBoardBook) {
                     boardNumber=6;
                 }
-                else if (board==R.id.competitiveExamBook) {
-                    boardNumber=20;
-                }
                 getPrice.putExtra("BOARD_NUMBER",boardNumber);
                 if (board!=-1) {
                     startActivity(getPrice);

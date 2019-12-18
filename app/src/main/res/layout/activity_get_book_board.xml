@@ -78,17 +78,6 @@
             android:paddingEnd="8dp"
             android:layout_marginBottom="8dp"/>
 
-        <RadioButton
-            android:id="@+id/competitiveExamBook"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Competitive exams"
-            android:textSize="20sp"
-            android:fontFamily="@font/roboto_light"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            android:layout_marginBottom="8dp"/>
-
     </RadioGroup>
 
     <TextView

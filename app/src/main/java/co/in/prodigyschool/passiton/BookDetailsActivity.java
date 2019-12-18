@@ -98,7 +98,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
             view_address.setText(currentBook.getBookAddress());
             view_price.setText("₹" + currentBook.getBookPrice());
             if (currentBook.isTextbook()) {
-                view_category.setText("Text Book");
+                view_category.setText("Textbook");
             } else {
                 view_category.setText("Notes");
             }
