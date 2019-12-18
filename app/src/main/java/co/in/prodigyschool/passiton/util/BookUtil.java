@@ -2,6 +2,8 @@ package co.in.prodigyschool.passiton.util;
 
 import android.content.Context;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -26,6 +28,7 @@ public class BookUtil {
     Book book = new Book();
     Random random = new Random();
     book = new Book(userId,isTextbook,bookName,bookDescription,gradeNumber,boardNumber,bookPrice,bookAddress,getRandomImageUrl(new Random()),lat,lng);
+    book.setBookTime(new SimpleDateFormat("dd MM yyyy HH",Locale.getDefault()).format(new Date()));
     return book;
     }
 

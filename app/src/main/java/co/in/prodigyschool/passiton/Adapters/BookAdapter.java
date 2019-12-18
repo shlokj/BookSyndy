@@ -21,6 +21,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import co.in.prodigyschool.passiton.Data.Book;
 import co.in.prodigyschool.passiton.R;
 
@@ -91,6 +95,7 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder> {
         TextView nameView;
         TextView priceView;
         TextView cityView;
+        TextView timeSinceView;
         double latA,lngA;
         private FirebaseFirestore mFirestore;
 
@@ -100,6 +105,7 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder> {
             nameView = itemView.findViewById(R.id.bookMaterialName);
             priceView = itemView.findViewById(R.id.bookMaterialPrice);
             cityView = itemView.findViewById(R.id.locationAndDistance);
+            timeSinceView = itemView.findViewById(R.id.timeSinceListing);
             mFirestore = FirebaseFirestore.getInstance();
 
         }
@@ -111,11 +117,10 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder> {
             Book book = snapshot.toObject(Book.class);
             String userId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
             Resources resources = itemView.getResources();
+            timeSinceView.setVisibility(View.GONE);
             // Load image
             latA = latitude;
             lngA = longitude;
-
-
 
                Glide.with(imageView.getContext())
                        .load(book.getBookPhoto())
@@ -123,7 +128,8 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder> {
 
                nameView.setText(book.getBookName());
                cityView.setText(book.getBookAddress());
-               if(!userId.equalsIgnoreCase(book.getUserId()))
+               addBookTime(book.getBookTime());
+            if(!userId.equalsIgnoreCase(book.getUserId()))
                addDistance(book.getLat(),book.getLng());
                if(book.getBookPrice() == 0){
                    priceView.setText("Free");
@@ -144,6 +150,41 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder> {
 
 
 
+        }
+
+        private void addBookTime(String bookTime) {
+            if( bookTime != null && !bookTime.isEmpty()) {
+                timeSinceView.setVisibility(View.VISIBLE);
+                SimpleDateFormat myFormat = new SimpleDateFormat("dd MM yyyy HH",Locale.getDefault());
+                String currentDate = myFormat.format(new Date());
+
+                try {
+                    Date dateBefore = myFormat.parse(currentDate);
+                    Date dateAfter = myFormat.parse(bookTime);
+                    long difference = dateBefore.getTime() - dateAfter.getTime();
+                    Log.d("BookAdapter", "addBookTime: " + difference);
+                    float daysBetween = (difference / (1000 * 60 * 60 * 24));
+                    /* You can also convert the milliseconds to days using this method
+                     * float daysBetween =
+                     *         TimeUnit.DAYS.convert(difference, TimeUnit.MILLISECONDS)
+                     */
+                    if (daysBetween < 1.0f) {
+                        timeSinceView.setText("New");
+                    } else if(daysBetween > 1.0f && daysBetween < 7.0f) {
+                        if (daysBetween == 1.0f)
+                            timeSinceView.setText(String.format("%s day ago", Math.round(daysBetween)));
+                        else
+                            timeSinceView.setText(String.format("%s days ago", Math.round(daysBetween)));
+                    }
+                    else{
+                        String date = new SimpleDateFormat("MMM dd, yy",Locale.getDefault()).format(new Date(dateAfter.getTime()));
+                        timeSinceView.setText(String.format("%s",date));
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         private void addDistance(double latitude,double longitude){

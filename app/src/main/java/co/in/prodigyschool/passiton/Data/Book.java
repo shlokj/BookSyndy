@@ -16,7 +16,7 @@ public class Book {
     boolean isTextbook;
     private int bookPrice;
     private int gradeNumber,boardNumber;
-    private String userId;
+    private String userId,bookTime;
     private double lat,lng;
 
     public  Book(){
@@ -38,6 +38,13 @@ public class Book {
         this.lng = lng;
     }
 
+    public String getBookTime() {
+        return bookTime;
+    }
+
+    public void setBookTime(String bookTime) {
+        this.bookTime = bookTime;
+    }
 
     public double getLat() {
         return lat;
