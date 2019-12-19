@@ -16,7 +16,7 @@ public class GetBookBoardActivity extends AppCompatActivity {
     boolean isTextbook;
     TextView bookBoardQuestion;
     RadioGroup boards;
-    String bookName, bookDescription;
+    String bookName, bookDescription,selectedImage;
     int board;
     int gradeNumber, boardNumber;
     Intent getPrice;
@@ -26,7 +26,7 @@ public class GetBookBoardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_book_board);
         getSupportActionBar().setTitle("List a book");
-
+        selectedImage = getIntent().getStringExtra("BOOK_IMAGE_URI");
         isTextbook = getIntent().getBooleanExtra("IS_TEXTBOOK", true);
         bookName = getIntent().getStringExtra("BOOK_NAME");
         bookDescription = getIntent().getStringExtra("BOOK_DESCRIPTION");
@@ -37,6 +37,7 @@ public class GetBookBoardActivity extends AppCompatActivity {
         }
         boards = (RadioGroup) findViewById(R.id.bookBoardsButtonList);
         getPrice = new Intent(GetBookBoardActivity.this, GetBookPriceActivity.class);
+        getPrice.putExtra("BOOK_IMAGE_URI",selectedImage);
         getPrice.putExtra("IS_TEXTBOOK", isTextbook);
         getPrice.putExtra("BOOK_NAME",bookName);
         getPrice.putExtra("BOOK_DESCRIPTION",bookDescription);

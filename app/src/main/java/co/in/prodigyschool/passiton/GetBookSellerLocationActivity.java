@@ -14,31 +14,24 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 import co.in.prodigyschool.passiton.Data.Book;
 import co.in.prodigyschool.passiton.util.BookUtil;
-import io.opencensus.internal.StringUtils;
 
 public class GetBookSellerLocationActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -46,7 +39,7 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
     private static final String TAG = "getLocationActivity";
     private FirebaseAuth mAuth;
     boolean isTextbook;
-    String bookName, bookDescription,phoneNumber,userId,bookAddress,bookImageUrl;
+    String bookName, bookDescription,phoneNumber,userId,bookAddress, selectedImage;
     int gradeNumber, boardNumber;
     private EditText locSearchDummy;
     private int bookPrice;
@@ -69,8 +62,6 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
         populateUserLocation();
         setupPlaceAutoComplete();
 
-        findViewById(R.id.fab18).setOnClickListener(this);
-
         isTextbook = getIntent().getBooleanExtra("IS_TEXTBOOK", true);
         bookName = getIntent().getStringExtra("BOOK_NAME");
         bookDescription = getIntent().getStringExtra("BOOK_DESCRIPTION");
@@ -78,20 +69,23 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
         boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 1);
         boardNumber = getIntent().getIntExtra("DEGREE_NUMBER", boardNumber);
 //        Toast.makeText(getApplicationContext(),"Board number: "+boardNumber,Toast.LENGTH_SHORT).show();
-
         bookPrice = getIntent().getIntExtra("BOOK_PRICE",0);
-        bookImageUrl = getIntent().getStringExtra("BOOK_IMAGE_URL");
+        selectedImage = getIntent().getStringExtra("BOOK_IMAGE_URI");
+
         findViewById(R.id.fab18).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Intent finalizeListing = new Intent(GetBookSellerLocationActivity.this, ConfirmListingActivity.class);
+                finalizeListing.putExtra("BOOK_IMAGE_URI", selectedImage);
                 finalizeListing.putExtra("IS_TEXTBOOK", isTextbook);
                 finalizeListing.putExtra("BOOK_NAME",bookName);
                 finalizeListing.putExtra("BOOK_DESCRIPTION",bookDescription);
                 finalizeListing.putExtra("GRADE_NUMBER",gradeNumber);
                 finalizeListing.putExtra("BOARD_NUMBER",boardNumber);
                 finalizeListing.putExtra("BOOK_PRICE",bookPrice);
+                finalizeListing.putExtra("LATITUDE",book_lat);
+                finalizeListing.putExtra("LONGITUDE",book_lng);
                 if (!(locationTV.getText().toString().equals(R.string.getting_loc))) {
                     finalizeListing.putExtra("BOOK_LOCATION", locationTV.getText().toString());
                     startActivity(finalizeListing);
@@ -248,14 +242,14 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
             boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 1);
             boardNumber = getIntent().getIntExtra("DEGREE_NUMBER", boardNumber);
             bookPrice = getIntent().getIntExtra("BOOK_PRICE",0);
-            bookImageUrl = getIntent().getStringExtra("BOOK_IMAGE_URL");
+            selectedImage = getIntent().getStringExtra("BOOK_IMAGE_URI");
             bookAddress = locationTV.getText().toString();
             if(userId == null){
                 userId = mAuth.getCurrentUser().getPhoneNumber();
             }
             Book book = BookUtil.addBook(userId,isTextbook,bookName,bookDescription,gradeNumber,boardNumber,bookPrice,bookAddress,book_lat,book_lng);
-            if(bookImageUrl != null && !bookImageUrl.isEmpty()){
-                book.setBookPhoto("https://firebasestorage.googleapis.com/v0/b/booksyndy-e8ef6.appspot.com/o/book_photos%2Fbook_photo_1.png?alt=media&token=df4a96f3-3162-4832-b95c-feea08ffcaaa");
+            if(selectedImage != null && !selectedImage.isEmpty()){
+               // book.setBookPhoto();
             }
             addBook(book);
 

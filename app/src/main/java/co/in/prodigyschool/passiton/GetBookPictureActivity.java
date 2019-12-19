@@ -42,6 +42,7 @@ public class GetBookPictureActivity extends AppCompatActivity {
     private FirebaseStorage mFirebaseStorage;
     private String book_photo_url = null;
     private String imageFilePath;
+    private Uri selectedImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +80,9 @@ public class GetBookPictureActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent getBookType = new Intent(GetBookPictureActivity.this, GetBookMaterialTypeActivity.class);
                 // To find an efficient way to pass on the image of the book; mostly the uri
+                if(selectedImage != null)
+                    getBookType.putExtra("BOOK_IMAGE_URI", selectedImage.toString());
+
                 startActivity(getBookType);
 
             }
@@ -95,17 +99,17 @@ public class GetBookPictureActivity extends AppCompatActivity {
 
                     Glide.with(this).load(imageFilePath).into(takenPic);
                     File f = new File(imageFilePath);
-                    Uri selectedImage = Uri.fromFile(f);
+                    selectedImage = Uri.fromFile(f);
                     takenPic.setVisibility(View.VISIBLE);
-                    storeBookImage(selectedImage);
+                    //storeBookImage(selectedImage);
                 }
                 break;
 
             case 1:// gallery intent
                 if (resultCode == RESULT_OK && imageReturnedIntent != null && imageReturnedIntent.getData() != null) {
                     chosenPic.setVisibility(View.VISIBLE);
-                    Uri selectedImage = imageReturnedIntent.getData();
-                    storeBookImage(selectedImage);
+                    selectedImage = imageReturnedIntent.getData();
+                    //storeBookImage(selectedImage);
                     chosenPic.setImageURI(selectedImage);
                 }
                 break;

@@ -13,7 +13,7 @@ import com.google.android.material.snackbar.Snackbar;
 public class GetBookDescriptionActivity extends AppCompatActivity {
 
     boolean isTextbook;
-    String bookName, bookDescription;
+    String bookName, bookDescription,selectedImage;
     EditText bookDescField;
 
     @Override
@@ -21,6 +21,7 @@ public class GetBookDescriptionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_book_description);
         getSupportActionBar().setTitle("List a book");
+        selectedImage = getIntent().getStringExtra("BOOK_IMAGE_URI");
         bookName = getIntent().getStringExtra("BOOK_NAME");
         isTextbook = getIntent().getBooleanExtra("IS_TEXTBOOK",true);
         bookDescField = (EditText) findViewById(R.id.bookDescription);
@@ -43,6 +44,7 @@ public class GetBookDescriptionActivity extends AppCompatActivity {
                 }
                 else {
                     Intent getBookDescription = new Intent(GetBookDescriptionActivity.this, GetBookClassActivity.class);
+                    getBookDescription.putExtra("BOOK_IMAGE_URI", selectedImage);
                     getBookDescription.putExtra("IS_TEXTBOOK", isTextbook);
                     getBookDescription.putExtra("BOOK_NAME",bookName);
                     getBookDescription.putExtra("BOOK_DESCRIPTION",bookDescription);

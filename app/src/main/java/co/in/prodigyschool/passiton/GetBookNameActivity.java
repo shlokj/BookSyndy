@@ -14,7 +14,7 @@ import com.google.android.material.snackbar.Snackbar;
 public class GetBookNameActivity extends AppCompatActivity {
 
     boolean isTextbook;
-    String bookName;
+    String bookName,selectedImage;
     EditText bookNameField;
     TextView nameQuestion, namingInstructuions;
 
@@ -23,6 +23,7 @@ public class GetBookNameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_book_name);
         getSupportActionBar().setTitle("List a book");
+        selectedImage = getIntent().getStringExtra("BOOK_IMAGE_URI");
         isTextbook = getIntent().getBooleanExtra("IS_TEXTBOOK",true);
         nameQuestion = (TextView)findViewById(R.id.titleQTV);
         namingInstructuions = (TextView) findViewById(R.id.namingInstructions);
@@ -50,6 +51,7 @@ public class GetBookNameActivity extends AppCompatActivity {
                 }
                 else {
                     Intent getBookDescription = new Intent(GetBookNameActivity.this, GetBookDescriptionActivity.class);
+                    getBookDescription.putExtra("BOOK_IMAGE_URI", selectedImage);
                     getBookDescription.putExtra("IS_TEXTBOOK", isTextbook);
                     getBookDescription.putExtra("BOOK_NAME",bookName);
                     startActivity(getBookDescription);

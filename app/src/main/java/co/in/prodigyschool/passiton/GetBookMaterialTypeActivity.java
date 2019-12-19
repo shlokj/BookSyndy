@@ -3,6 +3,7 @@ package co.in.prodigyschool.passiton;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RadioGroup;
@@ -15,7 +16,7 @@ public class GetBookMaterialTypeActivity extends AppCompatActivity {
     RadioGroup materialTypeButtons;
     int bookTypeId;
     boolean isTextbook;
-    
+    private String selectedImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +24,7 @@ public class GetBookMaterialTypeActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("List a book");
         materialTypeButtons = (RadioGroup) findViewById(R.id.materialTypeRadioGroup);
         FloatingActionButton next = findViewById(R.id.fab11);
+        selectedImage = getIntent().getStringExtra("BOOK_IMAGE_URI");
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -42,12 +44,14 @@ public class GetBookMaterialTypeActivity extends AppCompatActivity {
                 else if (bookTypeId==R.id.textbookOption) {
                     isTextbook=true;
                     Intent getBookName = new Intent(GetBookMaterialTypeActivity.this, GetBookNameActivity.class);
+                    getBookName.putExtra("BOOK_IMAGE_URI", selectedImage);
                     getBookName.putExtra("IS_TEXTBOOK", isTextbook);
                     startActivity(getBookName);
                 }
                 else if (bookTypeId==R.id.notesOption) {
                     isTextbook=false;
                     Intent getBookName = new Intent(GetBookMaterialTypeActivity.this, GetBookNameActivity.class);
+                    getBookName.putExtra("BOOK_IMAGE_URI", selectedImage);
                     getBookName.putExtra("IS_TEXTBOOK", isTextbook);
                     startActivity(getBookName);
                 }

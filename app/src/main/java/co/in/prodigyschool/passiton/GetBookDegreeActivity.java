@@ -15,7 +15,7 @@ import com.google.android.material.snackbar.Snackbar;
 public class GetBookDegreeActivity extends AppCompatActivity {
 
     boolean isTextbook;
-    String bookName, bookDescription;
+    String bookName, bookDescription,selectedImage;
     int gradeNumber, boardNumber, degreeNumber, degree;
     RadioGroup degrees;
     Intent getPrice;
@@ -28,7 +28,7 @@ public class GetBookDegreeActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("List a book");
 
         degrees = (RadioGroup) findViewById(R.id.bookDegreesButtonList);
-
+        selectedImage = getIntent().getStringExtra("BOOK_IMAGE_URI");
         isTextbook = getIntent().getBooleanExtra("IS_TEXTBOOK", true);
         bookName = getIntent().getStringExtra("BOOK_NAME");
         bookDescription = getIntent().getStringExtra("BOOK_DESCRIPTION");
@@ -85,6 +85,7 @@ public class GetBookDegreeActivity extends AppCompatActivity {
                 else if (degree==R.id.otherDegreeBook) {
                     degreeNumber=16;
                 }
+                getPrice.putExtra("BOOK_IMAGE_URI", selectedImage);
                 getPrice.putExtra("IS_TEXTBOOK", isTextbook);
                 getPrice.putExtra("BOOK_NAME",bookName);
                 getPrice.putExtra("BOOK_DESCRIPTION",bookDescription);

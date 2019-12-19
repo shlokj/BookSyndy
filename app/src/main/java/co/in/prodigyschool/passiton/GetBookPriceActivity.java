@@ -17,7 +17,7 @@ import com.google.android.material.snackbar.Snackbar;
 public class GetBookPriceActivity extends AppCompatActivity {
 
     boolean isTextbook, collegeStudent;
-    String bookName, bookDescription;
+    String bookName, bookDescription,selectedImage;
     int gradeNumber, boardNumber;
     Switch forFree;
     TextView pricingInstructions;
@@ -36,6 +36,7 @@ public class GetBookPriceActivity extends AppCompatActivity {
         priceField.setEnabled(false);
         priceField.setFocusable(false);
         forFree = (Switch) findViewById(R.id.switchFree);
+        selectedImage = getIntent().getStringExtra("BOOK_IMAGE_URI");
         isTextbook = getIntent().getBooleanExtra("IS_TEXTBOOK", true);
         bookName = getIntent().getStringExtra("BOOK_NAME");
         bookDescription = getIntent().getStringExtra("BOOK_DESCRIPTION");
@@ -85,6 +86,7 @@ public class GetBookPriceActivity extends AppCompatActivity {
                     try {
                         price = Integer.parseInt(priceField.getText().toString());
                         getLocation = new Intent(GetBookPriceActivity.this, GetBookSellerLocationActivity.class);
+                        getLocation.putExtra("BOOK_IMAGE_URI", selectedImage);
                         getLocation.putExtra("IS_TEXTBOOK", isTextbook);
                         getLocation.putExtra("BOOK_NAME",bookName);
                         getLocation.putExtra("BOOK_DESCRIPTION",bookDescription);

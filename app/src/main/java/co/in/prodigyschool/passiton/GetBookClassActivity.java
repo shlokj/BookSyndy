@@ -19,7 +19,7 @@ public class GetBookClassActivity extends AppCompatActivity {
     boolean isTextbook;
     private TextView gradeQuestion;
     private RadioGroup grades;
-    private String bookName, bookDescription;
+    private String bookName, bookDescription,selectedImage;
     int grade;
     int gradeNumber, boardNumber;
     boolean tmp=true;
@@ -31,6 +31,7 @@ public class GetBookClassActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_book_class);
         getSupportActionBar().setTitle("List a book");
+        selectedImage = getIntent().getStringExtra("BOOK_IMAGE_URI");
         isTextbook = getIntent().getBooleanExtra("IS_TEXTBOOK", true);
         bookName = getIntent().getStringExtra("BOOK_NAME");
         bookDescription = getIntent().getStringExtra("BOOK_DESCRIPTION");
@@ -62,6 +63,7 @@ public class GetBookClassActivity extends AppCompatActivity {
             }
         });
         getBookBoard = new Intent(GetBookClassActivity.this, GetBookBoardActivity.class);
+        getBookBoard.putExtra("BOOK_IMAGE_URI", selectedImage);
         getBookBoard.putExtra("IS_TEXTBOOK", isTextbook);
         getBookBoard.putExtra("BOOK_NAME",bookName);
         getBookBoard.putExtra("BOOK_DESCRIPTION",bookDescription);
@@ -103,6 +105,7 @@ public class GetBookClassActivity extends AppCompatActivity {
                 else if (grade==R.id.universityBook) {
                     gradeNumber=7;
                     Intent getBookDegree = new Intent(GetBookClassActivity.this, GetBookDegreeActivity.class);
+                    getBookDegree.putExtra("BOOK_IMAGE_URI", selectedImage);
                     getBookDegree.putExtra("IS_TEXTBOOK", isTextbook);
                     getBookDegree.putExtra("BOOK_NAME",bookName);
                     getBookDegree.putExtra("BOOK_DESCRIPTION",bookDescription);
@@ -112,6 +115,7 @@ public class GetBookClassActivity extends AppCompatActivity {
                 }
                 else if (boardNumber==20) {
                     getPrice = new Intent(GetBookClassActivity.this, GetBookPriceActivity.class);
+                    getPrice.putExtra("BOOK_IMAGE_URI", selectedImage);
                     getPrice.putExtra("IS_TEXTBOOK", isTextbook);
                     getPrice.putExtra("BOOK_NAME",bookName);
                     getPrice.putExtra("BOOK_DESCRIPTION",bookDescription);
