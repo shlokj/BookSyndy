@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -32,6 +34,8 @@ import java.util.ArrayList;
 import co.in.prodigyschool.passiton.Adapters.BookAdapter;
 import co.in.prodigyschool.passiton.BookDetailsActivity;
 import co.in.prodigyschool.passiton.Data.User;
+import co.in.prodigyschool.passiton.GetBookPictureActivity;
+import co.in.prodigyschool.passiton.HomeActivity;
 import co.in.prodigyschool.passiton.R;
 
 public class HomeFragment extends Fragment implements BookAdapter.OnBookSelectedListener {
@@ -52,10 +56,19 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
                 ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
+        setHasOptionsMenu(true);
         /* recycler view */
         recyclerView = root.findViewById(R.id.home_recycler_view);
         mEmptyView = root.findViewById(R.id.view_empty);
-
+        FloatingActionButton fab = root.findViewById(R.id.fab_home);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent startBookPub = new Intent(getActivity(), GetBookPictureActivity.class);
+                startBookPub.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(startBookPub);
+            }
+        });
         initFireStore();
 
         /* use a linear layout manager */
@@ -73,12 +86,7 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
         mQuery = mFirestore.collection("books").orderBy("bookPrice", Query.Direction.ASCENDING).limit(LIMIT);
         populateBookAdapter();
         removeUserBooks();
-
-
     }
-
-
-
 
 
     private void populateBookAdapter() {
@@ -88,7 +96,6 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
         }
         // specify an adapter
         mAdapter = new BookAdapter(mQuery, this) {
-
 
             @Override
             protected void onDataChanged() {
@@ -148,7 +155,6 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
         }
 
     }
-
 
     @Override
     public void onBookSelected(DocumentSnapshot snapshot) {

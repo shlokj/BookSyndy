@@ -106,8 +106,14 @@ public class ConfirmListingActivity extends AppCompatActivity {
                 }
                 //TODO: append degree
             }
-            bookPriceTV.setText("₹" + bookPrice);
-            bookLocTV.setText(bookAddress);
         }
+        if (bookPrice!=0) {
+            bookPriceTV.setText("₹" + bookPrice);
+        }
+        else {
+            bookPriceTV.setText("Free");
+        }
+        bookLocTV.setText(bookAddress);
+
     }
 }
