@@ -166,6 +166,30 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.home, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if(id == R.id.action_settings){
+            Log.d("user click", "onOptionsItemSelected: ");
+        }
+        if (id == R.id.filter) {
+            Intent openFilters = new Intent(HomeActivity.this,FilterActivity.class);
+            startActivity(openFilters);
+            //open filter activity to apply and change filters
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     /* location classes */
 
     @SuppressWarnings("MissingPermission")
