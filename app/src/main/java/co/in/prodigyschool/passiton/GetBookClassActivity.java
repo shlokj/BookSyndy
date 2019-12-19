@@ -126,4 +126,9 @@ public class GetBookClassActivity extends AppCompatActivity {
             }
         });
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        tmp=true;
+    }
 }

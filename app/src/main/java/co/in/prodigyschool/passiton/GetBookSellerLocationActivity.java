@@ -3,6 +3,7 @@ package co.in.prodigyschool.passiton;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -50,6 +51,8 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
     private EditText locSearchDummy;
     private int bookPrice;
     private TextView locationTV;
+    private ProgressDialog progressDialog;
+
     PlacesClient placesClient;
     List<Place.Field> placeFields = Arrays.asList(Place.Field.ID,Place.Field.NAME,Place.Field.ADDRESS);
     AutocompleteSupportFragment places_fragment;
@@ -74,6 +77,8 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
         gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
         boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 1);
         boardNumber = getIntent().getIntExtra("DEGREE_NUMBER", boardNumber);
+//        Toast.makeText(getApplicationContext(),"Board number: "+boardNumber,Toast.LENGTH_SHORT).show();
+
         bookPrice = getIntent().getIntExtra("BOOK_PRICE",0);
         bookImageUrl = getIntent().getStringExtra("BOOK_IMAGE_URL");
         findViewById(R.id.fab18).setOnClickListener(new View.OnClickListener() {
@@ -210,6 +215,7 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
             public void onComplete(@NonNull Task<DocumentReference> task) {
            if(task.isSuccessful()){
                Log.d("Add Book","onComplete: Book added successfully");
+               progressDialog.dismiss();
                Intent homeIntent = new Intent(GetBookSellerLocationActivity.this,HomeActivity.class);
                homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                startActivity(homeIntent);
@@ -225,6 +231,11 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
 
     @Override
     public void onClick(View v) {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Posting");
+        progressDialog.setTitle("Creating your listing...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         try {
             if(locationTV.getText().toString().equals(R.string.getting_loc) || locationTV.getText().toString().isEmpty() || locationTV.getText().toString().equals("") || locationTV.getText().toString().length() == 0){
                 Toast.makeText(getApplicationContext(),"Please enter a valid address",Toast.LENGTH_SHORT).show();
