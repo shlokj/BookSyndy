@@ -13,20 +13,41 @@
         android:layout_height="wrap_content"
         android:elevation="4dp">
 
-        <ImageView
-            android:id="@+id/book_image"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/book_image_cl"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:alpha="1.0"
-            android:scaleType="centerCrop"/>
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/book_image"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:alpha="1.0"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:scaleType="center"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- Back button -->
 
-        <View
-
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@drawable/gradient_up" />
+            android:layout_height="wrap_content">
+
+            <View
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@drawable/gradient_up"
+                app:layout_constraintDimensionRatio="1:1" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <TextView
             android:id="@+id/book_name"
@@ -34,6 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/book_category"
+            android:layout_alignParentStart="true"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:textColor="@android:color/white"
@@ -45,9 +67,8 @@
             style="@style/AppTheme.Subheader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/book_image"
+            android:layout_above="@+id/book_grade_and_board"
             android:layout_alignStart="@+id/book_name"
-            android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
             android:textColor="@android:color/white"
             tools:text="Text Book" />
@@ -71,13 +92,25 @@
             android:textColor="@android:color/white"
             tools:text="San Francisco" />
 
+
+        <TextView
+            android:id="@+id/book_grade_and_board"
+            style="@style/AppTheme.Subheader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignBottom="@id/book_image_cl"
+            android:layout_margin="8dp"
+            android:textColor="@android:color/white"
+            android:text="Grade, board" />
+
         <TextView
             android:id="@+id/book_price"
             style="@style/AppTheme.Body1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_alignTop="@+id/book_image"
+            android:layout_alignTop="@+id/book_image_cl"
             android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
             android:textColor="@android:color/white"

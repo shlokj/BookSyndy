@@ -118,7 +118,8 @@ public class ConfirmListingActivity extends AppCompatActivity {
         }
         if (boardNumber == 20) {
             bookCategoryTV.setText("Competitive exams");
-        } else {
+        }
+        else {
             if (gradeNumber == 1) {
                 bookCategoryTV.setText("Grade 5 or below");
             } else if (gradeNumber == 2) {
@@ -156,22 +157,23 @@ public class ConfirmListingActivity extends AppCompatActivity {
                 } else if (boardNumber == 16) {
                     bookCategoryTV.append(", other degree");
                 }
-
-                if (boardNumber == 1) {
-                    bookCategoryTV.append(", CBSE");
-                } else if (boardNumber == 2) {
-                    bookCategoryTV.append(", ICSE//ISC");
-                } else if (boardNumber == 3) {
-                    bookCategoryTV.append(", IB");
-                } else if (boardNumber == 4) {
-                    bookCategoryTV.append(", IGCSE");
-                } else if (boardNumber == 5) {
-                    bookCategoryTV.append(", state board");
-                } else if (boardNumber == 6) {
-                    bookCategoryTV.append(", other board");
-                }
-                //TODO: append degree
             }
+
+            if (boardNumber == 1) {
+                bookCategoryTV.append(", CBSE");
+            } else if (boardNumber == 2) {
+                bookCategoryTV.append(", ICSE//ISC");
+            } else if (boardNumber == 3) {
+                bookCategoryTV.append(", IB");
+            } else if (boardNumber == 4) {
+                bookCategoryTV.append(", IGCSE");
+            } else if (boardNumber == 5) {
+                bookCategoryTV.append(", state board");
+            } else if (boardNumber == 6) {
+                bookCategoryTV.append(", other board");
+            }
+                //TODO: append degree
+
         }
         if (bookPrice != 0) {
             bookPriceTV.setText("₹" + bookPrice);
@@ -217,7 +219,7 @@ public class ConfirmListingActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<Uri> task) {
                     if (task.isSuccessful()) {
                         book_photo_url = task.getResult().toString();
-                        Toast.makeText(getApplicationContext(), "upload success", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(), "upload success", Toast.LENGTH_SHORT).show();
                         progressDialog.dismiss();
                         Log.d(TAG, "onComplete: success url: " + book_photo_url);
                         uploadBook();

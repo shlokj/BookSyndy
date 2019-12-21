@@ -147,7 +147,7 @@ public class GetBookPictureActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<Uri> task) {
                     if (task.isSuccessful()) {
                         book_photo_url = task.getResult().toString();
-                        Toast.makeText(getApplicationContext(), "upload success", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(), "upload success", Toast.LENGTH_SHORT).show();
                         progressDialog.dismiss();
                         Log.d(TAG, "onComplete: success url: " + book_photo_url);
                     } else {

@@ -442,7 +442,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 public void onComplete(@NonNull Task<Uri> task) {
                     if (task.isSuccessful()) {
                         String url = task.getResult().toString();
-                        Toast.makeText(getApplicationContext(), "upload success", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(), "upload success", Toast.LENGTH_SHORT).show();
                         progressDialog.dismiss();
                         SendMessage(url,"photo");
                         Log.d(TAG, "onComplete: success url: " + url);
