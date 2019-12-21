@@ -100,5 +100,7 @@
     <string name="book_cat_eg">Eg. Class 12, CBSE (or) Undergraduate, B. tech (or) Competitive exams</string>
     <string name="mark_as_sold">Mark as sold</string>
     <string name="resend_otp">Resend OTP</string>
+    <string name="all_books">All Books</string>
+    <string name="action_search">Search</string>
 
 </resources>

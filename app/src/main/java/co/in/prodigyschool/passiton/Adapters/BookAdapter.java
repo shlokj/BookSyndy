@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,8 +23,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import co.in.prodigyschool.passiton.Data.Book;
@@ -32,6 +37,9 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder> {
 
     double latA,lngA;
     private FirebaseFirestore mFirestore;
+
+
+
     public interface OnBookSelectedListener {
 
         void onBookSelected(DocumentSnapshot snapshot);
@@ -213,6 +221,14 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder> {
         }
 
     }
+
+
+    //code for search
+
+
+
+
+
 
 
 }

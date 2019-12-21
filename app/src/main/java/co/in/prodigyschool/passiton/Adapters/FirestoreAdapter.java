@@ -150,6 +150,4 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder>
         notifyItemRemoved(change.getOldIndex());
     }
 
-
-
 }
