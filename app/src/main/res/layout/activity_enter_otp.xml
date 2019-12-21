@@ -45,10 +45,13 @@
 
         <TextView
             android:id="@+id/resendOTPButton"
+            android:clickable="true"
+            android:focusable="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Resend OTP"
+            android:text="@string/resend_otp"
+            android:background="?attr/selectableItemBackground"
             android:textColor="@color/colorLink" />
 
         <TextView

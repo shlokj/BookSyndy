@@ -99,5 +99,6 @@
     <string name="places_api_key">AIzaSyDFv-Pb57N1LSzVR213kB2M5n8arDzX4Hs</string>
     <string name="book_cat_eg">Eg. Class 12, CBSE (or) Undergraduate, B. tech (or) Competitive exams</string>
     <string name="mark_as_sold">Mark as sold</string>
+    <string name="resend_otp">Resend OTP</string>
 
 </resources>

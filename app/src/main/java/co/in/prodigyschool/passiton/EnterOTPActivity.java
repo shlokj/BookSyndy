@@ -32,14 +32,14 @@ import java.util.concurrent.TimeUnit;
 public class EnterOTPActivity extends AppCompatActivity {
     String userPhoneNumber;
 
-    private int autoResendCount=0;
+    private int autoResendCount=0, resumeCount=0;
     private final String ctryCode = "+91";
     private String verificationId;
     private FirebaseAuth mAuth;
     private TextView resendOtp, enterOtpMessage, timerTV;
     private ProgressDialog progressDialog;
     private EditText otpField;
-    private boolean firstSend=true;
+    private boolean firstSend=true,timerOn=true;
     FirebaseFirestore db;
 
     @Override
@@ -52,17 +52,16 @@ public class EnterOTPActivity extends AppCompatActivity {
         timerTV = findViewById(R.id.resendTimer);
         userPhoneNumber = getIntent().getStringExtra("USER_MOB").trim();
         sendVerificationCode(userPhoneNumber);
-        if (firstSend) {
-            startResendTimer(15);
-        }
-        else {
-            startResendTimer(30);
-        }
+        startResendTimer(15);
+
         resendOtp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                firstSend=false;
-                sendVerificationCode(userPhoneNumber);
+                if (!timerOn) {
+                    startResendTimer(30);
+                    firstSend = false;
+                    sendVerificationCode(userPhoneNumber);
+                }
             }
         });
         FloatingActionButton next = findViewById(R.id.fab2);
@@ -243,9 +242,10 @@ public class EnterOTPActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (autoResendCount<2) {
+        if (autoResendCount<2 && resumeCount>0) {
             sendVerificationCode(userPhoneNumber);
             autoResendCount=autoResendCount+1;
+            resumeCount=resumeCount+1;
         }
     }
     public void startResendTimer(int seconds) {
@@ -265,6 +265,7 @@ public class EnterOTPActivity extends AppCompatActivity {
             public void onFinish() {
                 resendOtp.setEnabled(true);
                 timerTV.setVisibility(View.GONE);
+                timerOn=false;
             }
         }.start();
     }
