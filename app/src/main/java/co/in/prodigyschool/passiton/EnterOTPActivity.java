@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -31,12 +32,14 @@ import java.util.concurrent.TimeUnit;
 public class EnterOTPActivity extends AppCompatActivity {
     String userPhoneNumber;
 
+    private int autoResendCount=0;
     private final String ctryCode = "+91";
     private String verificationId;
     private FirebaseAuth mAuth;
-    private TextView resendOtp, enterOtpMessage;
+    private TextView resendOtp, enterOtpMessage, timerTV;
     private ProgressDialog progressDialog;
     private EditText otpField;
+    private boolean firstSend=true;
     FirebaseFirestore db;
 
     @Override
@@ -45,12 +48,20 @@ public class EnterOTPActivity extends AppCompatActivity {
         setContentView(R.layout.activity_enter_otp);
         mAuth = FirebaseAuth.getInstance();
         otpField = findViewById(R.id.editTextOtp);
+        resendOtp =  findViewById(R.id.resendOTPButton);
+        timerTV = findViewById(R.id.resendTimer);
         userPhoneNumber = getIntent().getStringExtra("USER_MOB").trim();
         sendVerificationCode(userPhoneNumber);
-        resendOtp =  findViewById(R.id.resendOTPButton);
+        if (firstSend) {
+            startResendTimer(15);
+        }
+        else {
+            startResendTimer(30);
+        }
         resendOtp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                firstSend=false;
                 sendVerificationCode(userPhoneNumber);
             }
         });
@@ -113,8 +124,8 @@ public class EnterOTPActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     isRegisteredUser();
-
-                } else {
+                }
+                else {
                     progressDialog.dismiss();
                     View parentLayout = findViewById(android.R.id.content);
                     Snackbar.make(parentLayout, "Incorrect verification code (t2)", Snackbar.LENGTH_SHORT)
@@ -138,7 +149,7 @@ public class EnterOTPActivity extends AppCompatActivity {
         final String phoneNumber = ctryCode + number;
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 phoneNumber,        // Phone number to verify
-                60,                 // Timeout duration
+                90,                 // Timeout duration
                 TimeUnit.SECONDS,   // Unit of timeout
                 this,               // Activity (for callback binding)
                 mCallbacks);        // OnVerificationStateChangedCallbacks
@@ -227,5 +238,34 @@ public class EnterOTPActivity extends AppCompatActivity {
                     }
 
                 });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (autoResendCount<2) {
+            sendVerificationCode(userPhoneNumber);
+            autoResendCount=autoResendCount+1;
+        }
+    }
+    public void startResendTimer(int seconds) {
+        timerTV.setVisibility(View.VISIBLE);
+        resendOtp.setEnabled(false);
+
+        new CountDownTimer(seconds*1000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                String secondsString = Long.toString(millisUntilFinished/1000);
+                if (millisUntilFinished<10000) {
+                    secondsString = "0"+secondsString;
+                }
+                timerTV.setText(" (0:"+ secondsString+")");
+            }
+
+            public void onFinish() {
+                resendOtp.setEnabled(true);
+                timerTV.setVisibility(View.GONE);
+            }
+        }.start();
     }
 }

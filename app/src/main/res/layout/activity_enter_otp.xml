@@ -50,6 +50,13 @@
             android:layout_weight="1"
             android:text="Resend OTP"
             android:textColor="@color/colorLink" />
+
+        <TextView
+            android:id="@+id/resendTimer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            tools:text=" (0:00)" />
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
