@@ -36,6 +36,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -71,7 +72,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     private TextView navUsername,navUserphone;
     private FirebaseFirestore mFirestore;
-    private String curUserId;
+    private String curUserId, snackbarMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +80,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_home);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
@@ -98,7 +100,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navUserphone = headerView.findViewById(R.id.user_phone);
         navUsername.setOnClickListener(this);
         navUserphone.setOnClickListener(this);
-
+        snackbarMessage = getIntent().getStringExtra("SNACKBAR_MSG");
+        if (snackbarMessage!=null) {
+            if (snackbarMessage.length() > 0) {
+                View parentLayout = findViewById(android.R.id.content);
+                Snackbar.make(parentLayout, snackbarMessage, Snackbar.LENGTH_SHORT).show();
+            }
+        }
         populateUserDetails();
 
 

@@ -274,6 +274,12 @@ public class ConfirmListingActivity extends AppCompatActivity {
                         progressDialog.dismiss();
                         Intent homeIntent = new Intent(ConfirmListingActivity.this,HomeActivity.class);
                         homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                        if (isTextbook) {
+                            homeIntent.putExtra("SNACKBAR_MSG", "Your book has been listed!");
+                        }
+                        else {
+                            homeIntent.putExtra("SNACKBAR_MSG", "Your material has been listed!");
+                        }
                         startActivity(homeIntent);
                     }
                     else{

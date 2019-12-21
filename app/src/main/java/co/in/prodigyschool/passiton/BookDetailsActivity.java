@@ -40,12 +40,12 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     private FirebaseFirestore mFirestore;
     private Book currentBook;
     private User bookOwner;
-    private FloatingActionButton fab_favourite;
     private TextView view_bookname,view_address,view_price,view_category,view_description;
     private ImageView view_bookimage;
     private ListenerRegistration mBookUserRegistration,mBookRegistration;
     private DocumentReference bookUserRef, bookRef;
     private Menu menu;
+    private int MENU_DELETE = 123;
 
     private static final String TAG = "BOOK DETAILS";
 
@@ -62,9 +62,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         view_price = findViewById(R.id.book_price);
         view_bookimage = findViewById(R.id.book_image);
         view_description = findViewById(R.id.bookDescriptionTV);
-        findViewById(R.id.book_button_back).setOnClickListener(this);
         findViewById(R.id.fab_chat).setOnClickListener(this);
-        findViewById(R.id.fab_favorite).setOnClickListener(this);
 
         if(getSupportActionBar()!= null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -124,13 +122,9 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.book_button_back:
-                onBackArrowClicked(v);
-                break;
             case R.id.fab_chat:
                 startChatActivity();
                 break;
-            case R.id.fab_favorite:
         }
     }
 
@@ -175,11 +169,9 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         mBookRegistration = bookRef.addSnapshotListener(this);
         if(isHome){
             findViewById(R.id.fab_chat).setVisibility(View.VISIBLE);
-            findViewById(R.id.fab_favorite).setVisibility(View.VISIBLE);
         }
         else{
             findViewById(R.id.fab_chat).setVisibility(View.INVISIBLE);
-            findViewById(R.id.fab_favorite).setVisibility(View.INVISIBLE);
         }
     }
 
@@ -203,6 +195,15 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
             return;
         }
             populateBookDetails(snapshot.toObject(Book.class));
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.clear();
+        if (!isHome) {
+            menu.add(0, MENU_DELETE, Menu.NONE, getString(R.string.mark_as_sold)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override

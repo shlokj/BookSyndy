@@ -1,8 +1,10 @@
 package co.in.prodigyschool.passiton;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -27,7 +29,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private Menu menu;
     private int clickCount;
     private CheckBox compExams;
-
+    private boolean detailsChanged = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,15 +111,46 @@ public class UserProfileActivity extends AppCompatActivity {
                     menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_edit_24px))
                             .setTitle("Edit profile");
                     clickCount = clickCount + 1;
-                    //TODO: save profile changes and exit to home
+
+                    //TODO: save profile changes to firebase
+
+                    Intent homeIntent = new Intent(UserProfileActivity.this,HomeActivity.class);
+                    homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    homeIntent.putExtra("SNACKBAR_MSG", "Your profile has been saved");
+                    startActivity(homeIntent);
                 }
                 break;
             case android.R.id.home:
-                this.finish();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(UserProfileActivity.this);
+                builder.setTitle("Save your changes?");
+                builder.setMessage("Would you like to save the changes you made to your profile?");
+                builder.setPositiveButton("Save and exit", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent homeIntent = new Intent(UserProfileActivity.this,HomeActivity.class);
+                        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                        homeIntent.putExtra("SNACKBAR_MSG", "Your profile has been saved");
+                        startActivity(homeIntent);
+                    }
+                });
+                builder.setNegativeButton("Exit without saving", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finishActivity();
+                    }
+                });
+                builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                builder.show();
                 break;
 
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     @Override
@@ -128,5 +161,8 @@ public class UserProfileActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+    public void finishActivity () {
+        this.finish();
     }
 }
