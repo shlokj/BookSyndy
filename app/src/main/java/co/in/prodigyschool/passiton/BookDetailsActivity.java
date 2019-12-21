@@ -199,8 +199,8 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.clear();
         if (!isHome) {
+            menu.clear();
             menu.add(0, MENU_DELETE, Menu.NONE, getString(R.string.mark_as_sold)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         }
         return super.onPrepareOptionsMenu(menu);

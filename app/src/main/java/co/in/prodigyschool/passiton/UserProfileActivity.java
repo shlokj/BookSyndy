@@ -121,32 +121,36 @@ public class UserProfileActivity extends AppCompatActivity {
                 }
                 break;
             case android.R.id.home:
+                if (detailsChanged) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(UserProfileActivity.this);
+                    builder.setTitle("Save your changes?");
+                    builder.setMessage("Would you like to save the changes you made to your profile?");
+                    builder.setPositiveButton("Save and exit", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent homeIntent = new Intent(UserProfileActivity.this, HomeActivity.class);
+                            homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            homeIntent.putExtra("SNACKBAR_MSG", "Your profile has been saved");
+                            startActivity(homeIntent);
+                        }
+                    });
+                    builder.setNegativeButton("Exit without saving", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finishActivity();
+                        }
+                    });
+                    builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(UserProfileActivity.this);
-                builder.setTitle("Save your changes?");
-                builder.setMessage("Would you like to save the changes you made to your profile?");
-                builder.setPositiveButton("Save and exit", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Intent homeIntent = new Intent(UserProfileActivity.this,HomeActivity.class);
-                        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                        homeIntent.putExtra("SNACKBAR_MSG", "Your profile has been saved");
-                        startActivity(homeIntent);
-                    }
-                });
-                builder.setNegativeButton("Exit without saving", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        finishActivity();
-                    }
-                });
-                builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-                builder.show();
+                        }
+                    });
+                    builder.show();
+                }
+                else {
+                    finishActivity();
+                }
                 break;
 
         }
