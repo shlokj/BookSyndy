@@ -54,7 +54,7 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
     FilterDialogFragment mFilterDialog;
 
 
-
+//TODO: come back home on pressing back in another activity
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =

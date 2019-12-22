@@ -15,7 +15,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         android:fontFamily="@font/roboto_light"
-        android:text="Hey there!\nEnter your mobile number to log in or sign up."
+        android:text="Welcome to the Book Syndicate!\n\nEnter your mobile number to log in or sign up."
         android:textColor="#242424"
         android:textSize="26sp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
