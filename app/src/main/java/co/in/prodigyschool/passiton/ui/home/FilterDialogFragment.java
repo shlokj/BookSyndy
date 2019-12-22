@@ -1,5 +1,6 @@
 package co.in.prodigyschool.passiton.ui.home;
 
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.DialogFragment;
 
 import android.os.Bundle;
@@ -23,7 +24,9 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
     public static final String TAG = "FILTER_DIALOG";
 
     private View mRootView;
-    private CheckBox freeOnly;
+    private CheckBox filterGrade5orBelow, filterGrade6to8, filterGrade9, filterGrade10, filterGrade11, filterGrade12;
+    private CheckBox filterBoardCbse, filterBoardIcse, filterBoardIb, filterBoardIgcse, filterBoardState, filterBoardOther, filterBoardCompetitiveExams;
+    private CheckBox freeOnly, filterTextbook, filterNotes;
     private OnFilterSelectionListener mOnFilterSelectedListener;
 
 
@@ -68,6 +71,27 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
         freeOnly = mRootView.findViewById(R.id.freeOnlyCB);
         mRootView.findViewById(R.id.button_search).setOnClickListener(this);
         mRootView.findViewById(R.id.button_cancel).setOnClickListener(this);
+
+        filterGrade5orBelow = mRootView.findViewById(R.id.filterGrade5orBelow);
+        filterGrade6to8 = mRootView.findViewById(R.id.filterGrade6to8);
+        filterGrade9 = mRootView.findViewById(R.id.filterGrade9);
+        filterGrade10 = mRootView.findViewById(R.id.filterGrade10);
+        filterGrade11 = mRootView.findViewById(R.id.filterGrade11);
+        filterGrade12 = mRootView.findViewById(R.id.filterGrade12);
+
+        filterBoardCbse = mRootView.findViewById(R.id.filterBoardCbse);
+        filterBoardIcse = mRootView.findViewById(R.id.filterBoardIcse);
+        filterBoardIb = mRootView.findViewById(R.id.filterBoardIb);
+        filterBoardIgcse = mRootView.findViewById(R.id.filterBoardIgcse);
+        filterBoardState = mRootView.findViewById(R.id.filterBoardState);
+        filterBoardOther = mRootView.findViewById(R.id.filterBoardOther);
+        filterBoardCompetitiveExams = mRootView.findViewById(R.id.filterBoardCompetitiveExams);
+
+        filterTextbook = mRootView.findViewById(R.id.filterTextbook);
+        filterNotes = mRootView.findViewById(R.id.filterNotes);
+
+        setFilterOptionsFontToRobotoLight();
+
         return mRootView;
     }
 
@@ -126,6 +150,26 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
         } else {
             return -1;
         }
+    }
+
+
+    public void setFilterOptionsFontToRobotoLight() {
+        filterGrade5orBelow.setTypeface(ResourcesCompat.getFont(getActivity(), R.font.roboto_light));
+        filterGrade6to8.setTypeface(ResourcesCompat.getFont(getActivity(), R.font.roboto_light));
+        filterGrade9.setTypeface(ResourcesCompat.getFont(getActivity(), R.font.roboto_light));
+        filterGrade10.setTypeface(ResourcesCompat.getFont(getActivity(), R.font.roboto_light));
+        filterGrade11.setTypeface(ResourcesCompat.getFont(getActivity(), R.font.roboto_light));
+        filterGrade12.setTypeface(ResourcesCompat.getFont(getActivity(), R.font.roboto_light));
+        filterBoardCbse.setTypeface(ResourcesCompat.getFont(getActivity(), R.font.roboto_light));
+        filterBoardIcse.setTypeface(ResourcesCompat.getFont(getActivity(), R.font.roboto_light));
+        filterBoardIb.setTypeface(ResourcesCompat.getFont(getActivity(), R.font.roboto_light));
+        filterBoardIgcse.setTypeface(ResourcesCompat.getFont(getActivity(), R.font.roboto_light));
+        filterBoardState.setTypeface(ResourcesCompat.getFont(getActivity(), R.font.roboto_light));
+        filterBoardOther.setTypeface(ResourcesCompat.getFont(getActivity(), R.font.roboto_light));
+        filterBoardCompetitiveExams.setTypeface(ResourcesCompat.getFont(getActivity(), R.font.roboto_light));
+        freeOnly.setTypeface(ResourcesCompat.getFont(getActivity(), R.font.roboto_light));
+        filterTextbook.setTypeface(ResourcesCompat.getFont(getActivity(), R.font.roboto_light));
+        filterNotes.setTypeface(ResourcesCompat.getFont(getActivity(), R.font.roboto_light));
     }
 
 }

@@ -9,6 +9,6 @@ public class HomeItem {
 
 
     public static int picPath[] = new int[]{
-            R.drawable.ic_booksyndy_logo_smallc, R.drawable.ic_booksyndy_logo_smallc, R.drawable.ic_booksyndy_logo_smallc, R.drawable.ic_booksyndy_logo_smallc, R.drawable.ic_booksyndy_logo_smallc
-            , R.drawable.ic_booksyndy_logo_smallc, R.drawable.ic_booksyndy_logo_smallc, R.drawable.ic_booksyndy_logo_smallc, R.drawable.ic_booksyndy_logo_smallc, R.drawable.ic_booksyndy_logo_smallc};
+            R.drawable.ic_booksyndy_logo_square, R.drawable.ic_booksyndy_logo_square, R.drawable.ic_booksyndy_logo_square, R.drawable.ic_booksyndy_logo_square, R.drawable.ic_booksyndy_logo_square
+            , R.drawable.ic_booksyndy_logo_square, R.drawable.ic_booksyndy_logo_square, R.drawable.ic_booksyndy_logo_square, R.drawable.ic_booksyndy_logo_square, R.drawable.ic_booksyndy_logo_square};
 }

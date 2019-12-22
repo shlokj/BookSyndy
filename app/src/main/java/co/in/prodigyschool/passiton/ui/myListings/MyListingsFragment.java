@@ -23,6 +23,7 @@ import com.google.firebase.firestore.Query;
 import co.in.prodigyschool.passiton.Adapters.BookAdapter;
 import co.in.prodigyschool.passiton.BookDetailsActivity;
 import co.in.prodigyschool.passiton.R;
+import co.in.prodigyschool.passiton.ui.home.HomeFragment;
 
 public class MyListingsFragment extends Fragment implements BookAdapter.OnBookSelectedListener{
 
@@ -132,5 +133,11 @@ public class MyListingsFragment extends Fragment implements BookAdapter.OnBookSe
         startActivity(bookDetails);
     }
 
-
+/*    @Override
+    public void onDetach() {
+        super.onDetach();
+        Intent home = new Intent(getActivity(), HomeFragment.class);
+        startActivity(home);
+        getActivity().overridePendingTransition(R.anim.slide_ltor, R.anim.slide_rtol);
+    }*/
 }

@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:scaleType="centerCrop"
-        app:srcCompat="@drawable/ic_booksyndy_logo_smallc" />
+        app:srcCompat="@drawable/ic_booksyndy_logo_square" />
 
     <TextView
         android:id="@+id/bookMaterialName"

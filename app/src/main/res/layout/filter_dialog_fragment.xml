@@ -25,7 +25,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,7 +34,10 @@
             android:id="@+id/gradeFilterLL"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -88,7 +90,10 @@
             android:id="@+id/boardFilterLL"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_weight="1"
             android:orientation="vertical"
             app:layout_constraintStart_toEndOf="@+id/gradeFilterLL"
@@ -172,8 +177,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="16dp"
-                android:scaleX="1.2"
-                android:scaleY="1.2"
                 android:text="@string/free_only" />
 
         </LinearLayout>
@@ -223,6 +226,7 @@
             android:id="@+id/button_cancel"
             style="@style/Base.Widget.AppCompat.Button.Borderless"
             android:layout_width="0dp"
+            android:layout_marginTop="16dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textColor="@color/greySecondary"
@@ -232,6 +236,7 @@
 
         <Button
             android:id="@+id/button_search"
+            android:layout_marginTop="16dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

@@ -46,7 +46,7 @@
             android:layout_margin="8dp"
             android:padding="8dp"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/ic_booksyndy_logo_smallc" />
+            app:srcCompat="@drawable/ic_booksyndy_logo_square" />
 
         <TextView
             style="@style/AppTheme.Body1"

@@ -18,7 +18,7 @@
             android:title="@string/book_reqs" />
         <item
             android:id="@+id/nav_chats"
-            android:icon="@drawable/ic_chat_24px"
+            android:icon="@drawable/ic_chat_outlined_24px"
             android:title="@string/my_chats" />
 
         <item
