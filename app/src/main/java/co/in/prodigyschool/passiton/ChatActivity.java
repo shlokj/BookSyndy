@@ -395,7 +395,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 {
                     if (task.isSuccessful())
                     {
-                        Toast.makeText(ChatActivity.this, "Message Sent Successfully...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ChatActivity.this, "Message Sent Successfully", Toast.LENGTH_SHORT).show();
                         populateChatDetails();
                     }
                     else

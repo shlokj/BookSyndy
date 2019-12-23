@@ -65,7 +65,6 @@
 
             </RelativeLayout>
 
-
         </androidx.appcompat.widget.Toolbar>
 
 
@@ -77,8 +76,8 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/appbarlayout"
         android:layout_above="@+id/chat_linear_layout"
-        android:layout_marginBottom="6dp"
-        >
+        android:layout_marginBottom="6dp">
+
     </androidx.recyclerview.widget.RecyclerView>
 
 

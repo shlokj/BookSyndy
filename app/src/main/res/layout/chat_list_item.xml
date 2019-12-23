@@ -41,8 +41,7 @@
         android:layout_marginTop="8dp"
         android:text="@string/last_seen"
         android:textColor="@android:color/background_dark"
-        android:textSize="14sp"
-        />
+        android:textSize="14sp" />
 
 
 

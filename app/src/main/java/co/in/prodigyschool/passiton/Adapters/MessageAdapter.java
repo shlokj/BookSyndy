@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import co.in.prodigyschool.passiton.Data.Messages;
@@ -34,7 +35,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
     public class MessageViewHolder extends RecyclerView.ViewHolder
     {
-        public TextView senderMessageText, receiverMessageText;
+        public TextView senderMessageText, receiverMessageText, senderMessageTime, receiverMessageTime;
 
         public ImageView messageSenderPicture, messageReceiverPicture;
 
@@ -44,9 +45,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
             super(itemView);
 
             senderMessageText =  itemView.findViewById(R.id.sender_messsage_text);
+            senderMessageTime =  itemView.findViewById(R.id.sender_message_time);
             receiverMessageText =  itemView.findViewById(R.id.receiver_message_text);
+            receiverMessageTime = itemView.findViewById(R.id.receiver_message_time);
             messageReceiverPicture = itemView.findViewById(R.id.message_receiver_image_view);
             messageSenderPicture = itemView.findViewById(R.id.message_sender_image_view);
+
         }
     }
 
@@ -77,28 +81,37 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         String fromMessageType = messages.getType();
 
         messageViewHolder.receiverMessageText.setVisibility(View.GONE);
+        messageViewHolder.receiverMessageTime.setVisibility(View.GONE);
         messageViewHolder.senderMessageText.setVisibility(View.GONE);
+        messageViewHolder.senderMessageTime.setVisibility(View.GONE);
         messageViewHolder.messageSenderPicture.setVisibility(View.GONE);
         messageViewHolder.messageReceiverPicture.setVisibility(View.GONE);
 
 
         if (fromMessageType.equals("text"))
         {
+
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+            String strDate= formatter.format(messages.getDate());
+
             if (fromUserID.equals(messageSenderId))
             {
                 messageViewHolder.senderMessageText.setVisibility(View.VISIBLE);
-
+                messageViewHolder.senderMessageTime.setVisibility(View.VISIBLE);
+//                messageViewHolder.senderMessageTime.setGravity(G);
                 messageViewHolder.senderMessageText.setBackgroundResource(R.drawable.sender_messages_layout);
                 messageViewHolder.senderMessageText.setTextColor(Color.WHITE);
-                messageViewHolder.senderMessageText.setText(messages.getMessage() + "\n \n" + messages.getTime() + " - " + messages.getDate());
+                messageViewHolder.senderMessageTime.setText(messages.getTime() + "\n" + strDate);
+                messageViewHolder.senderMessageText.setText(messages.getMessage()/* + "\n \n" + messages.getTime() + " - " + messages.getDate()*/);
             }
             else
             {
                 messageViewHolder.receiverMessageText.setVisibility(View.VISIBLE);
-
+                messageViewHolder.receiverMessageTime.setVisibility(View.VISIBLE);
                 messageViewHolder.receiverMessageText.setBackgroundResource(R.drawable.receiver_messages_layout);
-                messageViewHolder.receiverMessageText.setTextColor(Color.BLACK);
-                messageViewHolder.receiverMessageText.setText(messages.getMessage() + "\n \n" + messages.getTime() + " - " + messages.getDate());
+                messageViewHolder.receiverMessageText.setTextColor(Color.WHITE);
+                messageViewHolder.receiverMessageTime.setText(messages.getTime() + "\n" + strDate);
+                messageViewHolder.receiverMessageText.setText(messages.getMessage()/* + "\n \n" + messages.getTime() + " - " + messages.getDate()*/);
             }
         }
         else if(fromMessageType.equals("photo")){
