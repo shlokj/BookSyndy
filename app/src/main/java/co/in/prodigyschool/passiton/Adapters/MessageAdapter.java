@@ -1,6 +1,7 @@
 package co.in.prodigyschool.passiton.Adapters;
 
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import co.in.prodigyschool.passiton.Data.Messages;
 import co.in.prodigyschool.passiton.R;
@@ -22,6 +26,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder>
 {
+    public static String TAG = "MESSAGE_ADAPTER";
     private List<Messages> userMessagesList;
     private FirebaseAuth mAuth;
 
@@ -90,9 +95,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
         if (fromMessageType.equals("text"))
         {
+            String  strDate = messages.getDate();
 
-            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-            String strDate= formatter.format(messages.getDate());
 
             if (fromUserID.equals(messageSenderId))
             {
