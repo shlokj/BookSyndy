@@ -73,6 +73,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         if(getSupportActionBar()!= null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         }
 
     }
@@ -220,9 +221,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     }
 
 
-    public void onBackArrowClicked(View view) {
-        onBackPressed();
-    }
+
 
     public static boolean checkConnection(Context context) {
         final ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -308,5 +307,15 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }
