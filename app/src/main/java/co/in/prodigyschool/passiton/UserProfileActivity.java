@@ -1,9 +1,5 @@
 package co.in.prodigyschool.passiton;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,18 +7,22 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class UserProfileActivity extends AppCompatActivity {
 
     private ImageView profilePic;
-    private EditText fName, lName, year, phoneNumber;
+    private EditText fName, lName, year, phoneNo, uName;
     private Spinner gradeSpinner, boardSpinner, degreeSpinner;
     private FloatingActionButton saveChanges;
     private TextWatcher checkChange;
@@ -30,6 +30,11 @@ public class UserProfileActivity extends AppCompatActivity {
     private int clickCount;
     private CheckBox compExams;
     private boolean detailsChanged = false;
+
+    private String firstName, lastName, phoneNumber;
+    private FirebaseFirestore mFirestore;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +50,9 @@ public class UserProfileActivity extends AppCompatActivity {
 
         fName = findViewById(R.id.firstNameProfile);
         lName = findViewById(R.id.lastNameProfile);
+        uName = findViewById(R.id.usernameField);
         year = findViewById(R.id.profileYearField);
-        phoneNumber = findViewById(R.id.profilePhoneNumberField);
+        phoneNo = findViewById(R.id.profilePhoneNumberField);
 
         gradeSpinner = findViewById(R.id.gradeSpinner);
         boardSpinner = findViewById(R.id.boardSpinner);
@@ -76,7 +82,11 @@ public class UserProfileActivity extends AppCompatActivity {
 
         fName.addTextChangedListener(checkChange);
         lName.addTextChangedListener(checkChange);
+        uName.addTextChangedListener(checkChange);
         year.addTextChangedListener(checkChange);
+
+
+//        mFirestore = FirebaseFirestore.getInstance();
 
     }
 
@@ -95,6 +105,7 @@ public class UserProfileActivity extends AppCompatActivity {
                 if (clickCount%2==0) {
                     fName.setEnabled(true);
                     lName.setEnabled(true);
+                    uName.setEnabled(true);
                     year.setEnabled(true);
                     compExams.setEnabled(true);
                     // phoneNumber.setEnabled(true);
@@ -105,6 +116,7 @@ public class UserProfileActivity extends AppCompatActivity {
                 else {
                     fName.setEnabled(false);
                     lName.setEnabled(false);
+                    uName.setEnabled(false);
                     year.setEnabled(false);
                     compExams.setEnabled(false);
                     // phoneNumber.setEnabled(false);
@@ -169,4 +181,6 @@ public class UserProfileActivity extends AppCompatActivity {
     public void finishActivity () {
         this.finish();
     }
+
+
 }
