@@ -74,12 +74,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-//        DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
-//        float dpHeight = displayMetrics.heightPixels / displayMetrics.density;
-//        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
-//        ViewGroup.LayoutParams bookImageLP = view_bookimage.getLayoutParams();
-//        bookImageLP.height = (int)dpWidth;
-//        view_bookimage.setLayoutParams(bookImageLP);
+
     }
 
     private void initFireStore() {
@@ -191,6 +186,15 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         catch(Exception e){
             Log.e(TAG, "populateBookDetails: exception",e );
         }
+
+        view_bookimage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent viewFullPic = new Intent(BookDetailsActivity.this, ViewPictureActivity.class);
+                viewFullPic.putExtra("IMAGE_STR",currentBook.getBookPhoto());
+                startActivity(viewFullPic);
+            }
+        });
     }
 
     @Override
