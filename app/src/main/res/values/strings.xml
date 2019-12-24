@@ -111,4 +111,5 @@
     <string name="apply">Apply</string>
     <string name="cancel">cancel</string>
     <string name="filter_tagline">Find exactly what you\'re looking for.</string>
+    <string name="price">Price</string>
 </resources>

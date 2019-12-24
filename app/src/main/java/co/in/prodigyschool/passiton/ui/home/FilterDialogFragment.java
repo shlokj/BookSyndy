@@ -1,19 +1,18 @@
 package co.in.prodigyschool.passiton.ui.home;
 
-import androidx.core.content.res.ResourcesCompat;
-import androidx.fragment.app.DialogFragment;
-
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
 import co.in.prodigyschool.passiton.R;
 import co.in.prodigyschool.passiton.util.Filters;
@@ -28,6 +27,8 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
     private CheckBox filterBoardCbse, filterBoardIcse, filterBoardIb, filterBoardIgcse, filterBoardState, filterBoardOther, filterBoardCompetitiveExams;
     private CheckBox freeOnly, filterTextbook, filterNotes;
     private OnFilterSelectionListener mOnFilterSelectedListener;
+    private TextView openCollegeFilters;
+    FilterCollegeDialogFragment mCFdialog;
 
 
     public interface OnFilterSelectionListener
@@ -69,7 +70,7 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
                              @Nullable Bundle savedInstanceState) {
         mRootView =  inflater.inflate(R.layout.filter_dialog_fragment, container, false);
         freeOnly = mRootView.findViewById(R.id.freeOnlyCB);
-        mRootView.findViewById(R.id.button_search).setOnClickListener(this);
+        mRootView.findViewById(R.id.button_apply).setOnClickListener(this);
         mRootView.findViewById(R.id.button_cancel).setOnClickListener(this);
 
         filterGrade5orBelow = mRootView.findViewById(R.id.filterGrade5orBelow);
@@ -92,6 +93,19 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
 
         setFilterOptionsFontToRobotoLight();
 
+        openCollegeFilters = mRootView.findViewById(R.id.collegeFiltersButton);
+
+        mCFdialog = new FilterCollegeDialogFragment();
+
+/*
+        openCollegeFilters.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCFdialog.show(getChildFragmentManager(),FilterCollegeDialogFragment.TAG);
+            }
+        });
+*/
+
         return mRootView;
     }
 
@@ -112,7 +126,7 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.button_search:
+            case R.id.button_apply:
                 onFilterApplied();
                 break;
             case R.id.button_cancel:

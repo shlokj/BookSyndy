@@ -1,111 +1,146 @@
 package co.in.prodigyschool.passiton.ui.home;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
 import co.in.prodigyschool.passiton.R;
+import co.in.prodigyschool.passiton.util.Filters;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link FilterCollegeDialogFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link FilterCollegeDialogFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class FilterCollegeDialogFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class FilterCollegeDialogFragment extends DialogFragment implements View.OnClickListener {
 
-    private OnFragmentInteractionListener mListener;
+    public static final String TAG = "COLLEGE_FILTER_DIALOG";
 
-    public FilterCollegeDialogFragment() {
-        // Required empty public constructor
+    private View mRootView;
+    private CheckBox filterGrade5orBelow, filterGrade6to8, filterGrade9, filterGrade10, filterGrade11, filterGrade12;
+    private CheckBox filterBoardCbse, filterBoardIcse, filterBoardIb, filterBoardIgcse, filterBoardState, filterBoardOther, filterBoardCompetitiveExams;
+    private CheckBox freeOnly, filterTextbook, filterNotes;
+    private FilterCollegeDialogFragment.OnFilterSelectionListener mOnFilterSelectedListener_c;
+    private TextView openSchoolFilters;
+    FilterDialogFragment mFilterDialog;
+
+
+    public interface OnFilterSelectionListener
+    {
+        public void onFilter(Filters filters);
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FilterCollegeDialogFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FilterCollegeDialogFragment newInstance(String param1, String param2) {
-        FilterCollegeDialogFragment fragment = new FilterCollegeDialogFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public void onAttachToParentFragment(Fragment fragment)
+    {
+        mOnFilterSelectedListener_c = (OnFilterSelectionListener)fragment;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
+        Log.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
+        onAttachToParentFragment(getParentFragment());
+    }
+
+
+    public static FilterCollegeDialogFragment newInstance() {
+        return new FilterCollegeDialogFragment();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_filter_college_dialog, container, false);
-    }
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        mRootView =  inflater.inflate(R.layout.filter_dialog_fragment, container, false);
+        freeOnly = mRootView.findViewById(R.id.freeOnlyCB);
+        mRootView.findViewById(R.id.button_apply_c).setOnClickListener(this);
+        mRootView.findViewById(R.id.button_cancel_c).setOnClickListener(this);
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+
+        filterTextbook = mRootView.findViewById(R.id.filterTextbook_c);
+        filterNotes = mRootView.findViewById(R.id.filterNotes_c);
+
+        setFilterOptionsFontToRobotoLight();
+
+        mFilterDialog = new FilterDialogFragment();
+        openSchoolFilters = mRootView.findViewById(R.id.collegeFiltersButton);
+
+        openSchoolFilters.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mFilterDialog.show(getChildFragmentManager(),FilterDialogFragment.TAG);
+            }
+        });
+
+        return mRootView;
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getDialog().getWindow().setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+    }
+
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.button_apply_c:
+                onFilterApplied();
+                break;
+            case R.id.button_cancel_c:
+                onCancelClicked();
+                break;
+        }
+    }
+
+    public void onFilterApplied() {
+
+        Log.d(TAG, "onFilterApplied: search clicked:"+getFilters().getPrice());
+        mOnFilterSelectedListener_c.onFilter(getFilters());
+        dismiss();
+    }
+
+    public void onCancelClicked() {
+        dismiss();
+    }
+
+    public Filters getFilters() {
+        Filters filters = new Filters();
+
+        if (mRootView != null) {
+
+            filters.setPrice(getSelectedPrice());
+
+        }
+
+        return filters;
+    }
+
+    private int getSelectedPrice() {
+        if (freeOnly.isChecked()) {
+            return 1;
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+            return -1;
         }
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+
+    public void setFilterOptionsFontToRobotoLight() {
+
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
+
 }
