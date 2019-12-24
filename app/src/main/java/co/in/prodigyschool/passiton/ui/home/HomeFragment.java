@@ -186,8 +186,6 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if(!TextUtils.isEmpty(query))
-                    onSearchClicked(query.toLowerCase());
                 return false;
             }
 
@@ -198,6 +196,9 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
                     mAdapter.setQuery(mQuery);
                     removeUserBooks(mQuery);
                 }
+
+                if(!TextUtils.isEmpty(newText))
+                    onSearchClicked(newText.toLowerCase());
                 return false;
             }
         });
