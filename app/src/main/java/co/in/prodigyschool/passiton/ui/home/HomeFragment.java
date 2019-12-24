@@ -51,11 +51,19 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
     private static final int LIMIT = 50;
     private FirebaseFirestore mFirestore;
     private Query mQuery;
+    private User currentUser;
     FilterDialogFragment mFilterDialog;
     FilterCollegeDialogFragment mCFdialog;
 
 
-//TODO: come back home on pressing back in another activity
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
+    }
+
+    
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
@@ -77,6 +85,7 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
             }
         });
         initFireStore();
+        setDefaultFilters();
 
         /* use a linear layout manager */
         layoutManager = new LinearLayoutManager(getActivity());
@@ -86,6 +95,8 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
 
         return root;
     }
+
+
 
 
     @Override
@@ -148,7 +159,7 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
                     String otherUserId = snapshot.toObject(User.class).getPhone();
                     usersList.add(otherUserId);
                 }
-                usersList.remove(curUserId);
+                        usersList.remove(curUserId);
                 if(!usersList.isEmpty()) {
                     Query query = defaultQuery.whereIn("userId", usersList).limit(LIMIT);
                     mAdapter.setQuery(query);
@@ -157,6 +168,7 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
                     //case when only current user has books and no other users present
                     mAdapter.setQuery(null);
                 }
+
 
             }
         });
@@ -283,6 +295,7 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
     @Override
     public void onFilter(Filters filters) {
 
+        // price filter
         Query query  = mFirestore.collection("books");
         if(filters.hasPrice()) {
             query = query.whereEqualTo("bookPrice", 0);
@@ -290,8 +303,59 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
             //query = query.whereEqualTo("textbook",false);
             //Log.d(TAG, "onFilter: home"+filters.getPrice());
         }
+
+        //filter: text and notes
+        if(!(filters.IsNotes() && filters.IsText())) {
+            if (filters.IsNotes()) {
+                query = query.whereEqualTo("textbook", false);
+
+            }
+
+            if (filters.IsText()) {
+                query = query.whereEqualTo("textbook", true);
+            }
+        }
+
+        //filter: board
+        if(filters.hasBookBoard()){
+            query = query.whereEqualTo("boardNumber", filters.getBookBoard());
+        }
+
+        //filter: grade
+        if(filters.hasBookGrade()){
+            query = query.whereEqualTo("gradeNumber", filters.getBookGrade());
+        }
+
+
         mQuery = query;
         mAdapter.setQuery(query);
         removeUserBooks(query);
     }
+
+
+    private void setDefaultFilters() {
+        final String curUserId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
+        mFirestore.collection("users").document(curUserId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+           if(e != null){
+               Log.e(TAG, "onEvent: listener error",e );
+               return;
+           }
+           currentUser = snapshot.toObject(User.class);
+                Log.d(TAG, "setDefaultFilters: success");
+                Filters defaultFilters = new Filters();
+                defaultFilters.setBookGrade(currentUser.getGradeNumber());
+                defaultFilters.setBookBoard(currentUser.getBoardNumber());
+                defaultFilters.setIsText(true);
+                homeViewModel.setFilters(defaultFilters);
+                onFilter(homeViewModel.getFilters());
+            }
+        });
+
+
+    }
+
+
+
 }

@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -19,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import co.in.prodigyschool.passiton.R;
 import co.in.prodigyschool.passiton.SignInActivity;
+import co.in.prodigyschool.passiton.ui.home.HomeFragment;
 
 public class SendFragment extends Fragment {
 
@@ -45,6 +47,12 @@ public class SendFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 //return to home frag
+                //this solution shows signout as selected
+              //  FragmentTransaction t = getFragmentManager().beginTransaction();
+              //  t.replace(R.id.nav_host_fragment, new HomeFragment());
+             //   t.commit();
+                startActivity(getActivity().getIntent());
+                getActivity().finish();
             }
         });
         builder.show();

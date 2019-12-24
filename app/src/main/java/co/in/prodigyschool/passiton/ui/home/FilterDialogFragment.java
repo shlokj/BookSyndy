@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import co.in.prodigyschool.passiton.R;
 import co.in.prodigyschool.passiton.util.Filters;
@@ -28,6 +29,7 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
     private CheckBox freeOnly, filterTextbook, filterNotes;
     private OnFilterSelectionListener mOnFilterSelectedListener;
     private TextView openCollegeFilters;
+    private HomeViewModel homeViewModel;
     FilterCollegeDialogFragment mCFdialog;
 
 
@@ -56,7 +58,7 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
         super.onCreate(savedInstanceState);
 
         onAttachToParentFragment(getParentFragment());
-
+        homeViewModel = ViewModelProviders.of(getParentFragment()).get(HomeViewModel.class);
         // ...
     }
 
@@ -105,8 +107,63 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
             }
         });
 */
+        setDefaultFilters();
 
         return mRootView;
+    }
+
+    private void setDefaultFilters() {
+
+        Filters defaultFilters = homeViewModel.getFilters();
+
+        if(defaultFilters.IsText()){
+            filterTextbook.setChecked(true);
+        }
+        if(defaultFilters.hasBookBoard()){
+            int bookBoard = defaultFilters.getBookBoard();
+            if(bookBoard == 1){
+                filterBoardCbse.setChecked(true);
+            }
+            else if(bookBoard == 2){
+                filterBoardIcse.setChecked(true);
+            }
+            else if(bookBoard == 3){
+                filterBoardIb.setChecked(true);
+            }
+            else if(bookBoard == 4){
+                filterBoardIgcse.setChecked(true);
+            }
+            else if(bookBoard == 5){
+                filterBoardState.setChecked(true);
+            }
+            else if(bookBoard == 6){
+                filterBoardOther.setChecked(true);
+            }
+        }
+
+        if(defaultFilters.hasBookGrade()){
+            int bookGrade = defaultFilters.getBookGrade();
+            if(bookGrade == 1){
+                filterGrade5orBelow.setChecked(true);
+            }
+            else if(bookGrade == 2){
+                filterGrade6to8.setChecked(true);
+            }
+            else if(bookGrade == 3){
+                filterGrade9.setChecked(true);
+            }
+            else if(bookGrade == 4){
+                filterGrade10.setChecked(true);
+            }
+            else if(bookGrade == 5){
+                filterGrade11.setChecked(true);
+            }
+            else if(bookGrade == 6){
+                filterGrade12.setChecked(true);
+            }
+        }
+
+
     }
 
     @Override
@@ -152,11 +209,20 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
         if (mRootView != null) {
 
             filters.setPrice(getSelectedPrice());
+            filters.setIsText(isTextBook());
+            filters.setIsNotes(isNotes());
+            filters.setBookBoard(getselectedBoard());
+            filters.setBookGrade(getselectedGrade());
+
 
         }
 
+        homeViewModel.setFilters(filters);
         return filters;
     }
+
+
+
 
     private int getSelectedPrice() {
         if (freeOnly.isChecked()) {
@@ -165,6 +231,71 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
             return -1;
         }
     }
+
+    //is text or notes
+    private boolean isTextBook() {
+        if (filterTextbook.isChecked()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean isNotes() {
+        if (filterNotes.isChecked()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private int getselectedBoard() {
+        if(filterBoardCbse.isChecked()){
+            return 1;
+        }
+        if(filterBoardIcse.isChecked()){
+            return 2;
+        }
+        if(filterBoardIb.isChecked()){
+            return 3;
+        }
+        if(filterBoardIgcse.isChecked()){
+            return 4;
+        }
+        if(filterBoardState.isChecked()){
+            return 5;
+        }
+        if(filterBoardOther.isChecked()){
+            return 6;
+        }
+        if(filterBoardCompetitiveExams.isChecked()){
+            return 20;
+        }
+        return -1;
+    }
+
+    private int getselectedGrade() {
+        if(filterGrade5orBelow.isChecked()){
+            return 1;
+        }
+        if(filterGrade6to8.isChecked()){
+            return 2;
+        }
+        if(filterGrade9.isChecked()){
+            return 3;
+        }
+        if(filterGrade10.isChecked()){
+            return 4;
+        }
+        if(filterGrade11.isChecked()){
+            return 5;
+        }
+        if(filterGrade12.isChecked()){
+            return 6;
+        }
+        return -1;
+    }
+
 
 
     public void setFilterOptionsFontToRobotoLight() {

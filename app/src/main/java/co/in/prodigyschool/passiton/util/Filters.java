@@ -15,6 +15,11 @@ public class Filters {
     private String sortBy = null;
     private Query.Direction sortDirection = null;
 
+    private boolean isText = false;
+    private boolean isNotes = false;
+    private int bookGrade = -1;
+    private int bookBoard = -1;
+
     public Filters() {}
 
     public static Filters getDefault() {
@@ -35,6 +40,10 @@ public class Filters {
     public boolean hasPrice() {
         return (price > 0);
     }
+
+    public boolean hasBookBoard(){return (bookBoard > 0);}
+
+    public boolean hasBookGrade(){return (bookGrade > 0);}
 
     public boolean hasSortBy() {
         return !(TextUtils.isEmpty(sortBy));
@@ -116,4 +125,33 @@ public class Filters {
     }
 
 
+    public void setIsNotes(boolean notes) {
+        this.isNotes = notes;
+    }
+    public boolean IsNotes(){
+        return this.isNotes;
+    }
+
+    public void setIsText(boolean text) {
+        this.isText = text;
+    }
+    public boolean IsText(){
+        return this.isText;
+    }
+
+    public void setBookGrade(int gradeNumber) {
+        this.bookGrade = gradeNumber;
+    }
+
+    public int getBookGrade(){
+        return this.bookGrade;
+    }
+
+    public void setBookBoard(int boardNumber) {
+        this.bookBoard = boardNumber;
+    }
+
+    public int getBookBoard(){
+        return this.bookBoard;
+    }
 }
