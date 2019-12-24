@@ -7,7 +7,7 @@
     tools:context=".ViewPictureActivity"
     android:background="@color/colorPrimary">
 
-    <ImageView
+    <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/bookPicFull"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

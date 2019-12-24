@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.github.chrisbanes.photoview.PhotoView;
 
 public class ViewPictureActivity extends AppCompatActivity {
 

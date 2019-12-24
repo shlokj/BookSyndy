@@ -103,4 +103,12 @@
     <string name="all_books">All Books</string>
     <string name="action_search">Search</string>
     <string name="filters">Filters</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="degree">Degree</string>
+    <string name="school_filters">School filters</string>
+    <string name="apply">Apply</string>
+    <string name="cancel">cancel</string>
+    <string name="filter_tagline">Find exactly what you\'re looking for.</string>
 </resources>

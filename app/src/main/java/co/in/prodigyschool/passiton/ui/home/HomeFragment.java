@@ -52,6 +52,7 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
     private FirebaseFirestore mFirestore;
     private Query mQuery;
     FilterDialogFragment mFilterDialog;
+    FilterCollegeDialogFragment mCFdialog;
 
 
 //TODO: come back home on pressing back in another activity
@@ -61,6 +62,7 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
                 ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         mFilterDialog = new FilterDialogFragment();
+        mCFdialog = new FilterCollegeDialogFragment();
         setHasOptionsMenu(true);
         /* recycler view */
         recyclerView = root.findViewById(R.id.home_recycler_view);
