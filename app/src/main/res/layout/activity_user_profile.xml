@@ -175,6 +175,7 @@
 
         <Spinner
             android:id="@+id/gradeSpinner"
+            android:enabled="false"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -199,6 +200,7 @@
             android:id="@+id/boardSpinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:enabled="false"
             tools:layout_editor_absoluteX="1dp"
             tools:layout_editor_absoluteY="321dp" />
     </LinearLayout>
@@ -227,6 +229,7 @@
 
             <Spinner
                 android:id="@+id/degreeSpinner"
+                android:enabled="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -313,12 +316,12 @@
 
     <CheckBox
         android:id="@+id/profileCompetitiveExams"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/competitive_exams"
-        android:layout_margin="16dp"
+        android:layout_marginStart="16dp"
         android:enabled="false"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/boardLL" />
+        android:text="@string/competitive_exams"
+        app:layout_constraintBottom_toBottomOf="@+id/gradeLL"
+        app:layout_constraintStart_toEndOf="@+id/gradeLL" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
