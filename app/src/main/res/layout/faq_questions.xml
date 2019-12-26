@@ -4,10 +4,11 @@
     android:layout_width="match_parent" android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/helpQuestion"
+        android:id="@+id/text_helpquestion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="16dp"
+        android:textStyle="bold"
         android:text="How does BookSyndy work?"
         android:textSize="16sp"
         android:layout_centerVertical="true"
@@ -28,6 +29,6 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_marginTop="8dp"
-        android:layout_below="@id/helpQuestion"
+        android:layout_below="@id/text_helpquestion"
         android:background="@android:color/darker_gray" />
 </RelativeLayout>
