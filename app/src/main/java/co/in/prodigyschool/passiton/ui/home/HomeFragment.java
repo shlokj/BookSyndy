@@ -122,7 +122,7 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
         mFirestore = FirebaseFirestore.getInstance();
         mQuery = mFirestore.collection("books").limit(LIMIT);
         populateBookAdapter();
-        removeUserBooks(mQuery);
+        //removeUserBooks(mQuery);
     }
 
 
@@ -219,7 +219,7 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
                 if(newText == null || newText.trim().isEmpty())
                 {
                     mAdapter.setQuery(mQuery);
-                    removeUserBooks(mQuery);
+                    //removeUserBooks(mQuery);
                 }
 
                 if(!TextUtils.isEmpty(newText))
@@ -259,7 +259,7 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
                 else{
                     Query query1 = query.whereEqualTo("bookName",queryText);
                     mAdapter.setQuery(query1);
-                    removeUserBooks(query1);
+                    //removeUserBooks(query1);
                 }
 
 
@@ -340,7 +340,7 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
 
         mQuery = query;
         mAdapter.setQuery(query);
-        removeUserBooks(query);
+        //removeUserBooks(query);
     }
 
 
