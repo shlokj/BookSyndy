@@ -3,6 +3,7 @@
     <color name="colorPrimary">#202020</color>
     <color name="colorPrimaryDark">#151515</color>
     <color name="colorAccent">#06768D</color>
+    <color name="colorBackground">#FAFAFA</color>
     <color name="colorLink">#05C5CF</color>
     <color name="colorTextBlack">#151515</color>
     <color name="greyDisabled">#61000000</color>

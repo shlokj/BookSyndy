@@ -158,7 +158,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
                     //TODO: save profile changes to firebase
 
-                    if (fName.getText().toString().length()==0 || lName.getText().toString().length()==0 || uName.getText().toString().length()==0 /*|| year.getText().toString().length()==0*/) {
+                    if (!(fName.getText().toString().length()==0 || lName.getText().toString().length()==0 || uName.getText().toString().length()==0 /*|| year.getText().toString().length()==0*/)) {
 
                         Intent homeIntent = new Intent(UserProfileActivity.this, HomeActivity.class);
                         homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -281,7 +281,6 @@ public class UserProfileActivity extends AppCompatActivity {
                             ArrayAdapter<String> boardAdapter = new ArrayAdapter<String>(UserProfileActivity.this,
                                     android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.boards));
                             boardAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
                             boardSpinner.setAdapter(boardAdapter);
                             boardSpinner.setSelection(boardNumber-1);
                         }

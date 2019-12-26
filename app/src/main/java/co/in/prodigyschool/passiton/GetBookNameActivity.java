@@ -1,12 +1,12 @@
 package co.in.prodigyschool.passiton;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -17,12 +17,17 @@ public class GetBookNameActivity extends AppCompatActivity {
     String bookName,selectedImage;
     EditText bookNameField;
     TextView nameQuestion, namingInstructuions;
+    private int gradeNumber,boardNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_book_name);
         getSupportActionBar().setTitle("List a book");
+
+        gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
+        boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 1);
+
         selectedImage = getIntent().getStringExtra("BOOK_IMAGE_URI");
         isTextbook = getIntent().getBooleanExtra("IS_TEXTBOOK",true);
         nameQuestion = (TextView)findViewById(R.id.titleQTV);
@@ -53,6 +58,8 @@ public class GetBookNameActivity extends AppCompatActivity {
                     Intent getBookDescription = new Intent(GetBookNameActivity.this, GetBookDescriptionActivity.class);
                     getBookDescription.putExtra("BOOK_IMAGE_URI", selectedImage);
                     getBookDescription.putExtra("IS_TEXTBOOK", isTextbook);
+                    getBookDescription.putExtra("GRADE_NUMBER",gradeNumber);
+                    getBookDescription.putExtra("BOARD_NUMBER",boardNumber);
                     getBookDescription.putExtra("BOOK_NAME",bookName);
                     startActivity(getBookDescription);
                 }

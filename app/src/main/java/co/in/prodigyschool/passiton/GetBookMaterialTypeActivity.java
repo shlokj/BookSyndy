@@ -1,12 +1,11 @@
 package co.in.prodigyschool.passiton;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RadioGroup;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -17,11 +16,17 @@ public class GetBookMaterialTypeActivity extends AppCompatActivity {
     int bookTypeId;
     boolean isTextbook;
     private String selectedImage;
+    private int gradeNumber,boardNumber;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_book_material_type);
         getSupportActionBar().setTitle("List a book");
+
+        gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
+        boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 1);
+
         materialTypeButtons = (RadioGroup) findViewById(R.id.materialTypeRadioGroup);
         FloatingActionButton next = findViewById(R.id.fab11);
         selectedImage = getIntent().getStringExtra("BOOK_IMAGE_URI");
@@ -46,6 +51,8 @@ public class GetBookMaterialTypeActivity extends AppCompatActivity {
                     Intent getBookName = new Intent(GetBookMaterialTypeActivity.this, GetBookNameActivity.class);
                     getBookName.putExtra("BOOK_IMAGE_URI", selectedImage);
                     getBookName.putExtra("IS_TEXTBOOK", isTextbook);
+                    getBookName.putExtra("GRADE_NUMBER",gradeNumber);
+                    getBookName.putExtra("BOARD_NUMBER",boardNumber);
                     startActivity(getBookName);
                 }
                 else if (bookTypeId==R.id.notesOption) {
@@ -53,6 +60,8 @@ public class GetBookMaterialTypeActivity extends AppCompatActivity {
                     Intent getBookName = new Intent(GetBookMaterialTypeActivity.this, GetBookNameActivity.class);
                     getBookName.putExtra("BOOK_IMAGE_URI", selectedImage);
                     getBookName.putExtra("IS_TEXTBOOK", isTextbook);
+                    getBookName.putExtra("GRADE_NUMBER",gradeNumber);
+                    getBookName.putExtra("BOARD_NUMBER",boardNumber);
                     startActivity(getBookName);
                 }
             }

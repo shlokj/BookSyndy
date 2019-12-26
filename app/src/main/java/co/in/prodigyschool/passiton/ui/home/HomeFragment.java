@@ -1,6 +1,9 @@
 package co.in.prodigyschool.passiton.ui.home;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -11,17 +14,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
+import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -52,6 +58,8 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
     private FirebaseFirestore mFirestore;
     private Query mQuery;
     private User currentUser;
+    private String curUserId;
+    private int gradeNumber, boardNumber;
     FilterDialogFragment mFilterDialog;
     FilterCollegeDialogFragment mCFdialog;
 
@@ -60,6 +68,7 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getUserDetails();
         //homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
     }
 
@@ -81,6 +90,8 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
             public void onClick(View view) {
                 Intent startBookPub = new Intent(getActivity(), GetBookPictureActivity.class);
                 startBookPub.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startBookPub.putExtra("GRADE_NUMBER",gradeNumber);
+                startBookPub.putExtra("BOARD_NUMBER",boardNumber);
                 startActivity(startBookPub);
             }
         });
@@ -352,10 +363,58 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
                 onFilter(homeViewModel.getFilters());
             }
         });
-
-
     }
 
 
+
+    public static boolean checkConnection(Context context) {
+        final ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (connMgr != null) {
+            NetworkInfo activeNetworkInfo = connMgr.getActiveNetworkInfo();
+
+            if (activeNetworkInfo != null) { // connected to the internet
+                // connected to the mobile provider's data plan
+                if (activeNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+                    // connected to wifi
+                    return true;
+                } else return activeNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE;
+            }
+        }
+        return false;
+    }
+
+
+    private void getUserDetails() {
+        if (!checkConnection(getActivity())) {
+            Toast.makeText(getActivity(),"Internet Required",Toast.LENGTH_LONG).show();
+            return;
+        }
+        mFirestore = FirebaseFirestore.getInstance();
+        try{
+            curUserId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
+            DocumentReference userReference =  mFirestore.collection("users").document(curUserId);
+            userReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot snapshot) {
+                    User user = snapshot.toObject(User.class);
+                    if(user != null) {
+                        gradeNumber=user.getGradeNumber();
+                        boardNumber=user.getBoardNumber();
+                    }
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e(TAG, "onFailure: ",e );
+                }
+            });
+
+        }
+        catch(Exception e){
+            Log.e(TAG, "PopulateUserDetails method failed with  ",e);
+        }
+    }
 
 }

@@ -1,19 +1,18 @@
 package co.in.prodigyschool.passiton;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 public class CustNameActivity extends AppCompatActivity {
 
-    boolean isParent, isValidUsername, isAvailableUsername;
+    boolean isParent, isValidUsername, isAvailableUsername=true;
     EditText firstNameField, lastNameField, userIdField;
     String firstName, lastName, username;
 
@@ -50,7 +49,7 @@ public class CustNameActivity extends AppCompatActivity {
                 else if (!(isValidUsername && isAvailableUsername)) {
 //                    userIdField.getBackground().setColorFilter("#EE0000", PorterDuff.Mode.SRC_IN);
                     if (!isValidUsername) {
-                        Snackbar.make(parentLayout, "The username you entered is not valid. A valid username has only letters (a-z) and numbers (0-9) and is at least 5 characters long.", Snackbar.LENGTH_SHORT)
+                        Snackbar.make(parentLayout, "The username you entered is not valid."/* A valid username has only letters (a-z) and numbers (0-9) and is at least 5 characters long.*/ , Snackbar.LENGTH_SHORT)
                                 .setAction("OKAY", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {

@@ -1,12 +1,7 @@
 package co.in.prodigyschool.passiton;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
-
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -16,6 +11,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.Continuation;
@@ -43,6 +42,7 @@ public class GetBookPictureActivity extends AppCompatActivity {
     private String book_photo_url = null;
     private String imageFilePath;
     private Uri selectedImage;
+    private int gradeNumber,boardNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +51,9 @@ public class GetBookPictureActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("List a book");
         mFirebaseStorage = FirebaseStorage.getInstance();
         bookPhotosStorageReference = mFirebaseStorage.getReference().child("book_photos");
+
+        gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
+        boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 1);
 
         takenPic = findViewById(R.id.picChosenIV);
         chosenPic = findViewById(R.id.picTakenIV);
@@ -83,7 +86,12 @@ public class GetBookPictureActivity extends AppCompatActivity {
                 if(selectedImage != null)
                     getBookType.putExtra("BOOK_IMAGE_URI", selectedImage.toString());
 
+                getBookType.putExtra("GRADE_NUMBER",gradeNumber);
+                getBookType.putExtra("BOARD_NUMBER",boardNumber);
+
                 startActivity(getBookType);
+
+
 
             }
         });

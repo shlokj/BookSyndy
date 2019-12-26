@@ -1,9 +1,5 @@
 package co.in.prodigyschool.passiton;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -16,6 +12,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.DocumentReference;
@@ -93,7 +93,6 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
             view_address.setText(currentBook.getBookAddress());
             int gradeNumber = currentBook.getGradeNumber();
             int boardNumber = currentBook.getBoardNumber();
-//            Toast.makeText(getApplicationContext(),"Board number: "+boardNumber,Toast.LENGTH_SHORT).show();
 
 
             if (boardNumber == 20) {

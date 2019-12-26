@@ -1,7 +1,5 @@
 package co.in.prodigyschool.passiton;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +8,8 @@ import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -33,12 +33,16 @@ public class GetBookClassActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("List a book");
         selectedImage = getIntent().getStringExtra("BOOK_IMAGE_URI");
         isTextbook = getIntent().getBooleanExtra("IS_TEXTBOOK", true);
+        gradeNumber = getIntent().getIntExtra("GRADE_NUMBER", 4);
+        boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 1);
+
         bookName = getIntent().getStringExtra("BOOK_NAME");
         bookDescription = getIntent().getStringExtra("BOOK_DESCRIPTION");
         gradeQuestion = (TextView) findViewById(R.id.bookGradeQuestionTV);
         if (!isTextbook) {
             gradeQuestion.setText(R.string.notes_grade_question);
         }
+
         grades = (RadioGroup) findViewById(R.id.bookGradesButtonList);
         compExamBook = findViewById(R.id.competitiveExamBookCB);
         compExamBook.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -62,10 +66,32 @@ public class GetBookClassActivity extends AppCompatActivity {
                 }
             }
         });
+        if (gradeNumber==1) {
+            grades.check(R.id.grade5OrBelowBook);
+        }
+        else if (gradeNumber==2) {
+            grades.check(R.id.grade6to8Book);
+        }
+        else if (gradeNumber==3) {
+            grades.check(R.id.grade9Book);
+        }
+        else if (gradeNumber==4) {
+            grades.check(R.id.grade10Book);
+        }
+        else if (gradeNumber==5) {
+            grades.check(R.id.grade11Book);
+        }
+        else if (gradeNumber==6) {
+            grades.check(R.id.grade12Book);
+        }
+        else if (gradeNumber==7) {
+            grades.check(R.id.universityBook);
+        }
         getBookBoard = new Intent(GetBookClassActivity.this, GetBookBoardActivity.class);
         getBookBoard.putExtra("BOOK_IMAGE_URI", selectedImage);
         getBookBoard.putExtra("IS_TEXTBOOK", isTextbook);
         getBookBoard.putExtra("BOOK_NAME",bookName);
+        getBookBoard.putExtra("BOARD_NUMBER",boardNumber);
         getBookBoard.putExtra("BOOK_DESCRIPTION",bookDescription);
         FloatingActionButton next = (FloatingActionButton) findViewById(R.id.fab14);
         next.setOnClickListener(new View.OnClickListener() {
@@ -110,6 +136,7 @@ public class GetBookClassActivity extends AppCompatActivity {
                     getBookDegree.putExtra("BOOK_NAME",bookName);
                     getBookDegree.putExtra("BOOK_DESCRIPTION",bookDescription);
                     getBookDegree.putExtra("GRADE_NUMBER",gradeNumber);
+                    getBookDegree.putExtra("BOARD_NUMBER",boardNumber);
                     startActivity(getBookDegree);
                     tmp = false;
                 }

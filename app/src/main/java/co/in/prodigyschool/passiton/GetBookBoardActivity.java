@@ -1,12 +1,12 @@
 package co.in.prodigyschool.passiton;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -31,11 +31,32 @@ public class GetBookBoardActivity extends AppCompatActivity {
         bookName = getIntent().getStringExtra("BOOK_NAME");
         bookDescription = getIntent().getStringExtra("BOOK_DESCRIPTION");
         gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
+        boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 1);
+
         bookBoardQuestion = (TextView) findViewById(R.id.bookBoardQuestionTV);
+        boards = (RadioGroup) findViewById(R.id.bookBoardsButtonList);
+
         if (!isTextbook) {
             bookBoardQuestion.setText(R.string.material_board_q);
         }
-        boards = (RadioGroup) findViewById(R.id.bookBoardsButtonList);
+        if (boardNumber==1) {
+            boards.check(R.id.cbseBook);
+        }
+        else if (boardNumber==2) {
+            boards.check(R.id.icseBook);
+        }
+        else if (boardNumber==3) {
+            boards.check(R.id.ibBook);
+        }
+        else if (boardNumber==4) {
+            boards.check(R.id.igcseBook);
+        }
+        else if (boardNumber==5) {
+            boards.check(R.id.stateBook);
+        }
+        else if (boardNumber==6) {
+            boards.check(R.id.otherBoardBook);
+        }
         getPrice = new Intent(GetBookBoardActivity.this, GetBookPriceActivity.class);
         getPrice.putExtra("BOOK_IMAGE_URI",selectedImage);
         getPrice.putExtra("IS_TEXTBOOK", isTextbook);

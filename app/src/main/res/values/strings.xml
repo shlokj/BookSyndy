@@ -11,7 +11,7 @@
     <string name="cbse">CBSE</string>
     <string name="icse">ICSE/ISC</string>
     <string name="ib">IB</string>
-    <string name="igcse">IGCSE</string>
+    <string name="igcse">IGCSE/CAIE</string>
     <string name="state_board">State Board</string>
     <string name="board_question">Which board do you study under?</string>
     <string name="b_tech">B. Tech</string>

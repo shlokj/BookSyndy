@@ -1,11 +1,11 @@
 package co.in.prodigyschool.passiton;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -15,12 +15,18 @@ public class GetBookDescriptionActivity extends AppCompatActivity {
     boolean isTextbook;
     String bookName, bookDescription,selectedImage;
     EditText bookDescField;
+    private int gradeNumber,boardNumber;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_book_description);
         getSupportActionBar().setTitle("List a book");
+
+        gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
+        boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 1);
+
         selectedImage = getIntent().getStringExtra("BOOK_IMAGE_URI");
         bookName = getIntent().getStringExtra("BOOK_NAME");
         isTextbook = getIntent().getBooleanExtra("IS_TEXTBOOK",true);
@@ -46,6 +52,8 @@ public class GetBookDescriptionActivity extends AppCompatActivity {
                     Intent getBookDescription = new Intent(GetBookDescriptionActivity.this, GetBookClassActivity.class);
                     getBookDescription.putExtra("BOOK_IMAGE_URI", selectedImage);
                     getBookDescription.putExtra("IS_TEXTBOOK", isTextbook);
+                    getBookDescription.putExtra("GRADE_NUMBER",gradeNumber);
+                    getBookDescription.putExtra("BOARD_NUMBER",boardNumber);
                     getBookDescription.putExtra("BOOK_NAME",bookName);
                     getBookDescription.putExtra("BOOK_DESCRIPTION",bookDescription);
                     startActivity(getBookDescription);
