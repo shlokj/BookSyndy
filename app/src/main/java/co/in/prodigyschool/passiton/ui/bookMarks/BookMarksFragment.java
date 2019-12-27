@@ -1,78 +1,95 @@
-package co.in.prodigyschool.passiton.ui.myListings;
+package co.in.prodigyschool.passiton.ui.bookMarks;
 
 import android.content.Intent;
+import android.icu.text.Edits;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import co.in.prodigyschool.passiton.Adapters.BookAdapter;
 import co.in.prodigyschool.passiton.BookDetailsActivity;
+import co.in.prodigyschool.passiton.Data.Book;
 import co.in.prodigyschool.passiton.R;
-import co.in.prodigyschool.passiton.ui.home.HomeFragment;
 
-public class MyListingsFragment extends Fragment implements BookAdapter.OnBookSelectedListener{
+public class BookMarksFragment extends Fragment implements BookAdapter.OnBookSelectedListener{
 
-    private static String TAG = "MY LISTINGS";
+    private static String TAG = "BOOKMARKS";
 
+    private ToolsViewModel toolsViewModel;
+    private FirebaseFirestore mFirestore;
+    private FirebaseAuth mAuth;
+    private Query mQuery;
+    private CollectionReference bookMarkRef;
+    private String curUserId;
     private RecyclerView recyclerView;
     private ViewGroup mEmptyView;
-    private RecyclerView.LayoutManager layoutManager;
     private BookAdapter mAdapter;
-    private static final int LIMIT = 50;
-    private FirebaseFirestore mFirestore;
-    private Query mQuery;
-    private GalleryViewModel galleryViewModel;
+    private RecyclerView.LayoutManager layoutManager;
+
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        galleryViewModel =
-                ViewModelProviders.of(this).get(GalleryViewModel.class);
+        toolsViewModel =
+                ViewModelProviders.of(this).get(ToolsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-
-        /* recycler view */
+//        final TextView textView = root.findViewById(R.id.text_tools);
         recyclerView = root.findViewById(R.id.home_recycler_view);
         mEmptyView = root.findViewById(R.id.view_empty);
-        root.findViewById(R.id.fab_home).setVisibility(View.GONE);
+
         initFireStore();
+
+//        toolsViewModel.getText().observe(this, new Observer<String>() {
+//            @Override
+//            public void onChanged(@Nullable String s) {
+//                textView.setText(s);
+//            }
+//        });
 
         /* use a linear layout manager */
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mAdapter);
         mAdapter.startListening();
+        root.findViewById(R.id.fab_home).setVisibility(View.GONE);
         return root;
     }
 
     private void initFireStore() {
-        try {
-            /* firestore */
-            mFirestore = FirebaseFirestore.getInstance();
-            String userId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
-            mQuery = mFirestore.collection("books").whereEqualTo("userId", userId).limit(LIMIT);
-            populateBookAdapter();
-
-        } catch (Exception e) {
-            Log.e(TAG, "initFireStore: ", e);
-        }
-
+        mFirestore = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        curUserId = mAuth.getCurrentUser().getPhoneNumber();
+        mQuery = mFirestore.collection("bookmarks").document(curUserId).collection("books");
+        populateBookAdapter();
     }
 
     private void populateBookAdapter() {
@@ -82,7 +99,6 @@ public class MyListingsFragment extends Fragment implements BookAdapter.OnBookSe
         }
         // specify an adapter
         mAdapter = new BookAdapter(mQuery, this) {
-
 
             @Override
             protected void onDataChanged() {
@@ -104,9 +120,7 @@ public class MyListingsFragment extends Fragment implements BookAdapter.OnBookSe
             }
         };
 
-
     }
-
     @Override
     public void onStart() {
         super.onStart();
@@ -130,16 +144,9 @@ public class MyListingsFragment extends Fragment implements BookAdapter.OnBookSe
     public void onBookSelected(DocumentSnapshot snapshot) {
         String book_id = snapshot.getId();
         Intent bookDetails = new Intent(getActivity(), BookDetailsActivity.class);
+        Log.d(TAG, "onBookSelected: "+book_id);
         bookDetails.putExtra("bookid", book_id);
         bookDetails.putExtra("isHome",false);
         startActivity(bookDetails);
     }
-
-/*    @Override
-    public void onDetach() {
-        super.onDetach();
-        Intent home = new Intent(getActivity(), HomeFragment.class);
-        startActivity(home);
-        getActivity().overridePendingTransition(R.anim.slide_ltor, R.anim.slide_rtol);
-    }*/
 }

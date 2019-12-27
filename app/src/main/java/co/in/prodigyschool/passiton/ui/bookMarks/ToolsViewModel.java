@@ -1,4 +1,4 @@
-package co.in.prodigyschool.passiton.ui.starred;
+package co.in.prodigyschool.passiton.ui.bookMarks;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

@@ -13,11 +13,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -42,8 +47,9 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     private DocumentReference bookUserRef, bookRef;
     private Menu menu;
     private int MENU_DELETE = 123;
+    private String curAppUser;
 
-    private static final String TAG = "BOOK DETAILS";
+    private static final String TAG = "BOOK_DETAILS";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +80,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
 
         if(mFirestore != null){
             bookRef =  mFirestore.collection("books").document(bookid);
-
+            curAppUser = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
         }
         else{
             Toast.makeText(getApplicationContext(),"Firebase error",Toast.LENGTH_SHORT).show();
@@ -87,6 +93,10 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
 
         try {
             currentBook = book;
+            if(currentBook == null){
+                Log.d(TAG, "populateBookDetails: current book error");
+                return;
+            }
             bookUserRef = mFirestore.collection("users").document(currentBook.getUserId());
             view_bookname.setText(currentBook.getBookName());
             view_description.setText(currentBook.getBookDescription());
@@ -181,9 +191,11 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         view_bookimage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent viewFullPic = new Intent(BookDetailsActivity.this, ViewPictureActivity.class);
-                viewFullPic.putExtra("IMAGE_STR",currentBook.getBookPhoto());
-                startActivity(viewFullPic);
+                if(currentBook != null) {
+                    Intent viewFullPic = new Intent(BookDetailsActivity.this, ViewPictureActivity.class);
+                    viewFullPic.putExtra("IMAGE_STR", currentBook.getBookPhoto());
+                    startActivity(viewFullPic);
+                }
             }
         });
     }
@@ -286,6 +298,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
             case R.id.bookmark:
                 if (!saved) {
                     //add to bookmarks
+                    addToBookMark();
                     menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_bookmark_filled_24px));
                     saved = true;
                 }
@@ -297,6 +310,21 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void addToBookMark() {
+        final CollectionReference bookMarkRef = mFirestore.collection("bookmarks");
+        bookMarkRef.document(curAppUser).collection("books").document(bookid).set(currentBook).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(getApplicationContext(),"BookMarked!",Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(), "BookMark Failed", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
