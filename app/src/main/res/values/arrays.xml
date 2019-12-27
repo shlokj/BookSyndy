@@ -31,4 +31,9 @@
         <item>Other</item>
     </string-array>
 
+    <string-array name="types">
+        <item>Textbook</item>
+        <item>Notes / other material</item>
+    </string-array>
+
 </resources>

@@ -20,7 +20,8 @@
         android:roundIcon="@drawable/ic_booksyndy_logo_square"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ViewPictureActivity"></activity>
+        <activity android:name=".CreateListingActivity"></activity>
+        <activity android:name=".ViewPictureActivity" />
         <activity android:name=".CollegeFilterActivity" />
         <activity android:name=".ConfirmListingActivity" />
         <activity android:name=".GetCollegeBranchActivity" />
