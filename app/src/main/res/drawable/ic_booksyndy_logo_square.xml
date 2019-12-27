@@ -4,10 +4,8 @@
     android:viewportWidth="1000"
     android:viewportHeight="1000">
   <path
-      android:strokeWidth="1"
       android:pathData="M0,0h1000v1000h-1000z"
-      android:fillColor="#FFFFFF"
-      android:strokeColor="#000000"/>
+      android:fillColor="#FFFFFF"/>
   <path
       android:pathData="M502.58,657.68"
       android:strokeWidth="14.1732"

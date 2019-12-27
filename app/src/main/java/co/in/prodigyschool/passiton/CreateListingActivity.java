@@ -98,7 +98,7 @@ public class CreateListingActivity extends AppCompatActivity {
         gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
         boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 6);
 
-        // to allow multiple lines without enter key
+        // to disallow enter
         nameField.addTextChangedListener(new TextWatcher() {
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -116,11 +116,20 @@ public class CreateListingActivity extends AppCompatActivity {
                     if(s.subSequence(i-1, i).toString().equals("\n"))
                         s.replace(i-1, i, "");
                 }
-
-//                String myTextString = s.toString();
             }
         });
 
+        competitiveExam.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                gradeSpinner.setEnabled(!isChecked);
+                gradeSpinner.setFocusable(!isChecked);
+                gradeSpinner.setFocusableInTouchMode(!isChecked);
+                boardSpinner.setEnabled(!isChecked);
+                boardSpinner.setFocusable(!isChecked);
+                boardSpinner.setFocusableInTouchMode(!isChecked);
+            }
+        });
         free.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
