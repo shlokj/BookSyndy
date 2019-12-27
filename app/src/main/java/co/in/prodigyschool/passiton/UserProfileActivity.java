@@ -1,5 +1,6 @@
 package co.in.prodigyschool.passiton;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -7,6 +8,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
@@ -51,8 +53,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private String firstName, lastName, phoneNumber;
     private FirebaseFirestore mFirestore;
-
-
+    private User curUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,7 +132,7 @@ public class UserProfileActivity extends AppCompatActivity {
                 if (clickCount%2==0) {
                     fName.setEnabled(true);
                     lName.setEnabled(true);
-                    uName.setEnabled(true);
+                    //uName.setEnabled(true);
                     year.setEnabled(true);
                     compExams.setEnabled(true);
                     gradeSpinner.setEnabled(true);
@@ -143,6 +144,12 @@ public class UserProfileActivity extends AppCompatActivity {
                     clickCount = clickCount + 1;
                 }
                 else {
+
+                    //show progress
+                    final ProgressDialog progressDialog = new ProgressDialog(this);
+                    progressDialog.setTitle("Updating...");
+                    progressDialog.show();
+
                     fName.setEnabled(false);
                     lName.setEnabled(false);
                     uName.setEnabled(false);
@@ -160,14 +167,38 @@ public class UserProfileActivity extends AppCompatActivity {
 
                     if (!(fName.getText().toString().length()==0 || lName.getText().toString().length()==0 || uName.getText().toString().length()==0 /*|| year.getText().toString().length()==0*/)) {
 
-                        Intent homeIntent = new Intent(UserProfileActivity.this, HomeActivity.class);
-                        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        homeIntent.putExtra("SNACKBAR_MSG", "Your profile has been saved");
-                        startActivity(homeIntent);
+                        User updatedUser = curUser;
+                        updatedUser.setFirstName(fName.getText().toString());
+                        updatedUser.setLastName(lName.getText().toString());
+                        //updatedUser.setBoardNumber(boardSpinner.getSelectedItemPosition());
+                        //updatedUser.setGradeNumber(gradeSpinner.getSelectedItemPosition());
+                        updatedUser.setCompetitiveExam(compExams.isChecked());
+                        DocumentReference userReference =  mFirestore.collection("users").document(phoneNumber);
+                        userReference.set(updatedUser).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                if(progressDialog.isShowing())
+                                    progressDialog.dismiss();
+                                Intent homeIntent = new Intent(UserProfileActivity.this, HomeActivity.class);
+                                homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                homeIntent.putExtra("SNACKBAR_MSG", "Your profile has been saved");
+                                startActivity(homeIntent);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                if(progressDialog.isShowing())
+                                    progressDialog.dismiss();
+                                Log.d(TAG, "onFailure: update user",e);
+                                Toast.makeText(getApplicationContext(), "Update Failed", Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
                     }
 
                     else {
+                        if(progressDialog.isShowing())
+                            progressDialog.dismiss();
 
                         View parentLayout = findViewById(android.R.id.content);
                         Snackbar.make(parentLayout, "Please fill in all fields", Snackbar.LENGTH_SHORT)
@@ -219,6 +250,8 @@ public class UserProfileActivity extends AppCompatActivity {
         return true;
     }
 
+
+
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
@@ -263,6 +296,7 @@ public class UserProfileActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(DocumentSnapshot snapshot) {
                     User user = snapshot.toObject(User.class);
+                    curUser = user;
                     if(user != null) {
                         gradeNumber = user.getGradeNumber();
                         boardNumber = user.getBoardNumber();
@@ -293,7 +327,6 @@ public class UserProfileActivity extends AppCompatActivity {
                             ArrayAdapter<String> degreeAdapter = new ArrayAdapter<String>(UserProfileActivity.this,
                                     android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.boards));
                             degreeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
                             degreeSpinner.setAdapter(degreeAdapter);
                             degreeSpinner.setSelection(boardNumber-7);
                         }
