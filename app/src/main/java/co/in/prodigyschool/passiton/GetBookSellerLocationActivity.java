@@ -108,20 +108,20 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
     }
 
     private void setupPlaceAutoComplete() {
-    places_fragment = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
-    places_fragment.setPlaceFields(placeFields);
-    places_fragment.setCountry("IN");
-    places_fragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-        @Override
-        public void onPlaceSelected(@NonNull Place place) {
-            locationTV.setText(place.getName()+","+place.getAddress());
-        }
+        places_fragment = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+        places_fragment.setPlaceFields(placeFields);
+        places_fragment.setCountry("IN");
+        places_fragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(@NonNull Place place) {
+                locationTV.setText(place.getName()+","+place.getAddress());
+            }
 
-        @Override
-        public void onError(@NonNull Status status) {
-            Toast.makeText(GetBookSellerLocationActivity.this, status.getStatusMessage(), Toast.LENGTH_SHORT).show();
-        }
-    });
+            @Override
+            public void onError(@NonNull Status status) {
+                Toast.makeText(GetBookSellerLocationActivity.this, status.getStatusMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void initPlaces() {

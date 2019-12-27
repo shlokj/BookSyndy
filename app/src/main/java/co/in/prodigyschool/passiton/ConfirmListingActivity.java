@@ -256,8 +256,8 @@ public class ConfirmListingActivity extends AppCompatActivity {
 
     private void uploadBook() {
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Posting");
-        progressDialog.setTitle("Creating your listing...");
+        progressDialog.setMessage("Posting...");
+        progressDialog.setTitle("Creating your listing");
         progressDialog.setCancelable(false);
         progressDialog.show();
         try {
@@ -303,10 +303,10 @@ public class ConfirmListingActivity extends AppCompatActivity {
         }
     }
     public static String ordinal(int i) {
-        String[] sufixes = new String[] { "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th" };
+        String[] suffixes = new String[] { "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th" };
         switch (i % 100) {
             default:
-                return i + sufixes[i % 10];
+                return i + suffixes[i % 10];
 
         }
     }

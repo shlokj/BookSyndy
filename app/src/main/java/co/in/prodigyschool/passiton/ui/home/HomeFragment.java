@@ -61,6 +61,7 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
     private User currentUser;
     private String curUserId;
     private int gradeNumber, boardNumber;
+    private boolean preferGuidedMode;
     FilterDialogFragment mFilterDialog;
     FilterCollegeDialogFragment mCFdialog;
 
@@ -89,10 +90,16 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent startBookPub = new Intent(getActivity(), GetBookPictureActivity.class);
+                Intent startBookPub;
+                if (preferGuidedMode) {
+                    startBookPub = new Intent(getActivity(), GetBookPictureActivity.class);
+                }
+                else {
+                    startBookPub = new Intent(getActivity(), CreateListingActivity.class);
+                }
                 startBookPub.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startBookPub.putExtra("GRADE_NUMBER",gradeNumber);
-                startBookPub.putExtra("BOARD_NUMBER",boardNumber);
+                startBookPub.putExtra("GRADE_NUMBER", gradeNumber);
+                startBookPub.putExtra("BOARD_NUMBER", boardNumber);
                 startActivity(startBookPub);
             }
         });
@@ -262,13 +269,8 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
                     mAdapter.setQuery(query1);
                     //removeUserBooks(query1);
                 }
-
-
             }
         });
-
-
-
     }
 
     @Override
@@ -300,12 +302,10 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
         bookDetails.putExtra("bookid", book_id);
         bookDetails.putExtra("isHome",true);
         startActivity(bookDetails);
-
     }
 
     @Override
     public void onFilter(Filters filters) {
-
         // price filter
         Query query  = mFirestore.collection("books");
         if(filters.hasPrice()) {
