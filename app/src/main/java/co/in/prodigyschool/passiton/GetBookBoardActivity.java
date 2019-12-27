@@ -31,7 +31,7 @@ public class GetBookBoardActivity extends AppCompatActivity {
         bookName = getIntent().getStringExtra("BOOK_NAME");
         bookDescription = getIntent().getStringExtra("BOOK_DESCRIPTION");
         gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
-        boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 1);
+        boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 6);
 
         bookBoardQuestion = (TextView) findViewById(R.id.bookBoardQuestionTV);
         boards = (RadioGroup) findViewById(R.id.bookBoardsButtonList);

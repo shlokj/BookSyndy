@@ -147,7 +147,8 @@ public class UserProfileActivity extends AppCompatActivity {
 
                     //show progress
                     final ProgressDialog progressDialog = new ProgressDialog(this);
-                    progressDialog.setTitle("Updating...");
+                    progressDialog.setTitle("Saving your changes");
+                    progressDialog.setMessage("Please wait while we update your profile...");
                     progressDialog.show();
 
                     fName.setEnabled(false);
@@ -308,6 +309,7 @@ public class UserProfileActivity extends AppCompatActivity {
                         gradeSpinner.setSelection(gradeNumber-1);
 
                         if (gradeNumber>=1 && gradeNumber<=6) {
+                            Toast.makeText(getApplicationContext(),"School",Toast.LENGTH_LONG).show();
 
                             findViewById(R.id.boardLL).setVisibility(View.VISIBLE);
                             findViewById(R.id.collegeDegreeAndYearLL).setVisibility(View.GONE);
@@ -325,7 +327,7 @@ public class UserProfileActivity extends AppCompatActivity {
                             findViewById(R.id.collegeDegreeAndYearLL).setVisibility(View.VISIBLE);
 
                             ArrayAdapter<String> degreeAdapter = new ArrayAdapter<String>(UserProfileActivity.this,
-                                    android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.boards));
+                                    android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.degrees));
                             degreeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                             degreeSpinner.setAdapter(degreeAdapter);
                             degreeSpinner.setSelection(boardNumber-7);

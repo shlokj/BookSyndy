@@ -9,7 +9,6 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -18,7 +17,7 @@ public class GetBookPriceActivity extends AppCompatActivity {
 
     boolean isTextbook, collegeStudent;
     String bookName, bookDescription,selectedImage;
-    int gradeNumber, boardNumber;
+    int gradeNumber, boardNumber, yearNumber;
     Switch forFree;
     TextView pricingInstructions;
     EditText priceField;
@@ -36,6 +35,7 @@ public class GetBookPriceActivity extends AppCompatActivity {
         priceField.setEnabled(false);
         priceField.setFocusable(false);
         forFree = (Switch) findViewById(R.id.switchFree);
+        yearNumber = getIntent().getIntExtra("YEAR_NUMBER",0);
         selectedImage = getIntent().getStringExtra("BOOK_IMAGE_URI");
         isTextbook = getIntent().getBooleanExtra("IS_TEXTBOOK", true);
         bookName = getIntent().getStringExtra("BOOK_NAME");
@@ -48,7 +48,7 @@ public class GetBookPriceActivity extends AppCompatActivity {
         }
         else {
 //            Toast.makeText(getApplicationContext(),"School student",Toast.LENGTH_SHORT).show();
-            boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 1);
+            boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 6);
         }
 //        Toast.makeText(getApplicationContext(),"Board number: "+boardNumber,Toast.LENGTH_SHORT).show();
 
@@ -87,6 +87,7 @@ public class GetBookPriceActivity extends AppCompatActivity {
                         price = Integer.parseInt(priceField.getText().toString());
                         getLocation = new Intent(GetBookPriceActivity.this, GetBookSellerLocationActivity.class);
                         getLocation.putExtra("BOOK_IMAGE_URI", selectedImage);
+                        getLocation.putExtra("YEAR_NUMBER",yearNumber);
                         getLocation.putExtra("IS_TEXTBOOK", isTextbook);
                         getLocation.putExtra("BOOK_NAME",bookName);
                         getLocation.putExtra("BOOK_DESCRIPTION",bookDescription);

@@ -9,9 +9,8 @@ public class User {
 
 
     public User() {
+
     }
-
-
 
     public User(String firstName, String lastName, String phone, boolean isParent, boolean toSell, int gradeNumber, int boardNumber,boolean competitiveExam,String userId,String imageUrl) {
         this.firstName = firstName;

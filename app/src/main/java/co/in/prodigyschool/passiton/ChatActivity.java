@@ -1,6 +1,4 @@
-package co.
-
-in.prodigyschool.passiton;
+package co.in.prodigyschool.passiton;
 
 import android.app.ProgressDialog;
 import android.content.Intent;

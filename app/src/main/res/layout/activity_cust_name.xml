@@ -82,8 +82,9 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:layout_margin="16dp"
-        android:inputType="textPersonName|textNoSuggestions"
+        android:inputType="textPersonName|textNoSuggestions|textVisiblePassword"
         android:hint="@string/username"
+        android:digits="abcdefghijklmnopqrstuvwxyz1234567890"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/usernameQTV" />
 

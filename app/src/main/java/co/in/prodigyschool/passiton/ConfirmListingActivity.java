@@ -41,7 +41,7 @@ public class ConfirmListingActivity extends AppCompatActivity {
 
     boolean isTextbook;
     String bookName, bookDescription, phoneNumber, userId, bookAddress, bookImageUrl, selectedImage,book_photo_url;
-    int gradeNumber, boardNumber;
+    int gradeNumber, boardNumber, yearNumber;
     private int bookPrice;
     private TextView bookNameTV, bookDescriptionTV, bookTypeTV, bookCategoryTV, bookPriceTV, bookLocTV;
     private Button confirmAndPost;
@@ -70,11 +70,12 @@ public class ConfirmListingActivity extends AppCompatActivity {
         mFirebaseStorage = FirebaseStorage.getInstance();
         bookPhotosStorageReference = mFirebaseStorage.getReference().child("book_photos");
         selectedImage = getIntent().getStringExtra("BOOK_IMAGE_URI");
+        yearNumber = getIntent().getIntExtra("YEAR_NUMBER",0);
         isTextbook = getIntent().getBooleanExtra("IS_TEXTBOOK", true);
         bookName = getIntent().getStringExtra("BOOK_NAME");
         bookDescription = getIntent().getStringExtra("BOOK_DESCRIPTION");
         gradeNumber = getIntent().getIntExtra("GRADE_NUMBER", 4);
-        boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 1);
+        boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 6);
         bookPrice = getIntent().getIntExtra("BOOK_PRICE", 0);
         bookImageUrl = getIntent().getStringExtra("BOOK_IMAGE_URL");
         bookAddress = getIntent().getStringExtra("BOOK_LOCATION");
@@ -108,6 +109,7 @@ public class ConfirmListingActivity extends AppCompatActivity {
         if(selectedImage != null && !selectedImage.isEmpty()){
             bookPicFinal.setImageURI(Uri.parse(selectedImage));
         }
+        Toast.makeText(getApplicationContext(),"Board number: "+boardNumber,Toast.LENGTH_SHORT).show();
 
         bookNameTV.setText(bookName);
         bookDescriptionTV.setText(bookDescription);
@@ -157,6 +159,8 @@ public class ConfirmListingActivity extends AppCompatActivity {
                 } else if (boardNumber == 16) {
                     bookCategoryTV.append(", other degree");
                 }
+
+                bookCategoryTV.append(", "+ordinal(yearNumber)+" year");
             }
 
             if (boardNumber == 1) {
@@ -296,6 +300,14 @@ public class ConfirmListingActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "User Register Failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
             if(progressDialog.isShowing())
             progressDialog.dismiss();
+        }
+    }
+    public static String ordinal(int i) {
+        String[] sufixes = new String[] { "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th" };
+        switch (i % 100) {
+            default:
+                return i + sufixes[i % 10];
+
         }
     }
 }

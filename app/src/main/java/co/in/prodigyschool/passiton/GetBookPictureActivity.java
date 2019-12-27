@@ -53,7 +53,7 @@ public class GetBookPictureActivity extends AppCompatActivity {
         bookPhotosStorageReference = mFirebaseStorage.getReference().child("book_photos");
 
         gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
-        boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 1);
+        boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 6);
 
         takenPic = findViewById(R.id.picChosenIV);
         chosenPic = findViewById(R.id.picTakenIV);

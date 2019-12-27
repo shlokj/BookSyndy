@@ -121,6 +121,20 @@
         app:layout_constraintBottom_toTopOf="@+id/bookDegreesButtonList"
         app:layout_constraintStart_toStartOf="parent"/>
 
+
+    <EditText
+        android:id="@+id/bookYearField"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:ems="10"
+        android:hint="Year"
+        android:inputType="number"
+        android:maxLength="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/bookDegreesButtonList"
+        app:layout_constraintTop_toBottomOf="@+id/bookDegreeQuestionTV" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab16"
         app:layout_constraintBottom_toBottomOf="parent"

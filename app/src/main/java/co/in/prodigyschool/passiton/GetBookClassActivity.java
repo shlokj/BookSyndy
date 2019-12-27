@@ -34,7 +34,7 @@ public class GetBookClassActivity extends AppCompatActivity {
         selectedImage = getIntent().getStringExtra("BOOK_IMAGE_URI");
         isTextbook = getIntent().getBooleanExtra("IS_TEXTBOOK", true);
         gradeNumber = getIntent().getIntExtra("GRADE_NUMBER", 4);
-        boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 1);
+        boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 6);
 
         bookName = getIntent().getStringExtra("BOOK_NAME");
         bookDescription = getIntent().getStringExtra("BOOK_DESCRIPTION");

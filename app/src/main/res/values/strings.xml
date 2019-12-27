@@ -47,9 +47,9 @@
     <string name="book_desc_q">What best describes what you\'re here to put up?</string>
     <string name="title_question">What\'s the title of your book?</string>
     <string name="a_detailed_name">A detailed name</string>
-    <string name="textbook_naming_instructions">Make the title as clear and comprehensive as possible. Try to include all basic details.</string>
+    <string name="textbook_naming_instructions">Make the title as clear and comprehensive as possible. Try to include the author\'s and the publisher\'s names.</string>
     <string name="notes_name_question">What material is this?</string>
-    <string name="othermaterial_naming_instructions">Make the title as clear and comprehensive as possible. Try to include all basic details. Since what you\'re putting up isn\'t a published textbook, make sure the name you enter adequately describes it.</string>
+    <string name="othermaterial_naming_instructions">Make the title as clear and comprehensive as possible. Try to include the author\'s and the publisher\'s names.\n\nSince what you\'re putting up isn\'t a published textbook, make sure the name you enter adequately describes it.</string>
     <string name="first">First</string>
     <string name="last">Last</string>
     <string name="description">Description</string>

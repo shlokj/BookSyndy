@@ -47,6 +47,7 @@ public class GetCollegeSpecificsActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 yearField.setFocusableInTouchMode(true);
                 yearField.setFocusable(true);
+                yearField.requestFocus();
             }
         });
         FloatingActionButton next = (FloatingActionButton) findViewById(R.id.fab8);
@@ -54,11 +55,24 @@ public class GetCollegeSpecificsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 validYear=true;
-                yearNumber = Integer.parseInt(yearField.getText().toString());
+                View parentLayout = findViewById(android.R.id.content);
                 degree = degrees.getCheckedRadioButtonId();
+
                 if (degree==-1) {
-                    View parentLayout = findViewById(android.R.id.content);
-                    Snackbar.make(parentLayout, "Please select an option", Snackbar.LENGTH_SHORT)
+                    if (yearField.getText().toString().length()==0) {
+                        Snackbar.make(parentLayout, "Please enter your degree and year", Snackbar.LENGTH_SHORT)
+                                .setAction("OKAY", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+
+                                    }
+                                })
+                                .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                                .show();
+                    }
+                }
+                else if (yearField.getText().toString().length()==0) {
+                    Snackbar.make(parentLayout, "Please enter your year", Snackbar.LENGTH_SHORT)
                             .setAction("OKAY", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -68,75 +82,95 @@ public class GetCollegeSpecificsActivity extends AppCompatActivity {
                             .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
                             .show();
                 }
-                else if (degree==R.id.btech) {
-                    degreeNumber=7;
-                    if (yearNumber>4) {
-                        validYear=false;
-                        displaySnackbarYears(4);
+                else if (yearField.getText().toString().length()==1) {
+                    yearNumber = Integer.parseInt(yearField.getText().toString());
+
+                    if (degree == R.id.btech) {
+                        degreeNumber = 7;
+                        if (yearNumber > 4 || yearNumber==0) {
+                            validYear = false;
+                            displaySnackbarYears(4);
+                        }
+                    } else if (degree == R.id.bsc) {
+                        degreeNumber = 8;
+                        if (yearNumber > 4 || yearNumber==0) {
+                            validYear = false;
+                            displaySnackbarYears(4);
+                        }
+                    } else if (degree == R.id.bcom) {
+                        degreeNumber = 9;
+                        if (yearNumber > 4 || yearNumber==0) {
+                            validYear = false;
+                            displaySnackbarYears(4);
+                        }
+                    } else if (degree == R.id.ba) {
+                        degreeNumber = 10;
+                        if (yearNumber > 4 || yearNumber==0) {
+                            validYear = false;
+                            displaySnackbarYears(4);
+                        }
+                    } else if (degree == R.id.bba) {
+                        degreeNumber = 11;
+                        if (yearNumber > 4 || yearNumber==0) {
+                            validYear = false;
+                            displaySnackbarYears(4);
+                        }
+                    } else if (degree == R.id.bca) {
+                        degreeNumber = 12;
+                        if (yearNumber > 4 || yearNumber==0) {
+                            validYear = false;
+                            displaySnackbarYears(4);
+                        }
+                    } else if (degree == R.id.bed) {
+                        degreeNumber = 13;
+                        if (yearNumber > 4 || yearNumber==0) {
+                            validYear = false;
+                            displaySnackbarYears(4);
+                        }
+                    } else if (degree == R.id.llb) {
+                        degreeNumber = 14;
+                        if (yearNumber > 5 || yearNumber==0) {
+                            validYear = false;
+                            displaySnackbarYears(5);
+                        }
+                    } else if (degree == R.id.mbbs) {
+                        degreeNumber = 15;
+                        if (yearNumber > 6 || yearNumber==0) {
+                            validYear = false;
+                            displaySnackbarYears(6);
+                        }
+                    } else if (degree == R.id.otherDegree) {
+                        degreeNumber = 16;
+                        if (yearNumber==0) {
+                            validYear = false;
+                            Snackbar.make(parentLayout, "Your year can't be 0", Snackbar.LENGTH_SHORT)
+                                    .setAction("OKAY", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+
+                                        }
+                                    })
+                                    .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                                    .show();
+                        }
+                    }
+
+                    getFinalAnswer.putExtra("DEGREE_NUMBER",degreeNumber);
+                    if (degree!=-1 && validYear) {
+                        startActivity(getFinalAnswer);
                     }
                 }
-                else if (degree==R.id.bsc) {
-                    degreeNumber=8;
-                    if (yearNumber>4) {
-                        validYear=false;
-                        displaySnackbarYears(4);
-                    }
-                }
-                else if (degree==R.id.bcom) {
-                    degreeNumber=9;
-                    if (yearNumber>4) {
-                        validYear=false;
-                        displaySnackbarYears(4);
-                    }
-                }
-                else if (degree==R.id.ba) {
-                    degreeNumber=10;
-                    if (yearNumber>4) {
-                        validYear=false;
-                        displaySnackbarYears(4);
-                    }
-                }
-                else if (degree==R.id.bba) {
-                    degreeNumber=11;
-                    if (yearNumber>4) {
-                        validYear=false;
-                        displaySnackbarYears(4);
-                    }
-                }
-                else if (degree==R.id.bca) {
-                    degreeNumber=12;
-                    if (yearNumber>4) {
-                        validYear=false;
-                        displaySnackbarYears(4);
-                    }
-                }
-                else if (degree==R.id.bed) {
-                    degreeNumber=13;
-                    if (yearNumber>4) {
-                        validYear=false;
-                        displaySnackbarYears(4);
-                    }
-                }
-                else if (degree==R.id.llb) {
-                    degreeNumber=14;
-                    if (yearNumber>5) {
-                        validYear=false;
-                        displaySnackbarYears(5);
-                    }
-                }
-                else if (degree==R.id.mbbs) {
-                    degreeNumber=15;
-                    if (yearNumber>6) {
-                        validYear=false;
-                        displaySnackbarYears(6);
-                    }
-                }
-                else if (degree==R.id.otherDegree) {
-                    degreeNumber=16;
-                }
-                getFinalAnswer.putExtra("DEGREE_NUMBER",degreeNumber);
-                if (degree!=-1 && validYear) {
-                    startActivity(getFinalAnswer);
+                else {
+
+                    Snackbar.make(parentLayout, "Please enter your year", Snackbar.LENGTH_SHORT)
+                            .setAction("OKAY", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                }
+                            })
+                            .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                            .show();
                 }
             }
         });
@@ -145,7 +179,7 @@ public class GetCollegeSpecificsActivity extends AppCompatActivity {
     public void displaySnackbarYears(int year) {
         String yearNum = Integer.valueOf(year).toString();
         View parentLayout = findViewById(android.R.id.content);
-        Snackbar.make(parentLayout, "Please enter a year " + yearNum + " or below", Snackbar.LENGTH_SHORT)
+        Snackbar.make(parentLayout, "Please enter a valid year " + yearNum + " or below, and not 0", Snackbar.LENGTH_SHORT)
                 .setAction("OKAY", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

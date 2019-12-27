@@ -25,7 +25,7 @@ public class GetBookDescriptionActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("List a book");
 
         gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
-        boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 1);
+        boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 6);
 
         selectedImage = getIntent().getStringExtra("BOOK_IMAGE_URI");
         bookName = getIntent().getStringExtra("BOOK_NAME");

@@ -25,7 +25,7 @@ public class GetBookMaterialTypeActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("List a book");
 
         gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
-        boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 1);
+        boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 6);
 
         materialTypeButtons = (RadioGroup) findViewById(R.id.materialTypeRadioGroup);
         FloatingActionButton next = findViewById(R.id.fab11);

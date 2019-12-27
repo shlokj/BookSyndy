@@ -81,7 +81,7 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
             firstName = getIntent().getStringExtra("FIRST_NAME");
             lastName = getIntent().getStringExtra("LAST_NAME");
             gradeNumber = getIntent().getIntExtra("GRADE_NUMBER", 4);
-            boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 1);
+            boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 6);
             boardNumber = getIntent().getIntExtra("DEGREE_NUMBER", boardNumber);
             username = getIntent().getStringExtra("USERNAME");
             if (gradeNumber<3 || gradeNumber>6) {

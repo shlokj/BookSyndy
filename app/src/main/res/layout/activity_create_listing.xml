@@ -263,6 +263,33 @@
         </LinearLayout>
 
 
+        <LinearLayout
+            android:id="@+id/priceLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/boardLL">
+
+            <TextView
+                android:id="@+id/priceLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Price" />
+
+            <EditText
+                android:id="@+id/priceField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/getting_loc"
+                android:inputType="number" />
+
+        </LinearLayout>
+
         <Button
             android:id="@+id/postButton"
             android:layout_width="0dp"

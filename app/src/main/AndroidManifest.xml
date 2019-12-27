@@ -64,7 +64,8 @@
         <activity android:name=".GetJoinPurposeActivity" />
         <activity android:name=".GetBoardActivity" />
         <activity android:name=".GetGradeActivity" />
-        <activity android:name=".CustNameActivity" />
+        <activity android:name=".CustNameActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".ParOrStudActivity" />
         <activity android:name=".EnterOTPActivity" />
         <activity

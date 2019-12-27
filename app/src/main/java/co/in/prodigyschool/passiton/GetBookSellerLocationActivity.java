@@ -40,7 +40,7 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
     private FirebaseAuth mAuth;
     boolean isTextbook;
     String bookName, bookDescription,phoneNumber,userId,bookAddress, selectedImage;
-    int gradeNumber, boardNumber;
+    int gradeNumber, boardNumber, yearNumber;
     private EditText locSearchDummy;
     private int bookPrice;
     private TextView locationTV;
@@ -61,12 +61,12 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
         initPlaces();
         populateUserLocation();
         setupPlaceAutoComplete();
-
+        yearNumber = getIntent().getIntExtra("YEAR_NUMBER",0);
         isTextbook = getIntent().getBooleanExtra("IS_TEXTBOOK", true);
         bookName = getIntent().getStringExtra("BOOK_NAME");
         bookDescription = getIntent().getStringExtra("BOOK_DESCRIPTION");
         gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
-        boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 1);
+        boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 6);
         boardNumber = getIntent().getIntExtra("DEGREE_NUMBER", boardNumber);
 //        Toast.makeText(getApplicationContext(),"Board number: "+boardNumber,Toast.LENGTH_SHORT).show();
         bookPrice = getIntent().getIntExtra("BOOK_PRICE",0);
@@ -79,6 +79,7 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
                 Intent finalizeListing = new Intent(GetBookSellerLocationActivity.this, ConfirmListingActivity.class);
                 finalizeListing.putExtra("BOOK_IMAGE_URI", selectedImage);
                 finalizeListing.putExtra("IS_TEXTBOOK", isTextbook);
+                finalizeListing.putExtra("YEAR_NUMBER",yearNumber);
                 finalizeListing.putExtra("BOOK_NAME",bookName);
                 finalizeListing.putExtra("BOOK_DESCRIPTION",bookDescription);
                 finalizeListing.putExtra("GRADE_NUMBER",gradeNumber);
@@ -239,7 +240,7 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
             bookName = getIntent().getStringExtra("BOOK_NAME");
             bookDescription = getIntent().getStringExtra("BOOK_DESCRIPTION");
             gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
-            boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 1);
+            boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 6);
             boardNumber = getIntent().getIntExtra("DEGREE_NUMBER", boardNumber);
             bookPrice = getIntent().getIntExtra("BOOK_PRICE",0);
             selectedImage = getIntent().getStringExtra("BOOK_IMAGE_URI");
