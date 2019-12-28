@@ -20,7 +20,8 @@
         android:roundIcon="@drawable/ic_booksyndy_logo_square"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CreateListingActivity"></activity>
+        <activity android:name=".ViewUserProfileActivity"></activity>
+        <activity android:name=".CreateListingActivity" />
         <activity android:name=".ViewPictureActivity" />
         <activity android:name=".CollegeFilterActivity" />
         <activity android:name=".ConfirmListingActivity" />
@@ -64,7 +65,8 @@
         <activity android:name=".GetJoinPurposeActivity" />
         <activity android:name=".GetBoardActivity" />
         <activity android:name=".GetGradeActivity" />
-        <activity android:name=".CustNameActivity"
+        <activity
+            android:name=".CustNameActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".ParOrStudActivity" />
         <activity android:name=".EnterOTPActivity" />
