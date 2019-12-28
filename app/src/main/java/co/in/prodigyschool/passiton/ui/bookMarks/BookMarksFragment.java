@@ -1,46 +1,32 @@
 package co.in.prodigyschool.passiton.ui.bookMarks;
 
 import android.content.Intent;
-import android.icu.text.Edits;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import co.in.prodigyschool.passiton.Adapters.BookAdapter;
+import co.in.prodigyschool.passiton.Adapters.BookMarkAdapter;
 import co.in.prodigyschool.passiton.BookDetailsActivity;
 import co.in.prodigyschool.passiton.Data.Book;
 import co.in.prodigyschool.passiton.R;
 
-public class BookMarksFragment extends Fragment implements BookAdapter.OnBookSelectedListener{
+public class BookMarksFragment extends Fragment implements BookMarkAdapter.OnBookSelectedListener{
 
     private static String TAG = "BOOKMARKS";
 
@@ -52,7 +38,7 @@ public class BookMarksFragment extends Fragment implements BookAdapter.OnBookSel
     private String curUserId;
     private RecyclerView recyclerView;
     private ViewGroup mEmptyView;
-    private BookAdapter mAdapter;
+    private BookMarkAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
 
@@ -62,18 +48,11 @@ public class BookMarksFragment extends Fragment implements BookAdapter.OnBookSel
         toolsViewModel =
                 ViewModelProviders.of(this).get(ToolsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-//        final TextView textView = root.findViewById(R.id.text_tools);
         recyclerView = root.findViewById(R.id.home_recycler_view);
         mEmptyView = root.findViewById(R.id.view_empty);
 
         initFireStore();
 
-//        toolsViewModel.getText().observe(this, new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-//            }
-//        });
 
         /* use a linear layout manager */
         layoutManager = new LinearLayoutManager(getActivity());
@@ -89,19 +68,18 @@ public class BookMarksFragment extends Fragment implements BookAdapter.OnBookSel
         mAuth = FirebaseAuth.getInstance();
         curUserId = mAuth.getCurrentUser().getPhoneNumber();
         mQuery = mFirestore.collection("bookmarks").document(curUserId).collection("books");
-        populateBookAdapter();
+        setupBookMarkAdapter();
+
     }
 
-    private void populateBookAdapter() {
+    private void setupBookMarkAdapter() {
+        FirestoreRecyclerOptions<Book> options = new FirestoreRecyclerOptions.Builder<Book>()
+                .setQuery(mQuery, Book.class)
+                .build();
 
-        if (mQuery == null) {
-            Log.w(TAG, "No query, not initializing RecyclerView");
-        }
-        // specify an adapter
-        mAdapter = new BookAdapter(mQuery, this) {
-
+        mAdapter = new BookMarkAdapter(options,this){
             @Override
-            protected void onDataChanged() {
+            public void onDataChanged() {
                 super.onDataChanged();
 
                 if (getItemCount() == 0) {
@@ -114,13 +92,31 @@ public class BookMarksFragment extends Fragment implements BookAdapter.OnBookSel
             }
 
             @Override
-            protected void onError(FirebaseFirestoreException e) {
+            public void onError(FirebaseFirestoreException e) {
 
                 Log.e(TAG, "Error: check logs for info.");
             }
         };
 
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                mAdapter.deleteItem(viewHolder.getAdapterPosition());
+
+            }
+        }).attachToRecyclerView(recyclerView);
+
+
     }
+
+
+
     @Override
     public void onStart() {
         super.onStart();
@@ -139,14 +135,14 @@ public class BookMarksFragment extends Fragment implements BookAdapter.OnBookSel
 
     }
 
-
     @Override
     public void onBookSelected(DocumentSnapshot snapshot) {
-        String book_id = snapshot.getId();
+                String book_id = snapshot.getId();
         Intent bookDetails = new Intent(getActivity(), BookDetailsActivity.class);
         Log.d(TAG, "onBookSelected: "+book_id);
         bookDetails.putExtra("bookid", book_id);
         bookDetails.putExtra("isHome",false);
         startActivity(bookDetails);
     }
+
 }
