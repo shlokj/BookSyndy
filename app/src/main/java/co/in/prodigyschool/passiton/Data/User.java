@@ -4,7 +4,7 @@ public class User {
 
     private String firstName,lastName,phone,userId,imageUrl;
     private boolean isParent,toSell,competitiveExam;
-    private int gradeNumber,boardNumber;
+    private int gradeNumber,boardNumber,year;
 
 
 
@@ -23,6 +23,14 @@ public class User {
         this.competitiveExam = competitiveExam;
         this.userId = userId;
         this.imageUrl = imageUrl;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
     }
 
     public String getUserId() {
