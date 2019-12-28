@@ -14,7 +14,7 @@ public class Book {
 
     private String bookName,bookDescription,bookAddress,bookPhoto;
     boolean isTextbook;
-    private int bookPrice;
+    private int bookPrice,bookYear;
     private int gradeNumber,boardNumber;
     private String userId,bookTime;
     private double lat,lng;
@@ -36,6 +36,15 @@ public class Book {
         this.bookPhoto = bookPhoto;
         this.lat = lat;
         this.lng = lng;
+    }
+
+
+    public int getBookYear() {
+        return bookYear;
+    }
+
+    public void setBookYear(int bookYear) {
+        this.bookYear = bookYear;
     }
 
     public String getBookTime() {
