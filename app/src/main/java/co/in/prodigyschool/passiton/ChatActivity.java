@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -81,7 +82,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private CircleImageView visitor_profile_picture;
     private String receiver_user_id,visit_user_name,visit_image,message_sender_id;
     private TextView visitor_name,userLastSeen;
-    private ImageButton mPhotoPickerButton;
+    private ImageView mPhotoPickerButton;
     private EditText mMessageEditText;
     private Button mSendButton;
 
@@ -307,11 +308,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                     public void onChildAdded(DataSnapshot dataSnapshot, String s)
                     {
                         Messages messages = dataSnapshot.getValue(Messages.class);
-
                         messagesList.add(messages);
-
                         messageAdapter.notifyDataSetChanged();
-
                         userMessagesList.smoothScrollToPosition(userMessagesList.getAdapter().getItemCount());
                     }
 

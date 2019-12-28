@@ -96,6 +96,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         if (fromMessageType.equals("text"))
         {
             String  strDate = messages.getDate();
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM");
+            strDate = format.format(Date.parse(strDate));
 
 
             if (fromUserID.equals(messageSenderId))
@@ -143,8 +145,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
             }
         }
     }
-
-
 
 
     @Override

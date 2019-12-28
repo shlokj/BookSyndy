@@ -64,7 +64,6 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         if(getSupportActionBar()!= null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-
         }
 
     }
@@ -307,5 +306,13 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+    public static String ordinal(int i) {
+        String[] suffixes = new String[] { "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th" };
+        switch (i % 100) {
+            default:
+                return i + suffixes[i % 10];
+
+        }
     }
 }

@@ -74,6 +74,12 @@ public class CreateListingActivity extends AppCompatActivity {
         free = findViewById(R.id.freeOrNot);
 
         getSupportActionBar().setTitle("Create a listing");
+
+        if(getSupportActionBar()!= null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
         gradeAdapter = new ArrayAdapter<String>(CreateListingActivity.this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.grades));
         gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -349,5 +355,17 @@ public class CreateListingActivity extends AppCompatActivity {
                 })
                 .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
                 .show();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent homeActivity = new Intent(CreateListingActivity.this, HomeActivity.class);
+        startActivity(homeActivity);
     }
 }
