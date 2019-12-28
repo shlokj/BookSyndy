@@ -14,7 +14,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +24,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +32,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -51,7 +52,6 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -71,10 +71,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ChatActivity extends AppCompatActivity implements View.OnClickListener, EventListener<DocumentSnapshot> {
     public static final int DEFAULT_MSG_LENGTH_LIMIT = 1000;
     private static final int RC_PHOTO_PICKER = 2;
-    private static final String TAG = "CHAT ACTIVITY";
+    private static final String TAG = "CHAT_ACTIVITY";
     /*firebase */
     private FirebaseAuth mAuth;
-    private FirebaseFirestore mFirestore;
+    private FirebaseFirestore mFireStore;
     private DatabaseReference RootRef;
     private StorageReference bookPhotosStorageReference;
     private FirebaseStorage mFirebaseStorage;
@@ -114,7 +114,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         userLastSeen =  findViewById(R.id.user_last_seen);
         mSendButton = findViewById(R.id.sendButton);
         mAuth = FirebaseAuth.getInstance();
-        mFirestore = FirebaseFirestore.getInstance();
+        mFireStore = FirebaseFirestore.getInstance();
         RootRef = FirebaseDatabase.getInstance().getReference();
         mFirebaseStorage = FirebaseStorage.getInstance();
         bookPhotosStorageReference = mFirebaseStorage.getReference().child("chat_photos");
@@ -143,7 +143,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         Glide.with(getApplicationContext()).load(visit_image).into(visitor_profile_picture);
         visitor_name.setText(visit_user_name);
         message_sender_id = Objects.requireNonNull(mAuth.getCurrentUser()).getPhoneNumber();
-        messageSenderRef = mFirestore.collection("users").document(message_sender_id);
+        messageSenderRef = mFireStore.collection("users").document(message_sender_id);
         messageSenderRegistration = messageSenderRef.addSnapshotListener(this);
 
         /* buttons and listeners */
@@ -189,35 +189,60 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void populateChatDetails() {
-        if(user != null) {
-            String chat_sender_ref = "chats/" + message_sender_id + "/" + receiver_user_id;
-            String chat_receiver_ref = "chats/" + receiver_user_id + "/" + message_sender_id;
-            DatabaseReference userChatKeyRef = RootRef.child("chats").child(message_sender_id).child(receiver_user_id).push();
-            String chatPushId = userChatKeyRef.getKey();
-            Chat senderchat = new Chat(visit_image, visit_user_name, "online");
-            Chat receiverchat = new Chat(user.getImageUrl(), user.getUserId(), "online");
+    private void updateChatPage(){
+        if(user != null){
+           DocumentReference chat_sender_ref = mFireStore.collection("chats").document(message_sender_id).collection("receiver_chats").document(receiver_user_id);
+           DocumentReference chat_receiver_ref = mFireStore.collection("chats").document(receiver_user_id).collection("receiver_chats").document(message_sender_id);
+            Chat senderchat = new Chat(visit_image, visit_user_name, "online",receiver_user_id);
+            Chat receiverchat = new Chat(user.getImageUrl(), user.getUserId(), "online",message_sender_id);
 
-            Map chatBodyDetails = new HashMap();
-            chatBodyDetails.put(chat_sender_ref , senderchat);
-            chatBodyDetails.put(chat_receiver_ref , receiverchat);
-
-            RootRef.updateChildren(chatBodyDetails).addOnCompleteListener(new OnCompleteListener() {
+            Task t1 = chat_sender_ref.set(senderchat);
+            Task t2 = chat_receiver_ref.set(receiverchat);
+            Tasks.whenAll(t1,t2).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
-                public void onComplete(@NonNull Task task) {
-                    if (task.isSuccessful()) {
-                        Log.d(TAG, "onComplete: chat update successful");
-                    } else {
-                        Log.d(TAG, "onComplete: chat update failed", task.getException());
-                    }
+                public void onSuccess(Void aVoid) {
+                    Log.d(TAG, "onSuccess: chat page updated");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d(TAG, "onFailure: Failed: chat page update",e);
                 }
             });
         }
-        else{
-            Log.d(TAG, "populateChatDetails: failed with user object null");
-        }
+
 
     }
+//
+//    private void populateChatDetails() {
+//        if(user != null) {
+//            String chat_sender_ref = "chats/" + message_sender_id + "/" + receiver_user_id;
+//            String chat_receiver_ref = "chats/" + receiver_user_id + "/" + message_sender_id;
+//            DatabaseReference userChatKeyRef = RootRef.child("chats").child(message_sender_id).child(receiver_user_id).push();
+//            String chatPushId = userChatKeyRef.getKey();
+//            Chat senderchat = new Chat(visit_image, visit_user_name, "online");
+//            Chat receiverchat = new Chat(user.getImageUrl(), user.getUserId(), "online");
+//
+//            Map chatBodyDetails = new HashMap();
+//            chatBodyDetails.put(chat_sender_ref , senderchat);
+//            chatBodyDetails.put(chat_receiver_ref , receiverchat);
+//
+//            RootRef.updateChildren(chatBodyDetails).addOnCompleteListener(new OnCompleteListener() {
+//                @Override
+//                public void onComplete(@NonNull Task task) {
+//                    if (task.isSuccessful()) {
+//                        Log.d(TAG, "onComplete: chat update successful");
+//                    } else {
+//                        Log.d(TAG, "onComplete: chat update failed", task.getException());
+//                    }
+//                }
+//            });
+//        }
+//        else{
+//            Log.d(TAG, "populateChatDetails: failed with user object null");
+//        }
+//
+//    }
 
 
     @Override
@@ -392,7 +417,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                     if (task.isSuccessful())
                     {
                         Toast.makeText(ChatActivity.this, "Message Sent Successfully", Toast.LENGTH_SHORT).show();
-                        populateChatDetails();
+                        //populateChatDetails();
+                        updateChatPage();
                     }
                     else
                     {
@@ -406,7 +432,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
         }
     }
-
+//funciton to send image in chats
     private void storeBookImage(Uri selectedImageUri) {
         //show progress
         final ProgressDialog progressDialog = new ProgressDialog(this);
