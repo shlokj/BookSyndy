@@ -1,12 +1,14 @@
 package co.in.prodigyschool.passiton.ui.bookMarks;
 
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -26,6 +28,7 @@ import co.in.prodigyschool.passiton.Adapters.BookMarkAdapter;
 import co.in.prodigyschool.passiton.BookDetailsActivity;
 import co.in.prodigyschool.passiton.Data.Book;
 import co.in.prodigyschool.passiton.R;
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 public class BookMarksFragment extends Fragment implements BookMarkAdapter.OnBookSelectedListener{
 
@@ -135,6 +138,20 @@ public class BookMarksFragment extends Fragment implements BookMarkAdapter.OnBoo
 //                if (!undone) {
 //                    mAdapter.deleteItem(viewHolder.getAdapterPosition());
 //                }
+            }
+
+            @Override
+            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView,@NonNull RecyclerView.ViewHolder viewHolder,
+                                    float dX, float dY, int actionState, boolean isCurrentlyActive) {
+
+
+                new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                        .addBackgroundColor(ContextCompat.getColor(getActivity(), R.color.bookSwipeBg))
+                        .addActionIcon(R.drawable.ic_delete_24px)
+                        .create()
+                        .decorate();
+
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             }
         }).attachToRecyclerView(recyclerView);
     }

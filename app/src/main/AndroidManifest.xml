@@ -31,10 +31,12 @@
             android:name=".ChatActivity"
             android:label="@string/title_activity_chat"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".BookDetailsActivity" />
+        <activity android:name=".BookDetailsActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".GetFeedbackActivity" />
         <activity android:name=".EnterLocationManuallyActivity" />
-        <activity android:name=".UserProfileActivity" />
+        <activity android:name=".UserProfileActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".GetBookSellerLocationActivity" />
 
         <service
