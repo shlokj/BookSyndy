@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -40,8 +41,8 @@ public class BookMarksFragment extends Fragment implements BookMarkAdapter.OnBoo
     private ViewGroup mEmptyView;
     private BookMarkAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
-
-
+    private Snackbar snackbar;
+    private boolean undone, dismissed=true;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -53,7 +54,29 @@ public class BookMarksFragment extends Fragment implements BookMarkAdapter.OnBoo
 
         initFireStore();
 
+        snackbar =
+        Snackbar.make(getActivity().findViewById(android.R.id.content), "Removed from bookmarks", Snackbar.LENGTH_LONG)
+                .setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        undone=true;
+                    }
+                });
 
+        snackbar.setActionTextColor(getResources().getColor(android.R.color.holo_orange_light));
+
+        snackbar.addCallback(new Snackbar.Callback() {
+
+            @Override
+            public void onDismissed(Snackbar snackbar, int event) {
+
+            }
+
+            @Override
+            public void onShown(Snackbar snackbar) {
+
+            }
+        });
         /* use a linear layout manager */
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -107,14 +130,14 @@ public class BookMarksFragment extends Fragment implements BookMarkAdapter.OnBoo
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                snackbar.show();
                 mAdapter.deleteItem(viewHolder.getAdapterPosition());
-
+//                if (!undone) {
+//                    mAdapter.deleteItem(viewHolder.getAdapterPosition());
+//                }
             }
         }).attachToRecyclerView(recyclerView);
-
-
     }
-
 
 
     @Override
@@ -122,8 +145,6 @@ public class BookMarksFragment extends Fragment implements BookMarkAdapter.OnBoo
         super.onStart();
         if (mAdapter != null)
             mAdapter.startListening();
-
-
     }
 
     @Override
@@ -132,17 +153,15 @@ public class BookMarksFragment extends Fragment implements BookMarkAdapter.OnBoo
         if (mAdapter != null) {
             mAdapter.stopListening();
         }
-
     }
 
     @Override
     public void onBookSelected(DocumentSnapshot snapshot) {
-                String book_id = snapshot.getId();
+        String book_id = snapshot.getId();
         Intent bookDetails = new Intent(getActivity(), BookDetailsActivity.class);
         Log.d(TAG, "onBookSelected: "+book_id);
         bookDetails.putExtra("bookid", book_id);
         bookDetails.putExtra("isHome",false);
         startActivity(bookDetails);
     }
-
 }
