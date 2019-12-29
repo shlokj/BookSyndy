@@ -116,6 +116,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
         chatList.remove(position);
         notifyDataSetChanged();
         onDataChanged();
+
     }
 
     public void restoreChat(int position,Chat chatItem){
