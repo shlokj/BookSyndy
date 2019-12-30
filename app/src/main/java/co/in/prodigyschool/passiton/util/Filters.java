@@ -5,6 +5,9 @@ import android.text.TextUtils;
 
 import com.google.firebase.firestore.Query;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import co.in.prodigyschool.passiton.R;
 
 public class Filters {
@@ -17,14 +20,17 @@ public class Filters {
 
     private boolean isText = false;
     private boolean isNotes = false;
-    private int bookGrade = -1;
-    private int bookBoard = -1;
+    private List<Integer> bookGrade;
+    private List<Integer> bookBoard;
 
-    public Filters() {}
+    public Filters() {
+        bookGrade = new ArrayList<>();
+        bookBoard = new ArrayList<>();
+    }
 
     public static Filters getDefault() {
         Filters filters = new Filters();
-        filters.setSortDirection(Query.Direction.DESCENDING);
+       // filters.setSortDirection(Query.Direction.DESCENDING);
 
         return filters;
     }
@@ -38,12 +44,12 @@ public class Filters {
     }
 
     public boolean hasPrice() {
-        return (price > 0);
+        return (this.price > 0);
     }
 
-    public boolean hasBookBoard(){return (bookBoard > 0);}
+    public boolean hasBookBoard(){return (bookBoard.size() > 0);}
 
-    public boolean hasBookGrade(){return (bookGrade > 0);}
+    public boolean hasBookGrade(){return (bookGrade.size() > 0);}
 
     public boolean hasSortBy() {
         return !(TextUtils.isEmpty(sortBy));
@@ -139,19 +145,19 @@ public class Filters {
         return this.isText;
     }
 
-    public void setBookGrade(int gradeNumber) {
-        this.bookGrade = gradeNumber;
+    public void setBookGrade(List<Integer> gradeList) {
+        this.bookGrade = gradeList;
     }
 
-    public int getBookGrade(){
+    public List<Integer> getBookGrade(){
         return this.bookGrade;
     }
 
-    public void setBookBoard(int boardNumber) {
-        this.bookBoard = boardNumber;
+    public void setBookBoard(List<Integer> boardList) {
+        this.bookBoard = boardList;
     }
 
-    public int getBookBoard(){
+    public List<Integer> getBookBoard(){
         return this.bookBoard;
     }
 }

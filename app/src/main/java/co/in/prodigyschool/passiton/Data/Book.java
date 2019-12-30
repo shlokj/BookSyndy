@@ -1,6 +1,9 @@
 package co.in.prodigyschool.passiton.Data;
 
 
+import com.google.firebase.firestore.DocumentId;
+import com.google.firebase.firestore.Exclude;
+
 /**
 *Book POJO.
  */
@@ -12,12 +15,17 @@ public class Book {
     public static final String FIELD_CATEGORY = "category";
     public static final String FIELD_PRICE = "price";
 
+
+
     private String bookName,bookDescription,bookAddress,bookPhoto;
     boolean isTextbook;
     private int bookPrice,bookYear;
     private int gradeNumber,boardNumber;
     private String userId,bookTime;
     private double lat,lng;
+    @DocumentId
+    private String DocumentId;
+
 
     public  Book(){
 
@@ -38,6 +46,13 @@ public class Book {
         this.lng = lng;
     }
 
+    public String getDocumentId() {
+        return DocumentId;
+    }
+
+    public void setDocumentId(String documentId) {
+        this.DocumentId = documentId;
+    }
 
     public int getBookYear() {
         return bookYear;
