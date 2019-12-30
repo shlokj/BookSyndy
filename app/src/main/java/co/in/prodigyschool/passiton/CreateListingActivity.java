@@ -173,7 +173,6 @@ public class CreateListingActivity extends AppCompatActivity {
                     boardSpinner.setAdapter(degreeAdapter);
                     competitiveExam.setVisibility(View.GONE);
                 }
-
             }
 
             @Override

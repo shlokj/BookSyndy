@@ -24,7 +24,7 @@ public class ViewPictureActivity extends AppCompatActivity {
             ab.setTitle("View photo");
         }
         String imageStr = getIntent().getStringExtra("IMAGE_STR");
-        ImageView bookPic = findViewById(R.id.bookPicFull);
+        PhotoView bookPic = findViewById(R.id.bookPicFull);
 
         Glide.with(bookPic.getContext())
                 .load(imageStr)

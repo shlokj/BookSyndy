@@ -14,11 +14,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -48,12 +51,13 @@ public class UserProfileActivity extends AppCompatActivity {
     private TextWatcher checkChange;
     private Menu menu;
     private int clickCount,gradeNumber,boardNumber;
-    private CheckBox compExams;
+    private CheckBox compExams,preferGuidedMode;
     private boolean detailsChanged = false, newUNameOK=true;//TODO: add code to check whether new username is OK
-
+    private TextView boardLabel;
     private String firstName, lastName, phoneNumber;
     private FirebaseFirestore mFirestore;
     private User curUser;
+    private ArrayAdapter<String> boardAdapter, degreeAdapter, gradeAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +68,8 @@ public class UserProfileActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
         getSupportActionBar().setTitle("Profile");
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         profilePic = findViewById(R.id.profilePic);
 
@@ -77,10 +83,25 @@ public class UserProfileActivity extends AppCompatActivity {
         boardSpinner = findViewById(R.id.boardSpinner);
         degreeSpinner = findViewById(R.id.degreeSpinner);
 
+        boardLabel = findViewById(R.id.boardLabel);
+
         saveChanges = findViewById(R.id.fab_save);
         saveChanges.hide();
 
+        gradeAdapter = new ArrayAdapter<String>(UserProfileActivity.this,
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.grades));
+        gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        boardAdapter = new ArrayAdapter<String>(UserProfileActivity.this,
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.boards));
+        boardAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        degreeAdapter = new ArrayAdapter<String>(UserProfileActivity.this,
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.degrees));
+        degreeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         compExams = findViewById(R.id.profileCompetitiveExams);
+        preferGuidedMode = findViewById(R.id.preferGuidedMode);
 
         checkChange = new TextWatcher() {
             @Override
@@ -113,8 +134,42 @@ public class UserProfileActivity extends AppCompatActivity {
         gradeSpinner.setEnabled(false);
         boardSpinner.setEnabled(false);
         degreeSpinner.setEnabled(false);
+        preferGuidedMode.setEnabled(false);
 
         populateUserDetails();
+
+        gradeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                if (position<6) { //school grade selected
+
+                    boardLabel.setText("Board");
+                    if (boardSpinner.getAdapter()!=boardAdapter) {
+                        boardSpinner.setAdapter(boardAdapter);
+                    }
+                    if (position==4 || position==5) {
+                        compExams.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        compExams.setVisibility(View.GONE);
+                    }
+                }
+
+                else { //undergrad selected
+                    boardLabel.setText("Degree / course");
+                    if (boardSpinner.getAdapter()!=degreeAdapter) {
+                        boardSpinner.setAdapter(degreeAdapter);
+                    }
+                    compExams.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+
+            }
+
+        });
     }
 
 
@@ -138,6 +193,7 @@ public class UserProfileActivity extends AppCompatActivity {
                     gradeSpinner.setEnabled(true);
                     boardSpinner.setEnabled(true);
                     degreeSpinner.setEnabled(true);
+                    preferGuidedMode.setEnabled(true);
                     // phoneNumber.setEnabled(true);
                     menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_check_24px))
                             .setTitle("Save changes");
@@ -151,14 +207,6 @@ public class UserProfileActivity extends AppCompatActivity {
                     progressDialog.setMessage("Please wait while we update your profile...");
                     progressDialog.show();
 
-                    fName.setEnabled(false);
-                    lName.setEnabled(false);
-                    uName.setEnabled(false);
-                    year.setEnabled(false);
-                    compExams.setEnabled(false);
-                    gradeSpinner.setEnabled(false);
-                    boardSpinner.setEnabled(false);
-                    degreeSpinner.setEnabled(false);
                     // phoneNumber.setEnabled(false);
                     menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_edit_24px))
                             .setTitle("Edit profile");
@@ -168,11 +216,26 @@ public class UserProfileActivity extends AppCompatActivity {
 
                     if (!(fName.getText().toString().length()==0 || lName.getText().toString().length()==0 || uName.getText().toString().length()==0 /*|| year.getText().toString().length()==0*/)) {
 
+                        fName.setEnabled(false);
+                        lName.setEnabled(false);
+                        uName.setEnabled(false);
+                        year.setEnabled(false);
+                        compExams.setEnabled(false);
+                        gradeSpinner.setEnabled(false);
+                        boardSpinner.setEnabled(false);
+                        degreeSpinner.setEnabled(false);
+                        preferGuidedMode.setEnabled(false);
+
                         User updatedUser = curUser;
                         updatedUser.setFirstName(fName.getText().toString());
                         updatedUser.setLastName(lName.getText().toString());
-                        //updatedUser.setBoardNumber(boardSpinner.getSelectedItemPosition());
-                        //updatedUser.setGradeNumber(gradeSpinner.getSelectedItemPosition());
+                        updatedUser.setGradeNumber(gradeSpinner.getSelectedItemPosition()+1);
+                        if (gradeSpinner.getSelectedItemPosition()>=6) {
+                            updatedUser.setBoardNumber(boardSpinner.getSelectedItemPosition()+7);
+                        }
+                        else {
+                            updatedUser.setBoardNumber(boardSpinner.getSelectedItemPosition()+1);
+                        }
                         updatedUser.setCompetitiveExam(compExams.isChecked());
                         DocumentReference userReference =  mFirestore.collection("users").document(phoneNumber);
                         userReference.set(updatedUser).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -301,42 +364,39 @@ public class UserProfileActivity extends AppCompatActivity {
                     if(user != null) {
                         gradeNumber = user.getGradeNumber();
                         boardNumber = user.getBoardNumber();
-                        ArrayAdapter<String> gradeAdapter = new ArrayAdapter<String>(UserProfileActivity.this,
-                                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.grades));
-                        gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
                         gradeSpinner.setAdapter(gradeAdapter);
                         gradeSpinner.setSelection(gradeNumber-1);
 
                         if (gradeNumber>=1 && gradeNumber<=6) {
-                            Toast.makeText(getApplicationContext(),"School",Toast.LENGTH_LONG).show();
+//                            Toast.makeText(getApplicationContext(),"School",Toast.LENGTH_LONG).show();
 
-                            findViewById(R.id.boardLL).setVisibility(View.VISIBLE);
+                            boardLabel.setText("Board");
                             findViewById(R.id.collegeDegreeAndYearLL).setVisibility(View.GONE);
 
-                            ArrayAdapter<String> boardAdapter = new ArrayAdapter<String>(UserProfileActivity.this,
-                                    android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.boards));
-                            boardAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            if (gradeNumber==4 || gradeNumber==5) {
+                                compExams.setVisibility(View.VISIBLE);
+                                compExams.setChecked(user.isCompetitiveExam());
+                            }
+                            else {
+                                compExams.setVisibility(View.GONE);
+                            }
+
                             boardSpinner.setAdapter(boardAdapter);
                             boardSpinner.setSelection(boardNumber-1);
                         }
 
                         else {
 
-                            findViewById(R.id.boardLL).setVisibility(View.GONE);
-                            findViewById(R.id.collegeDegreeAndYearLL).setVisibility(View.VISIBLE);
+                            boardLabel.setText("Degree / course");
 
-                            ArrayAdapter<String> degreeAdapter = new ArrayAdapter<String>(UserProfileActivity.this,
-                                    android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.degrees));
-                            degreeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                            degreeSpinner.setAdapter(degreeAdapter);
-                            degreeSpinner.setSelection(boardNumber-7);
+                            boardSpinner.setAdapter(degreeAdapter);
+                            boardSpinner.setSelection(boardNumber-7);
                         }
                         fName.setText(user.getFirstName());
                         lName.setText(user.getLastName());
                         uName.setText(user.getUserId());
                         phoneNo.setText(user.getPhone().substring(3));
-                        compExams.setChecked(user.isCompetitiveExam());
                     }
 
                 }

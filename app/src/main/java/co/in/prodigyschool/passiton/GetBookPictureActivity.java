@@ -1,7 +1,9 @@
 package co.in.prodigyschool.passiton;
 
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -43,6 +45,7 @@ public class GetBookPictureActivity extends AppCompatActivity {
     private String imageFilePath;
     private Uri selectedImage;
     private int gradeNumber,boardNumber;
+    final int PIC_CROP = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +105,18 @@ public class GetBookPictureActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
 
         switch (requestCode) {
+
+/*            case PIC_CROP:
+
+                if (imageReturnedIntent != null) {
+                    // get the returned data
+                    Bundle extras = imageReturnedIntent.getExtras();
+
+                    Bitmap selectedBitmap = extras.getParcelable("data");
+
+                    chosenPic.setImageBitmap(selectedBitmap);
+                }*/
+
             case 0:// camera intent
                 if (resultCode == RESULT_OK ) {
 
@@ -117,10 +132,13 @@ public class GetBookPictureActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK && imageReturnedIntent != null && imageReturnedIntent.getData() != null) {
                     chosenPic.setVisibility(View.VISIBLE);
                     selectedImage = imageReturnedIntent.getData();
+                    performCrop(selectedImage);
                     //storeBookImage(selectedImage);
                     chosenPic.setImageURI(selectedImage);
                 }
                 break;
+
+
         }
     }
 //need to move this function to last book listing activity
@@ -218,6 +236,33 @@ public class GetBookPictureActivity extends AppCompatActivity {
                 startActivityForResult(pictureIntent,
                         0);
             }
+        }
+    }
+
+    private void performCrop(Uri picUri) {
+        try {
+            Intent cropIntent = new Intent("com.android.camera.action.CROP");
+            // indicate image type and Uri
+            cropIntent.setDataAndType(picUri, "image/*");
+            // set crop properties here
+            cropIntent.putExtra("crop", true);
+            // indicate aspect of desired crop
+            cropIntent.putExtra("aspectX", 1);
+            cropIntent.putExtra("aspectY", 1);
+            // indicate output X and Y
+            cropIntent.putExtra("outputX", 500);
+            cropIntent.putExtra("outputY", 500);
+            // retrieve data on return
+            cropIntent.putExtra("return-data", true);
+            // start the activity - we handle returning in onActivityResult
+            startActivityForResult(cropIntent, PIC_CROP);
+        }
+        // respond to users whose devices do not support the crop action
+        catch (ActivityNotFoundException anfe) {
+            // display an error message
+            String errorMessage = "Whoops - your device doesn't support the crop action!";
+            Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
+            toast.show();
         }
     }
 
