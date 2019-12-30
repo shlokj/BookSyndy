@@ -410,6 +410,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             messageBodyDetails.put(messageSenderRef + "/" + messagePushID, messageTextBody);
             messageBodyDetails.put( messageReceiverRef + "/" + messagePushID, messageTextBody);
 
+            mMessageEditText.setText("");
+
             RootRef.updateChildren(messageBodyDetails).addOnCompleteListener(new OnCompleteListener() {
                 @Override
                 public void onComplete(@NonNull Task task)
@@ -424,7 +426,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                     {
                         Toast.makeText(ChatActivity.this, "Error", Toast.LENGTH_SHORT).show();
                     }
-                    mMessageEditText.setText("");
                 }
             });
 

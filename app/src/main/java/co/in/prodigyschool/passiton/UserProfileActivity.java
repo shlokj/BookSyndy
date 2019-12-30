@@ -224,10 +224,10 @@ public class UserProfileActivity extends AppCompatActivity {
                 }
                 else {
 
-                    //show progress
                     final ProgressDialog progressDialog = new ProgressDialog(this);
                     progressDialog.setTitle("Saving your changes");
                     progressDialog.setMessage("Please wait while we update your profile...");
+                    progressDialog.setCancelable(false);
                     progressDialog.show();
 
                     // phoneNumber.setEnabled(false);
@@ -391,15 +391,19 @@ public class UserProfileActivity extends AppCompatActivity {
                         gradeSpinner.setAdapter(gradeAdapter);
                         gradeSpinner.setSelection(gradeNumber-1);
 
+                        Toast.makeText(getApplicationContext(),"Grade number: "+gradeNumber,Toast.LENGTH_SHORT).show();
+
                         if (gradeNumber>=1 && gradeNumber<=6) {
+
 //                            Toast.makeText(getApplicationContext(),"School",Toast.LENGTH_LONG).show();
 
                             boardLabel.setText("Board");
                             findViewById(R.id.collegeDegreeAndYearLL).setVisibility(View.GONE);
 
-                            if (gradeNumber==4 || gradeNumber==5) {
+                            if (gradeNumber==5 || gradeNumber==6) {
                                 compExams.setVisibility(View.VISIBLE);
                                 tempCE = user.isCompetitiveExam();
+                                Toast.makeText(getApplicationContext(),"Competitive exam: "+tempCE,Toast.LENGTH_SHORT).show();
                                 compExams.setChecked(tempCE);
                             }
                             else {

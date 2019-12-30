@@ -118,7 +118,7 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.chatBoxBlue);
 
         /* use a linear layout manager */
         recyclerView.setLayoutManager(layoutManager);
