@@ -1,9 +1,12 @@
 package co.in.prodigyschool.passiton.Adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import co.in.prodigyschool.passiton.Data.Chat;
@@ -22,6 +26,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
 
     private Context context;
     private List<Chat> chatList;
+    private List<Chat> chatListFull;
 
     public interface OnChatSelectedListener {
 
@@ -36,6 +41,13 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
         this.context = context;
         this.chatList = chatList;
         mListener = listener;
+
+    }
+
+    public void setChatList(List<Chat> chatList){
+        this.chatList = chatList;
+        notifyDataSetChanged();
+        onDataChanged();
     }
 
     @NonNull
@@ -80,11 +92,6 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
 
     }
 
-    @Override
-    public void registerAdapterDataObserver(@NonNull RecyclerView.AdapterDataObserver observer) {
-        super.registerAdapterDataObserver(observer);
-    }
-
     public static class  ChatsViewHolder extends RecyclerView.ViewHolder
     {
         CircleImageView profileImage;
@@ -100,4 +107,24 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
             userName = itemView.findViewById(R.id.custom_profile_name);
         }
     }
+
+    public List<Chat> getChatList(){
+        return this.chatList;
+    }
+
+    public void deleteChat(int position){
+        chatList.remove(position);
+        notifyDataSetChanged();
+        onDataChanged();
+
+    }
+
+    public void restoreChat(int position,Chat chatItem){
+        chatList.add(position,chatItem);
+        notifyDataSetChanged();
+        onDataChanged();
+    }
+
+
+
 }
