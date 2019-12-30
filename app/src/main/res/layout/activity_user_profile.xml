@@ -29,6 +29,7 @@
                 android:layout_gravity="center"
                 android:focusable="true"
                 android:clickable="true"
+                android:background="?attr/selectableItemBackground"
                 app:srcCompat="@drawable/ic_account_circle_24px" />
 
             <LinearLayout

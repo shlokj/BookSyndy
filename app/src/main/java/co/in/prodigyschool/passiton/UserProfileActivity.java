@@ -1,11 +1,14 @@
 package co.in.prodigyschool.passiton;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -29,6 +32,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -38,7 +42,10 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.File;
+
 import co.in.prodigyschool.passiton.Data.User;
+import co.in.prodigyschool.passiton.util.GalleryUtil;
 
 public class UserProfileActivity extends AppCompatActivity {
 
@@ -52,12 +59,16 @@ public class UserProfileActivity extends AppCompatActivity {
     private Menu menu;
     private int clickCount,gradeNumber,boardNumber;
     private CheckBox compExams,preferGuidedMode;
-    private boolean detailsChanged = false, newUNameOK=true;//TODO: add code to check whether new username is OK
+    private boolean detailsChanged = false, newUNameOK=true, tempCE;//TODO: add code to check whether new username is OK
     private TextView boardLabel;
     private String firstName, lastName, phoneNumber;
     private FirebaseFirestore mFirestore;
     private User curUser;
+    private Uri selectedImage;
     private ArrayAdapter<String> boardAdapter, degreeAdapter, gradeAdapter;
+
+    private final int GALLERY_ACTIVITY_CODE=200;
+    private final int RESULT_CROP = 400;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,6 +147,15 @@ public class UserProfileActivity extends AppCompatActivity {
         degreeSpinner.setEnabled(false);
         preferGuidedMode.setEnabled(false);
 
+        profilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(pickPhoto, 1);
+            }
+        });
+
         populateUserDetails();
 
         gradeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -149,9 +169,11 @@ public class UserProfileActivity extends AppCompatActivity {
                     }
                     if (position==4 || position==5) {
                         compExams.setVisibility(View.VISIBLE);
+                        compExams.setChecked(tempCE);
                     }
                     else {
                         compExams.setVisibility(View.GONE);
+                        compExams.setChecked(false);
                     }
                 }
 
@@ -161,6 +183,7 @@ public class UserProfileActivity extends AppCompatActivity {
                         boardSpinner.setAdapter(degreeAdapter);
                     }
                     compExams.setVisibility(View.GONE);
+                    compExams.setChecked(false);
                 }
             }
 
@@ -376,7 +399,8 @@ public class UserProfileActivity extends AppCompatActivity {
 
                             if (gradeNumber==4 || gradeNumber==5) {
                                 compExams.setVisibility(View.VISIBLE);
-                                compExams.setChecked(user.isCompetitiveExam());
+                                tempCE = user.isCompetitiveExam();
+                                compExams.setChecked(tempCE);
                             }
                             else {
                                 compExams.setVisibility(View.GONE);
@@ -410,6 +434,40 @@ public class UserProfileActivity extends AppCompatActivity {
         }
         catch(Exception e){
             Log.e(TAG, "PopulateUserDetails method failed with  ",e);
+        }
+    }
+
+    private void performCrop(String picUri) {
+        try {
+            //Start Crop Activity
+
+            Intent cropIntent = new Intent("com.android.camera.action.CROP");
+            // indicate image type and Uri
+
+            File f = new File(picUri);
+            Uri contentUri = Uri.fromFile(f);
+
+            cropIntent.setDataAndType(contentUri, "image/*");
+            // set crop properties
+            cropIntent.putExtra("crop", "true");
+            // indicate aspect of desired crop
+            cropIntent.putExtra("aspectX", 1);
+            cropIntent.putExtra("aspectY", 1);
+            // indicate output X and Y
+            cropIntent.putExtra("outputX", 280);
+            cropIntent.putExtra("outputY", 280);
+
+            // retrieve data on return
+            cropIntent.putExtra("return-data", true);
+            // start the activity - we handle returning in onActivityResult
+            startActivityForResult(cropIntent, RESULT_CROP);
+        }
+        // respond to users whose devices do not support the crop action
+        catch (ActivityNotFoundException anfe) {
+            // display an error message
+            String errorMessage = "your device doesn't support the crop action!";
+            Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
+            toast.show();
         }
     }
 }

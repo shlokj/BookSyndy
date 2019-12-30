@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -20,6 +21,7 @@
         android:roundIcon="@drawable/ic_booksyndy_logo_square"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".util.GalleryUtil"></activity>
         <activity android:name=".ViewUserProfileActivity"></activity>
         <activity android:name=".CreateListingActivity" />
         <activity android:name=".ViewPictureActivity" />

@@ -154,7 +154,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 } else if (boardNumber == 3) {
                     view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " IB");
                 } else if (boardNumber == 4) {
-                    view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " IGCSE");
+                    view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " IGCSE/CAIE");
                 } else if (boardNumber == 5) {
                     view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " state board");
                 } else if (boardNumber == 6) {

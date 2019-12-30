@@ -170,7 +170,7 @@ public class ConfirmListingActivity extends AppCompatActivity {
             } else if (boardNumber == 3) {
                 bookCategoryTV.append(", IB");
             } else if (boardNumber == 4) {
-                bookCategoryTV.append(", IGCSE");
+                bookCategoryTV.append(", IGCSE/CAIE");
             } else if (boardNumber == 5) {
                 bookCategoryTV.append(", state board");
             } else if (boardNumber == 6) {
