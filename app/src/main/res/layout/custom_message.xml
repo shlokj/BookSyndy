@@ -19,7 +19,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/receiver_messages_layout"
-            android:padding="10dp"
+            android:padding="12dp"
             android:text="receiver messages"
             android:textColor="@color/white"
             android:textSize="16sp" />
@@ -59,7 +59,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/sender_messages_layout"
-            android:padding="10dp"
+            android:padding="12dp"
             android:text="sender messages"
             android:textColor="@color/white"
             android:textSize="16sp" />

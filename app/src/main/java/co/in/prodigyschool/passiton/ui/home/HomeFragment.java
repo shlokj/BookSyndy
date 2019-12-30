@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -64,6 +65,7 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
     private boolean preferGuidedMode=true;
     FilterDialogFragment mFilterDialog;
     FilterCollegeDialogFragment mCFdialog;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
 
 
@@ -106,8 +108,19 @@ public class HomeFragment extends Fragment implements BookAdapter.OnBookSelected
         initFireStore();
         setDefaultFilters();
 
-        /* use a linear layout manager */
         layoutManager = new LinearLayoutManager(getActivity());
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.swiperefreshhome);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //code to reload with new books
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
+
+        /* use a linear layout manager */
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mAdapter);
 

@@ -486,15 +486,11 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                     progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
                 }
             });
-
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             progressDialog.dismiss();
         }
-
-
     }
-
 
 
     @Override
