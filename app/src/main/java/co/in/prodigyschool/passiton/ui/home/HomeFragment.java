@@ -304,7 +304,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 
         if(filters.hasPrice()){
             for(Book book:filteredList){
-                if(book.getBookPrice() == 0)
+                if(!(book.getBookPrice() == 0))
                     toBeRemoved.add(book);
             }
             noFilter = false;
@@ -326,38 +326,48 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             noFilter = false;
         }
 
-        List<Integer> unrequiredBoards = new ArrayList<>();
+        if (filters.hasBookBoard()) {
 
-        for (int i = 1; i<=6; i++) {
-            if (!filters.getBookBoard().contains(i)) {
-                unrequiredBoards.add(i);
-            }
-        }
+            List<Integer> unrequiredBoards = new ArrayList<>();
 
-        for (int a=0; a<filteredList.size(); a++) {
-            for (Integer i : unrequiredBoards) {
-                if (filteredList.get(a).getBoardNumber() == i) {
-                    toBeRemoved.add(filteredList.get(a));
+            for (int i = 1; i <= 16; i++) {
+                if (!filters.getBookBoard().contains(i)) {
+                    unrequiredBoards.add(i);
                 }
             }
-        }
 
-
-        List<Integer> unrequiredGrades = new ArrayList<>();
-
-        for (int i = 1; i<=7; i++) {
-            if (!filters.getBookGrade().contains(i)) {
-                unrequiredGrades.add(i);
+            if (!filters.getBookBoard().contains(20)) {
+                unrequiredBoards.add(20);
             }
-        }
-
-
-        for (int a=0; a<filteredList.size(); a++) {
-            for (Integer i : unrequiredGrades) {
-                if (filteredList.get(a).getGradeNumber() == i) {
-                    toBeRemoved.add(filteredList.get(a));
+            for (int a = 0; a < filteredList.size(); a++) {
+                for (Integer i : unrequiredBoards) {
+                    if (filteredList.get(a).getBoardNumber() == i) {
+                        toBeRemoved.add(filteredList.get(a));
+                    }
                 }
             }
+            noFilter = false;
+        }
+
+        if (filters.hasBookGrade()) {
+
+            List<Integer> unrequiredGrades = new ArrayList<>();
+
+            for (int i = 1; i <= 7; i++) {
+                if (!filters.getBookGrade().contains(i)) {
+                    unrequiredGrades.add(i);
+                }
+            }
+
+
+            for (int a = 0; a < filteredList.size(); a++) {
+                for (Integer i : unrequiredGrades) {
+                    if (filteredList.get(a).getGradeNumber() == i) {
+                        toBeRemoved.add(filteredList.get(a));
+                    }
+                }
+            }
+            noFilter = false;
         }
 
         for (Book b:toBeRemoved) {
