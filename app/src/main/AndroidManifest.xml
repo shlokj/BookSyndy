@@ -22,7 +22,8 @@
         android:roundIcon="@drawable/ic_booksyndy_logo_square"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SendFeedbackActivity"></activity>
+        <activity android:name=".RequestBookActivity"></activity>
+        <activity android:name=".SendFeedbackActivity" />
         <activity android:name=".util.GalleryUtil" />
         <activity android:name=".ViewUserProfileActivity" />
         <activity android:name=".CreateListingActivity" />
