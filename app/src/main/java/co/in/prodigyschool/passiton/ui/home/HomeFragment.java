@@ -67,7 +67,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     private User currentUser;
     private String curUserId;
     private int gradeNumber, boardNumber;
-    private boolean preferGuidedMode=true;
+    private boolean preferGuidedMode;
     FilterDialogFragment mFilterDialog;
     FilterCollegeDialogFragment mCFdialog;
     private List<Book> bookList;

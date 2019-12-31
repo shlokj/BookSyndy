@@ -235,8 +235,6 @@ public class UserProfileActivity extends AppCompatActivity {
                             .setTitle("Edit profile");
                     clickCount = clickCount + 1;
 
-                    //TODO: save profile changes to firebase
-
                     if (!(fName.getText().toString().length()==0 || lName.getText().toString().length()==0 || uName.getText().toString().length()==0 /*|| year.getText().toString().length()==0*/)) {
 
                         fName.setEnabled(false);

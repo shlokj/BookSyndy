@@ -150,10 +150,23 @@
                 android:id="@+id/boardSpinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 tools:layout_editor_absoluteX="1dp"
                 tools:layout_editor_absoluteY="321dp" />
         </LinearLayout>
+
+
+        <EditText
+            android:id="@+id/bookYearField"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Year"
+            android:layout_marginStart="24dp"
+            android:inputType="number"
+            android:maxLength="1"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/boardLL"
+            app:layout_constraintStart_toEndOf="@+id/boardLL" />
 
         <LinearLayout
             android:id="@+id/collegeDegreeAndYearLL"

@@ -52,7 +52,7 @@ public class CreateListingActivity extends AppCompatActivity {
     private TextView boardDegreeLabel;
     private Button postButton;
     private ProgressDialog progressDialog;
-    private EditText nameField, descField, priceField, locField;
+    private EditText nameField, descField, priceField, locField, yearField;
     private CheckBox competitiveExam, free;
     private ArrayAdapter<String> gradeAdapter, boardAdapter, degreeAdapter, typeAdapter;
 
@@ -71,6 +71,7 @@ public class CreateListingActivity extends AppCompatActivity {
         descField = findViewById(R.id.bookDescField2);
         locField = findViewById(R.id.locField2);
         priceField = findViewById(R.id.priceField);
+        yearField = findViewById(R.id.bookYearField);
         free = findViewById(R.id.freeOrNot);
 
         getSupportActionBar().setTitle("Create a listing");
@@ -107,13 +108,9 @@ public class CreateListingActivity extends AppCompatActivity {
         // to disallow enter
         nameField.addTextChangedListener(new TextWatcher() {
 
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
 
-            }
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
             public void afterTextChanged(Editable s) {
 
@@ -161,6 +158,7 @@ public class CreateListingActivity extends AppCompatActivity {
                 if (position<6) {
                     boardDegreeLabel.setText("Board");
                     boardSpinner.setAdapter(boardAdapter);
+                    yearField.setVisibility(View.GONE);
                     if (position==4 || position==5) {
                         competitiveExam.setVisibility(View.VISIBLE);
                     }
@@ -171,6 +169,7 @@ public class CreateListingActivity extends AppCompatActivity {
                 else {
                     boardDegreeLabel.setText("Degree / course");
                     boardSpinner.setAdapter(degreeAdapter);
+                    yearField.setVisibility(View.VISIBLE);
                     competitiveExam.setVisibility(View.GONE);
                 }
             }

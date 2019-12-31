@@ -176,7 +176,6 @@ public class ConfirmListingActivity extends AppCompatActivity {
             } else if (boardNumber == 6) {
                 bookCategoryTV.append(", other board");
             }
-                //TODO: append degree
 
         }
         if (bookPrice != 0) {
