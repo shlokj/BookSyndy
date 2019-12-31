@@ -26,7 +26,6 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
 
     private Context context;
     private List<Chat> chatList;
-    private List<Chat> chatListFull;
 
     public interface OnChatSelectedListener {
 

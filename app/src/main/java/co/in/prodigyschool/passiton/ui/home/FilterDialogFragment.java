@@ -15,6 +15,9 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import co.in.prodigyschool.passiton.R;
 import co.in.prodigyschool.passiton.util.Filters;
 
@@ -107,64 +110,64 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
             }
         });
 */
-        setDefaultFilters();
+        //setDefaultFilters();
 
         return mRootView;
     }
 
-    private void setDefaultFilters() {
-
-        Filters defaultFilters = homeViewModel.getFilters();
-
-        if(defaultFilters.IsText()){
-            filterTextbook.setChecked(true);
-        }
-        if(defaultFilters.hasBookBoard()){
-            int bookBoard = defaultFilters.getBookBoard();
-            if(bookBoard == 1){
-                filterBoardCbse.setChecked(true);
-            }
-            else if(bookBoard == 2){
-                filterBoardIcse.setChecked(true);
-            }
-            else if(bookBoard == 3){
-                filterBoardIb.setChecked(true);
-            }
-            else if(bookBoard == 4){
-                filterBoardIgcse.setChecked(true);
-            }
-            else if(bookBoard == 5){
-                filterBoardState.setChecked(true);
-            }
-            else if(bookBoard == 6){
-                filterBoardOther.setChecked(true);
-            }
-        }
-
-        if(defaultFilters.hasBookGrade()){
-            int bookGrade = defaultFilters.getBookGrade();
-            if(bookGrade == 1){
-                filterGrade5orBelow.setChecked(true);
-            }
-            else if(bookGrade == 2){
-                filterGrade6to8.setChecked(true);
-            }
-            else if(bookGrade == 3){
-                filterGrade9.setChecked(true);
-            }
-            else if(bookGrade == 4){
-                filterGrade10.setChecked(true);
-            }
-            else if(bookGrade == 5){
-                filterGrade11.setChecked(true);
-            }
-            else if(bookGrade == 6){
-                filterGrade12.setChecked(true);
-            }
-        }
-
-
-    }
+//    private void setDefaultFilters() {
+//
+//        Filters defaultFilters = homeViewModel.getFilters();
+//
+//        if(defaultFilters.IsText()){
+//            filterTextbook.setChecked(true);
+//        }
+//        if(defaultFilters.hasBookBoard()){
+//            int bookBoard = defaultFilters.getBookBoard();
+//            if(bookBoard == 1){
+//                filterBoardCbse.setChecked(true);
+//            }
+//            else if(bookBoard == 2){
+//                filterBoardIcse.setChecked(true);
+//            }
+//            else if(bookBoard == 3){
+//                filterBoardIb.setChecked(true);
+//            }
+//            else if(bookBoard == 4){
+//                filterBoardIgcse.setChecked(true);
+//            }
+//            else if(bookBoard == 5){
+//                filterBoardState.setChecked(true);
+//            }
+//            else if(bookBoard == 6){
+//                filterBoardOther.setChecked(true);
+//            }
+//        }
+//
+//        if(defaultFilters.hasBookGrade()){
+//            int bookGrade = defaultFilters.getBookGrade();
+//            if(bookGrade == 1){
+//                filterGrade5orBelow.setChecked(true);
+//            }
+//            else if(bookGrade == 2){
+//                filterGrade6to8.setChecked(true);
+//            }
+//            else if(bookGrade == 3){
+//                filterGrade9.setChecked(true);
+//            }
+//            else if(bookGrade == 4){
+//                filterGrade10.setChecked(true);
+//            }
+//            else if(bookGrade == 5){
+//                filterGrade11.setChecked(true);
+//            }
+//            else if(bookGrade == 6){
+//                filterGrade12.setChecked(true);
+//            }
+//        }
+//
+//
+//    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -195,7 +198,8 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
     public void onFilterApplied() {
 
         Log.d(TAG, "onFilterApplied: search clicked:"+getFilters().getPrice());
-        mOnFilterSelectedListener.onFilter(getFilters());
+        if(mOnFilterSelectedListener != null)
+            mOnFilterSelectedListener.onFilter(getFilters());
         dismiss();
     }
 
@@ -216,8 +220,6 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
 
 
         }
-
-        homeViewModel.setFilters(filters);
         return filters;
     }
 
@@ -249,51 +251,53 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
         }
     }
 
-    private int getselectedBoard() {
+    private List<Integer> getselectedBoard() {
+        ArrayList<Integer> selectedBoard = new ArrayList<>();
         if(filterBoardCbse.isChecked()){
-            return 1;
+            selectedBoard.add(1);
         }
         if(filterBoardIcse.isChecked()){
-            return 2;
+            selectedBoard.add(2);
         }
         if(filterBoardIb.isChecked()){
-            return 3;
+            selectedBoard.add(3);
         }
         if(filterBoardIgcse.isChecked()){
-            return 4;
+            selectedBoard.add(4);
         }
         if(filterBoardState.isChecked()){
-            return 5;
+            selectedBoard.add(5);
         }
         if(filterBoardOther.isChecked()){
-            return 6;
+            selectedBoard.add(6);
         }
         if(filterBoardCompetitiveExams.isChecked()){
-            return 20;
+            selectedBoard.add(20);
         }
-        return -1;
+        return selectedBoard;
     }
 
-    private int getselectedGrade() {
+    private List<Integer> getselectedGrade() {
+        ArrayList<Integer> selectedGrade = new ArrayList<>();
         if(filterGrade5orBelow.isChecked()){
-            return 1;
+            selectedGrade.add(1);
         }
         if(filterGrade6to8.isChecked()){
-            return 2;
+            selectedGrade.add(2);
         }
         if(filterGrade9.isChecked()){
-            return 3;
+            selectedGrade.add(3);
         }
         if(filterGrade10.isChecked()){
-            return 4;
+            selectedGrade.add(4);
         }
         if(filterGrade11.isChecked()){
-            return 5;
+            selectedGrade.add(5);
         }
         if(filterGrade12.isChecked()){
-            return 6;
+            selectedGrade.add(6);
         }
-        return -1;
+        return selectedGrade;
     }
 
 

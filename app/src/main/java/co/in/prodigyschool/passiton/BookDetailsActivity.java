@@ -331,10 +331,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         onBackPressed();
         return true;
     }
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
+
     public static String ordinal(int i) {
         String[] suffixes = new String[] { "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th" };
         switch (i % 100) {
