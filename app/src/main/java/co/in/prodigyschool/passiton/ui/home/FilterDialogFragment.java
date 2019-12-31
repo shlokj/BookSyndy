@@ -219,10 +219,7 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
         }
         return filters;
     }
-
-
-
-
+    
     private int getSelectedPrice() {
         if (freeOnly.isChecked()) {
             return 1;

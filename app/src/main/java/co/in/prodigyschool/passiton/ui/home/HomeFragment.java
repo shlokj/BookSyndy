@@ -304,11 +304,17 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 
         if(filters.hasPrice()){
             for(Book book:filteredList){
-                if(!(book.getBookPrice() == 0))
+                if(book.getBookPrice() != 0)
                     toBeRemoved.add(book);
             }
             noFilter = false;
         }
+
+        for (Book b:toBeRemoved) {
+            filteredList.remove(b);
+        }
+
+        toBeRemoved.clear();
 
         if (!(filters.IsText() && filters.IsNotes())) {
             if (filters.IsText()) {
@@ -326,9 +332,17 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             noFilter = false;
         }
 
+
+        for (Book b:toBeRemoved) {
+            filteredList.remove(b);
+        }
+
+        toBeRemoved.clear();
+
+        List<Integer> unrequiredBoards = new ArrayList<>();
+
         if (filters.hasBookBoard()) {
 
-            List<Integer> unrequiredBoards = new ArrayList<>();
 
             for (int i = 1; i <= 16; i++) {
                 if (!filters.getBookBoard().contains(i)) {
@@ -348,6 +362,24 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             }
             noFilter = false;
         }
+
+        else {
+//            if (!unrequiredBoards.contains(20)) {
+//                unrequiredBoards.add(20);
+//            }
+            for (int a = 0; a < filteredList.size(); a++) {
+                    if (filteredList.get(a).getBoardNumber() == 20) {
+                        toBeRemoved.add(filteredList.get(a));
+                    }
+            }
+        }
+
+
+        for (Book b:toBeRemoved) {
+            filteredList.remove(b);
+        }
+
+        toBeRemoved.clear();
 
         if (filters.hasBookGrade()) {
 
@@ -373,6 +405,9 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         for (Book b:toBeRemoved) {
             filteredList.remove(b);
         }
+
+        toBeRemoved.clear();
+
         /*if(filters.hasPrice()){
             for(Book book:bookListFull){
                 if(book.getBookPrice() == 0)
