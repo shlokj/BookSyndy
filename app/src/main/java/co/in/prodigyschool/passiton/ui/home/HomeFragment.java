@@ -293,8 +293,77 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     public void onFilter(Filters filters) {
         Log.d(TAG, "onFilter: entered :price"+filters.hasPrice());
         List<Book> filteredList = new ArrayList<>();
+        List<Book> toBeRemoved = new ArrayList<>();
+
         boolean noFilter = true;
+
+        // add all books to filtered list to start with
+        filteredList.addAll(bookListFull);
+
+        // then, remove books that don't satisfy the provided criteria
+
         if(filters.hasPrice()){
+            for(Book book:filteredList){
+                if(book.getBookPrice() == 0)
+                    toBeRemoved.add(book);
+            }
+            noFilter = false;
+        }
+
+        if (!(filters.IsText() && filters.IsNotes())) {
+            if (filters.IsText()) {
+                for (Book book : filteredList) {
+                    if (!book.isTextbook())
+                        toBeRemoved.add(book);
+                }
+            }
+            else if (filters.IsNotes()){
+                for (Book book : filteredList) {
+                    if (book.isTextbook())
+                        toBeRemoved.add(book);
+                }
+            }
+            noFilter = false;
+        }
+
+        List<Integer> unrequiredBoards = new ArrayList<>();
+
+        for (int i = 1; i<=6; i++) {
+            if (!filters.getBookBoard().contains(i)) {
+                unrequiredBoards.add(i);
+            }
+        }
+
+        for (int a=0; a<filteredList.size(); a++) {
+            for (Integer i : unrequiredBoards) {
+                if (filteredList.get(a).getBoardNumber() == i) {
+                    toBeRemoved.add(filteredList.get(a));
+                }
+            }
+        }
+
+
+        List<Integer> unrequiredGrades = new ArrayList<>();
+
+        for (int i = 1; i<=7; i++) {
+            if (!filters.getBookGrade().contains(i)) {
+                unrequiredGrades.add(i);
+            }
+        }
+
+
+        for (int a=0; a<filteredList.size(); a++) {
+            for (Integer i : unrequiredGrades) {
+                if (filteredList.get(a).getGradeNumber() == i) {
+                    toBeRemoved.add(filteredList.get(a));
+                }
+            }
+        }
+
+        for (Book b:toBeRemoved) {
+            filteredList.remove(b);
+        }
+        /*if(filters.hasPrice()){
             for(Book book:bookListFull){
                 if(book.getBookPrice() == 0)
                     filteredList.add(book);
@@ -345,14 +414,14 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 
             noFilter = false;
         }
-
+*/
 
         if(filteredList == null || filteredList.isEmpty()){
             if(noFilter){
-            Log.d(TAG, "onFilter: is empty");
-            filteredList.addAll(bookList);
-            bookListFull.clear();
-            bookListFull.addAll(bookList);
+                Log.d(TAG, "onFilter: is empty");
+                filteredList.addAll(bookList);
+                bookListFull.clear();
+                bookListFull.addAll(bookList);
             }
             else{
                 bookListFull.clear();
