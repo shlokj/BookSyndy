@@ -125,7 +125,6 @@ public class MyListingsFragment extends Fragment implements BookAdapter.OnBookSe
 
     }
 
-
     @Override
     public void onBookSelected(DocumentSnapshot snapshot) {
         String book_id = snapshot.getId();

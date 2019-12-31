@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -20,7 +19,6 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import co.in.prodigyschool.passiton.R;
 import co.in.prodigyschool.passiton.SignInActivity;
-import co.in.prodigyschool.passiton.ui.home.HomeFragment;
 
 public class SendFragment extends Fragment {
 
@@ -55,7 +53,22 @@ public class SendFragment extends Fragment {
                 getActivity().finish();
             }
         });
+/*        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                startActivity(getActivity().getIntent());
+                getActivity().finish();
+            }
+        });*/
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                startActivity(getActivity().getIntent());
+                getActivity().finish();
+            }
+        });
         builder.show();
+
 
         return root;
     }

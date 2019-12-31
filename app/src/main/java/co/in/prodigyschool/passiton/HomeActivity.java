@@ -161,8 +161,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onBackPressed() {
 
-    }
+        int count = getSupportFragmentManager().getBackStackEntryCount();
 
+        if (count == 0) {
+            super.onBackPressed();
+
+        } else {
+            getSupportFragmentManager().popBackStack();
+        }
+
+    }
 
     /* location classes */
 
