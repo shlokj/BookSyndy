@@ -7,8 +7,8 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -22,8 +22,9 @@
         android:roundIcon="@drawable/ic_booksyndy_logo_square"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".util.GalleryUtil"></activity>
-        <activity android:name=".ViewUserProfileActivity"></activity>
+        <activity android:name=".SendFeedbackActivity"></activity>
+        <activity android:name=".util.GalleryUtil" />
+        <activity android:name=".ViewUserProfileActivity" />
         <activity android:name=".CreateListingActivity" />
         <activity android:name=".ViewPictureActivity" />
         <activity android:name=".CollegeFilterActivity" />
@@ -34,12 +35,14 @@
             android:name=".ChatActivity"
             android:label="@string/title_activity_chat"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".BookDetailsActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".BookDetailsActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".GetFeedbackActivity" />
         <activity android:name=".EnterLocationManuallyActivity" />
-        <activity android:name=".UserProfileActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".UserProfileActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".GetBookSellerLocationActivity" />
 
         <service

@@ -109,7 +109,7 @@ public class ConfirmListingActivity extends AppCompatActivity {
         if(selectedImage != null && !selectedImage.isEmpty()){
             bookPicFinal.setImageURI(Uri.parse(selectedImage));
         }
-        Toast.makeText(getApplicationContext(),"Board number: "+boardNumber,Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(),"Board number: "+boardNumber,Toast.LENGTH_SHORT).show();
 
         bookNameTV.setText(bookName);
         bookDescriptionTV.setText(bookDescription);

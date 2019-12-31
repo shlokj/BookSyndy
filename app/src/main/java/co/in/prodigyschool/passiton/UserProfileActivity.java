@@ -391,7 +391,7 @@ public class UserProfileActivity extends AppCompatActivity {
                         gradeSpinner.setAdapter(gradeAdapter);
                         gradeSpinner.setSelection(gradeNumber-1);
 
-                        Toast.makeText(getApplicationContext(),"Grade number: "+gradeNumber,Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(),"Grade number: "+gradeNumber,Toast.LENGTH_SHORT).show();
 
                         if (gradeNumber>=1 && gradeNumber<=6) {
 
@@ -403,7 +403,7 @@ public class UserProfileActivity extends AppCompatActivity {
                             if (gradeNumber==5 || gradeNumber==6) {
                                 compExams.setVisibility(View.VISIBLE);
                                 tempCE = user.isCompetitiveExam();
-                                Toast.makeText(getApplicationContext(),"Competitive exam: "+tempCE,Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(getApplicationContext(),"Competitive exam: "+tempCE,Toast.LENGTH_SHORT).show();
                                 compExams.setChecked(tempCE);
                             }
                             else {
@@ -458,8 +458,8 @@ public class UserProfileActivity extends AppCompatActivity {
             cropIntent.putExtra("aspectX", 1);
             cropIntent.putExtra("aspectY", 1);
             // indicate output X and Y
-            cropIntent.putExtra("outputX", 280);
-            cropIntent.putExtra("outputY", 280);
+            cropIntent.putExtra("outputX", 256);
+            cropIntent.putExtra("outputY", 256);
 
             // retrieve data on return
             cropIntent.putExtra("return-data", true);
