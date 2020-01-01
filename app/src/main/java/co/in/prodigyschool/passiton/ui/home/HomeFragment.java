@@ -367,6 +367,8 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 //            if (!unrequiredBoards.contains(20)) {
 //                unrequiredBoards.add(20);
 //            }
+
+            // remove competitive exam books from the list as we don't want them by default
             for (int a = 0; a < filteredList.size(); a++) {
                     if (filteredList.get(a).getBoardNumber() == 20) {
                         toBeRemoved.add(filteredList.get(a));
