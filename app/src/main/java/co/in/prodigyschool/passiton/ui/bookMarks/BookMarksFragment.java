@@ -20,6 +20,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -57,29 +58,8 @@ public class BookMarksFragment extends Fragment implements BookMarkAdapter.OnBoo
 
         initFireStore();
 
-        snackbar =
-        Snackbar.make(getActivity().findViewById(android.R.id.content), "Removed from bookmarks", Snackbar.LENGTH_LONG)
-                .setAction("UNDO", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        undone=true;
-                    }
-                });
 
-        snackbar.setActionTextColor(getResources().getColor(android.R.color.holo_orange_light));
 
-        snackbar.addCallback(new Snackbar.Callback() {
-
-            @Override
-            public void onDismissed(Snackbar snackbar, int event) {
-
-            }
-
-            @Override
-            public void onShown(Snackbar snackbar) {
-
-            }
-        });
         /* use a linear layout manager */
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -133,11 +113,23 @@ public class BookMarksFragment extends Fragment implements BookMarkAdapter.OnBoo
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                snackbar.show();
+                int position = viewHolder.getAdapterPosition();
+                final DocumentReference deletedBookReference = mAdapter.getSnapshots().getSnapshot(position).getReference();
+                final Book deletedBook = mAdapter.getSnapshots().getSnapshot(position).toObject(Book.class);
                 mAdapter.deleteItem(viewHolder.getAdapterPosition());
-//                if (!undone) {
-//                    mAdapter.deleteItem(viewHolder.getAdapterPosition());
-//                }
+                snackbar =
+                        Snackbar.make(getActivity().findViewById(android.R.id.content), "Removed from bookmarks", Snackbar.LENGTH_LONG)
+                                .setAction("UNDO", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        // undo is selected, restore the deleted item
+                                        deletedBookReference.set(deletedBook);
+
+                                    }
+                                });
+
+                snackbar.setActionTextColor(getResources().getColor(android.R.color.holo_orange_light));
+                snackbar.show();
             }
 
             @Override
