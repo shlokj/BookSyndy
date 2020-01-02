@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -29,6 +30,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import co.in.prodigyschool.passiton.Data.Book;
 import co.in.prodigyschool.passiton.Data.User;
@@ -43,13 +45,16 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     private User bookOwner;
     private TextView view_bookname,view_address,view_price,view_category,view_description, view_grade_and_board;
     private ImageView view_bookimage;
-    private ListenerRegistration mBookUserRegistration,mBookRegistration;
-    private DocumentReference bookUserRef, bookRef;
+    private ListenerRegistration mBookUserRegistration,mBookRegistration,mBookMarkRegistration;
+    private DocumentReference bookUserRef;
+    private DocumentReference bookRef;
+    private DocumentReference bookMarkRef;
     private Menu menu;
     private int MENU_DELETE = 123;
     private String curAppUser;
 
     private static final String TAG = "BOOK_DETAILS";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,11 +85,13 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         if(mFirestore != null){
             bookRef =  mFirestore.collection("books").document(bookid);
             curAppUser = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
+
         }
         else{
             Toast.makeText(getApplicationContext(),"Firebase error",Toast.LENGTH_SHORT).show();
         }
     }
+
 
 
 
@@ -197,6 +204,8 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 }
             }
         });
+
+        updateBookMark();
     }
 
     @Override
@@ -245,6 +254,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     protected void onStart() {
         super.onStart();
         mBookRegistration = bookRef.addSnapshotListener(this);
+
         if(isHome){
             findViewById(R.id.fab_chat).setVisibility(View.VISIBLE);
         }
@@ -288,7 +298,36 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_book_listing, menu);
         this.menu = menu;
+
         return true;
+    }
+
+    private void updateBookMark() {
+        if(curAppUser == null){
+            curAppUser = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
+        }
+        if(mFirestore == null){
+            mFirestore = FirebaseFirestore.getInstance();
+        }
+        bookMarkRef = mFirestore.collection("bookmarks").document(curAppUser).collection("books").document(currentBook.getDocumentId());
+        mBookMarkRegistration  = bookMarkRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+           if(e != null){
+               Log.e(TAG, "onEvent: BookMarkCheck Failed",e );
+                return;
+           }
+
+           if(snapshot.exists()){
+               menu.getItem(0).setIcon(ContextCompat.getDrawable(getBaseContext(), R.drawable.ic_bookmark_filled_24px));
+               saved = true;
+              // menu.getItem(0).setEnabled(false);
+
+           }
+
+            }
+        });
+
     }
 
     @Override
@@ -302,10 +341,8 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                     saved = true;
                 }
                 else {
-                    //remove from bookmarks
-                    menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_bookmark_border_24px));
-                    saved = false;
-                }
+                    showSnackbar("Already BookMarked!");
+                    }
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -339,5 +376,18 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 return i + suffixes[i % 10];
 
         }
+    }
+
+    public void showSnackbar(String message) {
+        View parentLayout = findViewById(android.R.id.content);
+        Snackbar.make(parentLayout, message, Snackbar.LENGTH_SHORT)
+                .setAction("OKAY", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                })
+                .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                .show();
     }
 }
