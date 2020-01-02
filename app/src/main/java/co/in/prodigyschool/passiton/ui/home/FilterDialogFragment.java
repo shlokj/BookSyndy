@@ -211,21 +211,15 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
         Filters filters = new Filters();
 
         if (mRootView != null) {
-
             filters.setPrice(getSelectedPrice());
             filters.setIsText(isTextBook());
             filters.setIsNotes(isNotes());
             filters.setBookBoard(getselectedBoard());
             filters.setBookGrade(getselectedGrade());
-
-
         }
         return filters;
     }
-
-
-
-
+    
     private int getSelectedPrice() {
         if (freeOnly.isChecked()) {
             return 1;
@@ -245,6 +239,14 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
 
     private boolean isNotes() {
         if (filterNotes.isChecked()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean isCompetitiveExam() {
+        if (filterBoardCompetitiveExams.isChecked()) {
             return true;
         } else {
             return false;

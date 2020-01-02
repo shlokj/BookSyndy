@@ -45,7 +45,7 @@ public class CreateListingActivity extends AppCompatActivity {
     private double book_lat,book_lng;
     boolean isTextbook, forCompExam;
     private String curUserId, bookName, bookDescription, phoneNumber, userId, bookAddress, bookImageUrl, selectedImage,book_photo_url;
-    int gradeNumber, boardNumber;
+    int gradeNumber, boardNumber, year;
     private int bookPrice;
     private FirebaseAuth mAuth;
     private FirebaseFirestore mFirestore;
@@ -198,6 +198,7 @@ public class CreateListingActivity extends AppCompatActivity {
                     boardNumber = boardSpinner.getSelectedItemPosition() + 7;
                 }
                 String bps = priceField.getText().toString();
+                String bys = yearField.getText().toString();
                 forCompExam = competitiveExam.isChecked();
 
                 if (bookName.length()<10) {
@@ -205,6 +206,9 @@ public class CreateListingActivity extends AppCompatActivity {
                 }
                 else if (bookDescription.length()<10) {
                     showSnackbar("Please enter at least 10 characters for the description");
+                }
+                else if (gradeNumber>=7 && yearField.getText().toString().length()==0) {
+                    showSnackbar("Please enter a year for your book");
                 }
                 else if (bookAddress.length()==0) {
                     showSnackbar("Couldn't get your location. Please enter it manually.");
@@ -214,6 +218,7 @@ public class CreateListingActivity extends AppCompatActivity {
                 }
                 else {
                     bookPrice = Integer.parseInt(bps);
+                    year = Integer.parseInt(bys);
                     uploadBook();
                 }
 
