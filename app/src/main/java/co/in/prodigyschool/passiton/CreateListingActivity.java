@@ -71,7 +71,7 @@ public class CreateListingActivity extends AppCompatActivity {
         descField = findViewById(R.id.bookDescField2);
         locField = findViewById(R.id.locField2);
         priceField = findViewById(R.id.priceField);
-        yearField = findViewById(R.id.bookYearField);
+        yearField = findViewById(R.id.bookYearField1);
         free = findViewById(R.id.freeOrNot);
 
         getSupportActionBar().setTitle("Create a listing");
@@ -197,8 +197,8 @@ public class CreateListingActivity extends AppCompatActivity {
                 else {
                     boardNumber = boardSpinner.getSelectedItemPosition() + 7;
                 }
-                String bps = priceField.getText().toString();
-                String bys = yearField.getText().toString();
+                String bps = priceField.getText().toString().trim();
+                String bys = yearField.getText().toString().trim();
                 forCompExam = competitiveExam.isChecked();
 
                 if (bookName.length()<10) {
@@ -218,7 +218,8 @@ public class CreateListingActivity extends AppCompatActivity {
                 }
                 else {
                     bookPrice = Integer.parseInt(bps);
-                    year = Integer.parseInt(bys);
+                    Log.d(TAG, "onClick: LISTING: "+bys);
+                    //year = Integer.parseInt(bys);
                     uploadBook();
                 }
 

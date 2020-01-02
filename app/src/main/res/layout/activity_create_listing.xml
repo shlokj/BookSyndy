@@ -156,7 +156,7 @@
 
 
         <EditText
-            android:id="@+id/bookYearField"
+            android:id="@+id/bookYearField1"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:ems="10"

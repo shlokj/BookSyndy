@@ -18,7 +18,7 @@ public class Book {
 
 
     private String bookName,bookDescription,bookAddress,bookPhoto;
-    boolean isTextbook;
+    boolean isTextbook,isBookSold;
     private int bookPrice,bookYear;
     private int gradeNumber,boardNumber;
     private String userId,bookTime;
@@ -31,7 +31,7 @@ public class Book {
 
     }
     //for user entry
-    public Book(String userId, boolean isTextbook, String bookName, String bookDescription, int gradeNumber, int boardNumber,int bookPrice, String bookAddress,String bookPhoto,double lat,double lng){
+    public Book(String userId, boolean isTextbook, String bookName, String bookDescription, int gradeNumber, int boardNumber,int bookPrice, String bookAddress,String bookPhoto,String bookTime,Boolean isBookSold,double lat,double lng){
 
         this.userId = userId;
         this.bookName = bookName;
@@ -42,8 +42,18 @@ public class Book {
         this.bookPrice = bookPrice;
         this.isTextbook = isTextbook;
         this.bookPhoto = bookPhoto;
+        this.bookTime = bookTime;
+        this.isBookSold = isBookSold;
         this.lat = lat;
         this.lng = lng;
+    }
+
+    public boolean isBookSold() {
+        return isBookSold;
+    }
+
+    public void setBookSold(boolean bookSold) {
+        isBookSold = bookSold;
     }
 
     public String getDocumentId() {

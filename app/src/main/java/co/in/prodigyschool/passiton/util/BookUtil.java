@@ -25,10 +25,9 @@ public class BookUtil {
 
 
     public static Book addBook(String userId, boolean isTextbook, String bookName, String bookDescription, int gradeNumber, int boardNumber,int bookPrice, String bookAddress,double lat,double lng){
-    Book book = new Book();
-    Random random = new Random();
-    book = new Book(userId,isTextbook,bookName,bookDescription,gradeNumber,boardNumber,bookPrice,bookAddress,getRandomImageUrl(new Random()),lat,lng);
-    book.setBookTime(new SimpleDateFormat("dd MM yyyy HH",Locale.getDefault()).format(new Date()));
+    String bookTime = new SimpleDateFormat("dd MM yyyy HH",Locale.getDefault()).format(new Date());
+    Book book = new Book(userId,isTextbook,bookName,bookDescription,gradeNumber,boardNumber,bookPrice,bookAddress,getRandomImageUrl(new Random()),bookTime,false,lat,lng);
+    //book.setBookTime(new SimpleDateFormat("dd MM yyyy HH",Locale.getDefault()).format(new Date()));
     return book;
     }
 
