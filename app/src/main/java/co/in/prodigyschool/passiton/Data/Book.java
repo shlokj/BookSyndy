@@ -15,8 +15,6 @@ public class Book {
     public static final String FIELD_CATEGORY = "category";
     public static final String FIELD_PRICE = "price";
 
-
-
     private String bookName,bookDescription,bookAddress,bookPhoto;
     boolean isTextbook,isBookSold;
     private int bookPrice,bookYear;
@@ -127,8 +125,6 @@ public class Book {
     public void setTextbook(boolean textbook) {
         isTextbook = textbook;
     }
-
-
 
     public int getBookPrice() {
         return bookPrice;

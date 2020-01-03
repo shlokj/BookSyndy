@@ -341,8 +341,10 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                     saved = true;
                 }
                 else {
-                    showSnackbar("Already BookMarked!");
-                    }
+                    removeFromBookMarks();
+                    menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_bookmark_border_24px));
+                    saved = false;
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -359,6 +361,22 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onFailure(@NonNull Exception e) {
                 Toast.makeText(getApplicationContext(), "BookMark Failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void removeFromBookMarks() {
+        final CollectionReference bookMarkRef = mFirestore.collection("bookmarks");
+        bookMarkRef.document(curAppUser).collection("books").document(bookid).delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(getApplicationContext(),"Removed from bookmarks",Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(), "Remove Failed", Toast.LENGTH_SHORT).show();
             }
         });
     }

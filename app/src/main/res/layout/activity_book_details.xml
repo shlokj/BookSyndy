@@ -22,12 +22,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:alpha="1.0"
+                android:background="@color/quantum_grey700"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:scaleType="center"/>
+                android:scaleType="fitCenter"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- Back button -->
@@ -48,6 +49,30 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/seller_dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_margin="16dp"
+            android:cropToPadding="true"
+            app:srcCompat="@drawable/ic_account_circle_24px" />
+
+
+        <TextView
+            android:id="@+id/sellerName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:gravity="center_vertical"
+            android:textSize="18sp"
+            android:layout_alignTop="@id/seller_dp"
+            android:layout_alignBottom="@id/seller_dp"
+            android:fontFamily="@font/roboto_light"
+            android:layout_toEndOf="@+id/seller_dp"
+            tools:text="Book Syndicate" />
+
         <TextView
             android:id="@+id/book_name"
             style="@style/AppTheme.Title"
@@ -57,6 +82,7 @@
             android:layout_alignParentStart="true"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:fontFamily="@font/roboto"
             android:textColor="@android:color/white"
             android:textStyle="bold"
             tools:text="Some Book Name" />
@@ -69,6 +95,7 @@
             android:layout_above="@+id/book_grade_and_board"
             android:layout_alignStart="@+id/book_name"
             android:layout_marginTop="8dp"
+            android:fontFamily="@font/roboto_light"
             android:textColor="@android:color/white"
             tools:text="Text Book" />
 
@@ -89,6 +116,7 @@
             android:layout_below="@+id/book_category"
             android:layout_toEndOf="@+id/restaurant_city_divider"
             android:textColor="@android:color/white"
+            android:fontFamily="@font/roboto_light"
             tools:text="San Francisco" />
 
 
@@ -100,6 +128,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignBottom="@id/book_image_cl"
             android:layout_margin="8dp"
+            android:fontFamily="@font/roboto_light"
             android:textColor="@android:color/white"
             android:text="Grade, board" />
 
@@ -108,13 +137,14 @@
             style="@style/AppTheme.Body1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
             android:layout_alignTop="@+id/book_image_cl"
-            android:layout_marginEnd="8dp"
+            android:layout_alignParentEnd="true"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/roboto_light"
             android:textColor="@android:color/white"
-            android:textStyle="bold"
             android:textSize="20sp"
+            android:textStyle="bold"
             tools:text="$$$" />
 
     </RelativeLayout>
