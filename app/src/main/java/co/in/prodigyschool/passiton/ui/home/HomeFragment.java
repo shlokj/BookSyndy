@@ -270,16 +270,20 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                 else{
                     String filterPattern = newText.toLowerCase().trim();
                     for (Book book : filteredList1) {
-                        int foundIndex = book.getBookName().indexOf(filterPattern);
-                        if (book.getBookName().toLowerCase().contains(filterPattern) && (foundIndex==0 || book.getBookName().substring(foundIndex-1,foundIndex).equals(" "))) {
-                            Log.d(TAG, "onQueryTextChange: Found at index "+foundIndex);
-//                            Log.d(TAG, "onQueryTextChange: "+book.getBookName().substring(foundIndex-1,foundIndex));
-                            filteredList1.add(book);
+                        int foundIndex = book.getBookName().toLowerCase().indexOf(filterPattern);
+                        Toast.makeText(getActivity(),"Found at "+foundIndex,Toast.LENGTH_SHORT).show();
+                        if (book.getBookName().toLowerCase().contains(filterPattern)) {
+                            if (foundIndex!=-1 && (foundIndex==0 || book.getBookName().substring(foundIndex-1,foundIndex).equals(" "))) {
+                                filteredList1.add(book);
+                            }
                         }
                     }
                     for (Book book : bookListFull) {
-                        if (book.getBookName().toLowerCase().contains(filterPattern) && !filteredList1.contains(book)) {
-                            filteredList1.add(book);
+                        int foundIndex = book.getBookName().toLowerCase().indexOf(filterPattern);
+                        if (book.getBookName().toLowerCase().contains(filterPattern)) {
+                            if (foundIndex!=-1 && (foundIndex==0 || book.getBookName().substring(foundIndex-1,foundIndex).equals(" "))) {
+                                filteredList1.add(book);
+                            }
                         }
                     }
                 }
