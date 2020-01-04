@@ -116,4 +116,7 @@
     <string name="board">Board</string>
     <string name="grade">Grade</string>
     <string name="use_guided_mode">Use guided mode to create listings</string>
+    <string name="nothing_here">Nothing to show here</string>
+    <string name="ongoing">Ongoing</string>
+    <string name="completed">Completed</string>
 </resources>

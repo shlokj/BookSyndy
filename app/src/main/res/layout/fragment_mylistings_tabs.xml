@@ -10,19 +10,21 @@
         android:id="@+id/listings_tab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
+        app:tabTextColor="@color/white"
+        android:background="@color/colorPrimary"
+        app:tabIndicatorHeight="4dp">
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tab_available"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Available" />
+            android:text="@string/ongoing" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tab_sold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sold" />
+            android:text="@string/completed" />
 
     </com.google.android.material.tabs.TabLayout>
 
