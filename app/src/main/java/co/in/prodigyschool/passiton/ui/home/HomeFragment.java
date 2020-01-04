@@ -274,8 +274,14 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                             filteredList1.add(book);
                         }
                     }
+                    for (Book book : bookListFull) {
+                        if (book.getBookName().toLowerCase().contains(filterPattern) && !filteredList1.contains(book)) {
+                            filteredList1.add(book);
+                        }
+                    }
                 }
                 mAdapter.setBookList(filteredList1);
+
                 return false;
             }
         });
