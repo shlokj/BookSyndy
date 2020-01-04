@@ -73,8 +73,8 @@ public class FaqAdapter extends BaseExpandableListAdapter {
             LayoutInflater inflater = (LayoutInflater)this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.faq_questions,null);
         }
-        TextView questionView = (TextView)convertView.findViewById(R.id.text_helpquestion);
-        questionView.setTypeface(null, Typeface.BOLD);
+        TextView questionView = convertView.findViewById(R.id.text_helpquestion);
+        questionView.setTypeface(null, Typeface.NORMAL);
         questionView.setText(question);
 
 

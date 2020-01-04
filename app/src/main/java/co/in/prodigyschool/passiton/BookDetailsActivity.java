@@ -329,7 +329,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                     }
 
                     if (snapshot.exists()) {
-                        menu.getItem(0).setIcon(ContextCompat.getDrawable(getBaseContext(), R.drawable.ic_bookmark_filled_24px));
+                        menu.getItem(1).setIcon(ContextCompat.getDrawable(getBaseContext(), R.drawable.ic_bookmark_filled_24px));
                         saved = true;
                         // menu.getItem(0).setEnabled(false);
 
@@ -340,10 +340,9 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
 
         }
         catch (Exception e){
-            Log.e(TAG, "updateBookMark: failed with",e );
-            Toast.makeText(getApplicationContext(),"BookMark Failed",Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "updateBookMark: failed with",e);
+            Toast.makeText(getApplicationContext(),"Bookmark Failed",Toast.LENGTH_SHORT).show();
         }
-
     }
 
     @Override
@@ -353,20 +352,20 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 if (!saved) {
                     //add to bookmarks
                     addToBookMark();
-                    menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_bookmark_filled_24px));
+                    menu.getItem(1).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_bookmark_filled_24px));
                     saved = true;
                 }
                 else {
                     removeFromBookMarks();
-                    menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_bookmark_border_24px));
+                    menu.getItem(1).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_bookmark_border_24px));
                     saved = false;
                 }
                 break;
             case R.id.share:
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(BookDetailsActivity.this);
-                builder.setTitle("Save your changes?");
-                builder.setMessage("Would you like to save the changes you made to your profile?");
+                builder.setTitle("Share link");
+//                builder.setMessage("Share this link with someone who might be interested in this book");
                 final EditText editText = new EditText(getApplicationContext());
 
                 // fill this edittext with a dynamic link from firebase
@@ -396,6 +395,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 }
                 builder.show();
                 showSnackbar("Copied to clipboard!");
+                break;
 
         }
         return super.onOptionsItemSelected(item);

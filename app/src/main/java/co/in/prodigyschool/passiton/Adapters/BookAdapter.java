@@ -215,7 +215,7 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder> {
                     res = Math.round(res / 100);
                     res = res / 10;
                     if (res > 0.0f)
-                        cityView.append("\n" + res + " KM");
+                        cityView.append("\n" + res + " km");
                 }
             }
         }
