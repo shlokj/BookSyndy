@@ -245,15 +245,12 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         if(mSwipeRefreshLayout.isRefreshing()){
             mSwipeRefreshLayout.setRefreshing(false);
         }
-
     }
-
 
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.home, menu);
-
         MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView  searchView = (SearchView)searchItem.getActionView();
         searchView.setQueryHint("Search");
@@ -265,20 +262,20 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                List<Book> filteredList = new ArrayList<>();
+                List<Book> filteredList1 = new ArrayList<>();
                 if(newText == null || newText.trim().isEmpty())
                 {
-                    filteredList = bookListFull;
+                    filteredList1 = bookListFull;
                 }
                 else{
                     String filterPattern = newText.toLowerCase().trim();
-                    for (Book book : bookListFull) {
+                    for (Book book : filteredList1) {
                         if (book.getBookName().toLowerCase().contains(filterPattern)) {
-                            filteredList.add(book);
+                            filteredList1.add(book);
                         }
                     }
                 }
-                mAdapter.setBookList(filteredList);
+                mAdapter.setBookList(filteredList1);
                 return false;
             }
         });
