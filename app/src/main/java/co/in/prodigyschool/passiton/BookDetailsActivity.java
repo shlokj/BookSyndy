@@ -109,6 +109,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
             view_address.setText(currentBook.getBookAddress());
             int gradeNumber = currentBook.getGradeNumber();
             int boardNumber = currentBook.getBoardNumber();
+            int year = currentBook.getBookYear();
 
 
             if (boardNumber == 20) {
@@ -152,12 +153,16 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                     } else if (boardNumber == 16) {
                         view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " other degree");
                     }
+
+                    if (year!=0) {
+                        view_grade_and_board.append(", "+ordinal(year)+" year");
+                    }
                 }
 
                 if (boardNumber == 1) {
                     view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " CBSE");
                 } else if (boardNumber == 2) {
-                    view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " ICSE//ISC");
+                    view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " ICSE/ISC");
                 } else if (boardNumber == 3) {
                     view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " IB");
                 } else if (boardNumber == 4) {
@@ -226,7 +231,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
             startActivity(chatIntent);
         }
         catch(Exception e){
-            Toast.makeText(getApplicationContext(), "Please Try Again", Toast.LENGTH_SHORT).show();
+            showSnackbar("Please try again");
         }
     }
 
@@ -355,12 +360,12 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         bookMarkRef.document(curAppUser).collection("books").document(bookid).set(currentBook).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Toast.makeText(getApplicationContext(),"BookMarked!",Toast.LENGTH_SHORT).show();
+                showSnackbar("Bookmarked!");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(), "BookMark Failed", Toast.LENGTH_SHORT).show();
+                showSnackbar("Couldn't add to bookmarks");
             }
         });
     }
@@ -371,12 +376,12 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Toast.makeText(getApplicationContext(),"Removed from bookmarks",Toast.LENGTH_SHORT).show();
+                showSnackbar("Removed from bookmarks");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(), "Remove Failed", Toast.LENGTH_SHORT).show();
+                showSnackbar("Failed to remove from bookmarks");
             }
         });
     }
@@ -389,11 +394,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
 
     public static String ordinal(int i) {
         String[] suffixes = new String[] { "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th" };
-        switch (i % 100) {
-            default:
-                return i + suffixes[i % 10];
-
-        }
+        return i + suffixes[i % 10];
     }
 
     public void showSnackbar(String message) {
@@ -405,7 +406,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
 
                     }
                 })
-                .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                .setActionTextColor(getResources().getColor(android.R.color.holo_orange_light))
                 .show();
     }
 }

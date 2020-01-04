@@ -226,9 +226,4 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder> {
     //code for search
 
 
-
-
-
-
-
 }

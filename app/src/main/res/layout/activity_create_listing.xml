@@ -71,8 +71,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:hint="Title"
-                    android:inputType="textCapWords|textShortMessage" />
+                    android:hint="@string/a_detailed_name"
+                    android:maxLength="150"
+                    android:maxLines="10"
+                    android:inputType="textCapSentences|textMultiLine" />
 
             </LinearLayout>
 
@@ -101,10 +103,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-
-                android:hint="@string/description"
-                android:inputType="textCapWords"
-                android:lines="5" />
+                android:singleLine="false"
+                android:maxLength="1000"
+                android:hint="Include all details"
+                android:inputType="textCapSentences|textMultiLine" />
 
         </LinearLayout>
 
@@ -313,6 +315,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
                     android:ems="10"
+                    android:maxLength="4"
                     android:hint="Price"
                     android:inputType="number" />
 
