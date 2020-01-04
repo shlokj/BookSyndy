@@ -1,6 +1,9 @@
 package co.in.prodigyschool.passiton;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -9,12 +12,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
@@ -30,7 +35,6 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import co.in.prodigyschool.passiton.Data.Book;
 import co.in.prodigyschool.passiton.Data.User;
@@ -51,7 +55,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     private DocumentReference bookMarkRef;
     private Menu menu;
     private int MENU_DELETE = 123;
-    private String curAppUser;
+    private String curAppUser, shareableLink="";
 
     private static final String TAG = "BOOK_DETAILS";
 
@@ -358,7 +362,40 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                     saved = false;
                 }
                 break;
+            case R.id.share:
 
+                AlertDialog.Builder builder = new AlertDialog.Builder(BookDetailsActivity.this);
+                builder.setTitle("Save your changes?");
+                builder.setMessage("Would you like to save the changes you made to your profile?");
+                final EditText editText = new EditText(getApplicationContext());
+
+                // fill this edittext with a dynamic link from firebase
+
+                builder.setPositiveButton("Copy link", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        shareableLink = editText.getText().toString();
+
+                        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("shareable_link", shareableLink);
+                        if (shareableLink.length()!=0) {
+                            clipboard.setPrimaryClip(clip);
+                        }
+                        showSnackbar("Copied to clipboard!");
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("shareable_link", shareableLink);
+                if (shareableLink.length()!=0) {
+                    clipboard.setPrimaryClip(clip);
+                }
+                builder.show();
+                showSnackbar("Copied to clipboard!");
 
         }
         return super.onOptionsItemSelected(item);

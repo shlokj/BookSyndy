@@ -119,4 +119,6 @@
     <string name="nothing_here">Nothing to show here</string>
     <string name="ongoing">Ongoing</string>
     <string name="completed">Completed</string>
+    <string name="share">Share</string>
+    <string name="bookmark">Bookmark</string>
 </resources>

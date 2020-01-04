@@ -315,7 +315,7 @@ public class UserProfileActivity extends AppCompatActivity {
                     builder.setNegativeButton("Exit without saving", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            finishActivity();
+                            finishActivity1();
                         }
                     });
                     builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
@@ -327,7 +327,7 @@ public class UserProfileActivity extends AppCompatActivity {
                     builder.show();
                 }
                 else {
-                    finishActivity();
+                    finishActivity1();
                 }
                 break;
 
@@ -346,7 +346,7 @@ public class UserProfileActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
     }
-    public void finishActivity () {
+    public void finishActivity1 () {
         this.finish();
     }
 
