@@ -308,30 +308,37 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void updateBookMark() {
-        if(curAppUser == null){
-            curAppUser = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
-        }
-        if(mFirestore == null){
-            mFirestore = FirebaseFirestore.getInstance();
-        }
-        bookMarkRef = mFirestore.collection("bookmarks").document(curAppUser).collection("books").document(currentBook.getDocumentId());
-        mBookMarkRegistration  = bookMarkRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
-           if(e != null){
-               Log.e(TAG, "onEvent: BookMarkCheck Failed",e );
-                return;
-           }
-
-           if(snapshot.exists()){
-               menu.getItem(0).setIcon(ContextCompat.getDrawable(getBaseContext(), R.drawable.ic_bookmark_filled_24px));
-               saved = true;
-              // menu.getItem(0).setEnabled(false);
-
-           }
-
+        try {
+            if (curAppUser == null) {
+                curAppUser = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
             }
-        });
+            if (mFirestore == null) {
+                mFirestore = FirebaseFirestore.getInstance();
+            }
+            bookMarkRef = mFirestore.collection("bookmarks").document(curAppUser).collection("books").document(currentBook.getDocumentId());
+            mBookMarkRegistration = bookMarkRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+                    if (e != null) {
+                        Log.e(TAG, "onEvent: BookMarkCheck Failed", e);
+                        return;
+                    }
+
+                    if (snapshot.exists()) {
+                        menu.getItem(0).setIcon(ContextCompat.getDrawable(getBaseContext(), R.drawable.ic_bookmark_filled_24px));
+                        saved = true;
+                        // menu.getItem(0).setEnabled(false);
+
+                    }
+
+                }
+            });
+
+        }
+        catch (Exception e){
+            Log.e(TAG, "updateBookMark: failed with",e );
+            Toast.makeText(getApplicationContext(),"BookMark Failed",Toast.LENGTH_SHORT).show();
+        }
 
     }
 
@@ -351,9 +358,47 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                     saved = false;
                 }
                 break;
+
+
         }
         return super.onOptionsItemSelected(item);
     }
+
+    /*
+    TODO:call this function on menu option selected
+     */
+    private void markAsSold(){
+        final CollectionReference bookRef = mFirestore.collection("books");
+        bookRef.document(bookid).update("bookSold",true).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(getApplicationContext(),"Book is sold",Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(),"Error: Please Try Again!",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    /*
+    if Needed else Delete this
+     */
+//    private void markAsAvailable(){
+//        final CollectionReference bookRef = mFirestore.collection("books");
+//        bookRef.document(bookid).update("bookSold",false).addOnSuccessListener(new OnSuccessListener<Void>() {
+//            @Override
+//            public void onSuccess(Void aVoid) {
+//                Toast.makeText(getApplicationContext(),"Book is sold",Toast.LENGTH_SHORT).show();
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                Toast.makeText(getApplicationContext(),"Error: Please Try Again!",Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
 
     private void addToBookMark() {
         final CollectionReference bookMarkRef = mFirestore.collection("bookmarks");

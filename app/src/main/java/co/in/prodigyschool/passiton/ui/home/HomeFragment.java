@@ -167,6 +167,37 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         return root;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (booksRegistration == null) {
+            booksRegistration = mQuery.addSnapshotListener(this);
+        }
+
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mAdapter != null) {
+            mAdapter.onDataChanged();
+        }
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (booksRegistration != null) {
+            booksRegistration.remove();
+            booksRegistration = null;
+            mAdapter.onDataChanged();
+        }
+
+
+    }
+
     private void refreshHome() {
         if (booksRegistration != null) {
             booksRegistration.remove();
@@ -184,7 +215,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         /* firestore */
         mFirestore = FirebaseFirestore.getInstance();
         curUserId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
-        mQuery = mFirestore.collection("books").limit(LIMIT);
+        mQuery = mFirestore.collection("books").whereEqualTo("bookSold",false).limit(LIMIT);
         booksRegistration = mQuery.addSnapshotListener(this);
         //removeUserBooks(mQuery);
     }
@@ -217,36 +248,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (booksRegistration == null) {
-            booksRegistration = mQuery.addSnapshotListener(this);
-        }
 
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mAdapter != null) {
-            mAdapter.onDataChanged();
-        }
-
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (booksRegistration != null) {
-            booksRegistration.remove();
-            booksRegistration = null;
-            mAdapter.onDataChanged();
-        }
-
-
-    }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
@@ -295,23 +297,11 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         }
         return super.onOptionsItemSelected(item);
     }
-
     public void onFilterClicked() {
         // Show the dialog containing filter options
 
-            if(!mFilterDialog.isAdded())
+        if(!mFilterDialog.isAdded())
             mFilterDialog.show(getChildFragmentManager(), FilterDialogFragment.TAG);
-    }
-
-
-
-    @Override
-    public void onBookSelected(Book book) {
-        String book_id = book.getDocumentId();
-        Intent bookDetails = new Intent(getActivity(), BookDetailsActivity.class);
-        bookDetails.putExtra("bookid", book_id);
-        bookDetails.putExtra("isHome",true);
-        startActivity(bookDetails);
     }
 
     @Override
@@ -530,6 +520,15 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 //        });
 //    }
 
+
+    @Override
+    public void onBookSelected(Book book) {
+        String book_id = book.getDocumentId();
+        Intent bookDetails = new Intent(getActivity(), BookDetailsActivity.class);
+        bookDetails.putExtra("bookid", book_id);
+        bookDetails.putExtra("isHome",true);
+        startActivity(bookDetails);
+    }
 
 
     public static boolean checkConnection(Context context) {

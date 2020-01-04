@@ -15,7 +15,7 @@
         android:id="@+id/nav_booklist"
         android:name="co.in.prodigyschool.passiton.ui.myListings.MyListingsFragment"
         android:label="@string/menu_mylistings"
-        tools:layout="@layout/fragment_gallery" />
+        tools:layout="@layout/fragment_mylistings_tabs" />
 
     <fragment
         android:id="@+id/nav_chats"
