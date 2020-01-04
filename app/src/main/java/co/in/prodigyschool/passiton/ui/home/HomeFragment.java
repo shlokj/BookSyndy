@@ -265,12 +265,15 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                 List<Book> filteredList1 = new ArrayList<>();
                 if(newText == null || newText.trim().isEmpty())
                 {
-                    filteredList1 = bookListFull;
+                    filteredList1.addAll(bookListFull);
                 }
                 else{
                     String filterPattern = newText.toLowerCase().trim();
                     for (Book book : filteredList1) {
-                        if (book.getBookName().toLowerCase().contains(filterPattern)) {
+                        int foundIndex = book.getBookName().indexOf(filterPattern);
+                        if (book.getBookName().toLowerCase().contains(filterPattern) && (foundIndex==0 || book.getBookName().substring(foundIndex-1,foundIndex).equals(" "))) {
+                            Log.d(TAG, "onQueryTextChange: Found at index "+foundIndex);
+//                            Log.d(TAG, "onQueryTextChange: "+book.getBookName().substring(foundIndex-1,foundIndex));
                             filteredList1.add(book);
                         }
                     }
