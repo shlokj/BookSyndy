@@ -396,16 +396,5 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    public void showSnackbar(String message) {
-        View parentLayout = findViewById(android.R.id.content);
-        Snackbar.make(parentLayout, message, Snackbar.LENGTH_SHORT)
-                .setAction("OKAY", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
 
-                    }
-                })
-                .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
-                .show();
-    }
 }
