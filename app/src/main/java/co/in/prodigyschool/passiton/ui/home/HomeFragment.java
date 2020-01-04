@@ -28,6 +28,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -50,6 +51,7 @@ import co.in.prodigyschool.passiton.Data.Book;
 import co.in.prodigyschool.passiton.Data.Chat;
 import co.in.prodigyschool.passiton.Data.User;
 import co.in.prodigyschool.passiton.GetBookPictureActivity;
+import co.in.prodigyschool.passiton.HomeActivity;
 import co.in.prodigyschool.passiton.R;
 import co.in.prodigyschool.passiton.util.Filters;
 
@@ -74,6 +76,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     private List<Book> bookListFull;
     private ListenerRegistration booksRegistration;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private View parentLayout;
 
 
 
@@ -90,6 +93,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         //homeViewModel =
         //        ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
+        parentLayout = root;
         mFilterDialog = new FilterDialogFragment();
         mCFdialog = new FilterCollegeDialogFragment();
         setHasOptionsMenu(true);
@@ -140,7 +144,15 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             @Override
             public void onRefresh() {
                 //code to reload with new books
-                mSwipeRefreshLayout.setRefreshing(false);
+                if(checkConnection(getContext())) {
+                    refreshHome();
+                }
+                else{
+                    showSnackbar("Check Your Internet!");
+                    if(mSwipeRefreshLayout.isRefreshing()){
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                }
             }
         });
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
@@ -155,8 +167,19 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         return root;
     }
 
+    private void refreshHome() {
+        if (booksRegistration != null) {
+            booksRegistration.remove();
+            booksRegistration = null;
+            booksRegistration = mQuery.addSnapshotListener(this);
+        }
+       // mSwipeRefreshLayout.setRefreshing(false);
+    }
+
 
     private void initFireStore() {
+        if(mSwipeRefreshLayout != null && !mSwipeRefreshLayout.isRefreshing())
+            mSwipeRefreshLayout.setRefreshing(true);
 
         /* firestore */
         mFirestore = FirebaseFirestore.getInstance();
@@ -188,6 +211,9 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         }
 
         onFilter(homeViewModel.getFilters());
+        if(mSwipeRefreshLayout.isRefreshing()){
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
 
     }
 
@@ -196,7 +222,6 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         super.onStart();
         if (booksRegistration == null) {
             booksRegistration = mQuery.addSnapshotListener(this);
-            mAdapter.onDataChanged();
         }
 
     }
@@ -530,6 +555,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             Toast.makeText(getActivity(),"Internet Required",Toast.LENGTH_LONG).show();
             return;
         }
+        if(mFirestore == null)
         mFirestore = FirebaseFirestore.getInstance();
         try{
             curUserId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
@@ -566,6 +592,19 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         }
         populateBookAdapter(queryDocumentSnapshots);
 
+    }
+
+    public void showSnackbar(String message) {
+
+        Snackbar.make(parentLayout, message, Snackbar.LENGTH_SHORT)
+                .setAction("OKAY", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                })
+                .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                .show();
     }
 
 
