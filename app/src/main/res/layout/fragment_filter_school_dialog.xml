@@ -20,114 +20,134 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:id="@+id/degreeLL"
+        android:id="@+id/gradeAndBoardFilterLL"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/filterQuestionTV">
 
         <LinearLayout
-            android:id="@+id/degreeLL1"
+            android:id="@+id/gradeFilterLL"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/degreeFilterLabel"
+                android:id="@+id/gradeFilterLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:text="@string/degree" />
+                android:text="Grade" />
 
             <CheckBox
-                android:id="@+id/filterBtech"
+                android:id="@+id/filterGrade5orBelow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/b_tech" />
+                android:text="5 and below" />
 
             <CheckBox
-                android:id="@+id/filterBsc"
+                android:id="@+id/filterGrade6to8"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/b_sc" />
+                android:text="6 to 8" />
 
             <CheckBox
-                android:id="@+id/filterBcom"
+                android:id="@+id/filterGrade9"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/b_com" />
+                android:text="9" />
 
             <CheckBox
-                android:id="@+id/filterBa"
+                android:id="@+id/filterGrade10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/ba" />
+                android:text="10" />
 
             <CheckBox
-                android:id="@+id/filterBba"
+                android:id="@+id/filterGrade11"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/bba" />
+                android:text="11" />
 
+            <CheckBox
+                android:id="@+id/filterGrade12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="12" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/degreeLL2"
+            android:id="@+id/boardFilterLL"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
             android:layout_weight="1"
             android:orientation="vertical"
             app:layout_constraintStart_toEndOf="@+id/gradeFilterLL"
             app:layout_constraintTop_toBottomOf="@+id/filterQuestionTV">
-
 
             <TextView
                 android:id="@+id/boardFilterLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:text="" />
+                android:text="Board" />
 
             <CheckBox
-                android:id="@+id/filterBca"
+                android:id="@+id/filterBoardCbse"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/bca" />
+                android:text="@string/cbse" />
 
             <CheckBox
-                android:id="@+id/filterBed"
+                android:id="@+id/filterBoardIcse"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/b_ed" />
+                android:text="@string/icse" />
 
             <CheckBox
-                android:id="@+id/filterLlb"
+                android:id="@+id/filterBoardIb"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/llb" />
+                android:text="@string/ib" />
 
             <CheckBox
-                android:id="@+id/filterMbbs"
+                android:id="@+id/filterBoardIgcse"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/mbbs" />
+                android:text="@string/igcse" />
 
             <CheckBox
-                android:id="@+id/filterOtherDegree"
+                android:id="@+id/filterBoardState"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/state_board" />
+
+            <CheckBox
+                android:id="@+id/filterBoardOther"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Other" />
-        </LinearLayout>
 
+            <CheckBox
+                android:id="@+id/filterBoardCompetitiveExams"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Competitive exams" />
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -149,7 +169,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:text="@string/price" />
+                android:text="Price" />
 
             <CheckBox
                 android:id="@+id/freeOnlyCB"
@@ -177,13 +197,13 @@
                 android:text="@string/type" />
 
             <CheckBox
-                android:id="@+id/filterTextbook_c"
+                android:id="@+id/filterTextbook"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/textbook" />
 
             <CheckBox
-                android:id="@+id/filterNotes_c"
+                android:id="@+id/filterNotes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/notes" />
@@ -198,7 +218,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/clear_filter_button_c"
+            android:id="@+id/clear_filter_button"
             android:padding="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -219,24 +239,24 @@
             android:layout_weight="1" />
 
         <Button
-            android:id="@+id/button_cancel_c"
+            android:id="@+id/button_cancel"
             style="@style/Base.Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textColor="@color/greySecondary"
-            android:text="@string/cancel"
+            android:text="cancel"
             />
 
 
         <Button
-            android:id="@+id/button_apply_c"
+            android:id="@+id/button_apply"
             android:layout_marginTop="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/apply"
+            android:text="Apply"
             />
 
     </LinearLayout>
@@ -244,4 +264,3 @@
 
 
 </LinearLayout>
-

@@ -23,9 +23,11 @@ public class Filters {
     private List<Integer> bookGrade;
     private List<Integer> bookBoard;
 
+
     public Filters() {
         bookGrade = new ArrayList<>();
         bookBoard = new ArrayList<>();
+
     }
 
     public static Filters getDefault() {
@@ -50,6 +52,8 @@ public class Filters {
     public boolean hasBookBoard(){return (bookBoard.size() > 0);}
 
     public boolean hasBookGrade(){return (bookGrade.size() > 0);}
+
+
 
     public boolean hasSortBy() {
         return !(TextUtils.isEmpty(sortBy));
@@ -160,4 +164,8 @@ public class Filters {
     public List<Integer> getBookBoard(){
         return this.bookBoard;
     }
+
+
+
+
 }

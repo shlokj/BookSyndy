@@ -121,4 +121,7 @@
     <string name="completed">Completed</string>
     <string name="share">Share</string>
     <string name="bookmark">Bookmark</string>
+    <string name="school">SCHOOL</string>
+    <string name="college">COLLEGE</string>
+    <string name="clear_filter">Clear Filter</string>
 </resources>
