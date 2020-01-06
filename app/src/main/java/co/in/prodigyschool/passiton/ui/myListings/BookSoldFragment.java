@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -26,7 +27,7 @@ import co.in.prodigyschool.passiton.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BookSoldFragment extends Fragment implements BookAdapter.OnBookSelectedListener{
+public class BookSoldFragment extends Fragment implements BookAdapter.OnBookSelectedListener, BookAdapter.OnBookLongSelectedListener {
 
     public static String TAG = "BOOK_SOLD_FRAGMENT";
 
@@ -102,7 +103,7 @@ public class BookSoldFragment extends Fragment implements BookAdapter.OnBookSele
             Log.w(TAG, "No query, not initializing RecyclerView");
         }
         // specify an adapter
-        mAdapter = new BookAdapter(mQuery, this) {
+        mAdapter = new BookAdapter(mQuery, this,this) {
 
 
             @Override
@@ -137,4 +138,8 @@ public class BookSoldFragment extends Fragment implements BookAdapter.OnBookSele
         startActivity(bookDetails);
     }
 
+    @Override
+    public void onBookLongSelected(DocumentSnapshot snapshot) {
+        Toast.makeText(getContext(),"clicked",Toast.LENGTH_SHORT).show();
+    }
 }
