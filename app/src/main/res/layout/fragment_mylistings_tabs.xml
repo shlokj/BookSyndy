@@ -10,8 +10,9 @@
         android:id="@+id/listings_tab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:tabTextColor="@color/white"
+        app:tabTextColor="#CCFFFFFF"
         android:background="@color/colorPrimary"
+        app:tabSelectedTextColor="@color/white"
         app:tabIndicatorHeight="4dp">
 
         <com.google.android.material.tabs.TabItem
@@ -32,9 +33,6 @@
         android:id="@+id/listings_viewpager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        />
-
-
+        android:layout_weight="1" />
 
 </LinearLayout>

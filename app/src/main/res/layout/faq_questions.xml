@@ -5,16 +5,17 @@
 
     <TextView
         android:id="@+id/text_helpquestion"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:textStyle="bold"
-        android:text="How does BookSyndy work?"
-        android:textSize="16sp"
-        android:layout_centerVertical="true"
         android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@+id/dropdownDummyButton"
+        android:fontFamily="@font/roboto_light"
+        android:padding="16dp"
+        android:text="How does BookSyndy work?"
         android:textColor="@color/colorTextBlack"
-        android:fontFamily="@font/roboto_light"/>
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <ImageView
         android:id="@+id/dropdownDummyButton"

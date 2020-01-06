@@ -37,4 +37,27 @@
         <item>Notes / other material</item>
     </string-array>
 
+    <string-array name="questions">
+        <item name="question1">How does it work?</item>
+        <item name="question2">How do I list my books?</item>
+        <item name="question3">Can I have multiple books under one listing?</item>
+        <item name="question4">How should I price what I put up?</item>
+        <item name="question5">I found a book I want. What should I do?</item>
+        <item name="question6">What do I do after I’ve sold / given my book?</item>
+        <item name="question7">Can I make payments through the app?</item>
+        <item name="question8">Do you charge / take commission for using your platform?</item>
+        <item name="question9">Can I post non-academics books, like storybooks?</item>
+    </string-array>
+
+    <string-array name="answers">
+        <item name="answer1">BookSyndy is a platform connecting you with people who have the books you need and people who need your books. We strive to make sure no book goes obsolete. You can sell or give away your old books on our platform, and buy or take books you need.</item>
+        <item name="answer2">Tap the blue floating plus button in the home screen. If you’re using guided mode, you’ll be guided through the process and asked one question per screen. If guided mode is not enabled, you’ll be shown a single screen where you can enter your book’s details.</item>
+        <item name="answer3">No. Unless the books are different parts of the same book/series, you are not advised to list multiple books together.</item>
+        <item name="answer4">We recommend you to keep your prices nominal and as low as possible. For example, if you’re selling your old textbook that initially costed Rs. 100, it would be reasonable to list it at Rs. 50. Needless to say, a book with a lower price is more likely to be bought than one with a higher price. If you feel a book is no longer of any use to you and feel generous enough to give it for free, please do so.</item>
+        <item name="answer5">You can message the seller by clicking the blue message button in the app. Once you’ve reached an agreement with the seller, you can either request them to ship the book to you using a local logistics service, or meet them in person.</item>
+        <item name="answer6">Make sure to click the ‘Mark as sold’ option from the menu so buyers know it has been taken.</item>
+        <item name="answer7">No.</item>
+        <item name="answer8">No. This platform is entirely free for everyone to use.</item>
+        <item name="answer9">Not as of now. BookSyndy currently focuses deeply on academics, to help students find what they need. If you feel we should accept a broader range of books, let us know in the feedback section.</item>
+    </string-array>
 </resources>

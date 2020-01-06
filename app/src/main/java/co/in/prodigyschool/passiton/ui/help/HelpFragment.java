@@ -30,10 +30,11 @@ public class HelpFragment extends Fragment {
     private int cc = 1;
     /*
     todo: add or remove question here
-     */
     private String[] questions = new String[]{"How does BookSyndy work?","question 2","question 3"};
     private String[] answers = new String[]{"BookSyndy works like charm.","answer 2","answer 3"};
-
+*/
+    private String[] questions;
+    private String[] answers;
 
     private ShareViewModel shareViewModel;
 
@@ -61,7 +62,8 @@ public class HelpFragment extends Fragment {
         questionsList = new ArrayList<>();
         answersList = new ArrayList<>();
         hashMap = new HashMap<>();
-
+        questions = getResources().getStringArray(R.array.questions);
+        answers = getResources().getStringArray(R.array.answers);
         questionsList = Arrays.asList(questions);
         answersList = Arrays.asList(answers);
         for(int i=0;i<questionsList.size();i++){
