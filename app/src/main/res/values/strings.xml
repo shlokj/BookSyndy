@@ -35,7 +35,7 @@
     <string name="menu_mylistings">My Listings</string>
     <string name="menu_slideshow">Chats</string>
     <string name="menu_tools">Bookmarks</string>
-    <string name="menu_share">Help</string>
+    <string name="menu_share">Help and FAQs</string>
     <string name="menu_send">Sign Out</string>
     <string name="action_signOut">Sign out</string>
     <string name="main_activity">This is Main Activity</string>
@@ -94,7 +94,7 @@
     <string name="for_comp_exams">This material is for competitive exams</string>
     <string name="competitive_exams">Competitive exams</string>
     <string name="first_name">First name</string>
-    <string name="help">Help</string>
+    <string name="help">Help and FAQs</string>
     <string name="bookmarks">Bookmarks</string>
     <string name="places_api_key">AIzaSyDFv-Pb57N1LSzVR213kB2M5n8arDzX4Hs</string>
     <string name="book_cat_eg">Eg. Class 12, CBSE (or) Undergraduate, B. tech (or) Competitive exams</string>
@@ -121,4 +121,7 @@
     <string name="completed">Completed</string>
     <string name="share">Share</string>
     <string name="bookmark">Bookmark</string>
+    <string name="school">SCHOOL</string>
+    <string name="college">COLLEGE</string>
+    <string name="clear_filter">Clear filters</string>
 </resources>

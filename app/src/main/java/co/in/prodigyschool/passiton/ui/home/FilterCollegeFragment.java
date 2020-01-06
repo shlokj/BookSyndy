@@ -5,11 +5,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -33,6 +36,8 @@ public class FilterCollegeFragment extends Fragment implements View.OnClickListe
     private HomeViewModel homeViewModel;
     private OnFilterSelectionListener mOnFilterSelectedListener;
     private FilterDialogFragment parentFragment;
+    private Spinner distSpinner,sortBySpinner;
+    private ArrayAdapter<String> distAdapter, sortByAdapter;
 
 
     public void onAttachToParentFragment(Fragment fragment)
@@ -57,7 +62,6 @@ public class FilterCollegeFragment extends Fragment implements View.OnClickListe
         parentFragment = (FilterDialogFragment)getParentFragment();
         onAttachToParentFragment(parentFragment.getParentFragment());
         homeViewModel = ViewModelProviders.of(parentFragment.getParentFragment()).get(HomeViewModel.class);
-        // ...
     }
 
 
@@ -85,6 +89,19 @@ public class FilterCollegeFragment extends Fragment implements View.OnClickListe
         freeOnly = mRootView.findViewById(R.id.freeOnlyCB);
         filterTextbook = mRootView.findViewById(R.id.filterTextbook_c);
         filterNotes = mRootView.findViewById(R.id.filterNotes_c);
+
+        distSpinner = mRootView.findViewById(R.id.distanceSpinner);
+        sortBySpinner = mRootView.findViewById(R.id.sortBySpinner);
+
+        distAdapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.distancesBy5));
+        distAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        distSpinner.setAdapter(distAdapter);
+        distSpinner.setSelection(1);
+
+        sortByAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.sorts));
+        sortByAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sortBySpinner.setAdapter(sortByAdapter);
 
         setFilterView(homeViewModel.getFilters());
         setFilterOptionsFontToRobotoLight();
@@ -182,9 +199,7 @@ public class FilterCollegeFragment extends Fragment implements View.OnClickListe
             filters.setIsText(isTextBook());
             filters.setIsNotes(isNotes());
             filters.setBookBoard(getselectedBoard());
-
         }
-
         return filters;
     }
 
@@ -250,8 +265,18 @@ public class FilterCollegeFragment extends Fragment implements View.OnClickListe
 
 
     public void setFilterOptionsFontToRobotoLight() {
-
+        filterDegreeBtech.setTypeface(ResourcesCompat.getFont(getActivity(), R.font.roboto_light));
+        filterDegreeBsc.setTypeface(ResourcesCompat.getFont(getActivity(), R.font.roboto_light));
+        filterDegreeBcom.setTypeface(ResourcesCompat.getFont(getActivity(), R.font.roboto_light));
+        filterDegreeBa.setTypeface(ResourcesCompat.getFont(getActivity(), R.font.roboto_light));
+        filterDegreeBba.setTypeface(ResourcesCompat.getFont(getActivity(), R.font.roboto_light));
+        filterDegreeBca.setTypeface(ResourcesCompat.getFont(getActivity(), R.font.roboto_light));
+        filterDegreeBed.setTypeface(ResourcesCompat.getFont(getActivity(), R.font.roboto_light));
+        filterDegreeLlb.setTypeface(ResourcesCompat.getFont(getActivity(), R.font.roboto_light));
+        filterDegreeMbbs.setTypeface(ResourcesCompat.getFont(getActivity(), R.font.roboto_light));
+        filterDegreeOther.setTypeface(ResourcesCompat.getFont(getActivity(), R.font.roboto_light));
+        freeOnly.setTypeface(ResourcesCompat.getFont(getActivity(), R.font.roboto_light));
+        filterTextbook.setTypeface(ResourcesCompat.getFont(getActivity(), R.font.roboto_light));
+        filterNotes.setTypeface(ResourcesCompat.getFont(getActivity(), R.font.roboto_light));
     }
-
-
 }

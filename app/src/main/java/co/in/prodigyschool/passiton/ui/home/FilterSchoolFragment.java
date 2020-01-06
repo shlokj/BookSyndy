@@ -13,12 +13,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import co.in.prodigyschool.passiton.CreateListingActivity;
 import co.in.prodigyschool.passiton.Data.OnFilterSelectionListener;
 import co.in.prodigyschool.passiton.R;
 import co.in.prodigyschool.passiton.util.Filters;
@@ -37,6 +40,9 @@ public class FilterSchoolFragment extends Fragment implements View.OnClickListen
     private TextView openCollegeFilters;
     private HomeViewModel homeViewModel;
     private FilterDialogFragment parentFragment;
+    private Spinner distSpinner,sortBySpinner;
+    private ArrayAdapter<String> distAdapter, sortByAdapter;
+
 
     public FilterSchoolFragment() {
         // Required empty public constructor
@@ -96,6 +102,20 @@ public class FilterSchoolFragment extends Fragment implements View.OnClickListen
 
         filterTextbook = mRootView.findViewById(R.id.filterTextbook);
         filterNotes = mRootView.findViewById(R.id.filterNotes);
+
+
+        distSpinner = mRootView.findViewById(R.id.distanceSpinner);
+        sortBySpinner = mRootView.findViewById(R.id.sortBySpinner);
+
+        distAdapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.distancesBy5));
+        distAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        distSpinner.setAdapter(distAdapter);
+        distSpinner.setSelection(1);
+
+        sortByAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.sorts));
+        sortByAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sortBySpinner.setAdapter(sortByAdapter);
 
         setFilterView(homeViewModel.getFilters());
         setFilterOptionsFontToRobotoLight();

@@ -10,10 +10,7 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/filters_tab"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:tabTextColor="@color/white"
-        android:background="@color/colorPrimary"
-        app:tabIndicatorHeight="4dp">
+        android:layout_height="wrap_content">
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tab_school"
@@ -33,10 +30,7 @@
         android:id="@+id/filters_viewpager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        />
-
-
+        android:layout_weight="1"/>
 
 </LinearLayout>
 

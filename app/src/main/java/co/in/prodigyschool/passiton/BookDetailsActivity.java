@@ -74,6 +74,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         view_bookimage = findViewById(R.id.book_image);
         view_description = findViewById(R.id.bookDescriptionTV);
         view_grade_and_board = findViewById(R.id.book_grade_and_board);
+        getSupportActionBar().setTitle("View listing");
         findViewById(R.id.fab_chat).setOnClickListener(this);
 
         if(getSupportActionBar()!= null) {
@@ -182,8 +183,10 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
             view_price.setText("₹" + currentBook.getBookPrice());
             if (currentBook.isTextbook()) {
                 view_category.setText("Textbook");
+                getSupportActionBar().setTitle("View book");
             } else {
                 view_category.setText("Notes");
+                getSupportActionBar().setTitle("View material");
             }
             Glide.with(view_bookimage.getContext())
                     .load(currentBook.getBookPhoto())

@@ -36,6 +36,21 @@
         <item>Textbook</item>
         <item>Notes / other material</item>
     </string-array>
+    <string-array name="distancesBy5">
+        <item>5 km</item>
+        <item>10 km</item>
+        <item>15 km</item>
+        <item>20 km</item>
+        <item>25 km</item>
+        <item>30 km</item>
+        <item>Any</item>
+    </string-array>
+
+    <string-array name="sorts">
+        <item>Relevance</item>
+        <item>Date listed</item>
+        <item>Distance</item>
+    </string-array>
 
     <string-array name="questions">
         <item name="question1">How does it work?</item>
@@ -43,7 +58,7 @@
         <item name="question3">Can I have multiple books under one listing?</item>
         <item name="question4">How should I price what I put up?</item>
         <item name="question5">I found a book I want. What should I do?</item>
-        <item name="question6">What do I do after I’ve sold / given my book?</item>
+        <item name="question6">What should I do after I’ve sold / given my book?</item>
         <item name="question7">Can I make payments through the app?</item>
         <item name="question8">Do you charge / take commission for using your platform?</item>
         <item name="question9">Can I post non-academics books, like storybooks?</item>
