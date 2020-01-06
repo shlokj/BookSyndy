@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -43,19 +42,17 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-import co.in.prodigyschool.passiton.Adapters.BookAdapter;
 import co.in.prodigyschool.passiton.Adapters.HomeAdapter;
 import co.in.prodigyschool.passiton.BookDetailsActivity;
 import co.in.prodigyschool.passiton.CreateListingActivity;
 import co.in.prodigyschool.passiton.Data.Book;
-import co.in.prodigyschool.passiton.Data.Chat;
+import co.in.prodigyschool.passiton.Data.OnFilterSelectionListener;
 import co.in.prodigyschool.passiton.Data.User;
 import co.in.prodigyschool.passiton.GetBookPictureActivity;
-import co.in.prodigyschool.passiton.HomeActivity;
 import co.in.prodigyschool.passiton.R;
 import co.in.prodigyschool.passiton.util.Filters;
 
-public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelectedListener,FilterDialogFragment.OnFilterSelectionListener,EventListener<QuerySnapshot> {
+public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelectedListener, OnFilterSelectionListener,EventListener<QuerySnapshot> {
 
     private static String TAG = "HOME_FRAGMENT";
     private HomeViewModel homeViewModel;
@@ -71,7 +68,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     private int gradeNumber, boardNumber;
     private boolean preferGuidedMode;
     FilterDialogFragment mFilterDialog;
-    FilterCollegeDialogFragment mCFdialog;
+    FilterCollegeFragment mCFdialog;
     private List<Book> bookList;
     private List<Book> bookListFull;
     private ListenerRegistration booksRegistration;
@@ -95,7 +92,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         parentLayout = root;
         mFilterDialog = new FilterDialogFragment();
-        mCFdialog = new FilterCollegeDialogFragment();
+        mCFdialog = new FilterCollegeFragment();
         setHasOptionsMenu(true);
         /* recycler view */
         recyclerView = root.findViewById(R.id.home_recycler_view);
@@ -389,9 +386,6 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         }
 
         else {
-//            if (!unrequiredBoards.contains(20)) {
-//                unrequiredBoards.add(20);
-//            }
 
             // remove competitive exam books from the list as we don't want them by default
             for (int a = 0; a < filteredList.size(); a++) {
@@ -435,58 +429,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 
         toBeRemoved.clear();
 
-        /*if(filters.hasPrice()){
-            for(Book book:bookListFull){
-                if(book.getBookPrice() == 0)
-                    filteredList.add(book);
-            }
-            noFilter = false;
-        }
 
-        if(filters.IsText()){
-            for(Book book:bookListFull){
-                if(book.isTextbook() && !filteredList.contains(book))
-                    filteredList.add(book);
-            }
-            noFilter = false;
-        }
-
-        if(filters.IsNotes()){
-            for(Book book:bookListFull){
-                if(!book.isTextbook() && !filteredList.contains(book))
-                    filteredList.add(book);
-            }
-            noFilter = false;
-        }
-
-
-
-        //filter: board
-        if(filters.hasBookBoard()){
-            for(Book book:bookListFull){
-                for(Integer i:filters.getBookBoard()){
-                    if(book.getBoardNumber() == i && !filteredList.contains(book)){
-                        filteredList.add(book);
-                    }
-                }
-            }
-
-            noFilter = false;
-        }
-
-        //filter: grade
-        if(filters.hasBookGrade()){
-            for(Book book:bookListFull){
-                for(Integer i:filters.getBookGrade()){
-                    if(book.getGradeNumber() == i && !filteredList.contains(book)){
-                        filteredList.add(book);
-                    }
-                }
-            }
-
-            noFilter = false;
-        }
-*/
 
         if(filteredList == null || filteredList.isEmpty()){
             if(noFilter){
@@ -503,9 +446,6 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         mAdapter.setBookList(filteredList);
         homeViewModel.setFilters(filters);
 
-//        mQuery = query;
-//        //mAdapter.setQuery(query);
-//        //removeUserBooks(query);
     }
 
 
