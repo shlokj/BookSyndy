@@ -62,6 +62,7 @@
         <item name="question7">Can I make payments through the app?</item>
         <item name="question8">Do you charge / take commission for using your platform?</item>
         <item name="question9">Can I post non-academics books, like storybooks?</item>
+        <item name="question10">Still have a question?</item>
     </string-array>
 
     <string-array name="answers">
@@ -73,6 +74,7 @@
         <item name="answer6">Make sure to click the ‘Mark as sold’ option from the menu so buyers know it has been taken.</item>
         <item name="answer7">No.</item>
         <item name="answer8">No. This platform is entirely free for everyone to use.</item>
-        <item name="answer9">Not as of now. BookSyndy currently focuses deeply on academics, to help students find what they need. If you feel we should accept a broader range of books, let us know in the feedback section.</item>
+        <item name="answer9">Not as of now. BookSyndy currently focuses deeply on academics, to help students find what they need. If you feel we should accept a broader range of books, do let us know in the feedback section.</item>
+        <item name="answer10">(send email button here)</item><!--TODO: add a button here-->
     </string-array>
 </resources>
