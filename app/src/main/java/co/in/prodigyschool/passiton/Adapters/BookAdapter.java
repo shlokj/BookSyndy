@@ -6,8 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,7 +21,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,7 +43,14 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder> {
 
     }
 
+    public interface OnBookLongSelectedListener {
+
+        void onBookLongSelected(DocumentSnapshot snapshot);
+
+    }
+
     private OnBookSelectedListener mListener;
+    private OnBookLongSelectedListener mLongListener;
 
     public BookAdapter(Query query, OnBookSelectedListener listener) {
         super(query);
@@ -154,9 +158,13 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder> {
                        }
                    }
                });
+               itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                   @Override
+                   public boolean onLongClick(View v) {
 
-
-
+                       return true;
+                   }
+               });
 
         }
 

@@ -1,6 +1,7 @@
 package co.in.prodigyschool.passiton.ui.myListings;
 
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -12,6 +13,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -39,6 +44,8 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
     private FirebaseFirestore mFirestore;
     private Query mQuery;
     private GalleryViewModel galleryViewModel;
+    private ArrayAdapter<String> optionsList;
+
 
     public BookAvailableFragment() {
         // Required empty public constructor
@@ -142,5 +149,29 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
             startActivity(bookDetails);
         }
 
+
+    private void displayOptions(){
+        optionsList.clear();
+        optionsList.add("Delete");
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getLayoutInflater();
+        View convertView = (View) inflater.inflate(R.layout.dialog_longpress_mylistings_options, null);
+        alertDialog.setView(convertView);
+//        alertDialog.setTitle("Select your device");
+        alertDialog.setCancelable(true);
+        ListView devicesListView = (ListView) convertView.findViewById(R.id.optionsListView);
+        devicesListView.setAdapter(optionsList);
+        final AlertDialog dialog = alertDialog.show();
+
+        devicesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String opt = ((TextView) view).getText().toString();
+                if (opt.equals("Delete")) {
+                    // move the selected book to completed
+                }
+            }
+        });
+    }
 
 }
