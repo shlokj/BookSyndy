@@ -54,7 +54,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     private DocumentReference bookRef;
     private DocumentReference bookMarkRef;
     private Menu menu;
-    private int MENU_DELETE = 123;
+    private final int MENU_DELETE = 123;
     private String curAppUser, shareableLink="";
 
     private static final String TAG = "BOOK_DETAILS";
@@ -404,6 +404,11 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 showSnackbar("Copied to clipboard!");
                 break;
 
+            case MENU_DELETE:
+                markAsSold(true);
+                onBackPressed();
+                break;
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -411,12 +416,12 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     /*
     TODO:call this function on menu option selected
      */
-    private void markAsSold(){
+    private void markAsSold(boolean sold){
         final CollectionReference bookRef = mFirestore.collection("books");
-        bookRef.document(bookid).update("bookSold",true).addOnSuccessListener(new OnSuccessListener<Void>() {
+        bookRef.document(bookid).update("bookSold",sold).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Toast.makeText(getApplicationContext(),"Book is sold",Toast.LENGTH_SHORT).show();
+
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
