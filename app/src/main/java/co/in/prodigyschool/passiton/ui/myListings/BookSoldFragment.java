@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,6 +40,8 @@ public class BookSoldFragment extends Fragment implements BookAdapter.OnBookSele
     private FirebaseFirestore mFirestore;
     private Query mQuery;
     private GalleryViewModel galleryViewModel;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
 
     public BookSoldFragment() {
         // Required empty public constructor
@@ -56,6 +59,10 @@ public class BookSoldFragment extends Fragment implements BookAdapter.OnBookSele
         mEmptyView = root.findViewById(R.id.view_empty);
         root.findViewById(R.id.fab_home).setVisibility(View.GONE);
         initFireStore();
+
+        mSwipeRefreshLayout = root.findViewById(R.id.swiperefreshhome);
+        mSwipeRefreshLayout.setRefreshing(false);
+        mSwipeRefreshLayout.setEnabled(false);
 
         /* use a linear layout manager */
         layoutManager = new LinearLayoutManager(getActivity());

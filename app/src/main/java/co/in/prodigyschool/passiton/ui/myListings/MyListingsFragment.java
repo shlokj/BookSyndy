@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
@@ -32,7 +33,6 @@ public class MyListingsFragment extends Fragment implements TabLayout.OnTabSelec
         mTabLayout = root.findViewById(R.id.listings_tab);
         tab_available = root.findViewById(R.id.tab_available);
         tab_sold = root.findViewById(R.id.tab_sold);
-
         mPageAdapter = new PageAdapter(getChildFragmentManager(),mTabLayout.getTabCount());
         mViewPager.setAdapter(mPageAdapter);
         mTabLayout.addOnTabSelectedListener(this);

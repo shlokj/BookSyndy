@@ -137,6 +137,8 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         layoutManager = new LinearLayoutManager(getActivity());
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.swiperefreshhome);
+
+
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
