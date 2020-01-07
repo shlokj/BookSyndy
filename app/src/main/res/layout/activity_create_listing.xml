@@ -43,7 +43,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/profilePic"
+                android:id="@+id/book_image"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
@@ -274,6 +274,12 @@
                 android:hint="@string/getting_loc"
                 android:inputType="textCapWords"
                 android:lines="5" />
+
+           <!-- <fragment android:id="@+id/autocomplete_fragment2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+                /> -->
 
         </LinearLayout>
 

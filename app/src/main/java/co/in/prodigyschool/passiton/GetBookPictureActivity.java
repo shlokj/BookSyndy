@@ -220,7 +220,7 @@ public class GetBookPictureActivity extends AppCompatActivity {
 
     private void openCameraIntent() {
         Intent pictureIntent = new Intent(
-                MediaStore.ACTION_IMAGE_CAPTURE);
+                MediaStore.ACTION_IMAGE_CAPTURE );
         if (pictureIntent.resolveActivity(getPackageManager()) != null) {
             //Create a file to store the image
             File photoFile = null;
