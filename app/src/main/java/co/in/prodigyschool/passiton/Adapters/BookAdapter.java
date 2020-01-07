@@ -52,9 +52,10 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder> {
     private OnBookSelectedListener mListener;
     private OnBookLongSelectedListener mLongListener;
 
-    public BookAdapter(Query query, OnBookSelectedListener listener) {
+    public BookAdapter(Query query, OnBookSelectedListener listener,OnBookLongSelectedListener longListener) {
         super(query);
         mListener = listener;
+        mLongListener = longListener;
         mFirestore = FirebaseFirestore.getInstance();
         getUserLocation();
     }
@@ -94,7 +95,7 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder> {
         // - replace the contents of the view with that element
 
 
-            holder.bind(getSnapshot(position), mListener,latA,lngA);
+            holder.bind(getSnapshot(position), mListener,mLongListener,latA,lngA);
 
 
     }
@@ -125,7 +126,7 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder> {
 
 
         public void bind(final DocumentSnapshot snapshot,
-                         final OnBookSelectedListener listener,double latitude,double longitude) {
+                         final OnBookSelectedListener listener, final OnBookLongSelectedListener longListener, double latitude, final double longitude) {
             Book book = snapshot.toObject(Book.class);
             String userId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
             Resources resources = itemView.getResources();
@@ -161,7 +162,9 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder> {
                itemView.setOnLongClickListener(new View.OnLongClickListener() {
                    @Override
                    public boolean onLongClick(View v) {
-
+                        if(longListener != null){
+                            longListener.onBookLongSelected(snapshot);
+                        }
                        return true;
                    }
                });
