@@ -36,8 +36,8 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_join_purpose);
-        reasonsQuestion = (TextView) findViewById(R.id.reasonQuestionTV);
-        reasons = (RadioGroup) findViewById(R.id.reasonsButtonList);
+        reasonsQuestion = findViewById(R.id.reasonQuestionTV);
+        reasons = findViewById(R.id.reasonsButtonList);
         startMainActivity = new Intent(GetJoinPurposeActivity.this, MainActivity.class);
 //        startMainActivity.putExtra("IS_PARENT", isParent);
 //        startMainActivity.putExtra("FIRST_NAME",firstName);
