@@ -23,16 +23,26 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Arrays;
+import java.util.List;
 
 import co.in.prodigyschool.passiton.Data.Book;
 import co.in.prodigyschool.passiton.Data.User;
@@ -48,14 +58,16 @@ public class CreateListingActivity extends AppCompatActivity {
     int gradeNumber, boardNumber, year;
     private int bookPrice;
     private FirebaseAuth mAuth;
-    private FirebaseFirestore mFirestore;
+    private FirebaseFirestore mFireStore;
     private TextView boardDegreeLabel;
     private Button postButton;
     private ProgressDialog progressDialog;
     private EditText nameField, descField, priceField, locField, yearField;
     private CheckBox competitiveExam, free;
     private ArrayAdapter<String> gradeAdapter, boardAdapter, degreeAdapter, typeAdapter;
-
+    private PlacesClient placesClient;
+    List<Place.Field> placeFields = Arrays.asList(Place.Field.ID,Place.Field.NAME,Place.Field.ADDRESS);
+    AutocompleteSupportFragment places_fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +92,11 @@ public class CreateListingActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
+        initFireBase();
+        populateUserLocation();
+        //initPlaces();
+        //setupPlaceAutoComplete();
+
 
         gradeAdapter = new ArrayAdapter<String>(CreateListingActivity.this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.grades));
@@ -337,10 +354,10 @@ public class CreateListingActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),"Internet Required",Toast.LENGTH_LONG).show();
             return;
         }
-        mFirestore = FirebaseFirestore.getInstance();
+        mFireStore = FirebaseFirestore.getInstance();
         try {
             curUserId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
-            DocumentReference userReference =  mFirestore.collection("users").document(curUserId);
+            DocumentReference userReference =  mFireStore.collection("users").document(curUserId);
             userReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot snapshot) {
@@ -402,7 +419,7 @@ public class CreateListingActivity extends AppCompatActivity {
                 book.setBookPhoto(book_photo_url);
             }
 
-            CollectionReference books = mFirestore.collection("books");
+            CollectionReference books = mFireStore.collection("books");
             books.add(book).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentReference> task) {
@@ -472,4 +489,101 @@ public class CreateListingActivity extends AppCompatActivity {
                 .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
                 .show();
     }
+
+    private void initFireBase() {
+        try {
+            mFireStore = FirebaseFirestore.getInstance();
+            mAuth = FirebaseAuth.getInstance();
+            userId = mAuth.getCurrentUser().getPhoneNumber();
+        }
+        catch (NullPointerException e){
+            Log.e(TAG, "initFireBase: getCurrentUser error", e);
+        }
+
+    }
+
+    private void populateUserLocation() {
+
+        try {
+            DocumentReference docRef = mFireStore.collection("address").document(userId);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            String area = document.getString("addr2");
+                            String city = document.getString("locality");
+                            book_lat = document.getDouble("lat");
+                            book_lng = document.getDouble("lng");
+                            locField.setText("");
+                            if(area != null ){
+                                locField.append(area+", ");
+                            }
+                            if(city != null){
+                                locField.append(city);
+                            }
+                            else {
+                                Log.d(TAG, "no address found");
+                            }
+                        } else {
+                            Log.d(TAG, "No address found in firebase");
+                            View parentLayout = findViewById(android.R.id.content);
+                            Snackbar.make(parentLayout, "Failed to get address", Snackbar.LENGTH_SHORT)
+                                    .setAction("OKAY", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+
+                                        }
+                                    })
+                                    .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                                    .show();
+                        }
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
+                        View parentLayout = findViewById(android.R.id.content);
+                        Snackbar.make(parentLayout, "Failed to get address", Snackbar.LENGTH_SHORT)
+                                .setAction("OKAY", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+
+                                    }
+                                })
+                                .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                                .show();
+                    }
+                }
+            });
+        }
+        catch(Exception e){
+            Log.d(TAG, "get failed with ",e);
+            Toast.makeText(getApplicationContext(), "failed to get Address", Toast.LENGTH_SHORT).show();
+
+        }
+    }
+
+    private void initPlaces() {
+        Places.initialize(this,getString(R.string.places_api_key));
+        placesClient = Places.createClient(this);
+    }
+
+//    private void setupPlaceAutoComplete() {
+//        places_fragment = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment2);
+//        places_fragment.setPlaceFields(placeFields);
+//        places_fragment.setCountry("IN");
+//        places_fragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+//            @Override
+//            public void onPlaceSelected(@NonNull Place place) {
+//                locField.setText(place.getName()+","+place.getAddress());
+//                LatLng latLng= place.getLatLng();
+//                book_lat = latLng.latitude;
+//                book_lng = latLng.longitude;
+//            }
+//
+//            @Override
+//            public void onError(@NonNull Status status) {
+//                Toast.makeText(CreateListingActivity.this, status.getStatusMessage(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
 }
