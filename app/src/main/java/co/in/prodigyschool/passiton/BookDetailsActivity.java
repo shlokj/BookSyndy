@@ -43,7 +43,7 @@ import co.in.prodigyschool.passiton.Data.User;
 public class BookDetailsActivity extends AppCompatActivity implements View.OnClickListener, EventListener<DocumentSnapshot> {
 
     private String bookid;
-    private boolean isHome, saved, isBookmarks, bookSold;
+    private boolean isHome, saved, isBookmarks;
     private FirebaseFirestore mFirestore;
     private Book currentBook;
     private User bookOwner;
@@ -304,12 +304,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         if (!isHome) {
             if (!isBookmarks) {
                 menu.clear();
-                if (!bookSold) {
-                    menu.add(0, MENU_DELETE, Menu.NONE, "Mark as sold").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-                }
-                else {
-                    menu.add(0, MENU_DELETE, Menu.NONE, "Mark as unsold").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-                }
+                menu.add(0, MENU_DELETE, Menu.NONE, "Mark as sold").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
             }
         }
         return super.onPrepareOptionsMenu(menu);
@@ -410,7 +405,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 break;
 
             case MENU_DELETE:
-                markAsSold(!bookSold); // mark it as sold if it isn't, mark it as unsold if it is
+                markAsSold(true);
                 onBackPressed();
                 break;
 
@@ -435,6 +430,24 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
             }
         });
     }
+
+    /*
+    if Needed else Delete this
+     */
+//    private void markAsAvailable(){
+//        final CollectionReference bookRef = mFirestore.collection("books");
+//        bookRef.document(bookid).update("bookSold",false).addOnSuccessListener(new OnSuccessListener<Void>() {
+//            @Override
+//            public void onSuccess(Void aVoid) {
+//                Toast.makeText(getApplicationContext(),"Book is sold",Toast.LENGTH_SHORT).show();
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                Toast.makeText(getApplicationContext(),"Error: Please Try Again!",Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
 
     private void addToBookMark() {
         final CollectionReference bookMarkRef = mFirestore.collection("bookmarks");
