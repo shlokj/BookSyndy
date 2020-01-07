@@ -244,6 +244,12 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
+    private boolean isBookSold(){
+        if(currentBook != null){
+            return currentBook.isBookSold();
+        }
+        return false;
+    }
 
 
 
@@ -304,7 +310,12 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         if (!isHome) {
             if (!isBookmarks) {
                 menu.clear();
-                menu.add(0, MENU_DELETE, Menu.NONE, "Mark as sold").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+                if (!isBookSold()) {
+                    menu.add(0, MENU_DELETE, Menu.NONE, "Mark as sold").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+                }
+                else {
+                    menu.add(0, MENU_DELETE, Menu.NONE, "Mark as unsold").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+                }
             }
         }
         return super.onPrepareOptionsMenu(menu);
@@ -405,7 +416,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 break;
 
             case MENU_DELETE:
-                markAsSold(true);
+                markAsSold(!isBookSold());
                 onBackPressed();
                 break;
 
