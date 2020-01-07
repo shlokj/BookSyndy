@@ -43,7 +43,7 @@ import co.in.prodigyschool.passiton.Data.User;
 public class BookDetailsActivity extends AppCompatActivity implements View.OnClickListener, EventListener<DocumentSnapshot> {
 
     private String bookid;
-    private boolean isHome, saved;
+    private boolean isHome, saved, isBookmarks;
     private FirebaseFirestore mFirestore;
     private Book currentBook;
     private User bookOwner;
@@ -66,6 +66,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.activity_book_details);
         bookid = getIntent().getStringExtra("bookid");
         isHome = getIntent().getBooleanExtra("isHome",false);
+        isBookmarks = getIntent().getBooleanExtra("isBookmarks",false);
         initFireStore();
         view_bookname = findViewById(R.id.book_name);
         view_address = findViewById(R.id.book_address);
@@ -81,6 +82,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
+
 
     }
 
@@ -300,8 +302,10 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         if (!isHome) {
-            menu.clear();
-            menu.add(0, MENU_DELETE, Menu.NONE, getString(R.string.mark_as_sold)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+            if (!isBookmarks) {
+                menu.clear();
+                menu.add(0, MENU_DELETE, Menu.NONE, "Mark as sold").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+            }
         }
         return super.onPrepareOptionsMenu(menu);
     }
@@ -332,7 +336,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                     }
 
                     if (snapshot.exists()) {
-                        menu.getItem(1).setIcon(ContextCompat.getDrawable(getBaseContext(), R.drawable.ic_bookmark_filled_24px));
+                        menu.findItem(R.id.bookmark).setIcon(ContextCompat.getDrawable(getBaseContext(), R.drawable.ic_bookmark_filled_24px));
                         saved = true;
                         // menu.getItem(0).setEnabled(false);
 
@@ -355,12 +359,12 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 if (!saved) {
                     //add to bookmarks
                     addToBookMark();
-                    menu.getItem(1).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_bookmark_filled_24px));
+                    menu.findItem(R.id.bookmark).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_bookmark_filled_24px));
                     saved = true;
                 }
                 else {
                     removeFromBookMarks();
-                    menu.getItem(1).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_bookmark_border_24px));
+                    menu.findItem(R.id.bookmark).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_bookmark_border_24px));
                     saved = false;
                 }
                 break;

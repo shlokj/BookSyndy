@@ -170,6 +170,7 @@ public class BookMarksFragment extends Fragment implements BookMarkAdapter.OnBoo
         Log.d(TAG, "onBookSelected: "+book_id);
         bookDetails.putExtra("bookid", book_id);
         bookDetails.putExtra("isHome",false);
+        bookDetails.putExtra("isBookmarks",true);
         startActivity(bookDetails);
     }
 }

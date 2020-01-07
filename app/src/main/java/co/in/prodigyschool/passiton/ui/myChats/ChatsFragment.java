@@ -110,7 +110,6 @@ public class ChatsFragment extends Fragment implements EventListener<QuerySnapsh
             ChatsRef = mFireStore.collection("chats").document(currentUserID).collection("receiver_chats");
             chatsRegistration = ChatsRef.addSnapshotListener(this);
 
-
         } catch (Exception e) {
             Log.e(TAG, "initFireStore: failed", e);
         }

@@ -160,6 +160,14 @@
         app:srcCompat="@drawable/ic_chat_24px_outlined_white" />
 
     <TextView
+        android:id="@+id/descLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_below="@id/book_top_card"
+        android:text="TextView" />
+
+    <TextView
         android:id="@+id/bookDescriptionTV"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
