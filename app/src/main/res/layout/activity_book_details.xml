@@ -49,6 +49,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+        <!--TODO: load seller info into these views-->
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/seller_dp"
             android:layout_width="64dp"

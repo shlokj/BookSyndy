@@ -30,7 +30,7 @@ public class MyListingsFragment extends Fragment implements TabLayout.OnTabSelec
                 ViewModelProviders.of(this).get(GalleryViewModel.class);
         View root = inflater.inflate(R.layout.fragment_mylistings_tabs, container, false);
         mViewPager = root.findViewById(R.id.listings_viewpager);
-        mTabLayout = root.findViewById(R.id.listings_tab);f
+        mTabLayout = root.findViewById(R.id.listings_tab);
         tab_available = root.findViewById(R.id.tab_available);
         tab_sold = root.findViewById(R.id.tab_sold);
         mPageAdapter = new PageAdapter(getChildFragmentManager(),mTabLayout.getTabCount());
