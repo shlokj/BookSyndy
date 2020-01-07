@@ -431,6 +431,13 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         });
     }
 
+    private boolean isBookSold(){
+        if(currentBook != null){
+            return currentBook.isBookSold();
+        }
+       return false;
+    }
+
     /*
     if Needed else Delete this
      */
