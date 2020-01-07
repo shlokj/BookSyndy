@@ -118,25 +118,30 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
             int boardNumber = currentBook.getBoardNumber();
             int year = currentBook.getBookYear();
 
+            if (currentBook.isTextbook()) {
+                view_grade_and_board.setText("Textbook " + getString(R.string.divider_bullet) + " ");
+            } else {
+                view_grade_and_board.setText("Notes / material " + getString(R.string.divider_bullet) + " ");
+            }
 
             if (boardNumber == 20) {
-                view_grade_and_board.setText("Competitive exams");
+                view_grade_and_board.append("Competitive exams");
             }
             else {
                 if (gradeNumber == 1) {
-                    view_grade_and_board.setText("Grade 5 or below");
+                    view_grade_and_board.append("Grade 5 or below");
                 } else if (gradeNumber == 2) {
-                    view_grade_and_board.setText("Grade 6 to 8");
+                    view_grade_and_board.append("Grade 6 to 8");
                 } else if (gradeNumber == 3) {
-                    view_grade_and_board.setText("Grade 9");
+                    view_grade_and_board.append("Grade 9");
                 } else if (gradeNumber == 4) {
-                    view_grade_and_board.setText("Grade 10");
+                    view_grade_and_board.append("Grade 10");
                 } else if (gradeNumber == 5) {
-                    view_grade_and_board.setText("Grade 11");
+                    view_grade_and_board.append("Grade 11");
                 } else if (gradeNumber == 6) {
-                    view_grade_and_board.setText("Grade 12");
+                    view_grade_and_board.append("Grade 12");
                 } else if (gradeNumber == 7) {
-                    view_grade_and_board.setText("Undergraduate");
+                    view_grade_and_board.append("Undergraduate");
 //                Toast.makeText(getApplicationContext(),"Grade number: 7\nBoard number: "+boardNumber,Toast.LENGTH_SHORT).show();
 
                     if (boardNumber == 7) {
@@ -179,7 +184,6 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 } else if (boardNumber == 6) {
                     view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " other board");
                 }
-                    //TODO: append degree
 
             }
             view_price.setText("₹" + currentBook.getBookPrice());
@@ -424,9 +428,6 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         return super.onOptionsItemSelected(item);
     }
 
-    /*
-    TODO:call this function on menu option selected
-     */
     private void markAsSold(boolean sold){
         final CollectionReference bookRef = mFirestore.collection("books");
         bookRef.document(bookid).update("bookSold",sold).addOnSuccessListener(new OnSuccessListener<Void>() {
