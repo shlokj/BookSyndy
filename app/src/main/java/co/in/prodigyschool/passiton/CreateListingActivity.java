@@ -267,6 +267,9 @@ public class CreateListingActivity extends AppCompatActivity {
                 else if (bps.length()==0) {
                     showSnackbar("Please enter a price or give it for free");
                 }
+                else if (book_photo_url==null || book_photo_url.length()==0) {
+                    showSnackbar("Please take a picture of your book");
+                }
                 else {
                     boolean validYear = true;
                     bookPrice = Integer.parseInt(bps);
@@ -703,7 +706,7 @@ public class CreateListingActivity extends AppCompatActivity {
         //show progress
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Uploading");
-        progressDialog.show();
+//        progressDialog.show();
         try {
             String timeStamp =
                     new SimpleDateFormat("yyyyMMdd_HHmmss",

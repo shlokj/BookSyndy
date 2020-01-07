@@ -38,6 +38,7 @@ import com.google.firebase.firestore.ListenerRegistration;
 
 import co.in.prodigyschool.passiton.Data.Book;
 import co.in.prodigyschool.passiton.Data.User;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class BookDetailsActivity extends AppCompatActivity implements View.OnClickListener, EventListener<DocumentSnapshot> {
@@ -47,8 +48,9 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     private FirebaseFirestore mFirestore;
     private Book currentBook;
     private User bookOwner;
-    private TextView view_bookname,view_address,view_price,view_category,view_description, view_grade_and_board;
+    private TextView view_bookname,view_address,view_price,view_category,view_description, view_grade_and_board, sellerName;
     private ImageView view_bookimage;
+    private CircleImageView sellerDp;
     private ListenerRegistration mBookUserRegistration,mBookRegistration,mBookMarkRegistration;
     private DocumentReference bookUserRef;
     private DocumentReference bookRef;
@@ -75,6 +77,9 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         view_bookimage = findViewById(R.id.book_image);
         view_description = findViewById(R.id.bookDescriptionTV);
         view_grade_and_board = findViewById(R.id.book_grade_and_board);
+        sellerDp = findViewById(R.id.seller_dp);
+        sellerName = findViewById(R.id.sellerName);
+
         getSupportActionBar().setTitle("View listing");
         findViewById(R.id.fab_chat).setOnClickListener(this);
 
