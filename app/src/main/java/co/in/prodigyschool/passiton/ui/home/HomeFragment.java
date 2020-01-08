@@ -2,6 +2,7 @@ package co.in.prodigyschool.passiton.ui.home;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -74,6 +75,8 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     private ListenerRegistration booksRegistration;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private View parentLayout;
+    private SharedPreferences userPref;
+
 
 
 
@@ -97,6 +100,9 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         /* recycler view */
         recyclerView = root.findViewById(R.id.home_recycler_view);
         mEmptyView = root.findViewById(R.id.view_empty);
+        userPref = getActivity().getSharedPreferences(getString(R.string.UserPref),0);
+        preferGuidedMode = userPref.getBoolean(getString(R.string.preferGuidedMode),false);
+
         FloatingActionButton fab = root.findViewById(R.id.fab_home);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -516,6 +522,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                 public void onSuccess(DocumentSnapshot snapshot) {
                     User user = snapshot.toObject(User.class);
                     if(user != null) {
+                        currentUser = user;
                         gradeNumber=user.getGradeNumber();
                         boardNumber=user.getBoardNumber();
                     }
