@@ -2,19 +2,36 @@ package co.in.prodigyschool.passiton;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import co.in.prodigyschool.passiton.Data.User;
 
 public class CustNameActivity extends AppCompatActivity {
 
     boolean isParent, isValidUsername, isAvailableUsername=true;
     EditText firstNameField, lastNameField, userIdField;
     String firstName, lastName, username;
+
+    private static String TAG = "CUSTNAMEACTIVITY";
+    private FirebaseFirestore mFireStore;
+    private List<String> userNamesList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +43,8 @@ public class CustNameActivity extends AppCompatActivity {
         firstNameField = (EditText) findViewById(R.id.firstName);
         lastNameField = (EditText) findViewById(R.id.lastName);
         FloatingActionButton next = (FloatingActionButton) findViewById(R.id.fab4);
+        userNamesList = new ArrayList<>();
+        initFireStore();
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -34,7 +53,8 @@ public class CustNameActivity extends AppCompatActivity {
                 username = userIdField.getText().toString();
                 isValidUsername = false;
                 isValidUsername = (username != null) && username.matches("[A-Za-z0-9_]+");
-
+                isAvailableUsername = checkUserName(username);
+                Log.d(TAG, "onClick: check user name:"+isAvailableUsername);
                 if (firstName.length()==0 || lastName.length()==0) {
                     Snackbar.make(parentLayout, "Please fill in both name fields", Snackbar.LENGTH_SHORT)
                             .setAction("OKAY", new View.OnClickListener() {
@@ -79,6 +99,38 @@ public class CustNameActivity extends AppCompatActivity {
                     getGrade.putExtra("USERNAME",username);//TODO: username pass on implementation for other registration info activities
                     startActivity(getGrade);
                 }
+            }
+        });
+    }
+
+    private boolean checkUserName(String username) {
+        boolean flag = true;
+        if(username != null){
+           for(String userId:userNamesList){
+               if(userId.equalsIgnoreCase(username)){
+                   flag = false;
+               }
+           }
+        }
+        return flag;
+    }
+
+    private void initFireStore() {
+        mFireStore = FirebaseFirestore.getInstance();
+        mFireStore.collection("users").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                     if(e != null){
+                         Log.e(TAG, "onEvent: user names feth error",e );
+                     }
+                     if(!queryDocumentSnapshots.isEmpty()){
+                         for (User user:queryDocumentSnapshots.toObjects(User.class)){
+                             userNamesList.add(user.getUserId());
+                             Log.d(TAG, "onEvent: user name:"+user.getUserId());
+                         }
+
+                     }
+
             }
         });
     }
