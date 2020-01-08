@@ -1,21 +1,31 @@
 package co.in.prodigyschool.passiton.ui.myListings;
 
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -41,6 +51,10 @@ public class BookSoldFragment extends Fragment implements BookAdapter.OnBookSele
     private Query mQuery;
     private GalleryViewModel galleryViewModel;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private String book_id;
+    private ListView devicesListView;
+    private AlertDialog dialog;
+    private ArrayAdapter<String> optionsList;
 
 
     public BookSoldFragment() {
@@ -59,6 +73,8 @@ public class BookSoldFragment extends Fragment implements BookAdapter.OnBookSele
         mEmptyView = root.findViewById(R.id.view_empty);
         root.findViewById(R.id.fab_home).setVisibility(View.GONE);
         initFireStore();
+
+        optionsList = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1);
 
         mSwipeRefreshLayout = root.findViewById(R.id.swiperefreshhome);
         mSwipeRefreshLayout.setRefreshing(false);
@@ -138,15 +154,63 @@ public class BookSoldFragment extends Fragment implements BookAdapter.OnBookSele
 
     @Override
     public void onBookSelected(DocumentSnapshot snapshot) {
-        String book_id = snapshot.getId();
+        book_id = snapshot.getId();
         Intent bookDetails = new Intent(getActivity(), BookDetailsActivity.class);
         bookDetails.putExtra("bookid", book_id);
         bookDetails.putExtra("isHome",false);
         startActivity(bookDetails);
     }
 
+    private void displayOptions(){
+        optionsList.clear();
+        optionsList.add("Mark as unsold");
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getLayoutInflater();
+        View convertView = (View) inflater.inflate(R.layout.dialog_longpress_mylistings_options, null);
+        alertDialog.setView(convertView);
+//        alertDialog.setTitle("Select your device");
+        alertDialog.setCancelable(true);
+        devicesListView = (ListView) convertView.findViewById(R.id.optionsListView);
+        devicesListView.setAdapter(optionsList);
+        dialog = alertDialog.show();
+        dialog.show();
+    }
+
     @Override
     public void onBookLongSelected(DocumentSnapshot snapshot) {
         Toast.makeText(getContext(),"clicked",Toast.LENGTH_SHORT).show();
+        book_id = snapshot.getId();
+
+//        vibrator.vibrate(10);
+
+        displayOptions();
+        devicesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String opt = ((TextView) view).getText().toString();
+                if (opt.equals("Mark as unsold")) {
+                    // move the selected book to completed
+                    markAsSold(false);
+                    dialog.dismiss();
+                }
+            }
+        });
+    }
+
+
+
+    private void markAsSold(boolean sold){
+        final CollectionReference bookRef = mFirestore.collection("books");
+        bookRef.document(book_id).update("bookSold",sold).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getActivity(),"Error: Please Try Again!",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

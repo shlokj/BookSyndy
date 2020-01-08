@@ -76,7 +76,7 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
         mEmptyView = root.findViewById(R.id.view_empty);
         root.findViewById(R.id.fab_home).setVisibility(View.GONE);
         initFireStore();
-        vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+//        vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
 
         optionsList = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1);
 
@@ -187,7 +187,7 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
         Toast.makeText(getContext(),"clicked",Toast.LENGTH_SHORT).show();
         book_id = snapshot.getId();
 
-        vibrator.vibrate(20);
+//        vibrator.vibrate(10);
 
         displayOptions();
         devicesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
