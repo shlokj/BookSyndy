@@ -124,4 +124,6 @@
     <string name="school">SCHOOL</string>
     <string name="college">COLLEGE</string>
     <string name="clear_filter">Clear filters</string>
+    <string name="UserPref">UserPreference</string>
+    <string name="preferGuidedMode">preferGuidedMode</string>
 </resources>

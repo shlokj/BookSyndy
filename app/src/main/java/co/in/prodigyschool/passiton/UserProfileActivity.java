@@ -6,6 +6,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -66,6 +67,10 @@ public class UserProfileActivity extends AppCompatActivity {
     private User curUser;
     private Uri selectedImage;
     private ArrayAdapter<String> boardAdapter, degreeAdapter, gradeAdapter;
+    private SharedPreferences userPref;
+    private SharedPreferences.Editor editor;
+
+
 
     private final int GALLERY_ACTIVITY_CODE=200;
     private final int RESULT_CROP = 400;
@@ -82,8 +87,10 @@ public class UserProfileActivity extends AppCompatActivity {
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-        profilePic = findViewById(R.id.profilePic);
 
+        profilePic = findViewById(R.id.profilePic);
+        preferGuidedMode = findViewById(R.id.preferGuidedMode);
+        getUserPreference();
         fName = findViewById(R.id.firstNameProfile);
         lName = findViewById(R.id.lastNameProfile);
         uName = findViewById(R.id.usernameField);
@@ -112,7 +119,7 @@ public class UserProfileActivity extends AppCompatActivity {
         degreeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         compExams = findViewById(R.id.profileCompetitiveExams);
-        preferGuidedMode = findViewById(R.id.preferGuidedMode);
+
 
         checkChange = new TextWatcher() {
             @Override
@@ -195,6 +202,12 @@ public class UserProfileActivity extends AppCompatActivity {
         });
     }
 
+    private void getUserPreference() {
+            userPref = this.getSharedPreferences(getString(R.string.UserPref),0);
+            preferGuidedMode.setChecked(userPref.getBoolean(getString(R.string.preferGuidedMode),false));
+
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -246,6 +259,11 @@ public class UserProfileActivity extends AppCompatActivity {
                         boardSpinner.setEnabled(false);
                         degreeSpinner.setEnabled(false);
                         preferGuidedMode.setEnabled(false);
+
+
+                        editor = userPref.edit();
+                        editor.putBoolean(getString(R.string.preferGuidedMode),preferGuidedMode.isChecked());
+                        editor.commit();
 
                         User updatedUser = curUser;
                         updatedUser.setFirstName(fName.getText().toString());
