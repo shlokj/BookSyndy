@@ -166,6 +166,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
 
+        setDefaultFilters();
 
         return root;
     }
@@ -443,8 +444,6 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 
         toBeRemoved.clear();
 
-
-
         if(filteredList == null || filteredList.isEmpty()){
             if(noFilter){
                 Log.d(TAG, "onFilter: is empty");
@@ -463,26 +462,33 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     }
 
 
-//    private void setDefaultFilters() {
-//        final String curUserId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
-//        mFirestore.collection("users").document(curUserId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-//            @Override
-//            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
-//           if(e != null){
-//               Log.e(TAG, "onEvent: listener error",e );
-//               return;
-//           }
-//           currentUser = snapshot.toObject(User.class);
-//                Log.d(TAG, "setDefaultFilters: success");
-//                Filters defaultFilters = new Filters();
-//                defaultFilters.setBookGrade(currentUser.getGradeNumber());
-//                defaultFilters.setBookBoard(currentUser.getBoardNumber());
-//                defaultFilters.setIsText(true);
-//                homeViewModel.setFilters(defaultFilters);
-//                onFilter(homeViewModel.getFilters());
-//            }
-//        });
-//    }
+    private void setDefaultFilters() {
+        final String curUserId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
+        mFirestore.collection("users").document(curUserId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+           if(e != null){
+               Log.e(TAG, "onEvent: listener error",e );
+               return;
+           }
+           currentUser = snapshot.toObject(User.class);
+                Log.d(TAG, "setDefaultFilters: success");
+                Filters defaultFilters = new Filters();
+                List<Integer> gradesList = new ArrayList<Integer>();
+                gradesList.add(currentUser.getGradeNumber());
+                if (currentUser.getGradeNumber()<=5) {
+                    gradesList.add(currentUser.getGradeNumber() + 1);
+                }
+                List<Integer> boardsList = new ArrayList<Integer>();
+                boardsList.add(currentUser.getBoardNumber());
+                defaultFilters.setBookGrade(gradesList);
+                defaultFilters.setBookBoard(boardsList);
+                defaultFilters.setIsText(true);
+                homeViewModel.setFilters(defaultFilters);
+                onFilter(homeViewModel.getFilters());
+            }
+        });
+    }
 
 
     @Override
