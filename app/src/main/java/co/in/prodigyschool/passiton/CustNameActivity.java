@@ -54,7 +54,6 @@ public class CustNameActivity extends AppCompatActivity {
                 isValidUsername = false;
                 isValidUsername = (username != null) && username.matches("[A-Za-z0-9_]+");
                 isAvailableUsername = checkUserName(username);
-                Log.d(TAG, "onClick: check user name:"+isAvailableUsername);
                 if (firstName.length()==0 || lastName.length()==0) {
                     Snackbar.make(parentLayout, "Please fill in both name fields", Snackbar.LENGTH_SHORT)
                             .setAction("OKAY", new View.OnClickListener() {
@@ -126,7 +125,6 @@ public class CustNameActivity extends AppCompatActivity {
                      if(!queryDocumentSnapshots.isEmpty()){
                          for (User user:queryDocumentSnapshots.toObjects(User.class)){
                              userNamesList.add(user.getUserId());
-                             Log.d(TAG, "onEvent: user name:"+user.getUserId());
                          }
 
                      }
