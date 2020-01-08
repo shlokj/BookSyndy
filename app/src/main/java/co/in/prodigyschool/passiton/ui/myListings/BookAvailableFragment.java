@@ -2,14 +2,17 @@ package co.in.prodigyschool.passiton.ui.myListings;
 
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +23,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -48,6 +54,10 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
     private GalleryViewModel galleryViewModel;
     private ArrayAdapter<String> optionsList;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private ListView devicesListView;
+    private Vibrator vibrator;
+    private AlertDialog dialog;
+    private String book_id;
 
 
     public BookAvailableFragment() {
@@ -59,8 +69,6 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
-
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
         /* recycler view */
@@ -68,6 +76,9 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
         mEmptyView = root.findViewById(R.id.view_empty);
         root.findViewById(R.id.fab_home).setVisibility(View.GONE);
         initFireStore();
+        vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+
+        optionsList = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1);
 
         mSwipeRefreshLayout = root.findViewById(R.id.swiperefreshhome);
         mSwipeRefreshLayout.setRefreshing(false);
@@ -158,30 +169,53 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
 
     private void displayOptions(){
         optionsList.clear();
-        optionsList.add("Delete");
+        optionsList.add("Mark as sold");
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getLayoutInflater();
         View convertView = (View) inflater.inflate(R.layout.dialog_longpress_mylistings_options, null);
         alertDialog.setView(convertView);
 //        alertDialog.setTitle("Select your device");
         alertDialog.setCancelable(true);
-        ListView devicesListView = (ListView) convertView.findViewById(R.id.optionsListView);
+        devicesListView = (ListView) convertView.findViewById(R.id.optionsListView);
         devicesListView.setAdapter(optionsList);
-        final AlertDialog dialog = alertDialog.show();
-
-        devicesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String opt = ((TextView) view).getText().toString();
-                if (opt.equals("Delete")) {
-                    // move the selected book to completed
-                }
-            }
-        });
+        dialog = alertDialog.show();
+        dialog.show();
     }
 
     @Override
     public void onBookLongSelected(DocumentSnapshot snapshot) {
         Toast.makeText(getContext(),"clicked",Toast.LENGTH_SHORT).show();
+        book_id = snapshot.getId();
+
+        vibrator.vibrate(20);
+
+        displayOptions();
+        devicesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String opt = ((TextView) view).getText().toString();
+                if (opt.equals("Mark as sold")) {
+                    // move the selected book to completed
+                    markAsSold(true);
+                    dialog.dismiss();
+                }
+            }
+        });
+    }
+
+
+    private void markAsSold(boolean sold){
+        final CollectionReference bookRef = mFirestore.collection("books");
+        bookRef.document(book_id).update("bookSold",sold).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getActivity(),"Error: Please Try Again!",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
