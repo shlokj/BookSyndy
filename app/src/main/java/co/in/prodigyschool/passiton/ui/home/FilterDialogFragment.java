@@ -34,8 +34,7 @@ public class FilterDialogFragment extends DialogFragment implements TabLayout.On
     private TabLayout mTabLayout;
     private FilterAdapter mFilterAdapter;
 
-
-
+    //TODO: check default filters as per rules
     public static FilterDialogFragment newInstance() {
         return new FilterDialogFragment();
     }

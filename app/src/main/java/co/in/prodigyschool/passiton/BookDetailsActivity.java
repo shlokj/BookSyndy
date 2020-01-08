@@ -60,6 +60,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     private final int MENU_DELETE = 123;
     private String curAppUser, shareableLink="";
     private double latA,lngA;
+    private View.OnClickListener toOpenProfile;
 
     private static final String TAG = "BOOK_DETAILS";
 
@@ -75,13 +76,25 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         getUserLocation();
         view_bookname = findViewById(R.id.book_name);
         view_address = findViewById(R.id.book_address);
-        view_category = findViewById(R.id.book_category);
+//        view_category = findViewById(R.id.book_category);
         view_price = findViewById(R.id.book_price);
         view_bookimage = findViewById(R.id.book_image);
         view_description = findViewById(R.id.bookDescriptionTV);
         view_grade_and_board = findViewById(R.id.book_grade_and_board);
         sellerDp = findViewById(R.id.seller_dp);
         sellerName = findViewById(R.id.sellerName);
+
+        toOpenProfile = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent viewProfile = new Intent(BookDetailsActivity.this, ViewUserProfileActivity.class);
+                viewProfile.putExtra("USER_PHONE",bookOwner.getPhone());
+                startActivity(viewProfile);
+            }
+        };
+
+        sellerName.setOnClickListener(toOpenProfile);
+        sellerDp.setOnClickListener(toOpenProfile);
 
         getSupportActionBar().setTitle("View listing");
         findViewById(R.id.fab_chat).setOnClickListener(this);
@@ -213,10 +226,10 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
             }
             view_price.setText("₹" + currentBook.getBookPrice());
             if (currentBook.isTextbook()) {
-                view_category.setText("Textbook");
+//                view_category.setText("Textbook");
                 getSupportActionBar().setTitle("View book");
             } else {
-                view_category.setText("Notes");
+//                view_category.setText("Notes");
                 getSupportActionBar().setTitle("View material");
             }
             Glide.with(view_bookimage.getContext())
@@ -230,6 +243,10 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                         return;
                     }
                     bookOwner = snapshot.toObject(User.class);
+                    sellerName.setText(bookOwner.getUserId());
+                    Glide.with(sellerDp.getContext())
+                            .load(bookOwner.getImageUrl())
+                            .into(sellerDp);
                 }
             });
         }
@@ -266,14 +283,12 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
             if (res > 0.0f && res < 1000f) {
                 res = Math.round(res);
                 if (res > 0.0f)
-                    view_address.append("  " + (int)res + " m");
-            }
+                    view_address.append("  " + getString(R.string.divider_bullet) + " " + (int)res + " m");            }
             else if(res > 1000f){
                 res = Math.round(res / 100);
                 res = res / 10;
                 if (res > 0.0f)
-                    view_address.append("\n" + res + " km");
-            }
+                    view_address.append(" " + getString(R.string.divider_bullet) + " " + res + " km");            }
         }
     }
 
@@ -359,7 +374,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
             Log.w(TAG, "book:onEvent", e);
             return;
         }
-            populateBookDetails(snapshot.toObject(Book.class));
+        populateBookDetails(snapshot.toObject(Book.class));
     }
 
     @Override
@@ -385,7 +400,6 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
 
         return true;
     }
-
 
 
     private void updateBookMark() {
@@ -498,24 +512,6 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         });
     }
 
-    /*
-    if Needed else Delete this
-     */
-//    private void markAsAvailable(){
-//        final CollectionReference bookRef = mFirestore.collection("books");
-//        bookRef.document(bookid).update("bookSold",false).addOnSuccessListener(new OnSuccessListener<Void>() {
-//            @Override
-//            public void onSuccess(Void aVoid) {
-//                Toast.makeText(getApplicationContext(),"Book is sold",Toast.LENGTH_SHORT).show();
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception e) {
-//                Toast.makeText(getApplicationContext(),"Error: Please Try Again!",Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
-
     private void addToBookMark() {
         final CollectionReference bookMarkRef = mFirestore.collection("bookmarks");
         bookMarkRef.document(curAppUser).collection("books").document(bookid).set(currentBook).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -535,11 +531,11 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         final CollectionReference bookMarkRef = mFirestore.collection("bookmarks");
         bookMarkRef.document(curAppUser).collection("books").document(bookid).delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                showSnackbar("Removed from bookmarks");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        showSnackbar("Removed from bookmarks");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 showSnackbar("Failed to remove from bookmarks");
@@ -570,6 +566,5 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 .setActionTextColor(getResources().getColor(android.R.color.holo_orange_light))
                 .show();
     }
-
 
 }

@@ -48,15 +48,17 @@
                 app:layout_constraintDimensionRatio="1:1" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
         <!--TODO: load seller info into these views-->
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/seller_dp"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_alignParentTop="true"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentStart="true"
-            android:layout_margin="16dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
             android:cropToPadding="true"
             app:srcCompat="@drawable/ic_account_circle_24px" />
 
@@ -98,15 +100,7 @@
             android:layout_marginTop="8dp"
             android:fontFamily="@font/roboto_light"
             android:textColor="@android:color/white"
-            tools:text="Text Book" />
-
-        <TextView
-            android:id="@+id/restaurant_city_divider"
-            style="@style/AppTheme.TextDivider"
-            android:layout_alignTop="@+id/book_category"
-            android:layout_toEndOf="@+id/book_category"
-            android:text="@string/divider_bullet"
-            android:textColor="@android:color/white" />
+            android:text="" />
 
         <TextView
             android:id="@+id/book_address"
@@ -115,7 +109,7 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/book_category"
             android:layout_below="@+id/book_category"
-            android:layout_toEndOf="@+id/restaurant_city_divider"
+            android:layout_marginStart="8dp"
             android:textColor="@android:color/white"
             android:fontFamily="@font/roboto_light"
             tools:text="San Francisco" />

@@ -78,8 +78,6 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     private SharedPreferences userPref;
 
 
-
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -257,7 +255,15 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.home, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
-        final SearchView  searchView = (SearchView)searchItem.getActionView();
+        final MenuItem filterItem = menu.findItem(R.id.filter);
+        searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                filterItem.setVisible(false);
+                return true;
+            }
+        });
+        final SearchView searchView = (SearchView)searchItem.getActionView();
         searchView.setQueryHint("Search");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

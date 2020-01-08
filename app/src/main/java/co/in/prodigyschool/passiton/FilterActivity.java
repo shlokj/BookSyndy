@@ -20,6 +20,7 @@ public class FilterActivity extends AppCompatActivity {
     CheckBox filterBoardCbse, filterBoardIcse, filterBoardIb, filterBoardIgcse, filterBoardState, filterBoardOther, filterBoardCompetitiveExams;
     CheckBox freeOnly, filterTextbook, filterNotes;
 
+    //TODO: set default filters
     /*How default filters are to be set:
     * For grade - check two boxes: the grade registered with AND the grade above it. For example, check 10 and 11 if the user is regd with 10
     * If the user has regd with 12, check only 12 here, and we'll add an option to view college book filters. Else college filters are all unchecked.
