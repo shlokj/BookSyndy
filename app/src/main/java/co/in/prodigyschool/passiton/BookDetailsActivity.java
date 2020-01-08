@@ -5,6 +5,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -58,6 +59,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     private Menu menu;
     private final int MENU_DELETE = 123;
     private String curAppUser, shareableLink="";
+    private double latA,lngA;
 
     private static final String TAG = "BOOK_DETAILS";
 
@@ -70,6 +72,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         isHome = getIntent().getBooleanExtra("isHome",false);
         isBookmarks = getIntent().getBooleanExtra("isBookmarks",false);
         initFireStore();
+        getUserLocation();
         view_bookname = findViewById(R.id.book_name);
         view_address = findViewById(R.id.book_address);
         view_category = findViewById(R.id.book_category);
@@ -102,6 +105,23 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         else{
             Toast.makeText(getApplicationContext(),"Firebase error",Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void getUserLocation() {
+        mFirestore.collection("address").document(curAppUser).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.e("BOOK_ADAPTER_INNER", "onEvent: exception", e);
+                    return;
+                }
+                if(snapshot.getDouble("lat") != null && snapshot.getDouble("lng") != null) {
+                    latA = snapshot.getDouble("lat");
+                    lngA = snapshot.getDouble("lng");
+                }
+
+            }
+        });
     }
 
 
@@ -217,6 +237,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
             Log.e(TAG, "populateBookDetails: exception",e);
         }
 
+
         view_bookimage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -227,9 +248,36 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 }
             }
         });
-
+        addDistance(currentBook.getLat(),currentBook.getLng());
         updateBookMark();
     }
+
+    private void addDistance(double latitude,double longitude){
+        float res;
+        if(latA != 0.0 && lngA != 0.0 && latitude != 0.0 && longitude != 0.0) {
+            Location locationA = new Location("point A");
+            Location locationB = new Location("point B");
+
+            locationA.setLatitude(latA);
+            locationA.setLongitude(lngA);
+            locationB.setLatitude(latitude);
+            locationB.setLongitude(longitude);
+            res = locationA.distanceTo(locationB);
+            if (res > 0.0f && res < 1000f) {
+                res = Math.round(res);
+                if (res > 0.0f)
+                    view_address.append("  " + (int)res + " m");
+            }
+            else if(res > 1000f){
+                res = Math.round(res / 100);
+                res = res / 10;
+                if (res > 0.0f)
+                    view_address.append("\n" + res + " km");
+            }
+        }
+    }
+
+
 
     @Override
     public void onClick(View v) {
@@ -337,6 +385,8 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
 
         return true;
     }
+
+
 
     private void updateBookMark() {
         try {
@@ -520,4 +570,6 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 .setActionTextColor(getResources().getColor(android.R.color.holo_orange_light))
                 .show();
     }
+
+
 }

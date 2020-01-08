@@ -147,6 +147,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
                 res = Math.round(res);
                 if (res > 0.0f)
                     //holder.cityView.append("  " + (int)res + " m");
+
                     return String.valueOf((int)res+" m");
             }
             else if(res > 1000f){
