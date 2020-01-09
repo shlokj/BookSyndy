@@ -89,6 +89,9 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
             public void onClick(View v) {
                 Intent viewProfile = new Intent(BookDetailsActivity.this, ViewUserProfileActivity.class);
                 viewProfile.putExtra("USER_PHONE",bookOwner.getPhone());
+                viewProfile.putExtra("USER_NAME",bookOwner.getFirstName()+" "+bookOwner.getLastName());
+                viewProfile.putExtra("USER_ID",bookOwner.getUserId());
+                viewProfile.putExtra("USER_PHOTO",bookOwner.getImageUrl());
                 startActivity(viewProfile);
             }
         };
