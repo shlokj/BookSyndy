@@ -241,6 +241,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             //bookList.addAll(queryDocumentSnapshots.toObjects(Book.class));
             mAdapter.setBookList(bookList);
             bookListFull = new ArrayList<>(bookList);
+
             mAdapter.onDataChanged();
 
         }

@@ -17,11 +17,11 @@ public class HomeViewModel extends ViewModel {
     public static  String TAG = "HOMEVIEWMODEL";
     private MutableLiveData<String> mText;
     private Filters mFilters;
-    private List<Book> bookList;
+
 
     public HomeViewModel() {
        mFilters = Filters.getDefault();
-       bookList = new ArrayList<>();
+
     }
 
     public Filters getFilters() {
@@ -34,12 +34,4 @@ public class HomeViewModel extends ViewModel {
         this.mFilters = mFilters;
     }
 
-    public List<Book> getBookList() {
-        return bookList;
-    }
-
-    public void setBookList(List<Book> bookList) {
-        this.bookList.clear();
-        this.bookList.addAll(bookList);
-    }
 }
