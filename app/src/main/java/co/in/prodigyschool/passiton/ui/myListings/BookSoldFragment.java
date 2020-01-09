@@ -178,11 +178,7 @@ public class BookSoldFragment extends Fragment implements BookAdapter.OnBookSele
 
     @Override
     public void onBookLongSelected(DocumentSnapshot snapshot) {
-        Toast.makeText(getContext(),"clicked",Toast.LENGTH_SHORT).show();
         book_id = snapshot.getId();
-
-//        vibrator.vibrate(10);
-
         displayOptions();
         devicesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

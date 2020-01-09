@@ -184,7 +184,6 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
 
     @Override
     public void onBookLongSelected(DocumentSnapshot snapshot) {
-        Toast.makeText(getContext(),"clicked",Toast.LENGTH_SHORT).show();
         book_id = snapshot.getId();
 
 //        vibrator.vibrate(10);

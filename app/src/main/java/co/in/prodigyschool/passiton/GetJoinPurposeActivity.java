@@ -3,6 +3,7 @@ package co.in.prodigyschool.passiton;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -31,6 +32,8 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
     Intent startMainActivity;
     User curFirebaseUser;
     FirebaseFirestore db;
+    private ProgressDialog progressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +79,11 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
     }
     private void registerUser() {
         try {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage("Finishing up");
+            progressDialog.setTitle("Just a sec...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
             competitiveExam = getIntent().getBooleanExtra("COMPETITIVE_EXAM", false);
             isParent = getIntent().getBooleanExtra("IS_PARENT", false);
             firstName = getIntent().getStringExtra("FIRST_NAME");
@@ -98,6 +106,7 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
                 public void onSuccess(Void aVoid) {
                     Toast.makeText(getApplicationContext(), "User Registered Successfully " + phoneNumber, Toast.LENGTH_LONG).show();
                     // Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    startMainActivity.putExtra("SNACKBAR_MSG","Hey there! Thanks for signing up!");
                     startActivity(startMainActivity);
                     finish();
                 }
@@ -108,8 +117,6 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
                     //Log.w(TAG, "Error adding document", e);
                 }
             });
-
-
 
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "User Register Failed: " + e.getMessage(), Toast.LENGTH_LONG).show();

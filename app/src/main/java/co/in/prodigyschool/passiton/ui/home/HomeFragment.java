@@ -76,6 +76,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private View parentLayout;
     private SharedPreferences userPref;
+    private MenuItem filterItem;
 
 
     @Override
@@ -242,7 +243,6 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             mAdapter.setBookList(bookList);
             bookListFull = new ArrayList<>(bookList);
             mAdapter.onDataChanged();
-
         }
 
         onFilter(homeViewModel.getFilters());
@@ -251,12 +251,11 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         }
     }
 
-
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.home, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
-        final MenuItem filterItem = menu.findItem(R.id.filter);
+        filterItem = menu.findItem(R.id.filter);
         searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -316,6 +315,9 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             //startActivity(openFilters);
             //open filter activity to apply and change filters
             onFilterClicked();
+        }
+        else if (id == R.id.action_search) {
+            filterItem.setVisible(false);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -565,7 +567,6 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     }
 
     public void showSnackbar(String message) {
-
         Snackbar.make(parentLayout, message, Snackbar.LENGTH_SHORT)
                 .setAction("OKAY", new View.OnClickListener() {
                     @Override
