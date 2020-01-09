@@ -1,5 +1,6 @@
 package co.in.prodigyschool.passiton.ui.bookMarks;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
@@ -7,6 +8,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -25,13 +31,15 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
+
+import co.in.prodigyschool.passiton.Adapters.BookAdapter;
 import co.in.prodigyschool.passiton.Adapters.BookMarkAdapter;
 import co.in.prodigyschool.passiton.BookDetailsActivity;
 import co.in.prodigyschool.passiton.Data.Book;
 import co.in.prodigyschool.passiton.R;
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
-public class BookMarksFragment extends Fragment implements BookMarkAdapter.OnBookSelectedListener{
+public class BookMarksFragment extends Fragment implements BookMarkAdapter.OnBookSelectedListener, BookAdapter.OnBookLongSelectedListener {
 
     private static String TAG = "BOOKMARKS";
 
@@ -47,6 +55,11 @@ public class BookMarksFragment extends Fragment implements BookMarkAdapter.OnBoo
     private RecyclerView.LayoutManager layoutManager;
     private Snackbar snackbar;
     private boolean undone, dismissed=true;
+    private ArrayAdapter<String> optionsList;
+    private ListView optionsListView;
+    private AlertDialog dialog;
+    private String book_id;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -57,8 +70,7 @@ public class BookMarksFragment extends Fragment implements BookMarkAdapter.OnBoo
         mEmptyView = root.findViewById(R.id.view_empty);
 
         initFireStore();
-
-
+        optionsList = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1);
 
         /* use a linear layout manager */
         layoutManager = new LinearLayoutManager(getActivity());
@@ -173,4 +185,37 @@ public class BookMarksFragment extends Fragment implements BookMarkAdapter.OnBoo
         bookDetails.putExtra("isBookmarks",true);
         startActivity(bookDetails);
     }
+
+    @Override
+    public void onBookLongSelected(DocumentSnapshot snapshot) {
+        book_id = snapshot.getId();
+        displayOptions();
+        optionsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String opt = ((TextView) view).getText().toString();
+                if (opt.equals("Remove from bookmarks")) {
+//                  remove from bms
+                    dialog.dismiss();
+                }
+            }
+        });
+    }
+
+
+    private void displayOptions(){
+        optionsList.clear();
+        optionsList.add("Mark as unsold");
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getLayoutInflater();
+        View convertView = (View) inflater.inflate(R.layout.dialog_longpress_mylistings_options, null);
+        alertDialog.setView(convertView);
+//        alertDialog.setTitle("Select your device");
+        alertDialog.setCancelable(true);
+        optionsListView = (ListView) convertView.findViewById(R.id.optionsListView);
+        optionsListView.setAdapter(optionsList);
+        dialog = alertDialog.show();
+        dialog.show();
+    }
+
 }

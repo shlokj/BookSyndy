@@ -52,7 +52,7 @@ public class BookSoldFragment extends Fragment implements BookAdapter.OnBookSele
     private GalleryViewModel galleryViewModel;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private String book_id;
-    private ListView devicesListView;
+    private ListView optionsListView;
     private AlertDialog dialog;
     private ArrayAdapter<String> optionsList;
 
@@ -170,8 +170,8 @@ public class BookSoldFragment extends Fragment implements BookAdapter.OnBookSele
         alertDialog.setView(convertView);
 //        alertDialog.setTitle("Select your device");
         alertDialog.setCancelable(true);
-        devicesListView = (ListView) convertView.findViewById(R.id.optionsListView);
-        devicesListView.setAdapter(optionsList);
+        optionsListView = (ListView) convertView.findViewById(R.id.optionsListView);
+        optionsListView.setAdapter(optionsList);
         dialog = alertDialog.show();
         dialog.show();
     }
@@ -180,7 +180,7 @@ public class BookSoldFragment extends Fragment implements BookAdapter.OnBookSele
     public void onBookLongSelected(DocumentSnapshot snapshot) {
         book_id = snapshot.getId();
         displayOptions();
-        devicesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        optionsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String opt = ((TextView) view).getText().toString();
