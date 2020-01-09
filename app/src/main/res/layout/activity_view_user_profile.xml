@@ -24,7 +24,7 @@
             app:srcCompat="@drawable/ic_account_circle_24px" />
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/view_fullname"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -42,14 +42,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/message_button_background"
-            android:gravity="center
-    "
+            android:gravity="center"
             android:layout_margin="16dp"
             android:paddingStart="12dp"
             android:paddingEnd="12dp"
             android:orientation="horizontal"
             app:layout_constraintStart_toEndOf="@+id/others_profile_image"
-            app:layout_constraintTop_toBottomOf="@+id/textView6">
+            app:layout_constraintTop_toBottomOf="@+id/view_fullname">
 
             <ImageView
                 android:id="@+id/messageIconIV"
@@ -89,5 +88,48 @@
             android:text="Books by user" />
 
     </com.google.android.material.tabs.TabLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/other_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/home_list_item"
+            />
+
+
+    <LinearLayout
+        android:id="@+id/other_view_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="280dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="gone">
+
+        <ImageView
+            android:id="@+id/bookPicture"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_margin="8dp"
+            android:padding="8dp"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/ic_book_24px" />
+
+        <TextView
+            style="@style/AppTheme.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:text="@string/nothing_here"
+            android:fontFamily="@font/roboto_light"
+            android:textColor="@color/greyDisabled" />
+
+    </LinearLayout>
+
+
 
 </LinearLayout>
