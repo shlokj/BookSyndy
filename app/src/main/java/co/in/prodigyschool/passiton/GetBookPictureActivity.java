@@ -271,5 +271,6 @@ public class GetBookPictureActivity extends AppCompatActivity {
     public void onBackPressed() {
         Intent homeActivity = new Intent(GetBookPictureActivity.this, HomeActivity.class);
         startActivity(homeActivity);
+        finish();
     }
 }

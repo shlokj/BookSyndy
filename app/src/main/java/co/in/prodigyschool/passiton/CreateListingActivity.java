@@ -511,6 +511,7 @@ public class CreateListingActivity extends AppCompatActivity {
     public void onBackPressed() {
         Intent homeActivity = new Intent(CreateListingActivity.this, HomeActivity.class);
         startActivity(homeActivity);
+        finish();
     }
 
     public void displaySnackbarYears(int year) {
