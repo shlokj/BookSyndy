@@ -1,33 +1,26 @@
 package co.in.prodigyschool.passiton;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import co.in.prodigyschool.passiton.Adapters.BookAdapter;
 import co.in.prodigyschool.passiton.Data.Book;
-import co.in.prodigyschool.passiton.ui.home.HomeFragment;
-import co.in.prodigyschool.passiton.ui.home.HomeViewModel;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ViewUserProfileActivity extends AppCompatActivity implements BookAdapter.OnBookSelectedListener,BookAdapter.OnBookLongSelectedListener {
@@ -73,8 +66,8 @@ public class ViewUserProfileActivity extends AppCompatActivity implements BookAd
 
     private void initFireBase() {
         mFireStore = FirebaseFirestore.getInstance();
-        mQuery =  mFireStore.collection("books").whereEqualTo("userId",phone);
-       mAdapter = new BookAdapter(mQuery,this,this){
+        mQuery =  mFireStore.collection("books").whereEqualTo("userId",phone).whereEqualTo("bookSold",false);
+        mAdapter = new BookAdapter(mQuery,this,this){
 
                @Override
                protected void onDataChanged() {
