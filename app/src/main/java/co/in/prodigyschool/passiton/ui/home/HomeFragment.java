@@ -459,7 +459,6 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         }
         mAdapter.setBookList(filteredList);
         homeViewModel.setFilters(filters);
-
     }
 
 
