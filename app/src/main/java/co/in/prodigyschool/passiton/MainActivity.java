@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -29,12 +30,16 @@ import co.in.prodigyschool.passiton.Data.User;
 
 public class MainActivity extends AppCompatActivity {
 
+    private SharedPreferences userPref;
+    private SharedPreferences.Editor editor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
+        userPref = this.getSharedPreferences(getString(R.string.UserPref),0);
         doesSessionExist();
 
         Window window = MainActivity.this.getWindow();
@@ -68,7 +73,18 @@ public class MainActivity extends AppCompatActivity {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
                                         if (document.getId().equalsIgnoreCase(userId)) {
                                             //user session exist
+
                                             User user = document.toObject(User.class);
+                                            editor = userPref.edit();
+                                            editor.putString(getString(R.string.p_userphone),user.getPhone());
+                                            editor.putString(getString(R.string.p_userid),user.getUserId());
+                                            editor.putString(getString(R.string.p_firstname),user.getFirstName());
+                                            editor.putString(getString(R.string.p_lastname),user.getLastName());
+                                            editor.putString(getString(R.string.p_imageurl),user.getImageUrl());
+                                            editor.putInt(getString(R.string.p_grade),user.getGradeNumber());
+                                            editor.putInt(getString(R.string.p_board),user.getBoardNumber());
+                                            editor.putBoolean(getString(R.string.p_competitive),user.isCompetitiveExam());
+                                            editor.apply();
                                             Intent homeActivity = new Intent(MainActivity.this,HomeActivity.class);
                                             homeActivity.putExtra("username",user.getFirstName() + " " + user.getLastName());
                                             homeActivity.putExtra("userphone",user.getPhone());

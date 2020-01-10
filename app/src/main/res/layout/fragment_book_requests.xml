@@ -1,43 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    >
+    android:orientation="vertical"
+    android:layout_height="match_parent">
 
-    <!-- Main Books recycler -->
-    <androidx.recyclerview.widget.RecyclerView android:id="@+id/chat_recycler_view"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/requests_tab"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginBottom="6dp"
-        tools:listitem="@layout/chat_list_item"
-        />
-
-
-    <!-- Empty list view -->
-    <LinearLayout
-        android:id="@+id/chat_view_empty"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone"
-        android:layout_marginBottom="280dp"
-        tools:visibility="gone">
+        app:tabTextColor="#CCFFFFFF"
+        android:background="@color/colorPrimary"
+        app:tabSelectedTextColor="@color/white"
+        app:tabIndicatorHeight="4dp">
 
-        <TextView
-            style="@style/AppTheme.Body1"
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tab_all_request"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Hello"
-            android:textColor="@color/greyDisabled" />
+            android:text="@string/pending" />
 
-    </LinearLayout>
-</RelativeLayout>
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tab_my_request"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/MyRequests" />
+
+    </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/requests_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+</LinearLayout>

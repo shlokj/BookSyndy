@@ -124,6 +124,23 @@
     <string name="school">SCHOOL</string>
     <string name="college">COLLEGE</string>
     <string name="clear_filter">Clear filters</string>
+
+    <string name="pending">Pending</string>
+    <string name="MyRequests">My Requests</string>
+
+    <!-- user shared preference -->
     <string name="UserPref">UserPreference</string>
+    <string name="p_imageurl">IMAGEURL</string>
+    <string name="p_userid">USERID</string>
+    <string name="p_userphone">USERPHONE</string>
+    <string name="p_firstname">FNAME</string>
+    <string name="p_lastname">LNAME</string>
+    <string name="p_lat">LAT</string>
+    <string name="p_lng">LNG</string>
     <string name="preferGuidedMode">preferGuidedMode</string>
+    <string name="p_grade">USERGRADE</string>
+    <string name="p_board">USERBOARD</string>
+    <string name="p_competitive">COMPETITIVE</string>
+
+    <!-- user shared preference -->
 </resources>
