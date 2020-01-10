@@ -107,6 +107,7 @@ public class ViewUserProfileActivity extends AppCompatActivity implements BookAd
         Intent bookDetails = new Intent(ViewUserProfileActivity.this, BookDetailsActivity.class);
         bookDetails.putExtra("bookid", book_id);
         bookDetails.putExtra("isHome",false);
+        bookDetails.putExtra("isProfile",true);
         startActivity(bookDetails);
 
     }

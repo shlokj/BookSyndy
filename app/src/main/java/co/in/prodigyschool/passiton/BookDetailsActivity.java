@@ -45,7 +45,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class BookDetailsActivity extends AppCompatActivity implements View.OnClickListener, EventListener<DocumentSnapshot> {
 
     private String bookid;
-    private boolean isHome, saved, isBookmarks;
+    private boolean isHome, saved, isBookmarks, isUserProfile;
     private FirebaseFirestore mFirestore;
     private Book currentBook;
     private User bookOwner;
@@ -71,6 +71,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.activity_book_details);
         bookid = getIntent().getStringExtra("bookid");
         isHome = getIntent().getBooleanExtra("isHome",false);
+        isUserProfile = getIntent().getBooleanExtra("isProfile",false);
         isBookmarks = getIntent().getBooleanExtra("isBookmarks",false);
         initFireStore();
         getUserLocation();
@@ -383,7 +384,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         if (!isHome) {
-            if (!isBookmarks) {
+            if (!isBookmarks && !isUserProfile) {
                 menu.clear();
                 if (!isBookSold()) {
                     menu.add(0, MENU_DELETE, Menu.NONE, "Mark as sold").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
