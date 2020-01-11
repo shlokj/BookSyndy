@@ -285,6 +285,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             editor = userPref.edit();
             editor.putFloat(getString(R.string.p_lat),(float)resultData.getDouble("lat"));
             editor.putFloat(getString(R.string.p_lng),(float)resultData.getDouble("lng"));
+            editor.putString(getString(R.string.p_area),resultData.getString("addr2"));
+            editor.putString(getString(R.string.p_city),resultData.getString("locality"));
             editor.apply();
             showResults(address);
         }

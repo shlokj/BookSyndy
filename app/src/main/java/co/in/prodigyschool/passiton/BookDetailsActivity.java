@@ -5,6 +5,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -60,6 +61,8 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     private final int MENU_DELETE = 123;
     private String curAppUser, shareableLink="";
     private double latA,lngA;
+    private SharedPreferences userPref;
+    private SharedPreferences.Editor editor;
 
     private static final String TAG = "BOOK_DETAILS";
 
@@ -72,6 +75,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         isHome = getIntent().getBooleanExtra("isHome",false);
         isUserProfile = getIntent().getBooleanExtra("isProfile",false);
         isBookmarks = getIntent().getBooleanExtra("isBookmarks",false);
+        userPref = this.getSharedPreferences(getString(R.string.UserPref),0);
         initFireStore();
         getUserLocation();
         view_bookname = findViewById(R.id.book_name);

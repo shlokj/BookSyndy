@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
@@ -75,9 +76,7 @@ public class RequestBookActivity extends AppCompatActivity {
         locField = findViewById(R.id.locField_r);
 
         yearField = findViewById(R.id.bookYearField_r);
-
-
-        initFirebase();
+         initFirebase();
 
         gradeAdapter = new ArrayAdapter<String>(RequestBookActivity.this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.grades));
@@ -315,7 +314,13 @@ public class RequestBookActivity extends AppCompatActivity {
         mFireStore = FirebaseFirestore.getInstance();
         userPhone = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
         userId = userPref.getString(getString(R.string.p_userid),"");
-        locField.setText("Gandhinagar , Bangalore");
+        String address;
+        address = userPref.getString(getString(R.string.p_area),"");
+        if(address != null && !TextUtils.isEmpty(address))
+            address = address + " , ";
+        address  = address + userPref.getString(getString(R.string.p_city),"");
+        locField.setText(address);
+        //locField.setText("Gandhinagar , Bangalore");
     }
 
 
