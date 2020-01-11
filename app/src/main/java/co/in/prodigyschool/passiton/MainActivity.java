@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                                         if (document.getId().equalsIgnoreCase(userId)) {
                                             //user session exist
                                             User user = document.toObject(User.class);
-                                            Intent homeActivity = new Intent(MainActivity.this,HomeActivity.class);
+                                            Intent homeActivity = new Intent(MainActivity.this,WelcomeActivity.class); //changed to welcome activity
                                             homeActivity.putExtra("username",user.getFirstName() + " " + user.getLastName());
                                             homeActivity.putExtra("userphone",user.getPhone());
                                             startActivity(homeActivity);

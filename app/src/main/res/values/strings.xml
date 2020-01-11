@@ -126,4 +126,17 @@
     <string name="clear_filter">Clear filters</string>
     <string name="UserPref">UserPreference</string>
     <string name="preferGuidedMode">preferGuidedMode</string>
+
+    <!--For walkthrough-->
+    <string name="title_activity_welcome">Home Screen</string>
+    <string name="next">NEXT</string>
+    <string name="skip">SKIP</string>
+    <string name="start">GOT IT</string>
+    <string name="slide_1_title">Find the books you need</string>
+    <string name="slide_1_desc">Explore a vast library of books and material</string>
+    <string name="slide_2_title">Sell or give away your old books</string>
+    <string name="slide_2_desc">Free up space and fund your next book as you do so</string>
+    <string name="slide_3_title">Connect</string>
+    <string name="slide_3_desc">Join a network of students across the country</string>
+    <string name="play_again">Play Again</string>
 </resources>
