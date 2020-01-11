@@ -28,7 +28,7 @@
                 android:text="Type" />
 
             <Spinner
-                android:id="@+id/bookTypeSpinner"
+                android:id="@+id/bookTypeSpinner_r"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>
@@ -51,7 +51,7 @@
                 android:text="Title" />
 
             <EditText
-                android:id="@+id/bookNameField"
+                android:id="@+id/bookNameField_r"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -78,7 +78,7 @@
                 android:text="@string/description" />
 
             <EditText
-                android:id="@+id/bookDescField2"
+                android:id="@+id/bookDescField_r"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -105,7 +105,7 @@
                 android:text="@string/grade" />
 
             <Spinner
-                android:id="@+id/gradeSpinner"
+                android:id="@+id/gradeSpinner_r"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 />
@@ -122,19 +122,32 @@
             app:layout_constraintTop_toBottomOf="@+id/gradeLL">
 
             <TextView
-                android:id="@+id/boardLabel"
+                android:id="@+id/boardLabel_r"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/board" />
 
             <Spinner
-                android:id="@+id/boardSpinner"
+                android:id="@+id/boardSpinner_r"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
                 tools:layout_editor_absoluteX="1dp"
                 tools:layout_editor_absoluteY="321dp" />
         </LinearLayout>
+
+        <EditText
+            android:id="@+id/bookYearField_r"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Year"
+            android:layout_marginStart="24dp"
+            android:inputType="number"
+            android:maxLength="1"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/boardLL"
+            app:layout_constraintStart_toEndOf="@+id/boardLL" />
 
         <LinearLayout
             android:id="@+id/collegeDegreeAndYearLL"
@@ -159,7 +172,7 @@
                     android:text="@string/degree" />
 
                 <Spinner
-                    android:id="@+id/degreeSpinner"
+                    android:id="@+id/degreeSpinner_r"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     />
@@ -177,15 +190,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Year" />
+                    android:text="@string/year" />
 
                 <EditText
-                    android:id="@+id/profileYearField"
+                    android:id="@+id/profileYearField_r"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-
                     android:inputType="number" />
             </LinearLayout>
 
@@ -205,7 +217,7 @@
             app:srcCompat="@drawable/ic_check_24px" />
 
         <CheckBox
-            android:id="@+id/forCompetitiveExams"
+            android:id="@+id/forCompetitiveExams_r"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -231,14 +243,13 @@
                 android:layout_weight="1"
                 android:text="@string/location" />
 
-            <EditText
-                android:id="@+id/locField2"
+            <TextView
+                android:id="@+id/locField_r"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="@string/getting_loc"
-                android:inputType="textCapWords"
                 android:lines="5" />
 
         </LinearLayout>

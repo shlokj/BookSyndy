@@ -2,15 +2,15 @@ package co.in.prodigyschool.passiton.Data;
 
 public class BookRequest {
     private String title,description,bookAddress, phone,userId,time;
-    private int grade,board;
-    private double lat,lng;
+    private int grade,board,bookYear;
+
     private boolean isCompetitive,isComplete,isText;
 
 
     public BookRequest() {
     }
 
-    public BookRequest(String title, String description, String bookAddress, String phone, String userId, int grade, int board, double lat, double lng, boolean isCompetitive, boolean isComplete, boolean isText) {
+    public BookRequest(String title, String description, String bookAddress, String phone, String userId, int grade, int board,int  year, boolean isCompetitive, boolean isComplete, boolean isText) {
         this.title = title;
         this.description = description;
         this.bookAddress = bookAddress;
@@ -18,11 +18,19 @@ public class BookRequest {
         this.userId = userId;
         this.grade = grade;
         this.board = board;
-        this.lat = lat;
-        this.lng = lng;
+        this.bookYear = year;
+
         this.isCompetitive = isCompetitive;
         this.isComplete = isComplete;
         this.isText = isText;
+    }
+
+    public int getBookYear() {
+        return bookYear;
+    }
+
+    public void setBookYear(int bookYear) {
+        this.bookYear = bookYear;
     }
 
     public String getTime() {
@@ -89,21 +97,7 @@ public class BookRequest {
         this.board = board;
     }
 
-    public double getLat() {
-        return lat;
-    }
 
-    public void setLat(double lat) {
-        this.lat = lat;
-    }
-
-    public double getLng() {
-        return lng;
-    }
-
-    public void setLng(double lng) {
-        this.lng = lng;
-    }
 
     public boolean isCompetitive() {
         return isCompetitive;

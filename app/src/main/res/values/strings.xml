@@ -141,6 +141,7 @@
     <string name="p_grade">USERGRADE</string>
     <string name="p_board">USERBOARD</string>
     <string name="p_competitive">COMPETITIVE</string>
+    <string name="year">Year</string>
 
     <!-- user shared preference -->
 </resources>
