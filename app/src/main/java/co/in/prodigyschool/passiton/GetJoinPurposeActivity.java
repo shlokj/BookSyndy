@@ -42,11 +42,13 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
         reasonsQuestion = findViewById(R.id.reasonQuestionTV);
         reasons = findViewById(R.id.reasonsButtonList);
         startMainActivity = new Intent(GetJoinPurposeActivity.this, MainActivity.class);
+
+        registerUser();
 //        startMainActivity.putExtra("IS_PARENT", isParent);
 //        startMainActivity.putExtra("FIRST_NAME",firstName);
 //        startMainActivity.putExtra("LAST_NAME",lastName);
 //        startMainActivity.putExtra("GRADE_NUMBER",gradeNumber);
-        FloatingActionButton next = (FloatingActionButton) findViewById(R.id.fab7);
+/*        FloatingActionButton next = (FloatingActionButton) findViewById(R.id.fab7);
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,8 +77,9 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
 //                 put firebase-related code here
                 registerUser();
             }
-        });
+        });*/
     }
+
     private void registerUser() {
         try {
             progressDialog = new ProgressDialog(this);
@@ -96,7 +99,7 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
                 competitiveExam=false;
             }
             phoneNumber = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
-            curFirebaseUser = new User(firstName, lastName, phoneNumber, isParent, toSell, gradeNumber, boardNumber,competitiveExam, username, default_pic_url);
+            curFirebaseUser = new User(firstName, lastName, phoneNumber, isParent, gradeNumber, boardNumber,competitiveExam, username, default_pic_url);
             db = FirebaseFirestore.getInstance();
 
             // Add a new document with a generated ID

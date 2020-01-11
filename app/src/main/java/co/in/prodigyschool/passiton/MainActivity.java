@@ -1,6 +1,5 @@
 package co.in.prodigyschool.passiton;
 
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -75,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
                                             //user session exist
 
                                             User user = document.toObject(User.class);
+                                            Intent homeActivity = new Intent(MainActivity.this,WelcomeActivity.class); //changed to welcome activity
                                             editor = userPref.edit();
                                             editor.putString(getString(R.string.p_userphone),user.getPhone());
                                             editor.putString(getString(R.string.p_userid),user.getUserId());
