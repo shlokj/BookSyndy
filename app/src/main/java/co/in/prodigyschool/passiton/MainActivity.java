@@ -72,9 +72,17 @@ public class MainActivity extends AppCompatActivity {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
                                         if (document.getId().equalsIgnoreCase(userId)) {
                                             //user session exist
-
                                             User user = document.toObject(User.class);
-                                            Intent homeActivity = new Intent(MainActivity.this,WelcomeActivity.class); //changed to welcome activity
+                                            String userId = userPref.getString(getString(R.string.p_userid),null);
+                                            Intent homeActivity;
+                                            if(userId == null || !userId.equalsIgnoreCase(user.getUserId())){
+                                                homeActivity = new Intent(MainActivity.this,WelcomeActivity.class);
+                                            }
+                                            else{
+                                                homeActivity = new Intent(MainActivity.this,HomeActivity.class); //changed to welcome activity
+                                            }
+
+
                                             editor = userPref.edit();
                                             editor.putString(getString(R.string.p_userphone),user.getPhone());
                                             editor.putString(getString(R.string.p_userid),user.getUserId());
@@ -92,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
                                             finish();
                                             return;
                                         }
+
 
                                         //Log.d(TAG, document.getId() + " => " + document.getData());
                                     }

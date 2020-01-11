@@ -2,16 +2,19 @@ package co.in.prodigyschool.passiton;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -38,14 +42,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import co.in.prodigyschool.passiton.Data.User;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
@@ -58,6 +58,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private LocationAddressResultReceiver addressResultReceiver;
     private Location currentLocation;
     private LocationCallback locationCallback;
+    private LocationManager locationManager;
     private NavigationView navigationView;
 
     private TextView navUsername,navUserphone;
@@ -152,39 +153,55 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+
+
+
+    public boolean CheckGpsStatus() {
+
+        locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+
     /* location classes */
 
     @SuppressWarnings("MissingPermission")
     private void startLocationUpdates() {
+        Log.d(TAG, "startLocationUpdates: entered");
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     LOCATION_PERMISSION_REQUEST_CODE);
-        } else {
+        }
+        else {
+            if (!CheckGpsStatus()) {
+                showGpsSettingDialog();
+            } else {
 
-            fusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
-                    // GPS location can be null if GPS is switched off
-                    if (location != null) {
-                        currentLocation = location;
-                        getAddress();
-                    }
-                }
-            })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d("add_location", "Error trying to get last GPS location");
-                            Toast.makeText(HomeActivity.this,
-                                    "Error trying to get last GPS location",
-                                    Toast.LENGTH_SHORT).show();
-                            e.printStackTrace();
+                fusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // GPS location can be null if GPS is switched off
+                        if (location != null) {
+                            currentLocation = location;
+                            getAddress();
                         }
-                    });
+                    }
+                })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d("add_location", "Error trying to get last GPS location");
+                                Toast.makeText(HomeActivity.this,
+                                        "Error trying to get last GPS location",
+                                        Toast.LENGTH_SHORT).show();
+                                e.printStackTrace();
+                            }
+                        });
 
+            }
         }
     }
 
@@ -211,7 +228,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             case LOCATION_PERMISSION_REQUEST_CODE: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    startLocationUpdates();
+                        startLocationUpdates();
                 } else {
                     Toast.makeText(this, "Location permission not granted, " +
                                     "restart the app if you want the feature",
@@ -223,6 +240,29 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    private void showGpsSettingDialog() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("GPS Disabled");
+        builder.setMessage("Open settings to enable GPS now?");
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+               Toast.makeText(getApplicationContext(),"Location Service Disabled",Toast.LENGTH_SHORT).show();
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+
+    }
 
 
     @Override
@@ -288,41 +328,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             editor.putString(getString(R.string.p_area),resultData.getString("addr2"));
             editor.putString(getString(R.string.p_city),resultData.getString("locality"));
             editor.apply();
-            showResults(address);
+           // showResults(address);
         }
     }
 
-    private void showResults(Map<String, Object> Address) {
-        //Toast.makeText(getApplicationContext(),addr1+" "+addr2+" "+locality,Toast.LENGTH_LONG).show();
-        try {
-
-            String userId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection("address").document(userId)
-                    .set(Address)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d("firestore_address", "DocumentSnapshot successfully written!");
-                            //Toast.makeText(getApplicationContext(), "Address successfully saved!", Toast.LENGTH_LONG).show();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w("firestore_address", "Error writing document", e);
-                            Toast.makeText(getApplicationContext(), "Error saving Address!", Toast.LENGTH_LONG).show();
-                        }
-                    });
-        } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-    }
 
     @Override
     protected void onResume() {
         super.onResume();
-        startLocationUpdates();
     }
 
     @Override
