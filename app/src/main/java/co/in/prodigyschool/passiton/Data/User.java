@@ -123,8 +123,4 @@ public class User {
         this.competitiveExam = competitiveExam;
     }
 
-    public String getFullName() {
-        return this.getFirstName() + " " + this.getLastName();
-    }
-
 }

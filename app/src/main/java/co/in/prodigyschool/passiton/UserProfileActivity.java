@@ -62,7 +62,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private CheckBox compExams,preferGuidedMode;
     private boolean detailsChanged = false, newUNameOK=true, tempCE;//TODO: add code to check whether new username is OK
     private TextView boardLabel;
-    private String firstName, lastName, phoneNumber;
+    private String firstName, lastName, phoneNumber,userId;
     private FirebaseFirestore mFirestore;
     private User curUser;
     private Uri selectedImage;
@@ -90,7 +90,8 @@ public class UserProfileActivity extends AppCompatActivity {
 
         profilePic = findViewById(R.id.profilePic);
         preferGuidedMode = findViewById(R.id.preferGuidedMode);
-        getUserPreference();
+        userPref = this.getSharedPreferences(getString(R.string.UserPref),0);
+
         fName = findViewById(R.id.firstNameProfile);
         lName = findViewById(R.id.lastNameProfile);
         uName = findViewById(R.id.usernameField);
@@ -137,7 +138,9 @@ public class UserProfileActivity extends AppCompatActivity {
 
             }
         };
-
+        mFirestore  = FirebaseFirestore.getInstance();
+        getUserPreference();
+        populateUserDetails();
         fName.addTextChangedListener(checkChange);
         lName.addTextChangedListener(checkChange);
         uName.addTextChangedListener(checkChange);
@@ -163,7 +166,7 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
 
-        populateUserDetails();
+
 
         gradeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -203,8 +206,9 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     private void getUserPreference() {
-            userPref = this.getSharedPreferences(getString(R.string.UserPref),0);
+
             preferGuidedMode.setChecked(userPref.getBoolean(getString(R.string.preferGuidedMode),false));
+
 
     }
 
@@ -261,23 +265,27 @@ public class UserProfileActivity extends AppCompatActivity {
                         preferGuidedMode.setEnabled(false);
 
 
-                        editor = userPref.edit();
-                        editor.putBoolean(getString(R.string.preferGuidedMode),preferGuidedMode.isChecked());
-                        editor.commit();
 
-                        User updatedUser = curUser;
-                        updatedUser.setFirstName(fName.getText().toString());
-                        updatedUser.setLastName(lName.getText().toString());
-                        updatedUser.setGradeNumber(gradeSpinner.getSelectedItemPosition()+1);
+
+                        int board;
                         if (gradeSpinner.getSelectedItemPosition()>=6) {
-                            updatedUser.setBoardNumber(boardSpinner.getSelectedItemPosition()+7);
+                            board = boardSpinner.getSelectedItemPosition()+7;
                         }
                         else {
-                            updatedUser.setBoardNumber(boardSpinner.getSelectedItemPosition()+1);
+                            board = boardSpinner.getSelectedItemPosition()+1;
                         }
-                        updatedUser.setCompetitiveExam(compExams.isChecked());
+
+                        editor = userPref.edit();
+                        editor.putBoolean(getString(R.string.preferGuidedMode),preferGuidedMode.isChecked());
+                        editor.putString(getString(R.string.p_firstname),fName.getText().toString());
+                        editor.putString(getString(R.string.p_lastname),lName.getText().toString());
+//                        editor.putString(getString(R.string.p_imageurl),user.getImageUrl());
+                        editor.putInt(getString(R.string.p_grade),gradeSpinner.getSelectedItemPosition() +1);
+                        editor.putInt(getString(R.string.p_board),board);
+                        editor.putBoolean(getString(R.string.p_competitive),compExams.isChecked());
+                        editor.apply();
                         DocumentReference userReference =  mFirestore.collection("users").document(phoneNumber);
-                        userReference.set(updatedUser).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        userReference.update("competitiveExam",compExams.isChecked(),"firstName",fName.getText().toString(),"lastName",lName.getText().toString(),"gradeNumber",gradeSpinner.getSelectedItemPosition()+1,"boardNumber",board).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 if(progressDialog.isShowing())
@@ -387,22 +395,16 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     private void populateUserDetails() {
-        if (!checkConnection(getApplicationContext())) {
-            Toast.makeText(getApplicationContext(),"Internet Required",Toast.LENGTH_LONG).show();
-            return;
-        }
-        mFirestore = FirebaseFirestore.getInstance();
+
         try{
-            phoneNumber = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
-            DocumentReference userReference =  mFirestore.collection("users").document(phoneNumber);
-            userReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot snapshot) {
-                    User user = snapshot.toObject(User.class);
-                    curUser = user;
-                    if(user != null) {
-                        gradeNumber = user.getGradeNumber();
-                        boardNumber = user.getBoardNumber();
+            phoneNumber = userPref.getString(getString(R.string.p_userphone),"");
+
+                        gradeNumber = userPref.getInt(getString(R.string.p_grade),2);
+                        boardNumber = userPref.getInt(getString(R.string.p_board),2);
+
+                        firstName = userPref.getString(getString(R.string.p_firstname),"");
+                        lastName = userPref.getString(getString(R.string.p_lastname),"");
+                        userId = userPref.getString(getString(R.string.p_userid),"");
 
                         gradeSpinner.setAdapter(gradeAdapter);
                         gradeSpinner.setSelection(gradeNumber-1);
@@ -418,7 +420,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
                             if (gradeNumber==5 || gradeNumber==6) {
                                 compExams.setVisibility(View.VISIBLE);
-                                tempCE = user.isCompetitiveExam();
+                                tempCE = userPref.getBoolean(getString(R.string.p_competitive),false);
 //                                Toast.makeText(getApplicationContext(),"Competitive exam: "+tempCE,Toast.LENGTH_SHORT).show();
                                 compExams.setChecked(tempCE);
                             }
@@ -437,19 +439,12 @@ public class UserProfileActivity extends AppCompatActivity {
                             boardSpinner.setAdapter(degreeAdapter);
                             boardSpinner.setSelection(boardNumber-7);
                         }
-                        fName.setText(user.getFirstName());
-                        lName.setText(user.getLastName());
-                        uName.setText(user.getUserId());
-                        phoneNo.setText(user.getPhone().substring(3));
-                    }
 
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.e(TAG, "onFailure: ",e );
-                }
-            });
+                        fName.setText(firstName);
+                        lName.setText(lastName);
+                        uName.setText(userId);
+                        phoneNo.setText(phoneNumber);
+
 
         }
         catch(Exception e){

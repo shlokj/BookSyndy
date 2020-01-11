@@ -25,7 +25,7 @@
             android:scaleY="1.2"
             app:srcCompat="@drawable/ic_search_24px" />
 
-        <!--This is the actual edittext where the user searches for their location -->
+        <!--This is the actual edittext where the phone searches for their location -->
 
         <EditText
             android:id="@+id/searchLocationEditText"
