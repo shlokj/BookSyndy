@@ -142,7 +142,6 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
 
 
 
-
     private void populateBookDetails(Book book) {
 
         try {
@@ -246,10 +245,12 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                         return;
                     }
                     bookOwner = snapshot.toObject(User.class);
-                    sellerName.setText(bookOwner.getUserId());
-                    Glide.with(sellerDp.getContext())
-                            .load(bookOwner.getImageUrl())
-                            .into(sellerDp);
+                    if (bookOwner!=null) {
+                        sellerName.setText(bookOwner.getUserId());
+                        Glide.with(sellerDp.getContext())
+                                .load(bookOwner.getImageUrl())
+                                .into(sellerDp);
+                    }
                 }
             });
         }
