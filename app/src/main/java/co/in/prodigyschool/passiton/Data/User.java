@@ -6,10 +6,21 @@ public class User {
     private boolean isParent,toSell,competitiveExam;
     private int gradeNumber,boardNumber,year;
 
-
-
     public User() {
 
+    }
+
+    public User(String firstName, String lastName, String phone, boolean isParent, int gradeNumber, int boardNumber,boolean competitiveExam,String userId,String imageUrl) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.isParent = isParent;
+        this.toSell = false;
+        this.gradeNumber = gradeNumber;
+        this.boardNumber = boardNumber;
+        this.competitiveExam = competitiveExam;
+        this.userId = userId;
+        this.imageUrl = imageUrl;
     }
 
     public User(String firstName, String lastName, String phone, boolean isParent, boolean toSell, int gradeNumber, int boardNumber,boolean competitiveExam,String userId,String imageUrl) {

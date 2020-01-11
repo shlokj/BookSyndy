@@ -60,7 +60,6 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     private final int MENU_DELETE = 123;
     private String curAppUser, shareableLink="";
     private double latA,lngA;
-    private View.OnClickListener toOpenProfile;
 
     private static final String TAG = "BOOK_DETAILS";
 
@@ -85,14 +84,14 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         sellerDp = findViewById(R.id.seller_dp);
         sellerName = findViewById(R.id.sellerName);
 
-        toOpenProfile = new View.OnClickListener() {
+        View.OnClickListener toOpenProfile = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent viewProfile = new Intent(BookDetailsActivity.this, ViewUserProfileActivity.class);
-                viewProfile.putExtra("USER_PHONE",bookOwner.getPhone());
-                viewProfile.putExtra("USER_NAME",bookOwner.getFirstName()+" "+bookOwner.getLastName());
-                viewProfile.putExtra("USER_ID",bookOwner.getUserId());
-                viewProfile.putExtra("USER_PHOTO",bookOwner.getImageUrl());
+                viewProfile.putExtra("USER_PHONE", bookOwner.getPhone());
+                viewProfile.putExtra("USER_NAME", bookOwner.getFirstName() + " " + bookOwner.getLastName());
+                viewProfile.putExtra("USER_ID", bookOwner.getUserId());
+                viewProfile.putExtra("USER_PHOTO", bookOwner.getImageUrl());
                 startActivity(viewProfile);
             }
         };

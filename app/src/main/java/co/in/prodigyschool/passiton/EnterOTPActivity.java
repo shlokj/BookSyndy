@@ -148,7 +148,7 @@ public class EnterOTPActivity extends AppCompatActivity {
         final String phoneNumber = ctryCode + number;
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 phoneNumber,        // Phone number to verify
-                90,                 // Timeout duration
+                120,                 // Timeout duration
                 TimeUnit.SECONDS,   // Unit of timeout
                 this,               // Activity (for callback binding)
                 mCallbacks);        // OnVerificationStateChangedCallbacks
@@ -268,5 +268,10 @@ public class EnterOTPActivity extends AppCompatActivity {
                 timerOn=false;
             }
         }.start();
+    }
+
+    @Override
+    public void onBackPressed() {
+        // do not allow user to go back to the screen before
     }
 }

@@ -13,4 +13,5 @@
     <color name="green">#C7EA46</color>
     <color name="bookSwipeBg">#ED2939</color>
     <color name="chatBoxBlue">#0CB0C6</color>
+    <color name="chatBoxGrey">#AAB4B5</color>
 </resources>
