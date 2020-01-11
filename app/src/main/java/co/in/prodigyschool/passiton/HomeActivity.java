@@ -3,6 +3,7 @@ package co.in.prodigyschool.passiton;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Geocoder;
 import android.location.Location;
@@ -62,6 +63,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private TextView navUsername,navUserphone;
     private FirebaseFirestore mFirestore;
     private String curUserId, snackbarMessage;
+    private SharedPreferences userPref;
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +73,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
+        userPref = this.getSharedPreferences(getString(R.string.UserPref),0);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -102,35 +105,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void populateUserDetails() {
-        if (!checkConnection(getApplicationContext())) {
-            Toast.makeText(getApplicationContext(),"Internet Required",Toast.LENGTH_LONG).show();
-            return;
-        }
-        mFirestore = FirebaseFirestore.getInstance();
-        try{
-            curUserId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
-            DocumentReference userReference =  mFirestore.collection("users").document(curUserId);
-            userReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot snapshot) {
-                    User user = snapshot.toObject(User.class);
-                    if(user != null) {
-                        navUsername.setText(user.getUserId());
-                        navUserphone.setText(user.getPhone());
-                    }
 
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.e(TAG, "onFailure: ",e );
-                }
-            });
+        String userPhone = userPref.getString(getString(R.string.p_userphone),"");
+        String userId = userPref.getString(getString(R.string.p_userid),"");
+        navUsername.setText(userId);
+        navUserphone.setText(userPhone);
 
-        }
-        catch(Exception e){
-            Log.e(TAG, "PopulateUserDetails method failed with  ",e);
-        }
     }
 
     @Override
@@ -302,6 +282,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             address.put("post", resultData.getString("post"));
             address.put("lat",resultData.getDouble("lat"));
             address.put("lng",resultData.getDouble("lng"));
+            editor = userPref.edit();
+            editor.putFloat(getString(R.string.p_lat),(float)resultData.getDouble("lat"));
+            editor.putFloat(getString(R.string.p_lng),(float)resultData.getDouble("lng"));
+            editor.apply();
             showResults(address);
         }
     }
@@ -309,6 +293,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private void showResults(Map<String, Object> Address) {
         //Toast.makeText(getApplicationContext(),addr1+" "+addr2+" "+locality,Toast.LENGTH_LONG).show();
         try {
+
             String userId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             db.collection("address").document(userId)
