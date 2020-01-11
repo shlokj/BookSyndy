@@ -14,7 +14,6 @@
             android:layout_height="wrap_content"
             android:text="@string/slide_1_title"
             android:textColor="@android:color/white"
-            android:fontFamily="@font/roboto_light"
             android:textAlignment="center"
             android:layout_marginBottom="@dimen/slide_title"
             android:textSize="@dimen/slide_title"
@@ -31,7 +30,6 @@
             android:paddingRight="@dimen/desc_padding"
             android:text="@string/slide_1_desc"
             android:textAlignment="center"
-            android:fontFamily="@font/roboto_light"
             android:textColor="@android:color/white"
             android:textSize="@dimen/slide_desc" />
     </LinearLayout>
