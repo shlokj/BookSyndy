@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                                             editor.putInt(getString(R.string.p_board),user.getBoardNumber());
                                             editor.putBoolean(getString(R.string.p_competitive),user.isCompetitiveExam());
                                             editor.apply();
-                                            Intent homeActivity = new Intent(MainActivity.this,HomeActivity.class);
+//                                            Intent homeActivity = new Intent(MainActivity.this,HomeActivity.class);
                                             homeActivity.putExtra("username",user.getFirstName() + " " + user.getLastName());
                                             homeActivity.putExtra("userphone",user.getPhone());
                                             startActivity(homeActivity);
