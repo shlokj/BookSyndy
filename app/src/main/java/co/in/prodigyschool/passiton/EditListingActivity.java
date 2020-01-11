@@ -2,21 +2,31 @@ package co.in.prodigyschool.passiton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.model.Place;
@@ -24,14 +34,25 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
+import co.in.prodigyschool.passiton.Data.Book;
+import co.in.prodigyschool.passiton.util.BookUtil;
 
 public class EditListingActivity extends AppCompatActivity {
 
@@ -87,6 +108,255 @@ public class EditListingActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
+
+        initFireBase();
+
+
+        gradeAdapter = new ArrayAdapter<String>(EditListingActivity.this,
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.grades));
+        gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        gradeSpinner.setAdapter(gradeAdapter);
+
+        boardAdapter = new ArrayAdapter<String>(EditListingActivity.this,
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.boards));
+        boardAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        boardSpinner.setAdapter(boardAdapter);
+
+        degreeAdapter = new ArrayAdapter<String>(EditListingActivity.this,
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.degrees));
+        degreeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        typeAdapter = new ArrayAdapter<String>(EditListingActivity.this,
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.types));
+        degreeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        typeSpinner.setAdapter(typeAdapter);
+
+        mAuth = FirebaseAuth.getInstance();
+
+        //TODO: get other details as well
+        gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
+        boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 6);
+
+        mBookImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // todo: add dialog to choose between camera or gallery
+//                Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+//                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                startActivityForResult(pickPhoto, 1);
+                openCameraIntent();
+            }
+        });
+
+        // to disallow enter
+        nameField.addTextChangedListener(new TextWatcher() {
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            public void afterTextChanged(Editable s) {
+
+                for(int i = s.length(); i > 0; i--) {
+
+                    if(s.subSequence(i-1, i).toString().equals("\n"))
+                        s.replace(i-1, i, "");
+                }
+            }
+        });
+
+
+        competitiveExam.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                gradeSpinner.setEnabled(!isChecked);
+                gradeSpinner.setFocusable(!isChecked);
+                gradeSpinner.setFocusableInTouchMode(!isChecked);
+                boardSpinner.setEnabled(!isChecked);
+                boardSpinner.setFocusable(!isChecked);
+                boardSpinner.setFocusableInTouchMode(!isChecked);
+            }
+        });
+        free.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (!(free.isChecked())) {
+                    priceField.setEnabled(true);
+                    priceField.setFocusableInTouchMode(true);
+                    priceField.setFocusable(true);
+                    priceField.setText("");
+                    priceField.requestFocus();
+                }
+                else {
+                    priceField.setEnabled(false);
+                    priceField.setFocusableInTouchMode(false);
+                    priceField.setFocusable(false);
+                    priceField.setText("0");
+                }
+            }
+        });
+
+        gradeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                if (position<6) {
+                    boardDegreeLabel.setText("Board");
+                    boardSpinner.setAdapter(boardAdapter);
+                    yearField.setVisibility(View.GONE);
+                    if (position==4 || position==5) {
+                        competitiveExam.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        competitiveExam.setVisibility(View.GONE);
+                    }
+                }
+                else {
+                    boardDegreeLabel.setText("Degree / course");
+                    boardSpinner.setAdapter(degreeAdapter);
+                    yearField.setVisibility(View.VISIBLE);
+                    competitiveExam.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+
+            }
+
+        });
+
+        postButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bookName = nameField.getText().toString();
+                bookDescription = descField.getText().toString();
+                bookAddress = locField.getText().toString();
+                isTextbook = typeSpinner.getSelectedItemPosition()==0;
+                gradeNumber = gradeSpinner.getSelectedItemPosition()+1;
+                if (gradeNumber>=7) {
+                    boardNumber = boardSpinner.getSelectedItemPosition() + 7;
+                }
+                else {
+                    boardNumber = boardSpinner.getSelectedItemPosition() + 1;
+                }
+                String bps = priceField.getText().toString().trim();
+                String bys;
+                forCompExam = competitiveExam.isChecked();
+
+                if (bookName.length()<10) {
+                    showSnackbar("Please enter at least 10 characters for your book's name");
+                }
+                else if (bookDescription.length()<10) {
+                    showSnackbar("Please enter at least 10 characters for the description");
+                }
+                else if (gradeNumber>=7 && yearField.getText().toString().length()==0) {
+                    showSnackbar("Please enter a year for your book");
+                }
+                else if (bookAddress.length()==0) {
+                    showSnackbar("Couldn't get your location. Please enter it manually.");
+                }
+                else if (bps.length()==0) {
+                    showSnackbar("Please enter a price or give it for free");
+                }
+                else if (book_photo_url==null || book_photo_url.length()==0) {
+                    showSnackbar("Please take a picture of your book");
+                }
+                else {
+                    boolean validYear = true;
+                    bookPrice = Integer.parseInt(bps);
+                    if (gradeNumber>=7) {
+//                        Toast.makeText(getApplicationContext(),"Undergrad",Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(),"Board number: "+boardNumber,Toast.LENGTH_SHORT).show();
+
+                        bys = yearField.getText().toString().trim();
+                        if (bys.length()==0) {
+                            showSnackbar("Please enter a year for your book");
+                        }
+                        else {
+                            year = Integer.parseInt(bys);
+
+                            if (boardNumber == 7) {
+
+                                if (year > 4 || year == 0) {
+                                    validYear = false;
+                                    displaySnackbarYears(4);
+                                }
+                            } else if (boardNumber == 8) {
+                                if (year > 4 || year == 0) {
+                                    validYear = false;
+                                    displaySnackbarYears(4);
+                                }
+                            } else if (boardNumber == 9) {
+                                if (year > 4 || year == 0) {
+                                    validYear = false;
+                                    displaySnackbarYears(4);
+                                }
+                            } else if (boardNumber == 10) {
+                                if (year > 4 || year == 0) {
+                                    validYear = false;
+                                    displaySnackbarYears(4);
+                                }
+                            } else if (boardNumber == 11) {
+                                if (year > 4 || year == 0) {
+                                    validYear = false;
+                                    displaySnackbarYears(4);
+                                }
+                            } else if (boardNumber == 12) {
+                                if (year > 4 || year == 0) {
+                                    validYear = false;
+                                    displaySnackbarYears(4);
+                                }
+                            } else if (boardNumber == 13) {
+                                if (year > 4 || year == 0) {
+                                    validYear = false;
+                                    displaySnackbarYears(4);
+                                }
+                            } else if (boardNumber == 14) {
+                                if (year > 5 || year == 0) {
+                                    validYear = false;
+                                    displaySnackbarYears(5);
+                                }
+                            } else if (boardNumber == 15) {
+                                boardNumber = 15;
+//                                Toast.makeText(getApplicationContext(),"MBBS",Toast.LENGTH_LONG).show();
+                                if (year > 6 || year == 0) {
+                                    validYear = false;
+                                    displaySnackbarYears(6);
+                                }
+                            } else if (boardNumber == 16) {
+                                if (year == 0) {
+                                    validYear = false;
+                                    View parentLayout = findViewById(android.R.id.content);
+                                    Snackbar.make(parentLayout, "Your year can't be 0", Snackbar.LENGTH_SHORT)
+                                            .setAction("OKAY", new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+
+                                                }
+                                            })
+                                            .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                                            .show();
+                                }
+                            }
+                        }
+                        if (bys.length()==0) {
+                            showSnackbar("Please enter a year for your book");
+                        }
+                        else {
+                            year=Integer.parseInt(bys);
+                        }
+                    }
+                    else {
+                        year=0;
+                    }
+                    if (validYear) {
+//                        Toast.makeText(getApplicationContext(),"Valid, start upload",Toast.LENGTH_SHORT).show();
+                        uploadBook();
+                    }
+                }
+            }
+        });
+
     }
 
 
@@ -101,8 +371,68 @@ public class EditListingActivity extends AppCompatActivity {
         catch (NullPointerException e){
             Log.e(TAG, "initFireBase: getCurrentUser error", e);
         }
-
     }
+
+
+
+    private void uploadBook() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Posting...");
+        progressDialog.setTitle("Creating your listing");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        try {
+
+            if(userId == null){
+                userId = mAuth.getCurrentUser().getPhoneNumber();
+            }
+            Book book = BookUtil.addBook(userId,isTextbook,bookName,bookDescription,gradeNumber,boardNumber,bookPrice,bookAddress,book_lat,book_lng);
+            book.setBookYear(year);
+            if(book_photo_url != null && !book_photo_url.isEmpty()){
+                // book.setBookPhoto();
+                book.setBookPhoto(book_photo_url);
+            }
+
+            CollectionReference books = mFireStore.collection("books");
+            books.add(book).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentReference> task) {
+                    if(task.isSuccessful()){
+                        Log.d("Add Book","onComplete: Book added successfully");
+                        progressDialog.dismiss();
+                        Intent homeIntent = new Intent(EditListingActivity.this,HomeActivity.class);
+                        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                        homeIntent.putExtra("SNACKBAR_MSG", "Your edits have been saved");
+                        startActivity(homeIntent);
+                    }
+                    else{
+                        Log.d(TAG, "onComplete: failed with",task.getException());
+                        Toast.makeText(getApplicationContext(),"failed to add book!",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "User Register Failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            if(progressDialog.isShowing())
+                progressDialog.dismiss();
+        }
+    }
+
+    public void showSnackbar(String message) {
+        View parentLayout = findViewById(android.R.id.content);
+        Snackbar.make(parentLayout, message, Snackbar.LENGTH_SHORT)
+                .setAction("OKAY", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                })
+                .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                .show();
+    }
+
 
     private void populateUserLocation() {
 
@@ -162,6 +492,155 @@ public class EditListingActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "failed to get Address", Toast.LENGTH_SHORT).show();
 
         }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+
+        switch (requestCode) {
+
+/*            case PIC_CROP:
+
+                if (imageReturnedIntent != null) {
+                    // get the returned data
+                    Bundle extras = imageReturnedIntent.getExtras();
+
+                    Bitmap selectedBitmap = extras.getParcelable("data");
+
+                    chosenPic.setImageBitmap(selectedBitmap);
+                }*/
+
+            case 0:// camera intent
+                if (resultCode == RESULT_OK ) {
+
+                    Glide.with(this).load(imageFilePath).into(mBookImage);
+                    File f = new File(imageFilePath);
+                    selectedImageUri = Uri.fromFile(f);
+                    storeBookImage(selectedImageUri);
+                }
+                break;
+
+            case 1:// gallery intent
+                if (resultCode == RESULT_OK && imageReturnedIntent != null && imageReturnedIntent.getData() != null) {
+                    selectedImageUri = imageReturnedIntent.getData();
+                    //performCrop(selectedImageUri);
+                    storeBookImage(selectedImageUri);
+                    Glide.with(this).load(selectedImageUri).into(mBookImage);
+                }
+                break;
+
+
+        }
+    }
+
+
+    private File createImageFile() throws IOException {
+
+        String imageFileName = "BOOK" + "_";
+        File storageDir =
+                getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        imageFilePath = image.getAbsolutePath();
+        return image;
+    }
+
+    private void openCameraIntent() {
+        Intent pictureIntent = new Intent(
+                MediaStore.ACTION_IMAGE_CAPTURE);
+        if (pictureIntent.resolveActivity(getPackageManager()) != null) {
+            //Create a file to store the image
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            }
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this, "co.in.prodigyschool.passiton.provider", photoFile);
+                pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                        photoURI);
+                startActivityForResult(pictureIntent,
+                        0);
+            }
+        }
+    }
+
+    private void storeBookImage(Uri selectedImageUri) {
+        //show progress
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Uploading");
+//        progressDialog.show();
+        try {
+            String timeStamp =
+                    new SimpleDateFormat("yyyyMMdd_HHmmss",
+                            Locale.getDefault()).format(new Date());
+            // Get a reference to store file at book_photos/<FILENAME>
+            final StorageReference photoRef = bookPhotosStorageReference.child(timeStamp + "_" + selectedImageUri.getLastPathSegment());
+
+            // Upload file to Firebase Storage
+            UploadTask uploadTask = photoRef.putFile(selectedImageUri);
+
+            uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                    if (!task.isSuccessful()) {
+                        Log.e(TAG, "then: failure download url", task.getException());
+                        progressDialog.dismiss();
+                    }
+
+                    // Continue with the task to get the download URL
+                    return photoRef.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
+                        book_photo_url = task.getResult().toString();
+//                        Toast.makeText(getApplicationContext(), "upload success", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                        Log.d(TAG, "onComplete: success url: " + book_photo_url);
+                    } else {
+                        // Handle failures
+                        progressDialog.dismiss();
+                        Log.e(TAG, "onComplete: failure", task.getException());
+                    }
+                }
+            });
+
+            uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                    //calculating progress percentage
+                    double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+
+                    //displaying percentage in progress dialog
+                    progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
+                }
+            });
+
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            progressDialog.dismiss();
+        }
+    }
+
+    public void displaySnackbarYears(int year) {
+        String yearNum = Integer.valueOf(year).toString();
+        View parentLayout = findViewById(android.R.id.content);
+        Snackbar.make(parentLayout, "Please enter a valid year " + yearNum + " or below, and not 0", Snackbar.LENGTH_SHORT)
+                .setAction("OKAY", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                })
+                .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                .show();
     }
 
 }

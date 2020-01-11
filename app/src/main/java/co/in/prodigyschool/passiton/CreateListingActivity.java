@@ -482,7 +482,7 @@ public class CreateListingActivity extends AppCompatActivity {
 
 
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "User Register Failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Create listing failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
             if(progressDialog.isShowing())
                 progressDialog.dismiss();
         }

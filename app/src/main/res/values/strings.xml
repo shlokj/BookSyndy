@@ -156,6 +156,7 @@
     <string name="year">Year</string>
     <string name="p_area">AREA</string>
     <string name="p_city">CITY</string>
+    <string name="save">Save</string>
 
     <!-- user shared preference -->
 </resources>

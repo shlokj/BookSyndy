@@ -34,6 +34,7 @@ import com.google.firebase.firestore.Query;
 
 import co.in.prodigyschool.passiton.Adapters.BookAdapter;
 import co.in.prodigyschool.passiton.BookDetailsActivity;
+import co.in.prodigyschool.passiton.EditListingActivity;
 import co.in.prodigyschool.passiton.R;
 
 /**
@@ -149,7 +150,6 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
 
             @Override
             protected void onError(FirebaseFirestoreException e) {
-
                 Log.e(TAG, "Error: check logs for info.");
             }
         };
@@ -167,9 +167,12 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
         }
 
 
+
+
     private void displayOptions(){
         optionsList.clear();
         optionsList.add("Mark as sold");
+        optionsList.add("Edit");
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getLayoutInflater();
         View convertView = (View) inflater.inflate(R.layout.dialog_longpress_mylistings_options, null);
@@ -198,6 +201,11 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
                     markAsSold(true);
                     dialog.dismiss();
                 }
+                else if (opt.equals("Edit")) {
+                    Intent edit = new Intent(getActivity(), EditListingActivity.class);
+
+                    startActivity(edit);
+                }
             }
         });
     }
@@ -217,4 +225,5 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
             }
         });
     }
+
 }
