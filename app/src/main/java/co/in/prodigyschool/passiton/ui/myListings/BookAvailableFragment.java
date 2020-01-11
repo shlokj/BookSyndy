@@ -2,7 +2,6 @@ package co.in.prodigyschool.passiton.ui.myListings;
 
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -209,7 +208,6 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
             }
         });
     }
-
 
     private void markAsSold(boolean sold){
         final CollectionReference bookRef = mFirestore.collection("books");

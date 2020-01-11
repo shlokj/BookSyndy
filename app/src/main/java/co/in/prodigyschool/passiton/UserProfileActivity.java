@@ -264,9 +264,6 @@ public class UserProfileActivity extends AppCompatActivity {
                         degreeSpinner.setEnabled(false);
                         preferGuidedMode.setEnabled(false);
 
-
-
-
                         int board;
                         if (gradeSpinner.getSelectedItemPosition()>=6) {
                             board = boardSpinner.getSelectedItemPosition()+7;
