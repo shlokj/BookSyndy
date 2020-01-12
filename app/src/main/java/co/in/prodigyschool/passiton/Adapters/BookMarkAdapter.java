@@ -208,7 +208,7 @@ public class BookMarkAdapter extends FirestoreRecyclerAdapter<Book,BookMarkAdapt
                 if (res > 0.0f && res < 1000f) {
                     res = Math.round(res);
                     if (res > 0.0f)
-                        cityView.append("  " + (int)res + " m");
+                        cityView.append("\n" + (int)res + " m");
                 }
                 else if(res > 1000f){
                     res = Math.round(res / 100);
@@ -218,9 +218,6 @@ public class BookMarkAdapter extends FirestoreRecyclerAdapter<Book,BookMarkAdapt
                 }
             }
         }
-
-
     }//end of view holder class
-
 }
 

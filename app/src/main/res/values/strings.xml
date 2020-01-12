@@ -157,6 +157,8 @@
     <string name="p_area">AREA</string>
     <string name="p_city">CITY</string>
     <string name="save">Save</string>
+    <string name="report_user">Report user</string>
+    <string name="report_listing">Report listing</string>
 
     <!-- user shared preference -->
 </resources>

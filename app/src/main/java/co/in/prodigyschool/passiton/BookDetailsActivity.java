@@ -486,6 +486,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+
                     }
                 });
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
@@ -502,8 +503,28 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 onBackPressed();
                 break;
 
+            case R.id.reportListing:
+                AlertDialog.Builder rBuilder = new AlertDialog.Builder(BookDetailsActivity.this);
+                rBuilder.setTitle("Report listing");
+                rBuilder.setMessage("Are you sure you want to report this listing?");
+                rBuilder.setPositiveButton("Report", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // code to report
+                        Toast.makeText(getApplicationContext(),"Reported",Toast.LENGTH_SHORT).show();
+                        onBackPressed();
+                    }
+                });
+                rBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+                rBuilder.show();
+                break;
+
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     private void markAsSold(boolean sold){

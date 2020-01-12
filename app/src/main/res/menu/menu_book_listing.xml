@@ -15,4 +15,8 @@
         android:icon="@drawable/ic_bookmark_border_24px"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/reportListing"
+        android:title="@string/report_listing"
+        app:showAsAction="never"/>
 </menu>

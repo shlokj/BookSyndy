@@ -1,11 +1,19 @@
 package co.in.prodigyschool.passiton;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,12 +45,16 @@ public class ViewUserProfileActivity extends AppCompatActivity implements BookAd
     private View mEmptyView;
     private Query mQuery;
     private RecyclerView.LayoutManager layoutManager;
+    private Menu menu;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_user_profile);
-        getSupportActionBar().setTitle("View profile");
-
+        ActionBar ab = getSupportActionBar();
+        ab.setTitle("View profile");
+        ab.setDisplayHomeAsUpEnabled(true);
+        ab.setDisplayShowHomeEnabled(true);
         user_photo = findViewById(R.id.others_profile_image);
         mUserName = findViewById(R.id.view_fullname);
         mUserId = findViewById(R.id.usernameMsg);
@@ -115,5 +127,40 @@ public class ViewUserProfileActivity extends AppCompatActivity implements BookAd
     @Override
     public void onBookLongSelected(DocumentSnapshot snapshot) {
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.reportUser:
+                AlertDialog.Builder rBuilder = new AlertDialog.Builder(ViewUserProfileActivity.this);
+                rBuilder.setTitle("Report listing");
+                rBuilder.setMessage(Html.fromHtml("Are you sure you want to report <b>"+userID+"</b>?"));
+                rBuilder.setPositiveButton("Report", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // code to report
+                        Toast.makeText(getApplicationContext(),"Reported",Toast.LENGTH_SHORT).show();
+                        onBackPressed();
+                    }
+                });
+                rBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+                rBuilder.show();
+                break;
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_view_user_profile, menu);
+        this.menu = menu;
+
+        return true;
     }
 }

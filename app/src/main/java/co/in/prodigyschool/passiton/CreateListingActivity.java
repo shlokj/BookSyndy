@@ -173,7 +173,7 @@ public class CreateListingActivity extends AppCompatActivity {
             public void onClick(View v) {final CharSequence[] options = {"Take Photo", "Choose from Gallery"};
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(CreateListingActivity.this);
-                builder.setTitle("Select Pic Using...");
+//                builder.setTitle("Select Pic Using...");
                 builder.setItems(options, new DialogInterface.OnClickListener() {
 
                     @Override
@@ -305,9 +305,9 @@ public class CreateListingActivity extends AppCompatActivity {
                 else if (bps.length()==0) {
                     showSnackbar("Please enter a price or give it for free");
                 }
-                else if (book_photo_url==null || book_photo_url.length()==0) {
+/*                else if (book_photo_url==null || book_photo_url.length()==0) {
                     showSnackbar("Please take a picture of your book");
-                }
+                }*/
                 else {
                     boolean validYear = true;
                     bookPrice = Integer.parseInt(bps);
@@ -323,7 +323,6 @@ public class CreateListingActivity extends AppCompatActivity {
                             year = Integer.parseInt(bys);
 
                             if (boardNumber == 7) {
-
                                 if (year > 4 || year == 0) {
                                     validYear = false;
                                     displaySnackbarYears(4);
@@ -657,7 +656,6 @@ public class CreateListingActivity extends AppCompatActivity {
                 }
                 break;
 
-
         }
     }
 
@@ -762,16 +760,17 @@ public class CreateListingActivity extends AppCompatActivity {
     }
 
 
+    // TODO: fix crop
     protected void CropImage(Uri picUri) {
         try {
             Intent intent = new Intent("com.android.camera.action.CROP");
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.setDataAndType(picUri, "image/*");
             intent.putExtra("crop", "true");
-            intent.putExtra("outputX", 200);
-            intent.putExtra("outputY", 200);
-            intent.putExtra("aspectX", 3);
-            intent.putExtra("aspectY", 4);
+            intent.putExtra("outputX", 400);
+            intent.putExtra("outputY", 400);
+            intent.putExtra("aspectX", 1);
+            intent.putExtra("aspectY", 1);
             intent.putExtra("scaleUpIfNeeded", true);
             intent.putExtra("return-data", true);
 
