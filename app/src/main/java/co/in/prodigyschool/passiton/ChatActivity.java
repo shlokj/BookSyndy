@@ -213,36 +213,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
 
     }
-//
-//    private void populateChatDetails() {
-//        if(user != null) {
-//            String chat_sender_ref = "chats/" + message_sender_id + "/" + receiver_user_id;
-//            String chat_receiver_ref = "chats/" + receiver_user_id + "/" + message_sender_id;
-//            DatabaseReference userChatKeyRef = RootRef.child("chats").child(message_sender_id).child(receiver_user_id).push();
-//            String chatPushId = userChatKeyRef.getKey();
-//            Chat senderchat = new Chat(visit_image, visit_user_name, "online");
-//            Chat receiverchat = new Chat(user.getImageUrl(), user.getUserId(), "online");
-//
-//            Map chatBodyDetails = new HashMap();
-//            chatBodyDetails.put(chat_sender_ref , senderchat);
-//            chatBodyDetails.put(chat_receiver_ref , receiverchat);
-//
-//            RootRef.updateChildren(chatBodyDetails).addOnCompleteListener(new OnCompleteListener() {
-//                @Override
-//                public void onComplete(@NonNull Task task) {
-//                    if (task.isSuccessful()) {
-//                        Log.d(TAG, "onComplete: chat update successful");
-//                    } else {
-//                        Log.d(TAG, "onComplete: chat update failed", task.getException());
-//                    }
-//                }
-//            });
-//        }
-//        else{
-//            Log.d(TAG, "populateChatDetails: failed with user object null");
-//        }
-//
-//    }
+
 
 
     @Override
