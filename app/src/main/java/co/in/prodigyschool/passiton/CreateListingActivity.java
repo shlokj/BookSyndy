@@ -1,12 +1,19 @@
 package co.in.prodigyschool.passiton;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -14,6 +21,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -30,6 +38,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.common.internal.service.Common;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -39,8 +48,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -52,8 +64,12 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -66,6 +82,8 @@ import co.in.prodigyschool.passiton.util.BookUtil;
 
 public class CreateListingActivity extends AppCompatActivity {
 
+    private static final int CROP_IMAGE = 2;
+    private static final int AUTOCOMPLETE_REQUEST_CODE = 108;
     private static String TAG = "CREATELISTINGFULL";
     private Spinner typeSpinner,gradeSpinner,boardSpinner;
     private double book_lat,book_lng;
@@ -89,6 +107,7 @@ public class CreateListingActivity extends AppCompatActivity {
     private Uri selectedImageUri;
     private FirebaseStorage mFirebaseStorage;
     private StorageReference bookPhotosStorageReference;
+    private SharedPreferences userPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +126,7 @@ public class CreateListingActivity extends AppCompatActivity {
         yearField = findViewById(R.id.bookYearField1);
         free = findViewById(R.id.freeOrNot);
         mBookImage = findViewById(R.id.book_image);
-
+        userPref = this.getSharedPreferences(getString(R.string.UserPref),0);
 
         getSupportActionBar().setTitle("Create a listing");
 
@@ -115,12 +134,16 @@ public class CreateListingActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
+
         initFireBase();
         populateUserLocation();
-        //initPlaces();
-        //setupPlaceAutoComplete();
-
-
+        locField.setEnabled(false);
+        findViewById(R.id.btn_search_listing).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onSearchCalled();
+            }
+        });
         gradeAdapter = new ArrayAdapter<String>(CreateListingActivity.this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.grades));
         gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -147,12 +170,27 @@ public class CreateListingActivity extends AppCompatActivity {
 
         mBookImage.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                // todo: add dialog to choose between camera or gallery
-//                Intent pickPhoto = new Intent(Intent.ACTION_PICK,
-//                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//                startActivityForResult(pickPhoto, 1);
-                openCameraIntent();
+            public void onClick(View v) {final CharSequence[] options = {"Take Photo", "Choose from Gallery"};
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(CreateListingActivity.this);
+                builder.setTitle("Select Pic Using...");
+                builder.setItems(options, new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int item) {
+                        if (options[item].equals("Take Photo")) {
+                            openCameraIntent();
+                        } else if (options[item].equals("Choose from Gallery")) {
+
+                            Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            startActivityForResult(pickPhoto, 1);
+
+                        }
+                    }
+                });
+
+                builder.show();
             }
         });
 
@@ -535,6 +573,10 @@ public class CreateListingActivity extends AppCompatActivity {
             userId = mAuth.getCurrentUser().getPhoneNumber();
             mFirebaseStorage = FirebaseStorage.getInstance();
             bookPhotosStorageReference = mFirebaseStorage.getReference().child("book_photos");
+            if (!Places.isInitialized()) {
+                Places.initialize(getApplicationContext(), getString(R.string.places_api_key));
+            }
+            PlacesClient placesClient = Places.createClient(this);
         }
         catch (NullPointerException e){
             Log.e(TAG, "initFireBase: getCurrentUser error", e);
@@ -543,123 +585,75 @@ public class CreateListingActivity extends AppCompatActivity {
     }
 
     private void populateUserLocation() {
-
-        try {
-            DocumentReference docRef = mFireStore.collection("address").document(userId);
-            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            String area = document.getString("addr2");
-                            String city = document.getString("locality");
-                            book_lat = document.getDouble("lat");
-                            book_lng = document.getDouble("lng");
-                            locField.setText("");
-                            if(area != null ){
-                                locField.append(area+", ");
-                            }
-                            if(city != null){
-                                locField.append(city);
-                            }
-                            else {
-                                Log.d(TAG, "no address found");
-                            }
-                        } else {
-                            Log.d(TAG, "No address found in firebase");
-                            View parentLayout = findViewById(android.R.id.content);
-                            Snackbar.make(parentLayout, "Failed to get address", Snackbar.LENGTH_SHORT)
-                                    .setAction("OKAY", new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-
-                                        }
-                                    })
-                                    .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
-                                    .show();
-                        }
-                    } else {
-                        Log.d(TAG, "get failed with ", task.getException());
-                        View parentLayout = findViewById(android.R.id.content);
-                        Snackbar.make(parentLayout, "Failed to get address", Snackbar.LENGTH_SHORT)
-                                .setAction("OKAY", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-
-                                    }
-                                })
-                                .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
-                                .show();
-                    }
-                }
-            });
-        }
-        catch(Exception e){
-            Log.d(TAG, "get failed with ",e);
-            Toast.makeText(getApplicationContext(), "failed to get Address", Toast.LENGTH_SHORT).show();
-
-        }
+        String address;
+        address = userPref.getString(getString(R.string.p_area),"");
+        if(address != null && !TextUtils.isEmpty(address))
+            address = address + " , ";
+        address  = address + userPref.getString(getString(R.string.p_city),"");
+        book_lat = userPref.getFloat(getString(R.string.p_lat),0.0f);
+        book_lng = userPref.getFloat(getString(R.string.p_lng),0.0f);
+        locField.setText(address);
     }
 
-    private void initPlaces() {
-        Places.initialize(this,getString(R.string.places_api_key));
-        placesClient = Places.createClient(this);
+    public void onSearchCalled() {
+        // Set the fields to specify which types of place data to return.
+        List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG);
+        // Start the autocomplete intent.
+        Intent intent = new Autocomplete.IntentBuilder(
+                AutocompleteActivityMode.FULLSCREEN, fields).setCountry("IN") //NIGERIA
+                .build(this);
+        startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
     }
-
-//    private void setupPlaceAutoComplete() {
-//        places_fragment = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment2);
-//        places_fragment.setPlaceFields(placeFields);
-//        places_fragment.setCountry("IN");
-//        places_fragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-//            @Override
-//            public void onPlaceSelected(@NonNull Place place) {
-//                locField.setText(place.getName()+","+place.getAddress());
-//                LatLng latLng= place.getLatLng();
-//                book_lat = latLng.latitude;
-//                book_lng = latLng.longitude;
-//            }
-//
-//            @Override
-//            public void onError(@NonNull Status status) {
-//                Toast.makeText(CreateListingActivity.this, status.getStatusMessage(), Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
-
 
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-
         switch (requestCode) {
-
-/*            case PIC_CROP:
-
-                if (imageReturnedIntent != null) {
-                    // get the returned data
-                    Bundle extras = imageReturnedIntent.getExtras();
-
-                    Bitmap selectedBitmap = extras.getParcelable("data");
-
-                    chosenPic.setImageBitmap(selectedBitmap);
-                }*/
-
             case 0:// camera intent
                 if (resultCode == RESULT_OK ) {
-
-                    Glide.with(this).load(imageFilePath).into(mBookImage);
                     File f = new File(imageFilePath);
-                    selectedImageUri = Uri.fromFile(f);
-                    storeBookImage(selectedImageUri);
+                    selectedImageUri = FileProvider.getUriForFile(CreateListingActivity.this, BuildConfig.APPLICATION_ID + ".provider",f);
+                    CropImage(selectedImageUri);
+
                 }
                 break;
 
             case 1:// gallery intent
                 if (resultCode == RESULT_OK && imageReturnedIntent != null && imageReturnedIntent.getData() != null) {
                     selectedImageUri = imageReturnedIntent.getData();
-                    //performCrop(selectedImageUri);
-                    storeBookImage(selectedImageUri);
-                    Glide.with(this).load(selectedImageUri).into(mBookImage);
+                    CropImage(selectedImageUri);
+                }
+                break;
+            case 2://crop image
+                if (imageReturnedIntent != null) {
+                    // get the returned data
+                    Bundle extras = imageReturnedIntent.getExtras();
+
+                    // get the cropped bitmap
+                    Bitmap photo = extras.getParcelable("data");
+
+                    mBookImage.setImageBitmap(photo);
+                    storeBookImage(photo);
+                }
+                break;
+            case AUTOCOMPLETE_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    Place place = Autocomplete.getPlaceFromIntent(imageReturnedIntent);
+                    Log.i(TAG, "Place: " + place.getName() + ", " + place.getId() + ", " + place.getAddress());
+                    Toast.makeText(CreateListingActivity.this, "ID: " + place.getId() + "address:" + place.getAddress() + "Name:" + place.getName() + " latlong: " + place.getLatLng(), Toast.LENGTH_LONG).show();
+
+                    String address = place.getAddress();
+                    book_lat = place.getLatLng().latitude;
+                    book_lng = place.getLatLng().longitude;
+                    // do query with address
+                    locField.setText(address);
+
+                } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                    // TODO: Handle the error.
+                    Status status = Autocomplete.getStatusFromIntent(imageReturnedIntent);
+                    Toast.makeText(CreateListingActivity.this, "Error: " + status.getStatusMessage(), Toast.LENGTH_LONG).show();
+                    Log.i(TAG, status.getStatusMessage());
+                } else if (resultCode == RESULT_CANCELED) {
+                    // The user canceled the operation.
                 }
                 break;
 
@@ -703,11 +697,15 @@ public class CreateListingActivity extends AppCompatActivity {
         }
     }
 
-    private void storeBookImage(Uri selectedImageUri) {
+    private void storeBookImage(Bitmap bmp) {
+
+        byte[] compressedImage = CompressResizeImage(bmp);
+
         //show progress
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Uploading");
-//        progressDialog.show();
+        //progressDialog.show();
+
         try {
             String timeStamp =
                     new SimpleDateFormat("yyyyMMdd_HHmmss",
@@ -716,8 +714,7 @@ public class CreateListingActivity extends AppCompatActivity {
             final StorageReference photoRef = bookPhotosStorageReference.child(timeStamp + "_" + selectedImageUri.getLastPathSegment());
 
             // Upload file to Firebase Storage
-            UploadTask uploadTask = photoRef.putFile(selectedImageUri);
-
+            UploadTask uploadTask = photoRef.putBytes(compressedImage);
             uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                 @Override
                 public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) {
@@ -762,5 +759,42 @@ public class CreateListingActivity extends AppCompatActivity {
         }
 
 
+    }
+
+
+    protected void CropImage(Uri picUri) {
+        try {
+            Intent intent = new Intent("com.android.camera.action.CROP");
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.setDataAndType(picUri, "image/*");
+            intent.putExtra("crop", "true");
+            intent.putExtra("outputX", 200);
+            intent.putExtra("outputY", 200);
+            intent.putExtra("aspectX", 3);
+            intent.putExtra("aspectY", 4);
+            intent.putExtra("scaleUpIfNeeded", true);
+            intent.putExtra("return-data", true);
+
+            startActivityForResult(intent, CROP_IMAGE);
+
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, "Your device doesn't support the crop action!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public byte[] CompressResizeImage(Bitmap bm)
+    {
+        int bmWidth = bm.getWidth();
+        int bmHeight = bm.getHeight();
+        int ivWidth = mBookImage.getWidth();
+        int ivHeight = mBookImage.getHeight();
+
+        int new_height = (int) Math.floor((double) bmHeight *( (double) ivWidth / (double) bmWidth));
+        Bitmap newbitMap = Bitmap.createScaledBitmap(bm, ivWidth, new_height, true);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        newbitMap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] b = baos.toByteArray();
+        return b;
     }
 }

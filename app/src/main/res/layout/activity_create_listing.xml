@@ -284,15 +284,29 @@
                 android:layout_weight="1"
                 android:text="@string/location" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
             <EditText
                 android:id="@+id/locField2"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="5"
                 android:ems="10"
                 android:hint="@string/getting_loc"
                 android:inputType="textCapWords"
                 android:lines="5" />
+
+            <ImageButton
+                android:id="@+id/btn_search_listing"
+                android:src="@drawable/ic_search_24_black"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
 
            <!-- <fragment android:id="@+id/autocomplete_fragment2"
                 android:layout_width="match_parent"

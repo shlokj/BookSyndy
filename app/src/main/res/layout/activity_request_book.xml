@@ -262,7 +262,7 @@
 
                 <ImageButton
                     android:id="@+id/btn_search_location"
-                    android:src="@drawable/ic_search_24px"
+                    android:src="@drawable/ic_search_24_black"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content" />
