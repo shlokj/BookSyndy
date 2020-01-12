@@ -177,7 +177,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
         else {
             if (!CheckGpsStatus()) {
-                showGpsSettingDialog();
+                //showGpsSettingDialog();
             } else {
 
                 fusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
