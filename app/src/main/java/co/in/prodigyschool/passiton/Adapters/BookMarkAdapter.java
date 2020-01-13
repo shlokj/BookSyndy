@@ -102,7 +102,9 @@ public class BookMarkAdapter extends FirestoreRecyclerAdapter<Book,BookMarkAdapt
         getSnapshots().getSnapshot(position).getReference().delete();
     }
 
-
+    public void deleteItem(DocumentSnapshot snapshot){
+        snapshot.getReference().delete();
+    }
 
 
     static class ViewHolder extends RecyclerView.ViewHolder {

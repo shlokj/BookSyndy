@@ -522,6 +522,9 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 });
                 rBuilder.show();
                 break;
+            case android.R.id.home:
+                this.finish();
+                break;
 
         }
         return true;

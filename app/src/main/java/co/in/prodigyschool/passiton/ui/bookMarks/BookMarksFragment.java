@@ -187,16 +187,31 @@ public class BookMarksFragment extends Fragment implements BookMarkAdapter.OnBoo
     }
 
     @Override
-    public void onBookLongSelected(DocumentSnapshot snapshot) {
-        book_id = snapshot.getId();
+    public void onBookLongSelected(final DocumentSnapshot snapshot) {
         displayOptions();
         optionsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String opt = ((TextView) view).getText().toString();
                 if (opt.equals("Remove from bookmarks")) {
-//                  remove from bms
+                    final DocumentReference deletedBookReference = snapshot.getReference();
+                    final Book deletedBook = snapshot.toObject(Book.class);
+                    mAdapter.deleteItem(snapshot);
+
+                    snackbar = Snackbar.make(getActivity().findViewById(android.R.id.content), "Removed from bookmarks", Snackbar.LENGTH_LONG)
+                                    .setAction("UNDO", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            // undo is selected, restore the deleted item
+                                            deletedBookReference.set(deletedBook);
+
+                                        }
+                                    });
+
                     dialog.dismiss();
+
+                    snackbar.setActionTextColor(getResources().getColor(android.R.color.holo_orange_light));
+                    snackbar.show();
                 }
             }
         });
@@ -205,7 +220,7 @@ public class BookMarksFragment extends Fragment implements BookMarkAdapter.OnBoo
 
     private void displayOptions(){
         optionsList.clear();
-        optionsList.add("Mark as unsold");
+        optionsList.add("Remove from bookmarks");
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getLayoutInflater();
         View convertView = (View) inflater.inflate(R.layout.dialog_longpress_mylistings_options, null);

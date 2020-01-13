@@ -167,7 +167,6 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
 
 
 
-
     private void displayOptions(){
         optionsList.clear();
         optionsList.add("Mark as sold");
