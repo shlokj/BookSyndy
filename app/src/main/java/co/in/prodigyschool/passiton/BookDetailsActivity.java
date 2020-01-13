@@ -511,7 +511,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 rBuilder.setPositiveButton("Report", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // code to report
+                        // TODO: code to report
                         Toast.makeText(getApplicationContext(),"Reported",Toast.LENGTH_SHORT).show();
                         onBackPressed();
                     }

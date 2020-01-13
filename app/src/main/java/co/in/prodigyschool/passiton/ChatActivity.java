@@ -369,7 +369,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 dBuilder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // code to delete chat
+                        // TODO: code to delete chat
                         Toast.makeText(getApplicationContext(),"Deleted",Toast.LENGTH_SHORT).show();
                         onBackPressed();
                     }
