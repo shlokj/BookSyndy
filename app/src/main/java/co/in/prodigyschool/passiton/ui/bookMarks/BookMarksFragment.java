@@ -39,7 +39,7 @@ import co.in.prodigyschool.passiton.Data.Book;
 import co.in.prodigyschool.passiton.R;
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
-public class BookMarksFragment extends Fragment implements BookMarkAdapter.OnBookSelectedListener, BookAdapter.OnBookLongSelectedListener {
+public class BookMarksFragment extends Fragment implements BookMarkAdapter.OnBookSelectedListener, BookMarkAdapter.OnBookLongSelectedListener {
 
     private static String TAG = "BOOKMARKS";
 
@@ -95,7 +95,7 @@ public class BookMarksFragment extends Fragment implements BookMarkAdapter.OnBoo
                 .setQuery(mQuery, Book.class)
                 .build();
 
-        mAdapter = new BookMarkAdapter(options,this){
+        mAdapter = new BookMarkAdapter(options,this,this){
             @Override
             public void onDataChanged() {
                 super.onDataChanged();

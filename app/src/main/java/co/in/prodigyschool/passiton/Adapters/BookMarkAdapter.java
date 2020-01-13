@@ -41,7 +41,14 @@ public class BookMarkAdapter extends FirestoreRecyclerAdapter<Book,BookMarkAdapt
 
     }
 
+    public interface OnBookLongSelectedListener {
+
+        void onBookLongSelected(DocumentSnapshot snapshot);
+
+    }
+
     private OnBookSelectedListener mListener;
+    private OnBookLongSelectedListener mLongListener;
 
 
     /**
@@ -50,9 +57,10 @@ public class BookMarkAdapter extends FirestoreRecyclerAdapter<Book,BookMarkAdapt
      *
      * @param options
      */
-    public BookMarkAdapter(@NonNull FirestoreRecyclerOptions<Book> options, BookMarkAdapter.OnBookSelectedListener listener) {
+    public BookMarkAdapter(@NonNull FirestoreRecyclerOptions<Book> options, BookMarkAdapter.OnBookSelectedListener listener, BookMarkAdapter.OnBookLongSelectedListener longListener) {
         super(options);
         mListener = listener;
+        mLongListener = longListener;
         mFirestore = FirebaseFirestore.getInstance();
         getUserLocation();
     }
@@ -77,7 +85,7 @@ public class BookMarkAdapter extends FirestoreRecyclerAdapter<Book,BookMarkAdapt
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Book model) {
-        holder.bind(getSnapshots().getSnapshot(position), mListener,latA,lngA);
+        holder.bind(getSnapshots().getSnapshot(position), mListener,mLongListener,latA,lngA);
 
     }
 
@@ -120,7 +128,7 @@ public class BookMarkAdapter extends FirestoreRecyclerAdapter<Book,BookMarkAdapt
 
 
         public void bind(final DocumentSnapshot snapshot,
-                         final BookMarkAdapter.OnBookSelectedListener listener, double latitude, double longitude) {
+                         final OnBookSelectedListener listener, final OnBookLongSelectedListener mLongListener, double latitude, double longitude) {
             Book book = snapshot.toObject(Book.class);
             String userId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
             Resources resources = itemView.getResources();
@@ -151,6 +159,17 @@ public class BookMarkAdapter extends FirestoreRecyclerAdapter<Book,BookMarkAdapt
                     if (listener != null) {
                         listener.onBookSelected(snapshot);
                     }
+                }
+            });
+
+            //longClick Listener
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if(mLongListener != null){
+                        mLongListener.onBookLongSelected(snapshot);
+                    }
+                    return true;
                 }
             });
 

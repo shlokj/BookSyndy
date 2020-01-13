@@ -42,7 +42,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     {
         public TextView senderMessageText, receiverMessageText, senderMessageTime, receiverMessageTime;
 
-        public ImageView messageSenderPicture, messageReceiverPicture;
+        public ImageView messageSenderPicture, messageReceiverPicture,messageSenderTick;
 
 
         public MessageViewHolder(@NonNull View itemView)
@@ -55,6 +55,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
             receiverMessageTime = itemView.findViewById(R.id.receiver_message_time);
             messageReceiverPicture = itemView.findViewById(R.id.message_receiver_image_view);
             messageSenderPicture = itemView.findViewById(R.id.message_sender_image_view);
+
 
         }
     }
@@ -109,6 +110,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                 messageViewHolder.senderMessageText.setTextColor(Color.WHITE);
                 messageViewHolder.senderMessageTime.setText(messages.getTime() + "\n" + strDate);
                 messageViewHolder.senderMessageText.setText(messages.getMessage()/* + "\n \n" + messages.getTime() + " - " + messages.getDate()*/);
+
             }
             else
             {
