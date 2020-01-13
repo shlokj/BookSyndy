@@ -22,9 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import co.in.prodigyschool.passiton.Data.Book;
@@ -115,10 +113,10 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder> {
         public ViewHolder(View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.bookPicture);
-            nameView = itemView.findViewById(R.id.bookMaterialName);
+            nameView = itemView.findViewById(R.id.bookMaterialName_r);
             priceView = itemView.findViewById(R.id.bookMaterialPrice);
             cityView = itemView.findViewById(R.id.locationAndDistance);
-            timeSinceView = itemView.findViewById(R.id.timeSinceListing);
+            timeSinceView = itemView.findViewById(R.id.timeSinceRequest);
             mFirestore = FirebaseFirestore.getInstance();
 
         }

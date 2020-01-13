@@ -27,7 +27,7 @@
 
 
     <TextView
-        android:id="@+id/bookMaterialName"
+        android:id="@+id/bookMaterialName_r"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -62,7 +62,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
-        android:id="@+id/timeSinceListing"
+        android:id="@+id/timeSinceRequest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="8dp"
@@ -73,7 +73,7 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/locationAndDistance"
         app:layout_constraintStart_toEndOf="@+id/bookPictureCV"
-        app:layout_constraintTop_toBottomOf="@+id/bookMaterialName" />
+        app:layout_constraintTop_toBottomOf="@+id/bookMaterialName_r" />
 
     <TextView
         android:id="@+id/locationAndDistance"

@@ -306,7 +306,7 @@ public class RequestBookActivity extends AppCompatActivity {
                     }
                     if (validYear) {
                         BookRequest bookRequest = new BookRequest(bookTitle,bookDesc,bookAddress,userPhone
-                                ,userId,gradeNumber,boardNumber,year,isCompetitive,false,isTextbook);
+                                ,userId,gradeNumber,boardNumber,year,isCompetitive,false,isTextbook,bookLat,bookLng);
                         postBookRequest(bookRequest);
                     }
                 }
@@ -332,6 +332,8 @@ public class RequestBookActivity extends AppCompatActivity {
         userPhone = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
         userId = userPref.getString(getString(R.string.p_userid),"");
         String address;
+        bookLat = userPref.getFloat(getString(R.string.p_lat),0.0f);
+        bookLng = userPref.getFloat(getString(R.string.p_lng),0.0f);
         address = userPref.getString(getString(R.string.p_area),"");
         if(address != null && !TextUtils.isEmpty(address))
             address = address + ", ";

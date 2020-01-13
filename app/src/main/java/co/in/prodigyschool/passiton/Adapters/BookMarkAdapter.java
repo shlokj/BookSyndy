@@ -120,10 +120,10 @@ public class BookMarkAdapter extends FirestoreRecyclerAdapter<Book,BookMarkAdapt
         public ViewHolder(View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.bookPicture);
-            nameView = itemView.findViewById(R.id.bookMaterialName);
+            nameView = itemView.findViewById(R.id.bookMaterialName_r);
             priceView = itemView.findViewById(R.id.bookMaterialPrice);
             cityView = itemView.findViewById(R.id.locationAndDistance);
-            timeSinceView = itemView.findViewById(R.id.timeSinceListing);
+            timeSinceView = itemView.findViewById(R.id.timeSinceRequest);
             mFirestore = FirebaseFirestore.getInstance();
 
         }
