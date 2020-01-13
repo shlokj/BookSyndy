@@ -24,7 +24,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".EditListingActivity"></activity>
-        <activity android:name=".PreferenceManager" />
         <activity android:name=".WelcomeActivity" />
         <activity android:name=".RequestBookActivity" />
         <activity android:name=".SendFeedbackActivity" />

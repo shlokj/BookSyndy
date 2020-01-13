@@ -251,14 +251,16 @@
 
                 <TextView
                     android:id="@+id/locField_r"
+                    android:gravity="center|start"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
+                    android:layout_marginTop="8dp"
                     android:textSize="16sp"
                     android:ems="10"
                     android:textColor="@color/quantum_black_100"
                     android:hint="@string/getting_loc"
-                    android:lines="5" />
+                    android:maxLines="5" />
 
                 <ImageButton
                     android:id="@+id/btn_search_location"

@@ -1,26 +1,9 @@
 package co.in.prodigyschool.passiton;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
-import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.ResultReceiver;
-import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -28,7 +11,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -37,11 +19,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
@@ -58,12 +40,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
-import co.in.prodigyschool.passiton.Data.Book;
 import co.in.prodigyschool.passiton.Data.BookRequest;
 
 public class RequestBookActivity extends AppCompatActivity {
@@ -110,21 +89,21 @@ public class RequestBookActivity extends AppCompatActivity {
         yearField = findViewById(R.id.bookYearField_r);
          initFirebase();
 
-        gradeAdapter = new ArrayAdapter<String>(RequestBookActivity.this,
+        gradeAdapter = new ArrayAdapter<>(RequestBookActivity.this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.grades));
         gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         gradeSpinner.setAdapter(gradeAdapter);
 
-        boardAdapter = new ArrayAdapter<String>(RequestBookActivity.this,
+        boardAdapter = new ArrayAdapter<>(RequestBookActivity.this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.boards));
         boardAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         boardSpinner.setAdapter(boardAdapter);
 
-        degreeAdapter = new ArrayAdapter<String>(RequestBookActivity.this,
+        degreeAdapter = new ArrayAdapter<>(RequestBookActivity.this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.degrees));
         degreeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        typeAdapter = new ArrayAdapter<String>(RequestBookActivity.this,
+        typeAdapter = new ArrayAdapter<>(RequestBookActivity.this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.types));
         degreeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         typeSpinner.setAdapter(typeAdapter);
@@ -355,7 +334,7 @@ public class RequestBookActivity extends AppCompatActivity {
         String address;
         address = userPref.getString(getString(R.string.p_area),"");
         if(address != null && !TextUtils.isEmpty(address))
-            address = address + " , ";
+            address = address + ", ";
         address  = address + userPref.getString(getString(R.string.p_city),"");
         locField.setText(address);
         String apiKey = getString(R.string.places_api_key);

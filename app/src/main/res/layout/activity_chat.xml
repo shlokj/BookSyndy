@@ -129,7 +129,7 @@
             android:layout_marginStart="6dp"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            app:srcCompat="@drawable/ic_photo_library_24px_op70"/>
+            app:srcCompat="@drawable/ic_photo_library_24px"/>
 
         <EditText
             android:id="@+id/messageEditText"

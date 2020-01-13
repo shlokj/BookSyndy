@@ -587,7 +587,7 @@ public class CreateListingActivity extends AppCompatActivity {
         String address;
         address = userPref.getString(getString(R.string.p_area),"");
         if(address != null && !TextUtils.isEmpty(address))
-            address = address + " , ";
+            address = address + ", ";
         address  = address + userPref.getString(getString(R.string.p_city),"");
         book_lat = userPref.getFloat(getString(R.string.p_lat),0.0f);
         book_lng = userPref.getFloat(getString(R.string.p_lng),0.0f);

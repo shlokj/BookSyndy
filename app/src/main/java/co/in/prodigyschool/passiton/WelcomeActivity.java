@@ -8,7 +8,6 @@ import android.os.Bundle;
 //import android.support.v4.view.PagerAdapter;
 //import android.support.v4.view.ViewPager;
 //import android.support.v7.app.AppCompatActivity;
-import co.in.prodigyschool.passiton.PreferenceManager;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,19 +30,11 @@ public class WelcomeActivity extends AppCompatActivity {
     private TextView[] dots;
     private int[] layouts;
     private Button btnSkip, btnNext;
-    private PreferenceManager prefManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
-
-        // Checking for first time launch - before calling setContentView()
-//        prefManager = new PreferenceManager(this);
-//        if (!prefManager.isFirstTimeLaunch()) {
-//            launchHomeScreen();
-//            finish();
-//        }
 
         // Making notification bar transparent
         if (Build.VERSION.SDK_INT >= 21) {
