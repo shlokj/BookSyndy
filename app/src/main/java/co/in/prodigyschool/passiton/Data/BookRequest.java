@@ -5,12 +5,12 @@ public class BookRequest {
     private int grade,board,bookYear;
 
     private boolean isCompetitive,isComplete,isText;
-
+    private double lat,lng;
 
     public BookRequest() {
     }
 
-    public BookRequest(String title, String description, String bookAddress, String phone, String userId, int grade, int board,int  year, boolean isCompetitive, boolean isComplete, boolean isText) {
+    public BookRequest(String title, String description, String bookAddress, String phone, String userId, int grade, int board,int  year, boolean isCompetitive, boolean isComplete, boolean isText,double lat,double lng) {
         this.title = title;
         this.description = description;
         this.bookAddress = bookAddress;
@@ -19,10 +19,27 @@ public class BookRequest {
         this.grade = grade;
         this.board = board;
         this.bookYear = year;
-
+        this.lat = lat;
+        this.lng = lng;
         this.isCompetitive = isCompetitive;
         this.isComplete = isComplete;
         this.isText = isText;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLng() {
+        return lng;
+    }
+
+    public void setLng(double lng) {
+        this.lng = lng;
     }
 
     public int getBookYear() {

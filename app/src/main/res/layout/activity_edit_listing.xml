@@ -28,7 +28,7 @@
                 android:text="Type" />
 
             <Spinner
-                android:id="@+id/bookTypeSpinner"
+                android:id="@+id/bookTypeSpinner_e"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>
@@ -56,7 +56,7 @@
                     android:text="Photo" />
 
                 <ImageView
-                    android:id="@+id/book_image"
+                    android:id="@+id/book_image_e"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_gravity="center"
@@ -85,7 +85,7 @@
                     android:text="Title" />
 
                 <EditText
-                    android:id="@+id/bookNameField"
+                    android:id="@+id/bookNameField_e"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -117,7 +117,7 @@
                 android:text="@string/description" />
 
             <EditText
-                android:id="@+id/bookDescField2"
+                android:id="@+id/bookDescField_e"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -145,7 +145,7 @@
                 android:text="@string/grade" />
 
             <Spinner
-                android:id="@+id/gradeSpinner"
+                android:id="@+id/gradeSpinner_e"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 />
@@ -162,13 +162,13 @@
             app:layout_constraintTop_toBottomOf="@+id/gradeLL">
 
             <TextView
-                android:id="@+id/boardLabel"
+                android:id="@+id/boardLabel_e"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/board" />
 
             <Spinner
-                android:id="@+id/boardSpinner"
+                android:id="@+id/boardSpinner_e"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:layout_editor_absoluteX="1dp"
@@ -177,7 +177,7 @@
 
 
         <EditText
-            android:id="@+id/bookYearField1"
+            android:id="@+id/bookYearField_e"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -212,7 +212,7 @@
                     android:text="@string/degree" />
 
                 <Spinner
-                    android:id="@+id/degreeSpinner"
+                    android:id="@+id/degreeSpinner_e"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     />
@@ -233,7 +233,7 @@
                     android:text="Year" />
 
                 <EditText
-                    android:id="@+id/profileYearField"
+                    android:id="@+id/profileYearField_e"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -246,7 +246,7 @@
 
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_save"
+            android:id="@+id/fab_save_e"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -258,7 +258,7 @@
             app:srcCompat="@drawable/ic_check_24px" />
 
         <CheckBox
-            android:id="@+id/forCompetitiveExams"
+            android:id="@+id/forCompetitiveExams_e"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -285,7 +285,7 @@
                 android:text="@string/location" />
 
             <EditText
-                android:id="@+id/locField2"
+                android:id="@+id/locField_e"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -335,7 +335,7 @@
                     android:textSize="16sp" />
 
                 <EditText
-                    android:id="@+id/priceField"
+                    android:id="@+id/priceField_e"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
@@ -345,7 +345,7 @@
                     android:inputType="number" />
 
                 <CheckBox
-                    android:id="@+id/freeOrNot"
+                    android:id="@+id/freeOrNot_e"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -355,7 +355,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/postButton"
+            android:id="@+id/postButton_e"
             android:layout_width="0dp"
             android:layout_height="72dp"
             android:layout_margin="20dp"

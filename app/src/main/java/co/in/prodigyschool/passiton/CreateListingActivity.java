@@ -634,7 +634,7 @@ public class CreateListingActivity extends AppCompatActivity {
                     storeBookImage(photo);
                 }
                 break;
-            case AUTOCOMPLETE_REQUEST_CODE:
+            case AUTOCOMPLETE_REQUEST_CODE: // for places search
                 if (resultCode == RESULT_OK) {
                     Place place = Autocomplete.getPlaceFromIntent(imageReturnedIntent);
                     Log.i(TAG, "Place: " + place.getName() + ", " + place.getId() + ", " + place.getAddress());
@@ -774,10 +774,11 @@ public class CreateListingActivity extends AppCompatActivity {
             intent.putExtra("scaleUpIfNeeded", true);
             intent.putExtra("return-data", true);
 
-            startActivityForResult(intent, CROP_IMAGE);
+            startActivityForResult(Intent.createChooser(intent,"Crop Picture"), CROP_IMAGE);
 
         } catch (ActivityNotFoundException e) {
             Toast.makeText(this, "Your device doesn't support the crop action!", Toast.LENGTH_SHORT).show();
+
         }
     }
 

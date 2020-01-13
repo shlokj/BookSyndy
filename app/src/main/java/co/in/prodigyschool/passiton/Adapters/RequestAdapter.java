@@ -1,62 +1,55 @@
 package co.in.prodigyschool.passiton.Adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import co.in.prodigyschool.passiton.Data.Book;
+import co.in.prodigyschool.passiton.Data.BookRequest;
 import co.in.prodigyschool.passiton.R;
 
-public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
+public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHolder> {
 
+    private static String TAG = "REQUEST_ADAPTER";
 
     private Context context;
-    private List<Book> bookList;
-    private OnBookSelectedListener mListener;
+    private List<BookRequest> requestList;
     private FirebaseFirestore mFireStore;
     private double latA,lngA;
+    private SharedPreferences userPref;
 
-    public interface OnBookSelectedListener {
-
-        void onBookSelected(Book book);
-
+    public RequestAdapter() {
     }
 
-    public HomeAdapter(Context context,List<Book> bookList,OnBookSelectedListener listener){
+    public RequestAdapter(Context context, List<BookRequest> requestList) {
         this.context = context;
-        this.bookList = bookList;
-        mListener = listener;
+        this.requestList = requestList;
         mFireStore = FirebaseFirestore.getInstance();
-        getUserLocation();
+        userPref = context.getSharedPreferences(context.getString(R.string.UserPref),0);
+        latA = userPref.getFloat(context.getString(R.string.p_lat),0.0f);
+        lngA = userPref.getFloat(context.getString(R.string.p_lng),0.0f);
     }
 
-    public List<Book> getBookList() {
-        return bookList;
+    public List<BookRequest> getRequestList() {
+        return requestList;
     }
 
-    public void setBookList(List<Book> bookList) {
-        this.bookList = bookList;
+    public void setRequestList(List<BookRequest> requestList) {
+        this.requestList = requestList;
         notifyDataSetChanged();
         onDataChanged();
     }
@@ -65,89 +58,50 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
 
     }
 
-    @Override
-    public int getItemCount() {
-        return bookList.size();
-    }
-
-
-
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-        View view  = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_list_item, parent, false);
+        View view  = LayoutInflater.from(parent.getContext()).inflate(R.layout.req_list_item, parent, false);
         return new ViewHolder(view);
-
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            final Book bookItem = bookList.get(position);
+        final BookRequest requestItem = requestList.get(position);
 
-        Glide.with(holder.imageView.getContext())
-                .load(bookItem.getBookPhoto())
-                .into(holder.imageView);
-
-        holder.nameView.setText(bookItem.getBookName());
-        holder.cityView.setText(bookItem.getBookAddress());
-        holder.timeSinceView.setText(addBookTime(bookItem.getBookTime()));
-        holder.cityView.append("  "+addDistance(bookItem.getLat(),bookItem.getLng()));
-        if(bookItem.getBookPrice() == 0){
-            holder.priceView.setText("Free");
-        }
-        else{
-            holder.priceView.setText("₹" + bookItem.getBookPrice());
-        }
-        // Click listener
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mListener != null) {
-                    mListener.onBookSelected(bookItem);
-                }
-            }
-        });
+        holder.nameView.setText(requestItem.getTitle());
+        holder.cityView.setText(requestItem.getBookAddress());
+        holder.timeSinceView.setText(addBookTime(requestItem.getTime()));
+        //Log.d(TAG, "onBindViewHolder: "+addDistance(requestItem.getLat(),requestItem.getLng()));
+        //Log.d(TAG, "onBindViewHolder: "+latA+" "+lngA);
+        holder.cityView.append("  "+addDistance(requestItem.getLat(),requestItem.getLng()));
 
     }
 
-    //init user location
-    public void getUserLocation() {
-        final String curUserId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
-        mFireStore.collection("address").document(curUserId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.e("BOOK_ADAPTER_INNER", "onEvent: exception", e);
-                    return;
-                }
-                if(snapshot.getDouble("lat") != null && snapshot.getDouble("lng") != null) {
-                    latA = snapshot.getDouble("lat");
-                    lngA = snapshot.getDouble("lng");
-                }
-
-            }
-        });
+    @Override
+    public int getItemCount() {
+        return requestList.size();
     }
+
 
     //determine books distance
     private String addDistance(double latitude,double longitude){
         float res;
         if(latA != 0.0 && lngA != 0.0 && latitude != 0.0 && longitude != 0.0) {
+            Log.d(TAG, "addDistance: enter");
             Location locationA = new Location("point A");
             Location locationB = new Location("point B");
-
             locationA.setLatitude(latA);
             locationA.setLongitude(lngA);
             locationB.setLatitude(latitude);
             locationB.setLongitude(longitude);
             res = locationA.distanceTo(locationB);
+            Log.d(TAG, "addDistance: res:"+res);
             if (res > 0.0f && res < 1000f) {
                 res = Math.round(res);
                 if (res > 0.0f)
                     //holder.cityView.append("  " + (int)res + " m");
-
+                    Log.d(TAG, "addDistance: "+res);
                     return String.valueOf((int)res+" m");
             }
             else if(res > 1000f){
@@ -155,6 +109,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
                 res = res / 10;
                 if (res > 0.0f)
                     //cityView.append("\n" + res + " KM");
+                    Log.d(TAG, "addDistance: "+res);
                     return  String.valueOf((int)res+ " KM");
             }
         }
@@ -173,8 +128,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
                 Date dateBefore = myFormat.parse(currentDate);
                 Date dateAfter = myFormat.parse(bookTime);
                 long difference = dateBefore.getTime() - dateAfter.getTime();
-                Log.d("BookAdapter", "addBookTime: " + difference);
-                float daysBetween = (difference / (1000 * 60 * 60 * 24));
+                float daysBetween = (float)(difference / (1000 * 60 * 60 * 24));
                 /* You can also convert the milliseconds to days using this method
                  * float daysBetween =
                  *         TimeUnit.DAYS.convert(difference, TimeUnit.MILLISECONDS)
@@ -205,18 +159,16 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView imageView;
+
         TextView nameView;
-        TextView priceView;
         TextView cityView;
         TextView timeSinceView;
 
-        public ViewHolder(View itemView) {
+         ViewHolder(View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.bookPicture);
+
             nameView = itemView.findViewById(R.id.bookMaterialName_r);
-            priceView = itemView.findViewById(R.id.bookMaterialPrice);
-            cityView = itemView.findViewById(R.id.locationAndDistance);
+            cityView = itemView.findViewById(R.id.locationAndDistance_r);
             timeSinceView = itemView.findViewById(R.id.timeSinceRequest);
 
 

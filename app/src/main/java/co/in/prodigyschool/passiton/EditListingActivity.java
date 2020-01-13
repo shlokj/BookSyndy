@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
@@ -80,6 +81,7 @@ public class EditListingActivity extends AppCompatActivity {
     private Uri selectedImageUri;
     private FirebaseStorage mFirebaseStorage;
     private StorageReference bookPhotosStorageReference;
+    private String documentId;
 
 
     @Override
@@ -87,19 +89,19 @@ public class EditListingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_listing);
 
-        typeSpinner = findViewById(R.id.bookTypeSpinner);
-        gradeSpinner = findViewById(R.id.gradeSpinner);
-        boardSpinner = findViewById(R.id.boardSpinner);
-        boardDegreeLabel = findViewById(R.id.boardLabel);
-        postButton = findViewById(R.id.postButton);
-        competitiveExam = findViewById(R.id.forCompetitiveExams);
-        nameField = findViewById(R.id.bookNameField);
-        descField = findViewById(R.id.bookDescField2);
-        locField = findViewById(R.id.locField2);
-        priceField = findViewById(R.id.priceField);
-        yearField = findViewById(R.id.bookYearField1);
-        free = findViewById(R.id.freeOrNot);
-        mBookImage = findViewById(R.id.book_image);
+        typeSpinner = findViewById(R.id.bookTypeSpinner_e);
+        gradeSpinner = findViewById(R.id.gradeSpinner_e);
+        boardSpinner = findViewById(R.id.boardSpinner_e);
+        boardDegreeLabel = findViewById(R.id.boardLabel_e);
+        postButton = findViewById(R.id.postButton_e);
+        competitiveExam = findViewById(R.id.forCompetitiveExams_e);
+        nameField = findViewById(R.id.bookNameField_e);
+        descField = findViewById(R.id.bookDescField_e);
+        locField = findViewById(R.id.locField_e);
+        priceField = findViewById(R.id.priceField_e);
+        yearField = findViewById(R.id.bookYearField_e);
+        free = findViewById(R.id.freeOrNot_e);
+        mBookImage = findViewById(R.id.book_image_e);
 
 
         getSupportActionBar().setTitle("Edit listing");
@@ -108,6 +110,7 @@ public class EditListingActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
+
 
         initFireBase();
 
@@ -136,6 +139,36 @@ public class EditListingActivity extends AppCompatActivity {
         //TODO: get other details as well
         gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
         boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 6);
+        bookName = getIntent().getStringExtra("BOOK_NAME");
+        bookDescription = getIntent().getStringExtra("BOOK_DESC");
+        bookAddress = getIntent().getStringExtra("BOOK_ADDRESS");
+        book_photo_url = getIntent().getStringExtra("BOOK_PHOTO");
+        book_lat = getIntent().getDoubleExtra("BOOK_LAT",0.0);
+        book_lng = getIntent().getDoubleExtra("BOOK_LNG",0.0);
+        isTextbook = getIntent().getBooleanExtra("BOOK_TYPE",false);
+        bookPrice = getIntent().getIntExtra("BOOK_PRICE",0);
+        documentId = getIntent().getStringExtra("DOCUMENT_ID");
+
+        gradeSpinner.setSelection(gradeNumber - 1);
+        boardSpinner.setSelection(boardNumber - 1);
+        nameField.setText(bookName);
+        descField.setText(bookDescription);
+        locField.setText(bookAddress);
+        Glide.with(mBookImage.getContext()).load(book_photo_url).into(mBookImage);
+        if(isTextbook){
+            typeSpinner.setSelection(0);
+        }
+        else{
+            typeSpinner.setSelection(1);
+        }
+       priceField.setText(bookPrice+"");
+        if(bookPrice == 0){
+            free.setChecked(true);
+           priceField.setEnabled(false);
+        }else{
+            free.setChecked(false);
+        }
+
 
         mBookImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -394,21 +427,21 @@ public class EditListingActivity extends AppCompatActivity {
             }
 
             CollectionReference books = mFireStore.collection("books");
-            books.add(book).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+            books.document(documentId).set(book).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
-                public void onComplete(@NonNull Task<DocumentReference> task) {
-                    if(task.isSuccessful()){
-                        Log.d("Add Book","onComplete: Book added successfully");
-                        progressDialog.dismiss();
-                        Intent homeIntent = new Intent(EditListingActivity.this,HomeActivity.class);
-                        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                        homeIntent.putExtra("SNACKBAR_MSG", "Your edits have been saved");
-                        startActivity(homeIntent);
-                    }
-                    else{
-                        Log.d(TAG, "onComplete: failed with",task.getException());
-                        Toast.makeText(getApplicationContext(),"failed to add book!",Toast.LENGTH_SHORT).show();
-                    }
+                public void onComplete(@NonNull Task<Void> task) {
+                    Log.d("Add Book","onComplete: Book added successfully");
+                    progressDialog.dismiss();
+                    Intent homeIntent = new Intent(EditListingActivity.this,HomeActivity.class);
+                    homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    homeIntent.putExtra("SNACKBAR_MSG", "Your edits have been saved");
+                    startActivity(homeIntent);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d(TAG, "onComplete: failed with",e);
+                    Toast.makeText(getApplicationContext(),"failed to add book!",Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -433,66 +466,6 @@ public class EditListingActivity extends AppCompatActivity {
                 .show();
     }
 
-
-    private void populateUserLocation() {
-
-        try {
-            DocumentReference docRef = mFireStore.collection("address").document(userId);
-            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            String area = document.getString("addr2");
-                            String city = document.getString("locality");
-                            book_lat = document.getDouble("lat");
-                            book_lng = document.getDouble("lng");
-                            locField.setText("");
-                            if(area != null ){
-                                locField.append(area+", ");
-                            }
-                            if(city != null){
-                                locField.append(city);
-                            }
-                            else {
-                                Log.d(TAG, "no address found");
-                            }
-                        } else {
-                            Log.d(TAG, "No address found in firebase");
-                            View parentLayout = findViewById(android.R.id.content);
-                            Snackbar.make(parentLayout, "Failed to get address", Snackbar.LENGTH_SHORT)
-                                    .setAction("OKAY", new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-
-                                        }
-                                    })
-                                    .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
-                                    .show();
-                        }
-                    } else {
-                        Log.d(TAG, "get failed with ", task.getException());
-                        View parentLayout = findViewById(android.R.id.content);
-                        Snackbar.make(parentLayout, "Failed to get address", Snackbar.LENGTH_SHORT)
-                                .setAction("OKAY", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-
-                                    }
-                                })
-                                .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
-                                .show();
-                    }
-                }
-            });
-        }
-        catch(Exception e){
-            Log.d(TAG, "get failed with ",e);
-            Toast.makeText(getApplicationContext(), "failed to get Address", Toast.LENGTH_SHORT).show();
-
-        }
-    }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);

@@ -33,6 +33,7 @@ import com.google.firebase.firestore.Query;
 
 import co.in.prodigyschool.passiton.Adapters.BookAdapter;
 import co.in.prodigyschool.passiton.BookDetailsActivity;
+import co.in.prodigyschool.passiton.Data.Book;
 import co.in.prodigyschool.passiton.EditListingActivity;
 import co.in.prodigyschool.passiton.R;
 
@@ -186,6 +187,7 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
     @Override
     public void onBookLongSelected(DocumentSnapshot snapshot) {
         book_id = snapshot.getId();
+        final Book book = snapshot.toObject(Book.class);
 
 //        vibrator.vibrate(10);
 
@@ -201,7 +203,17 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
                 }
                 else if (opt.equals("Edit")) {
                     Intent edit = new Intent(getActivity(), EditListingActivity.class);
-
+                    edit.putExtra("BOOK_NAME",book.getBookName());
+                    edit.putExtra("BOOK_PHOTO",book.getBookPhoto());
+                    edit.putExtra("BOOK_TYPE",book.isTextbook());
+                    edit.putExtra("GRADE_NUMBER",book.getGradeNumber());
+                    edit.putExtra("BOARD_NUMBER",book.getBoardNumber());
+                    edit.putExtra("BOOK_ADDRESS",book.getBookAddress());
+                    edit.putExtra("BOOK_DESC",book.getBookDescription());
+                    edit.putExtra("BOOK_LNG",book.getLng());
+                    edit.putExtra("BOOK_LAT",book.getLat());
+                    edit.putExtra("BOOK_PRICE",book.getBookPrice());
+                    edit.putExtra("DOCUMENT_ID",book.getDocumentId());
                     startActivity(edit);
                 }
             }
