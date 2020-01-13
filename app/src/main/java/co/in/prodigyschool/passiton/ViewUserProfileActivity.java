@@ -135,6 +135,7 @@ public class ViewUserProfileActivity extends AppCompatActivity implements BookAd
             case R.id.reportUser:
                 AlertDialog.Builder rBuilder = new AlertDialog.Builder(ViewUserProfileActivity.this);
                 rBuilder.setTitle("Report listing");
+                rBuilder.setIcon(R.drawable.ic_report_24px_outlined);
                 rBuilder.setMessage(Html.fromHtml("Are you sure you want to report <b>"+userID+"</b>?"));
                 rBuilder.setPositiveButton("Report", new DialogInterface.OnClickListener() {
                     @Override

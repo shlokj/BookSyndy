@@ -1,6 +1,7 @@
 package co.in.prodigyschool.passiton;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,6 +10,8 @@ import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -46,6 +49,7 @@ import com.google.firebase.storage.UploadTask;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -85,6 +89,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView mPhotoPickerButton;
     private EditText mMessageEditText;
     private Button mSendButton;
+    private Menu menu;
 
     private final List<Messages> messagesList = new ArrayList<>();
     private MessageAdapter messageAdapter;
@@ -113,26 +118,21 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         visitor_name = findViewById(R.id.visit_profile_name);
         userLastSeen =  findViewById(R.id.user_last_seen);
         mSendButton = findViewById(R.id.sendButton);
+        mSendButton.setEnabled(false);
         mAuth = FirebaseAuth.getInstance();
         mFireStore = FirebaseFirestore.getInstance();
         RootRef = FirebaseDatabase.getInstance().getReference();
         mFirebaseStorage = FirebaseStorage.getInstance();
         bookPhotosStorageReference = mFirebaseStorage.getReference().child("chat_photos");
 
+        // to change status bar color
         Window window = ChatActivity.this.getWindow();
-
-// clear FLAG_TRANSLUCENT_STATUS flag:
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
-// finally change the color
         window.setStatusBarColor(ContextCompat.getColor(ChatActivity.this,R.color.colorPrimaryDark));
 
         initializeChatRoom();
         DisplayLastSeen();
-
     }
 
     private void initializeChatRoom() {
@@ -349,14 +349,54 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         messagesList.clear();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_indiv_chat, menu);
+        this.menu = menu;
 
-    private void SendMessage(String msg,String messageType)
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.deleteChat:
+
+                AlertDialog.Builder dBuilder = new AlertDialog.Builder(ChatActivity.this);
+                dBuilder.setTitle("Delete chat");
+                dBuilder.setIcon(R.drawable.ic_delete_24px_black);
+                dBuilder.setMessage("Permanently delete this chat for you?");
+                dBuilder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // code to delete chat
+                        Toast.makeText(getApplicationContext(),"Deleted",Toast.LENGTH_SHORT).show();
+                        onBackPressed();
+                    }
+                });
+                dBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+                dBuilder.show();
+                break;
+            case android.R.id.home:
+                this.finish();
+                break;
+        }
+
+
+        return true;
+    }
+
+    private void SendMessage(String msg, String messageType)
     {
         String messageText =  msg;
 
         if (TextUtils.isEmpty(messageText))
         {
-            Toast.makeText(this, "first write your message...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Nothing to send", Toast.LENGTH_SHORT).show();
         }
         else
         {
