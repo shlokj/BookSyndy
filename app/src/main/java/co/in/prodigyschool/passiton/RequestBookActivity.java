@@ -3,6 +3,8 @@ package co.in.prodigyschool.passiton;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -421,11 +423,35 @@ public class RequestBookActivity extends AppCompatActivity {
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
-                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId() + ", " + place.getAddress());
-                Toast.makeText(RequestBookActivity.this, "ID: " + place.getId() + "address:" + place.getAddress() + "Name:" + place.getName() + " latlong: " + place.getLatLng(), Toast.LENGTH_LONG).show();
-                String address = place.getAddress();
-                // do query with address
-                locField.setText(address);
+
+                bookLat = place.getLatLng().latitude;
+                bookLng = place.getLatLng().longitude;
+                //returns list of addresses, take first one and send info to result receiver
+                Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+                List<Address> addresses = null;
+                try {
+                    addresses = geocoder.getFromLocation(
+                            bookLat,
+                            bookLng,
+                            1);
+                } catch (Exception ioException) {
+                    Log.e("", "Error in getting address for the location");
+                }
+
+                if (addresses == null || addresses.size()  == 0) {
+                    Log.e(TAG, "onActivityResult: Error Finding Address" );
+                    Toast.makeText(getApplicationContext(), "Error Fetching Address", Toast.LENGTH_SHORT).show();
+                } else {
+
+                    Address address = addresses.get(0);
+                    if(address.getSubLocality() != null){
+                        locField.setText(address.getSubLocality());
+                        locField.append(", ");
+                    }
+                    if(address.getLocality() != null){
+                        locField.append(address.getLocality());
+                    }
+                }
 
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.

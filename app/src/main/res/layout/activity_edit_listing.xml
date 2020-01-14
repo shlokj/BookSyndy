@@ -284,21 +284,27 @@
                 android:layout_weight="1"
                 android:text="@string/location" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
             <EditText
                 android:id="@+id/locField_e"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="5"
                 android:ems="10"
                 android:hint="@string/getting_loc"
                 android:inputType="textCapWords"
                 android:lines="5" />
 
-            <!-- <fragment android:id="@+id/autocomplete_fragment2"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
-                 /> -->
+            <ImageButton
+                android:id="@+id/btn_search_listing_e"
+                android:src="@drawable/ic_search_24px"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
         </LinearLayout>
 

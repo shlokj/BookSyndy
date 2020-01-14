@@ -14,6 +14,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -46,6 +48,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.AddressComponents;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
@@ -637,14 +640,37 @@ public class CreateListingActivity extends AppCompatActivity {
             case AUTOCOMPLETE_REQUEST_CODE: // for places search
                 if (resultCode == RESULT_OK) {
                     Place place = Autocomplete.getPlaceFromIntent(imageReturnedIntent);
-                    Log.i(TAG, "Place: " + place.getName() + ", " + place.getId() + ", " + place.getAddress());
-                    Toast.makeText(CreateListingActivity.this, "ID: " + place.getId() + "address:" + place.getAddress() + "Name:" + place.getName() + " latlong: " + place.getLatLng(), Toast.LENGTH_LONG).show();
+                    //Log.i(TAG, "Place: " + place.getName() + ", " + place.getId() + ", " + place.getAddress());
+                    //Toast.makeText(CreateListingActivity.this, "ID: " + place.getId() + "address:" + place.getAddress() + "Name:" + place.getName() + " latlong: " + place.getLatLng(), Toast.LENGTH_LONG).show();
 
-                    String address = place.getAddress();
                     book_lat = place.getLatLng().latitude;
                     book_lng = place.getLatLng().longitude;
-                    // do query with address
-                    locField.setText(address);
+                    //returns list of addresses, take first one and send info to result receiver
+                    Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+                    List<Address> addresses = null;
+                    try {
+                        addresses = geocoder.getFromLocation(
+                                book_lat,
+                                book_lng,
+                                1);
+                    } catch (Exception ioException) {
+                        Log.e("", "Error in getting address for the location");
+                    }
+
+                    if (addresses == null || addresses.size()  == 0) {
+                        Log.e(TAG, "onActivityResult: Error Finding Address" );
+                        Toast.makeText(getApplicationContext(), "Error Fetching Address", Toast.LENGTH_SHORT).show();
+                    } else {
+
+                        Address address = addresses.get(0);
+                        if(address.getSubLocality() != null){
+                            locField.setText(address.getSubLocality());
+                            locField.append(", ");
+                        }
+                        if(address.getLocality() != null){
+                            locField.append(address.getLocality());
+                        }
+                        }
 
                 } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                     // TODO: Handle the error.

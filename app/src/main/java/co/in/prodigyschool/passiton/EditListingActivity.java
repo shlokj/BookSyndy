@@ -6,6 +6,8 @@ import androidx.core.content.FileProvider;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -26,13 +28,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -59,6 +66,7 @@ public class EditListingActivity extends AppCompatActivity {
 
 
     private static String TAG = "CREATELISTINGFULL";
+    private static final int AUTOCOMPLETE_REQUEST_CODE = 108;
     private Spinner typeSpinner,gradeSpinner,boardSpinner;
     private double book_lat,book_lng;
     boolean isTextbook, forCompExam;
@@ -110,7 +118,12 @@ public class EditListingActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-
+        findViewById(R.id.btn_search_listing_e).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onSearchCalled();
+            }
+        });
 
         initFireBase();
 
@@ -400,6 +413,10 @@ public class EditListingActivity extends AppCompatActivity {
             userId = mAuth.getCurrentUser().getPhoneNumber();
             mFirebaseStorage = FirebaseStorage.getInstance();
             bookPhotosStorageReference = mFirebaseStorage.getReference().child("book_photos");
+            if (!Places.isInitialized()) {
+                Places.initialize(getApplicationContext(), getString(R.string.places_api_key));
+            }
+            PlacesClient placesClient = Places.createClient(this);
         }
         catch (NullPointerException e){
             Log.e(TAG, "initFireBase: getCurrentUser error", e);
@@ -466,6 +483,16 @@ public class EditListingActivity extends AppCompatActivity {
                 .show();
     }
 
+    public void onSearchCalled() {
+        // Set the fields to specify which types of place data to return.
+        List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG);
+        // Start the autocomplete intent.
+        Intent intent = new Autocomplete.IntentBuilder(
+                AutocompleteActivityMode.FULLSCREEN, fields).setCountry("IN") //NIGERIA
+                .build(this);
+        startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+    }
+
 
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
@@ -501,6 +528,50 @@ public class EditListingActivity extends AppCompatActivity {
                     Glide.with(this).load(selectedImageUri).into(mBookImage);
                 }
                 break;
+            case AUTOCOMPLETE_REQUEST_CODE: // for places search
+                if (resultCode == RESULT_OK) {
+                    Place place = Autocomplete.getPlaceFromIntent(imageReturnedIntent);
+                    //Log.i(TAG, "Place: " + place.getName() + ", " + place.getId() + ", " + place.getAddress());
+                    //Toast.makeText(CreateListingActivity.this, "ID: " + place.getId() + "address:" + place.getAddress() + "Name:" + place.getName() + " latlong: " + place.getLatLng(), Toast.LENGTH_LONG).show();
+
+                    book_lat = place.getLatLng().latitude;
+                    book_lng = place.getLatLng().longitude;
+                    //returns list of addresses, take first one and send info to result receiver
+                    Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+                    List<Address> addresses = null;
+                    try {
+                        addresses = geocoder.getFromLocation(
+                                book_lat,
+                                book_lng,
+                                1);
+                    } catch (Exception ioException) {
+                        Log.e("", "Error in getting address for the location");
+                    }
+
+                    if (addresses == null || addresses.size()  == 0) {
+                        Log.e(TAG, "onActivityResult: Error Finding Address" );
+                        Toast.makeText(getApplicationContext(), "Error Fetching Address", Toast.LENGTH_SHORT).show();
+                    } else {
+
+                        Address address = addresses.get(0);
+                        if(address.getSubLocality() != null){
+                            locField.setText(address.getSubLocality());
+                            locField.append(", ");
+                        }
+                        if(address.getLocality() != null){
+                            locField.append(address.getLocality());
+                        }
+                    }
+
+                } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                    Status status = Autocomplete.getStatusFromIntent(imageReturnedIntent);
+                    Toast.makeText(EditListingActivity.this, "Error: " + status.getStatusMessage(), Toast.LENGTH_LONG).show();
+                    Log.i(TAG, status.getStatusMessage());
+                } else if (resultCode == RESULT_CANCELED) {
+                    // The user canceled the operation.
+                }
+                break;
+
 
 
         }
