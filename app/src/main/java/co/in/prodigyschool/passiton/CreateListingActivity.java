@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.ConnectivityManager;
@@ -66,6 +67,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -625,16 +627,23 @@ public class CreateListingActivity extends AppCompatActivity {
                     CropImage(selectedImageUri);
                 }
                 break;
-            case 2://crop image
-                if (imageReturnedIntent != null) {
-                    // get the returned data
-                    Bundle extras = imageReturnedIntent.getExtras();
+                //new crop image
+            case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
+                CropImage.ActivityResult result = CropImage.getActivityResult(imageReturnedIntent);
+                if (resultCode == RESULT_OK) {
+                    Uri resultUri = result.getUri();
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
+                        mBookImage.setImageBitmap(bitmap);
+                        storeBookImage(bitmap);
+                    } catch (IOException e) {
+                        Log.e(TAG, "onActivityResult: CROP ERROR:",e);
+                        Toast.makeText(this, "CROP ERROR:"+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
 
-                    // get the cropped bitmap
-                    Bitmap photo = extras.getParcelable("data");
-
-                    mBookImage.setImageBitmap(photo);
-                    storeBookImage(photo);
+                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                    Exception error = result.getError();
+                    Toast.makeText(this, "CROP ERROR:"+error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
                 break;
             case AUTOCOMPLETE_REQUEST_CODE: // for places search
@@ -723,7 +732,7 @@ public class CreateListingActivity extends AppCompatActivity {
 
     private void storeBookImage(Bitmap bmp) {
 
-        byte[] compressedImage = CompressResizeImage(bmp);
+       byte[] compressedImage = CompressResizeImage(bmp);
 
         //show progress
         final ProgressDialog progressDialog = new ProgressDialog(this);
@@ -789,19 +798,8 @@ public class CreateListingActivity extends AppCompatActivity {
     // TODO: fix crop
     protected void CropImage(Uri picUri) {
         try {
-            Intent intent = new Intent("com.android.camera.action.CROP");
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            intent.setDataAndType(picUri, "image/*");
-            intent.putExtra("crop", "true");
-            intent.putExtra("outputX", 400);
-            intent.putExtra("outputY", 400);
-            intent.putExtra("aspectX", 1);
-            intent.putExtra("aspectY", 1);
-            intent.putExtra("scaleUpIfNeeded", true);
-            intent.putExtra("return-data", true);
-
-            startActivityForResult(Intent.createChooser(intent,"Crop Picture"), CROP_IMAGE);
-
+            CropImage.activity(picUri)
+                    .start(this);
         } catch (ActivityNotFoundException e) {
             Toast.makeText(this, "Your device doesn't support the crop action!", Toast.LENGTH_SHORT).show();
 
@@ -823,4 +821,6 @@ public class CreateListingActivity extends AppCompatActivity {
         byte[] b = baos.toByteArray();
         return b;
     }
+
+
 }
