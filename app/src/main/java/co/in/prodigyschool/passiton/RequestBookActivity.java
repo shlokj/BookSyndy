@@ -176,6 +176,7 @@ public class RequestBookActivity extends AppCompatActivity {
             gradeSpinner.setSelection(gradeNumber - 1);
         }
         boardNumber = userPref.getInt(getString(R.string.p_board), 6);
+        year = userPref.getInt(getString(R.string.p_year),0);
 
         if (gradeNumber>=7) {
             boardDegreeLabel.setText("Degree / course");

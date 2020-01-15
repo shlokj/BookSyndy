@@ -151,6 +151,7 @@
 
     <string name="p_grade">USERGRADE</string>
     <string name="p_board">USERBOARD</string>
+    <string name="p_year">USERYEAR</string>
     <string name="p_competitive">COMPETITIVE</string>
     <string name="year">Year</string>
     <string name="p_area">AREA</string>

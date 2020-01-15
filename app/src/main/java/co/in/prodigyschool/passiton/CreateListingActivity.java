@@ -92,9 +92,9 @@ public class CreateListingActivity extends AppCompatActivity {
     private static String TAG = "CREATELISTINGFULL";
     private Spinner typeSpinner,gradeSpinner,boardSpinner;
     private double book_lat,book_lng;
-    boolean isTextbook, forCompExam;
+    private boolean isTextbook, forCompExam;
     private String curUserId, bookName, bookDescription, phoneNumber, userId, bookAddress, bookImageUrl, selectedImage,book_photo_url;
-    int gradeNumber, boardNumber, year;
+    private int gradeNumber, boardNumber, year;
     private int bookPrice;
     private FirebaseAuth mAuth;
     private FirebaseFirestore mFireStore;
@@ -120,7 +120,7 @@ public class CreateListingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_listing);
         typeSpinner = findViewById(R.id.bookTypeSpinner);
         gradeSpinner = findViewById(R.id.gradeSpinner);
-        boardSpinner = findViewById(R.id.boardSpinner);
+        boardSpinner = findViewById(R.id.boardSpinner1);
         boardDegreeLabel = findViewById(R.id.boardLabel);
         postButton = findViewById(R.id.postButton);
         competitiveExam = findViewById(R.id.forCompetitiveExams);
@@ -133,6 +133,11 @@ public class CreateListingActivity extends AppCompatActivity {
         mBookImage = findViewById(R.id.book_image);
         userPref = this.getSharedPreferences(getString(R.string.UserPref),0);
 
+        year = getIntent().getIntExtra("YEAR_NUMBER",0);
+
+        if (year!=0) {
+            yearField.setText(year+"");
+        }
         getSupportActionBar().setTitle("Create a listing");
 
         if(getSupportActionBar()!= null) {
@@ -252,6 +257,7 @@ public class CreateListingActivity extends AppCompatActivity {
                 if (position<6) {
                     boardDegreeLabel.setText("Board");
                     boardSpinner.setAdapter(boardAdapter);
+//                    boardSpinner.setSelection(boardNumber-1);
                     yearField.setVisibility(View.GONE);
                     if (position==4 || position==5) {
                         competitiveExam.setVisibility(View.VISIBLE);
@@ -263,6 +269,7 @@ public class CreateListingActivity extends AppCompatActivity {
                 else {
                     boardDegreeLabel.setText("Degree / course");
                     boardSpinner.setAdapter(degreeAdapter);
+//                    boardSpinner.setSelection(boardNumber-7);
                     yearField.setVisibility(View.VISIBLE);
                     competitiveExam.setVisibility(View.GONE);
                 }
@@ -447,6 +454,8 @@ public class CreateListingActivity extends AppCompatActivity {
 
                         gradeSpinner.setAdapter(gradeAdapter);
                         gradeSpinner.setSelection(gradeNumber-1);
+                        Toast.makeText(getApplicationContext(),"Board number: "+boardNumber,Toast.LENGTH_SHORT).show();
+
 
                         if (gradeNumber>=7) {
                             boardDegreeLabel.setText("Degree / course");
@@ -456,12 +465,13 @@ public class CreateListingActivity extends AppCompatActivity {
 
                             boardDegreeLabel.setText("Degree / Board");
                             boardSpinner.setAdapter(degreeAdapter);
-                            boardSpinner.setSelection(boardNumber-7);
+                            // TODO: fix issue here
+                            boardSpinner.setSelection(boardNumber-7,true);
                         }
                         else {
                             boardDegreeLabel.setText("Board");
                             boardSpinner.setAdapter(boardAdapter);
-                            boardSpinner.setSelection(boardNumber-1);
+                            boardSpinner.setSelection(boardNumber-1,true);
                         }
                     }
 

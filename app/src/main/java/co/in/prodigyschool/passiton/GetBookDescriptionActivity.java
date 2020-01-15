@@ -57,6 +57,7 @@ public class GetBookDescriptionActivity extends AppCompatActivity {
                     getBookClass.putExtra("BOARD_NUMBER",boardNumber);
                     getBookClass.putExtra("BOOK_NAME",bookName);
                     getBookClass.putExtra("BOOK_DESCRIPTION",bookDescription);
+                    getBookClass.putExtra("YEAR_NUMBER", year);
                     startActivity(getBookClass);
                 }
             }

@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
                                             editor.putString(getString(R.string.p_imageurl),user.getImageUrl());
                                             editor.putInt(getString(R.string.p_grade),user.getGradeNumber());
                                             editor.putInt(getString(R.string.p_board),user.getBoardNumber());
+                                            editor.putInt(getString(R.string.p_year),user.getYear());
                                             editor.putBoolean(getString(R.string.p_competitive),user.isCompetitiveExam());
                                             editor.apply();
 //                                            Intent homeActivity = new Intent(MainActivity.this,HomeActivity.class);

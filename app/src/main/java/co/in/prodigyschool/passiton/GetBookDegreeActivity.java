@@ -39,13 +39,14 @@ public class GetBookDegreeActivity extends AppCompatActivity {
         boardNumber = getIntent().getIntExtra("BOARD_NUMBER",6);
         yearNumber = getIntent().getIntExtra("YEAR_NUMBER",0);
 
+        yearField = findViewById(R.id.bookYearField);
+
         if (yearNumber!=0) {
             yearField.setText(yearNumber+"");
         }
 
         getPrice = new Intent(GetBookDegreeActivity.this, GetBookPriceActivity.class);
         bookDegreeQ = findViewById(R.id.bookDegreeQuestionTV);
-        yearField = findViewById(R.id.bookYearField);
 
         if (boardNumber==7) {
             degrees.check(R.id.btechBook);

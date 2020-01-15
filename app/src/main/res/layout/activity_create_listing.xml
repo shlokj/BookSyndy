@@ -168,7 +168,7 @@
                 android:text="@string/board" />
 
             <Spinner
-                android:id="@+id/boardSpinner"
+                android:id="@+id/boardSpinner1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:layout_editor_absoluteX="1dp"

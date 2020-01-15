@@ -69,7 +69,6 @@ public class GetBookPictureActivity extends AppCompatActivity {
         gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
         boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 6);
         year = getIntent().getIntExtra("YEAR_NUMBER",0);
-//        Toast.makeText(this, "Year: "+year, Toast.LENGTH_SHORT).show();
 
         takenPic = findViewById(R.id.picTakenIV);
         chosenPic = findViewById(R.id.picChosenIV);

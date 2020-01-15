@@ -24,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,10 +59,11 @@ public class UserProfileActivity extends AppCompatActivity {
     private FloatingActionButton saveChanges;
     private TextWatcher checkChange;
     private Menu menu;
-    private int clickCount,gradeNumber,boardNumber;
+    private int clickCount,gradeNumber,boardNumber,yearNumber;
     private CheckBox compExams,preferGuidedMode;
     private boolean detailsChanged = false, newUNameOK=true, tempCE;//TODO: add code to check whether new username is OK
     private TextView boardLabel;
+    private LinearLayout yearLL;
     private String firstName, lastName, phoneNumber,userId;
     private FirebaseFirestore mFirestore;
     private User curUser;
@@ -69,8 +71,6 @@ public class UserProfileActivity extends AppCompatActivity {
     private ArrayAdapter<String> boardAdapter, degreeAdapter, gradeAdapter;
     private SharedPreferences userPref;
     private SharedPreferences.Editor editor;
-
-
 
     private final int GALLERY_ACTIVITY_CODE=200;
     private final int RESULT_CROP = 400;
@@ -103,6 +103,8 @@ public class UserProfileActivity extends AppCompatActivity {
         degreeSpinner = findViewById(R.id.degreeSpinner);
 
         boardLabel = findViewById(R.id.boardLabel);
+
+        yearLL = findViewById(R.id.profileYearLL);
 
         saveChanges = findViewById(R.id.fab_save);
         saveChanges.hide();
@@ -146,7 +148,6 @@ public class UserProfileActivity extends AppCompatActivity {
         uName.addTextChangedListener(checkChange);
         year.addTextChangedListener(checkChange);
 
-
         fName.setEnabled(false);
         lName.setEnabled(false);
         uName.setEnabled(false);
@@ -172,8 +173,8 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 if (position<6) { //school grade selected
-
                     boardLabel.setText("Board");
+                    yearLL.setVisibility(View.GONE);
                     if (boardSpinner.getAdapter()!=boardAdapter) {
                         boardSpinner.setAdapter(boardAdapter);
                     }
@@ -189,6 +190,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
                 else { //undergrad selected
                     boardLabel.setText("Degree / course");
+                    yearLL.setVisibility(View.VISIBLE);
                     if (boardSpinner.getAdapter()!=degreeAdapter) {
                         boardSpinner.setAdapter(degreeAdapter);
                     }
@@ -279,6 +281,7 @@ public class UserProfileActivity extends AppCompatActivity {
 //                        editor.putString(getString(R.string.p_imageurl),user.getImageUrl());
                         editor.putInt(getString(R.string.p_grade),gradeSpinner.getSelectedItemPosition() +1);
                         editor.putInt(getString(R.string.p_board),board);
+                        editor.putInt(getString(R.string.p_year),yearNumber);
                         editor.putBoolean(getString(R.string.p_competitive),compExams.isChecked());
                         editor.apply();
                         DocumentReference userReference =  mFirestore.collection("users").document(phoneNumber);
@@ -359,7 +362,6 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
@@ -396,52 +398,54 @@ public class UserProfileActivity extends AppCompatActivity {
         try{
             phoneNumber = userPref.getString(getString(R.string.p_userphone),"");
 
-                        gradeNumber = userPref.getInt(getString(R.string.p_grade),2);
-                        boardNumber = userPref.getInt(getString(R.string.p_board),2);
+            gradeNumber = userPref.getInt(getString(R.string.p_grade),2);
+            boardNumber = userPref.getInt(getString(R.string.p_board),2);
+            yearNumber = userPref.getInt(getString(R.string.p_year),0);
 
-                        firstName = userPref.getString(getString(R.string.p_firstname),"");
-                        lastName = userPref.getString(getString(R.string.p_lastname),"");
-                        userId = userPref.getString(getString(R.string.p_userid),"");
+            firstName = userPref.getString(getString(R.string.p_firstname),"");
+            lastName = userPref.getString(getString(R.string.p_lastname),"");
+            userId = userPref.getString(getString(R.string.p_userid),"");
 
-                        gradeSpinner.setAdapter(gradeAdapter);
-                        gradeSpinner.setSelection(gradeNumber-1);
+            gradeSpinner.setAdapter(gradeAdapter);
+            gradeSpinner.setSelection(gradeNumber-1);
 
 //                        Toast.makeText(getApplicationContext(),"Grade number: "+gradeNumber,Toast.LENGTH_SHORT).show();
 
-                        if (gradeNumber>=1 && gradeNumber<=6) {
+            if (gradeNumber>=1 && gradeNumber<=6) {
 
 //                            Toast.makeText(getApplicationContext(),"School",Toast.LENGTH_LONG).show();
 
-                            boardLabel.setText("Board");
-                            findViewById(R.id.collegeDegreeAndYearLL).setVisibility(View.GONE);
+                boardLabel.setText("Board");
+                findViewById(R.id.collegeDegreeAndYearLL).setVisibility(View.GONE);
 
-                            if (gradeNumber==5 || gradeNumber==6) {
-                                compExams.setVisibility(View.VISIBLE);
-                                tempCE = userPref.getBoolean(getString(R.string.p_competitive),false);
+                if (gradeNumber==5 || gradeNumber==6) {
+                    compExams.setVisibility(View.VISIBLE);
+                    tempCE = userPref.getBoolean(getString(R.string.p_competitive),false);
 //                                Toast.makeText(getApplicationContext(),"Competitive exam: "+tempCE,Toast.LENGTH_SHORT).show();
-                                compExams.setChecked(tempCE);
-                            }
-                            else {
-                                compExams.setVisibility(View.GONE);
-                            }
+                    compExams.setChecked(tempCE);
+                }
+                else {
+                    compExams.setVisibility(View.GONE);
+                }
 
-                            boardSpinner.setAdapter(boardAdapter);
-                            boardSpinner.setSelection(boardNumber-1);
-                        }
+                boardSpinner.setAdapter(boardAdapter);
+                boardSpinner.setSelection(boardNumber-1);
+            }
 
-                        else {
+            else {
 
-                            boardLabel.setText("Degree / course");
+                boardLabel.setText("Degree / course");
 
-                            boardSpinner.setAdapter(degreeAdapter);
-                            boardSpinner.setSelection(boardNumber-7);
-                        }
+                boardSpinner.setAdapter(degreeAdapter);
+                boardSpinner.setSelection(boardNumber-7);
 
-                        fName.setText(firstName);
-                        lName.setText(lastName);
-                        uName.setText(userId);
-                        phoneNo.setText(phoneNumber);
+                year.setText(yearNumber+"");
+            }
 
+            fName.setText(firstName);
+            lName.setText(lastName);
+            uName.setText(userId);
+            phoneNo.setText(phoneNumber);
 
         }
         catch(Exception e){
