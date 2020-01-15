@@ -789,12 +789,8 @@ public class CreateListingActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             progressDialog.dismiss();
         }
-
-
     }
 
-
-    // TODO: fix crop
     protected void CropImage(Uri picUri) {
         try {
             CropImage.activity(picUri)
@@ -820,6 +816,5 @@ public class CreateListingActivity extends AppCompatActivity {
         byte[] b = baos.toByteArray();
         return b;
     }
-
 
 }

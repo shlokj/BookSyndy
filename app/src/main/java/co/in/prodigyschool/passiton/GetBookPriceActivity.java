@@ -9,6 +9,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -43,14 +44,14 @@ public class GetBookPriceActivity extends AppCompatActivity {
         gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
         collegeStudent = getIntent().getBooleanExtra("COLLEGE_STUDENT",false);
         if (collegeStudent) {
-//            Toast.makeText(getApplicationContext(),"College student",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),"College student",Toast.LENGTH_SHORT).show();
             boardNumber = getIntent().getIntExtra("DEGREE_NUMBER", 7);
         }
         else {
-//            Toast.makeText(getApplicationContext(),"School student",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),"School student",Toast.LENGTH_SHORT).show();
             boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 6);
         }
-//        Toast.makeText(getApplicationContext(),"Board number: "+boardNumber,Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(),"Board number: "+boardNumber,Toast.LENGTH_SHORT).show();
 
         if(!isTextbook) {
             pricingInstructions.setText(R.string.material_pricing_instructions);

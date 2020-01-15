@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -19,34 +21,42 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.theartofdev.edmodo.cropper.CropImage;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class GetBookPictureActivity extends AppCompatActivity {
 
     public static String TAG = "GET_BOOK_PICTURE";
     LinearLayout takePic, choosePic;
-    ImageView takenPic, chosenPic;
+    private ImageView takenPic, chosenPic;
     private StorageReference bookPhotosStorageReference;
     private FirebaseStorage mFirebaseStorage;
     private String book_photo_url = null;
     private String imageFilePath;
-    private Uri selectedImage;
+    private Uri selectedImageUri;
     private int gradeNumber,boardNumber;
     final int PIC_CROP = 3;
 
+    // TODO: disallow user to go to the next activity if no picture selected
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,16 +96,13 @@ public class GetBookPictureActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent getBookType = new Intent(GetBookPictureActivity.this, GetBookMaterialTypeActivity.class);
                 // To find an efficient way to pass on the image of the book; mostly the uri
-                if(selectedImage != null)
-                    getBookType.putExtra("BOOK_IMAGE_URI", selectedImage.toString());
+                if(selectedImageUri != null)
+                    getBookType.putExtra("BOOK_IMAGE_URI", selectedImageUri.toString());
 
                 getBookType.putExtra("GRADE_NUMBER",gradeNumber);
                 getBookType.putExtra("BOARD_NUMBER",boardNumber);
 
                 startActivity(getBookType);
-
-
-
             }
         });
     }
@@ -103,50 +110,88 @@ public class GetBookPictureActivity extends AppCompatActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-
         switch (requestCode) {
-
-/*            case PIC_CROP:
-
-                if (imageReturnedIntent != null) {
-                    // get the returned data
-                    Bundle extras = imageReturnedIntent.getExtras();
-
-                    Bitmap selectedBitmap = extras.getParcelable("data");
-
-                    chosenPic.setImageBitmap(selectedBitmap);
-                }*/
-
             case 0:// camera intent
                 if (resultCode == RESULT_OK ) {
-
-                    Glide.with(this).load(imageFilePath).into(takenPic);
                     File f = new File(imageFilePath);
-                    selectedImage = Uri.fromFile(f);
-                    takenPic.setVisibility(View.VISIBLE);
-                    //storeBookImage(selectedImage);
+                    selectedImageUri = FileProvider.getUriForFile(GetBookPictureActivity.this, BuildConfig.APPLICATION_ID + ".provider",f);
+                    CropImage(selectedImageUri);
+
                 }
                 break;
 
             case 1:// gallery intent
                 if (resultCode == RESULT_OK && imageReturnedIntent != null && imageReturnedIntent.getData() != null) {
-                    chosenPic.setVisibility(View.VISIBLE);
-                    selectedImage = imageReturnedIntent.getData();
-                    performCrop(selectedImage);
-                    //storeBookImage(selectedImage);
-                    chosenPic.setImageURI(selectedImage);
+                    selectedImageUri = imageReturnedIntent.getData();
+                    CropImage(selectedImageUri);
                 }
                 break;
+            //new crop image
+            case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
+                CropImage.ActivityResult result = CropImage.getActivityResult(imageReturnedIntent);
+                if (resultCode == RESULT_OK) {
+                    Uri resultUri = result.getUri();
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
+                        takenPic.setImageBitmap(bitmap);
+                        storeBookImage(bitmap);
+                    } catch (IOException e) {
+                        Log.e(TAG, "onActivityResult: CROP ERROR:",e);
+                        Toast.makeText(this, "CROP ERROR:"+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
 
-
+                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                    Exception error = result.getError();
+                    Toast.makeText(this, "CROP ERROR:"+error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+                break;
         }
     }
-//need to move this function to last book listing activity
-    private void storeBookImage(Uri selectedImageUri) {
+
+    private File createImageFile() throws IOException {
+
+        String imageFileName = "BOOK" + "_";
+        File storageDir =
+                getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        imageFilePath = image.getAbsolutePath();
+        return image;
+    }
+
+    private void openCameraIntent() {
+        Intent pictureIntent = new Intent(
+                MediaStore.ACTION_IMAGE_CAPTURE);
+        if (pictureIntent.resolveActivity(getPackageManager()) != null) {
+            //Create a file to store the image
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            }
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this, "co.in.prodigyschool.passiton.provider", photoFile);
+                pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                        photoURI);
+                startActivityForResult(pictureIntent, 0);
+            }
+        }
+    }
+
+    private void storeBookImage(Bitmap bmp) {
+
+        byte[] compressedImage = CompressResizeImage(bmp);
+
         //show progress
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Uploading");
-        progressDialog.show();
+        //progressDialog.show();
+
         try {
             String timeStamp =
                     new SimpleDateFormat("yyyyMMdd_HHmmss",
@@ -155,8 +200,7 @@ public class GetBookPictureActivity extends AppCompatActivity {
             final StorageReference photoRef = bookPhotosStorageReference.child(timeStamp + "_" + selectedImageUri.getLastPathSegment());
 
             // Upload file to Firebase Storage
-            UploadTask uploadTask = photoRef.putFile(selectedImageUri);
-
+            UploadTask uploadTask = photoRef.putBytes(compressedImage);
             uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                 @Override
                 public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) {
@@ -199,71 +243,32 @@ public class GetBookPictureActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             progressDialog.dismiss();
         }
-
-
     }
 
-    private File createImageFile() throws IOException {
-
-        String imageFileName = "BOOK" + "_";
-        File storageDir =
-                getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        imageFilePath = image.getAbsolutePath();
-        return image;
-    }
-
-    private void openCameraIntent() {
-        Intent pictureIntent = new Intent(
-                MediaStore.ACTION_IMAGE_CAPTURE );
-        if (pictureIntent.resolveActivity(getPackageManager()) != null) {
-            //Create a file to store the image
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                // Error occurred while creating the File
-            }
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(this, "co.in.prodigyschool.passiton.provider", photoFile);
-                pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                        photoURI);
-                startActivityForResult(pictureIntent,
-                        0);
-            }
-        }
-    }
-
-    private void performCrop(Uri picUri) {
+    protected void CropImage(Uri picUri) {
         try {
-            Intent cropIntent = new Intent("com.android.camera.action.CROP");
-            // indicate image type and Uri
-            cropIntent.setDataAndType(picUri, "image/*");
-            // set crop properties here
-            cropIntent.putExtra("crop", true);
-            // indicate aspect of desired crop
-            cropIntent.putExtra("aspectX", 1);
-            cropIntent.putExtra("aspectY", 1);
-            // indicate output X and Y
-            cropIntent.putExtra("outputX", 500);
-            cropIntent.putExtra("outputY", 500);
-            // retrieve data on return
-            cropIntent.putExtra("return-data", true);
-            // start the activity - we handle returning in onActivityResult
-            startActivityForResult(cropIntent, PIC_CROP);
+            CropImage.activity(picUri)
+                    .start(this);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, "Your device doesn't support the crop action!", Toast.LENGTH_SHORT).show();
+
         }
-        // respond to users whose devices do not support the crop action
-        catch (ActivityNotFoundException anfe) {
-            // display an error message
-            String errorMessage = "Whoops - your device doesn't support the crop action!";
-            Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
-            toast.show();
-        }
+    }
+
+    public byte[] CompressResizeImage(Bitmap bm)
+    {
+        int bmWidth = bm.getWidth();
+        int bmHeight = bm.getHeight();
+        int ivWidth = takenPic.getWidth();
+        int ivHeight = takenPic.getHeight();
+
+        int new_height = (int) Math.floor((double) bmHeight *( (double) ivWidth / (double) bmWidth));
+        Bitmap newbitMap = Bitmap.createScaledBitmap(bm, ivWidth, new_height, true);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        newbitMap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] b = baos.toByteArray();
+        return b;
     }
 
 

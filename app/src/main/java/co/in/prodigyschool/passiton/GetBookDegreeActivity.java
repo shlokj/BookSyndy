@@ -114,8 +114,9 @@ public class GetBookDegreeActivity extends AppCompatActivity {
                 }
                 else if (yearField.getText().toString().length()==1) {
                     degree = degrees.getCheckedRadioButtonId();
-//                    Toast.makeText(getApplicationContext(),"Check",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Check",Toast.LENGTH_SHORT).show();
                     yearNumber = Integer.parseInt(yearField.getText().toString());
+                    Toast.makeText(getApplicationContext(),"ID: "+degree,Toast.LENGTH_SHORT).show();
                     if (degree == R.id.btechBook) {
                         degreeNumber = 7;
                         if (yearNumber > 4 || yearNumber==0) {
@@ -158,7 +159,7 @@ public class GetBookDegreeActivity extends AppCompatActivity {
                             validYear = false;
                             displaySnackbarYears(4);
                         }
-                    } else if (degree == R.id.llb) {
+                    } else if (degree == R.id.llbBook) {
                         degreeNumber = 14;
                         if (yearNumber > 5 || yearNumber==0) {
                             validYear = false;
@@ -185,7 +186,7 @@ public class GetBookDegreeActivity extends AppCompatActivity {
                                     .show();
                         }
                     }
-//                    Toast.makeText(getApplicationContext(),"Board number: "+degreeNumber,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Board number: "+degreeNumber,Toast.LENGTH_SHORT).show();
                     getPrice.putExtra("BOARD_NUMBER",degreeNumber);
                     getPrice.putExtra("BOOK_IMAGE_URI", selectedImage);
                     getPrice.putExtra("IS_TEXTBOOK", isTextbook);

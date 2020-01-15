@@ -107,7 +107,9 @@ public class ConfirmListingActivity extends AppCompatActivity {
         });
 
         if(selectedImage != null && !selectedImage.isEmpty()){
-            bookPicFinal.setImageURI(Uri.parse(selectedImage));
+            Glide.with(bookPicFinal.getContext())
+                    .load(selectedImage)
+                    .into(bookPicFinal);
         }
 //        Toast.makeText(getApplicationContext(),"Board number: "+boardNumber,Toast.LENGTH_SHORT).show();
 
@@ -249,8 +251,6 @@ public class ConfirmListingActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             progressDialog.dismiss();
         }
-
-
     }
 
     private void uploadBook() {
