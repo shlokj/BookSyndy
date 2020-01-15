@@ -724,8 +724,7 @@ public class CreateListingActivity extends AppCompatActivity {
                 Uri photoURI = FileProvider.getUriForFile(this, "co.in.prodigyschool.passiton.provider", photoFile);
                 pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
                         photoURI);
-                startActivityForResult(pictureIntent,
-                        0);
+                startActivityForResult(pictureIntent, 0);
             }
         }
     }

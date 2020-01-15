@@ -23,7 +23,7 @@
         <ImageView
             android:layout_width="@dimen/img_width_height"
             android:layout_height="@dimen/img_width_height"
-            android:src="@drawable/ic_booksyndy_logo_square" />
+            android:src="@drawable/ic_share_book" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

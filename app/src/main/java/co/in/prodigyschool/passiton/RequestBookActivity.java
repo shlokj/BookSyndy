@@ -89,7 +89,7 @@ public class RequestBookActivity extends AppCompatActivity {
         locField = findViewById(R.id.locField_r);
 
         yearField = findViewById(R.id.bookYearField_r);
-         initFirebase();
+        initFirebase();
 
         gradeAdapter = new ArrayAdapter<>(RequestBookActivity.this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.grades));
@@ -171,6 +171,8 @@ public class RequestBookActivity extends AppCompatActivity {
         gradeNumber = userPref.getInt(getString(R.string.p_grade),4);
         gradeSpinner.setSelection(gradeNumber-1);
         boardNumber = userPref.getInt(getString(R.string.p_board), 6);
+        Toast.makeText(getApplicationContext(),"Board number: "+boardNumber,Toast.LENGTH_SHORT).show();
+
         if (gradeNumber>=7) {
             boardDegreeLabel.setText("Degree / course");
             boardSpinner.setSelection(boardNumber-7);

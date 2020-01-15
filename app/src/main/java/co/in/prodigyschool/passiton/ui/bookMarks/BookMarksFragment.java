@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -59,6 +60,7 @@ public class BookMarksFragment extends Fragment implements BookMarkAdapter.OnBoo
     private ListView optionsListView;
     private AlertDialog dialog;
     private String book_id;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -78,6 +80,9 @@ public class BookMarksFragment extends Fragment implements BookMarkAdapter.OnBoo
         recyclerView.setAdapter(mAdapter);
         mAdapter.startListening();
         root.findViewById(R.id.fab_home).setVisibility(View.GONE);
+        mSwipeRefreshLayout = root.findViewById(R.id.swiperefreshhome);
+        mSwipeRefreshLayout.setRefreshing(false);
+        mSwipeRefreshLayout.setEnabled(false);
         return root;
     }
 
