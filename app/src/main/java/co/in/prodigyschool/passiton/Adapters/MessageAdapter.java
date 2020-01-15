@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -49,18 +50,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         {
             super(itemView);
 
-            senderMessageText =  itemView.findViewById(R.id.sender_messsage_text);
-            senderMessageTime =  itemView.findViewById(R.id.sender_message_time);
-            receiverMessageText =  itemView.findViewById(R.id.receiver_message_text);
+            senderMessageText = itemView.findViewById(R.id.sender_messsage_text);
+            senderMessageTime = itemView.findViewById(R.id.sender_message_time);
+            receiverMessageText = itemView.findViewById(R.id.receiver_message_text);
             receiverMessageTime = itemView.findViewById(R.id.receiver_message_time);
             messageReceiverPicture = itemView.findViewById(R.id.message_receiver_image_view);
             messageSenderPicture = itemView.findViewById(R.id.message_sender_image_view);
 
-
         }
     }
-
-
 
 
     @NonNull
@@ -96,7 +94,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
         if (fromMessageType.equals("text"))
         {
-            String  strDate = messages.getDate();
+            String strDate = messages.getDate();
             SimpleDateFormat format = new SimpleDateFormat("dd/MM");
             strDate = format.format(Date.parse(strDate));
 
@@ -108,7 +106,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 //                messageViewHolder.senderMessageTime.setGravity(G);
                 messageViewHolder.senderMessageText.setBackgroundResource(R.drawable.sender_messages_layout);
                 messageViewHolder.senderMessageText.setTextColor(Color.WHITE);
-                messageViewHolder.senderMessageTime.setText(messages.getTime() + "\n" + strDate);
+                messageViewHolder.senderMessageTime.setText(messages.getTime() + "  " + strDate);
                 messageViewHolder.senderMessageText.setText(messages.getMessage()/* + "\n \n" + messages.getTime() + " - " + messages.getDate()*/);
 
             }
@@ -118,7 +116,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                 messageViewHolder.receiverMessageTime.setVisibility(View.VISIBLE);
                 messageViewHolder.receiverMessageText.setBackgroundResource(R.drawable.receiver_messages_layout);
                 messageViewHolder.receiverMessageText.setTextColor(Color.WHITE);
-                messageViewHolder.receiverMessageTime.setText(messages.getTime() + "\n" + strDate);
+                messageViewHolder.receiverMessageTime.setText(messages.getTime() + "  " + strDate);
                 messageViewHolder.receiverMessageText.setText(messages.getMessage()/* + "\n \n" + messages.getTime() + " - " + messages.getDate()*/);
             }
         }

@@ -56,7 +56,7 @@
     <string name="description_req">Please provide a brief description.</string>
     <string name="desc_desc">Mention all relevant details, like the condition of the book/material, here.</string>
     <string name="notes_grade_question">Which grade is this material for?</string>
-    <string name="my_chats">My chats</string>
+    <string name="my_chats">Chats</string>
     <string name="home">Home</string>
     <string name="comp_exam_interest">I\'m interested in competitive exam prep</string>
     <string name="book_for_free_q">Do you feel generous today?</string>
@@ -158,5 +158,6 @@
     <string name="save">Save</string>
     <string name="report_user">Report user</string>
     <string name="report_listing">Report listing</string>
+    <string name="type_a_message">Type a message</string>
 
 </resources>
