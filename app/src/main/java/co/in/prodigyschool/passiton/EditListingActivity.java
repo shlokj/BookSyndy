@@ -160,10 +160,24 @@ public class EditListingActivity extends AppCompatActivity {
         book_lng = getIntent().getDoubleExtra("BOOK_LNG",0.0);
         isTextbook = getIntent().getBooleanExtra("BOOK_TYPE",false);
         bookPrice = getIntent().getIntExtra("BOOK_PRICE",0);
+        year = getIntent().getIntExtra("BOOK_YEAR",0);
         documentId = getIntent().getStringExtra("DOCUMENT_ID");
 
         gradeSpinner.setSelection(gradeNumber - 1);
-        boardSpinner.setSelection(boardNumber - 1);
+
+        if (gradeNumber>=7) {
+            boardDegreeLabel.setText("Degree / course");
+            boardSpinner.setSelection(boardNumber-7);
+        }
+        else {
+            boardDegreeLabel.setText("Board");
+            boardSpinner.setSelection(boardNumber-1);
+        }
+
+        if (year>0) {
+            yearField.setText(year + "");
+        }
+
         nameField.setText(bookName);
         descField.setText(bookDescription);
         locField.setText(bookAddress);

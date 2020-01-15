@@ -213,6 +213,7 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
                     edit.putExtra("BOOK_LNG",book.getLng());
                     edit.putExtra("BOOK_LAT",book.getLat());
                     edit.putExtra("BOOK_PRICE",book.getBookPrice());
+                    edit.putExtra("BOOK_YEAR",book.getBookYear());
                     edit.putExtra("DOCUMENT_ID",book.getDocumentId());
                     startActivity(edit);
                 }

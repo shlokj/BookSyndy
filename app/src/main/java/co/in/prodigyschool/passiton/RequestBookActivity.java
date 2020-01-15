@@ -169,16 +169,22 @@ public class RequestBookActivity extends AppCompatActivity {
 
 
         gradeNumber = userPref.getInt(getString(R.string.p_grade),4);
-        gradeSpinner.setSelection(gradeNumber-1);
+        if (gradeNumber<=5) {
+            gradeSpinner.setSelection(gradeNumber);
+        }
+        else {
+            gradeSpinner.setSelection(gradeNumber - 1);
+        }
         boardNumber = userPref.getInt(getString(R.string.p_board), 6);
-        Toast.makeText(getApplicationContext(),"Board number: "+boardNumber,Toast.LENGTH_SHORT).show();
 
         if (gradeNumber>=7) {
             boardDegreeLabel.setText("Degree / course");
+            boardSpinner.setAdapter(degreeAdapter);
             boardSpinner.setSelection(boardNumber-7);
         }
         else {
             boardDegreeLabel.setText("Board");
+            boardSpinner.setAdapter(boardAdapter);
             boardSpinner.setSelection(boardNumber-1);
         }
 

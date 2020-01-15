@@ -294,6 +294,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
                 android:ems="10"
+                android:enabled="false"
                 android:hint="@string/getting_loc"
                 android:inputType="textCapWords"
                 android:lines="5" />
