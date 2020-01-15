@@ -156,6 +156,7 @@ public class GetCollegeSpecificsActivity extends AppCompatActivity {
                     }
 
                     getFinalAnswer.putExtra("DEGREE_NUMBER",degreeNumber);
+                    getFinalAnswer.putExtra("YEAR_NUMBER",yearNumber);
                     if (degree!=-1 && validYear) {
                         startActivity(getFinalAnswer);
                     }

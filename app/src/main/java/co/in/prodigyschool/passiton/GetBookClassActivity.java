@@ -21,7 +21,7 @@ public class GetBookClassActivity extends AppCompatActivity {
     private RadioGroup grades;
     private String bookName, bookDescription,selectedImage;
     int grade;
-    int gradeNumber, boardNumber;
+    int gradeNumber, boardNumber, year;
     boolean tmp=true;
     Intent getBookBoard, getPrice;
     private CheckBox compExamBook;
@@ -35,6 +35,7 @@ public class GetBookClassActivity extends AppCompatActivity {
         isTextbook = getIntent().getBooleanExtra("IS_TEXTBOOK", true);
         gradeNumber = getIntent().getIntExtra("GRADE_NUMBER", 4);
         boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 6);
+        year = getIntent().getIntExtra("YEAR_NUMBER",0);
 
         bookName = getIntent().getStringExtra("BOOK_NAME");
         bookDescription = getIntent().getStringExtra("BOOK_DESCRIPTION");
@@ -137,6 +138,7 @@ public class GetBookClassActivity extends AppCompatActivity {
                     getBookDegree.putExtra("BOOK_DESCRIPTION",bookDescription);
                     getBookDegree.putExtra("GRADE_NUMBER",gradeNumber);
                     getBookDegree.putExtra("BOARD_NUMBER",boardNumber);
+                    getBookDegree.putExtra("YEAR_NUMBER", year);
                     startActivity(getBookDegree);
                     tmp = false;
                 }

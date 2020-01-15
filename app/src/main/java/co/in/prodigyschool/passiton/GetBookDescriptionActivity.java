@@ -15,7 +15,7 @@ public class GetBookDescriptionActivity extends AppCompatActivity {
     boolean isTextbook;
     String bookName, bookDescription,selectedImage;
     EditText bookDescField;
-    private int gradeNumber,boardNumber;
+    private int gradeNumber,boardNumber, year;
 
     //TODO: Save the description in the edittext in case the user goes back (don't make him type it again)
     @Override
@@ -26,6 +26,7 @@ public class GetBookDescriptionActivity extends AppCompatActivity {
 
         gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
         boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 6);
+        year = getIntent().getIntExtra("YEAR_NUMBER",0);
 
         selectedImage = getIntent().getStringExtra("BOOK_IMAGE_URI");
         bookName = getIntent().getStringExtra("BOOK_NAME");
@@ -49,14 +50,14 @@ public class GetBookDescriptionActivity extends AppCompatActivity {
                             .show();
                 }
                 else {
-                    Intent getBookDescription = new Intent(GetBookDescriptionActivity.this, GetBookClassActivity.class);
-                    getBookDescription.putExtra("BOOK_IMAGE_URI", selectedImage);
-                    getBookDescription.putExtra("IS_TEXTBOOK", isTextbook);
-                    getBookDescription.putExtra("GRADE_NUMBER",gradeNumber);
-                    getBookDescription.putExtra("BOARD_NUMBER",boardNumber);
-                    getBookDescription.putExtra("BOOK_NAME",bookName);
-                    getBookDescription.putExtra("BOOK_DESCRIPTION",bookDescription);
-                    startActivity(getBookDescription);
+                    Intent getBookClass = new Intent(GetBookDescriptionActivity.this, GetBookClassActivity.class);
+                    getBookClass.putExtra("BOOK_IMAGE_URI", selectedImage);
+                    getBookClass.putExtra("IS_TEXTBOOK", isTextbook);
+                    getBookClass.putExtra("GRADE_NUMBER",gradeNumber);
+                    getBookClass.putExtra("BOARD_NUMBER",boardNumber);
+                    getBookClass.putExtra("BOOK_NAME",bookName);
+                    getBookClass.putExtra("BOOK_DESCRIPTION",bookDescription);
+                    startActivity(getBookClass);
                 }
             }
         });

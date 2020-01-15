@@ -53,7 +53,8 @@ public class GetBookPictureActivity extends AppCompatActivity {
     private String book_photo_url = null;
     private String imageFilePath;
     private Uri selectedImageUri;
-    private int gradeNumber,boardNumber;
+    private int gradeNumber,boardNumber, year;
+    private boolean fromCamera;
     final int PIC_CROP = 3;
 
     // TODO: disallow user to go to the next activity if no picture selected
@@ -67,9 +68,11 @@ public class GetBookPictureActivity extends AppCompatActivity {
 
         gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
         boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 6);
+        year = getIntent().getIntExtra("YEAR_NUMBER",0);
+//        Toast.makeText(this, "Year: "+year, Toast.LENGTH_SHORT).show();
 
-        takenPic = findViewById(R.id.picChosenIV);
-        chosenPic = findViewById(R.id.picTakenIV);
+        takenPic = findViewById(R.id.picTakenIV);
+        chosenPic = findViewById(R.id.picChosenIV);
 
         takePic = findViewById(R.id.takePicLL);
         choosePic = findViewById(R.id.chooseFromGalleryLL);
@@ -77,6 +80,7 @@ public class GetBookPictureActivity extends AppCompatActivity {
         takePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                fromCamera = true;
                 openCameraIntent();
             }
         });
@@ -84,6 +88,7 @@ public class GetBookPictureActivity extends AppCompatActivity {
         choosePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                fromCamera = false;
                 Intent pickPhoto = new Intent(Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(pickPhoto, 1);
@@ -101,6 +106,7 @@ public class GetBookPictureActivity extends AppCompatActivity {
 
                 getBookType.putExtra("GRADE_NUMBER",gradeNumber);
                 getBookType.putExtra("BOARD_NUMBER",boardNumber);
+                getBookType.putExtra("YEAR_NUMBER", year);
 
                 startActivity(getBookType);
             }
@@ -133,7 +139,17 @@ public class GetBookPictureActivity extends AppCompatActivity {
                     Uri resultUri = result.getUri();
                     try {
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
-                        takenPic.setImageBitmap(bitmap);
+//                        takenPic.setImageBitmap(bitmap);
+                        if (fromCamera) {
+                            Glide.with(takenPic.getContext())
+                                    .load(resultUri)
+                                    .into(takenPic);
+                        }
+                        else {
+                            Glide.with(chosenPic.getContext())
+                                    .load(resultUri)
+                                    .into(chosenPic);
+                        }
                         storeBookImage(bitmap);
                     } catch (IOException e) {
                         Log.e(TAG, "onActivityResult: CROP ERROR:",e);

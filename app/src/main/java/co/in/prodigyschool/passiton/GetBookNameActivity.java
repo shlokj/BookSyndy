@@ -17,7 +17,7 @@ public class GetBookNameActivity extends AppCompatActivity {
     String bookName,selectedImage;
     EditText bookNameField;
     TextView nameQuestion, namingInstructuions;
-    private int gradeNumber,boardNumber;
+    private int gradeNumber,boardNumber, year;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +27,7 @@ public class GetBookNameActivity extends AppCompatActivity {
 
         gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
         boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 6);
+        year = getIntent().getIntExtra("YEAR_NUMBER",0);
 
         selectedImage = getIntent().getStringExtra("BOOK_IMAGE_URI");
         isTextbook = getIntent().getBooleanExtra("IS_TEXTBOOK",true);
@@ -61,6 +62,7 @@ public class GetBookNameActivity extends AppCompatActivity {
                     getBookDescription.putExtra("GRADE_NUMBER",gradeNumber);
                     getBookDescription.putExtra("BOARD_NUMBER",boardNumber);
                     getBookDescription.putExtra("BOOK_NAME",bookName);
+                    getBookDescription.putExtra("YEAR_NUMBER", year);
                     startActivity(getBookDescription);
                 }
             }

@@ -16,7 +16,7 @@ public class GetBookMaterialTypeActivity extends AppCompatActivity {
     int bookTypeId;
     boolean isTextbook;
     private String selectedImage;
-    private int gradeNumber,boardNumber;
+    private int gradeNumber,boardNumber, year;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +26,7 @@ public class GetBookMaterialTypeActivity extends AppCompatActivity {
 
         gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
         boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 6);
+        year = getIntent().getIntExtra("YEAR_NUMBER",0);
 
         materialTypeButtons = (RadioGroup) findViewById(R.id.materialTypeRadioGroup);
         FloatingActionButton next = findViewById(R.id.fab11);
@@ -53,6 +54,7 @@ public class GetBookMaterialTypeActivity extends AppCompatActivity {
                     getBookName.putExtra("IS_TEXTBOOK", isTextbook);
                     getBookName.putExtra("GRADE_NUMBER",gradeNumber);
                     getBookName.putExtra("BOARD_NUMBER",boardNumber);
+                    getBookName.putExtra("YEAR_NUMBER", year);
                     startActivity(getBookName);
                 }
                 else if (bookTypeId==R.id.notesOption) {
@@ -62,6 +64,7 @@ public class GetBookMaterialTypeActivity extends AppCompatActivity {
                     getBookName.putExtra("IS_TEXTBOOK", isTextbook);
                     getBookName.putExtra("GRADE_NUMBER",gradeNumber);
                     getBookName.putExtra("BOARD_NUMBER",boardNumber);
+                    getBookName.putExtra("YEAR_NUMBER", year);
                     startActivity(getBookName);
                 }
             }

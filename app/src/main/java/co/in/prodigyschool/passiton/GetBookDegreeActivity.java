@@ -37,6 +37,12 @@ public class GetBookDegreeActivity extends AppCompatActivity {
         bookDescription = getIntent().getStringExtra("BOOK_DESCRIPTION");
         gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
         boardNumber = getIntent().getIntExtra("BOARD_NUMBER",6);
+        yearNumber = getIntent().getIntExtra("YEAR_NUMBER",0);
+
+        if (yearNumber!=0) {
+            yearField.setText(yearNumber+"");
+        }
+
         getPrice = new Intent(GetBookDegreeActivity.this, GetBookPriceActivity.class);
         bookDegreeQ = findViewById(R.id.bookDegreeQuestionTV);
         yearField = findViewById(R.id.bookYearField);

@@ -66,7 +66,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     private Query mQuery;
     private User currentUser;
     private String curUserId;
-    private int gradeNumber, boardNumber;
+    private int gradeNumber, boardNumber, year;
     private boolean preferGuidedMode;
     FilterDialogFragment mFilterDialog;
     FilterCollegeFragment mCFdialog;
@@ -116,6 +116,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                 startBookPub.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startBookPub.putExtra("GRADE_NUMBER", gradeNumber);
                 startBookPub.putExtra("BOARD_NUMBER", boardNumber);
+                startBookPub.putExtra("YEAR_NUMBER", year);
                 startActivity(startBookPub);
             }
         });
@@ -283,7 +284,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                     String filterPattern = newText.toLowerCase().trim();
                     for (Book book : filteredList1) {
                         int foundIndex = book.getBookName().toLowerCase().indexOf(filterPattern);
-                        Toast.makeText(getActivity(),"Found at "+foundIndex,Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(),"Found at "+foundIndex,Toast.LENGTH_SHORT).show();
                         if (book.getBookName().toLowerCase().contains(filterPattern)) {
                             if (foundIndex!=-1 && (foundIndex==0 || book.getBookName().substring(foundIndex-1,foundIndex).equals(" "))) {
                                 filteredList1.add(book);
@@ -539,6 +540,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                         currentUser = user;
                         gradeNumber=user.getGradeNumber();
                         boardNumber=user.getBoardNumber();
+                        year=user.getYear();
                     }
 
                 }
