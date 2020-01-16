@@ -431,10 +431,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                             menu.findItem(R.id.bookmark).setIcon(ContextCompat.getDrawable(getBaseContext(), R.drawable.ic_bookmark_filled_24px));
                             saved = true;
                             // menu.getItem(0).setEnabled(false);
-
-
                     }
-
                 }
             });
 

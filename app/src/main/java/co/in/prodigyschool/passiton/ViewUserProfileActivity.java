@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -46,6 +48,7 @@ public class ViewUserProfileActivity extends AppCompatActivity implements BookAd
     private Query mQuery;
     private RecyclerView.LayoutManager layoutManager;
     private Menu menu;
+    private LinearLayout sendMessageLL;
 
     // TODO: book request layout
 
@@ -60,7 +63,7 @@ public class ViewUserProfileActivity extends AppCompatActivity implements BookAd
         user_photo = findViewById(R.id.others_profile_image);
         mUserName = findViewById(R.id.view_fullname);
         mUserId = findViewById(R.id.usernameMsg);
-
+        sendMessageLL = findViewById(R.id.sendMessageLL);
         fullName  = getIntent().getStringExtra("USER_NAME");
         userID = getIntent().getStringExtra("USER_ID");
         imageUrl = getIntent().getStringExtra("USER_PHOTO");
@@ -71,6 +74,12 @@ public class ViewUserProfileActivity extends AppCompatActivity implements BookAd
         initFireBase();
         initView();
 
+        sendMessageLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startChatActivity();
+            }
+        });
 
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -165,5 +174,26 @@ public class ViewUserProfileActivity extends AppCompatActivity implements BookAd
         this.menu = menu;
 
         return true;
+    }
+
+    private void startChatActivity() {
+        try {
+            Intent chatIntent = new Intent(ViewUserProfileActivity.this, ChatActivity.class);
+            chatIntent.putExtra("visit_user_id", phone); // phone number
+            chatIntent.putExtra("visit_user_name",userID); // unique user id
+            chatIntent.putExtra("visit_image", imageUrl);
+            startActivity(chatIntent);
+        }
+        catch(Exception e){
+            View parentLayout = findViewById(android.R.id.content);
+            Snackbar.make(parentLayout, "Please try again", Snackbar.LENGTH_SHORT)
+                    .setAction("OKAY", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                        }
+                    })
+                    .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                    .show();        }
     }
 }
