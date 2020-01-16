@@ -510,6 +510,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                 defaultFilters.setBookGrade(gradesList);
                 defaultFilters.setBookBoard(boardsList);
                 defaultFilters.setIsText(true);
+                defaultFilters.setBookDistance(10);
                 homeViewModel.setFilters(defaultFilters);
                 onFilter(homeViewModel.getFilters());
             }

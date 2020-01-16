@@ -147,6 +147,9 @@ public class FilterSchoolFragment extends Fragment implements View.OnClickListen
                 default:distSpinner.setSelection(6);
             }
         }
+        else{
+            distSpinner.setSelection(6);
+        }
 
         if(filters.hasBookBoard()){
             for(int i:filters.getBookBoard()){

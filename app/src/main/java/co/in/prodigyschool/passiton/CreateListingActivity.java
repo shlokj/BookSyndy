@@ -172,8 +172,8 @@ public class CreateListingActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
-        boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 6);
+//        gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
+//        boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 6);
 
         mBookImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -266,7 +266,7 @@ public class CreateListingActivity extends AppCompatActivity {
                 else {
                     boardDegreeLabel.setText("Degree / course");
                     boardSpinner.setAdapter(degreeAdapter);
-//                    boardSpinner.setSelection(boardNumber-7);
+ //                   boardSpinner.setSelection(boardNumber-7);
                     yearField.setVisibility(View.VISIBLE);
                     competitiveExam.setVisibility(View.GONE);
                 }
@@ -438,51 +438,35 @@ public class CreateListingActivity extends AppCompatActivity {
     private void autoFillGradeAndBoard() {
         if (!checkConnection(getApplicationContext())) {
             Toast.makeText(getApplicationContext(),"Internet Required",Toast.LENGTH_LONG).show();
-            return;
         }
-        mFireStore = FirebaseFirestore.getInstance();
         try {
-            curUserId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
-            DocumentReference userReference =  mFireStore.collection("users").document(curUserId);
-            userReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot snapshot) {
-                    co.in.prodigyschool.passiton.Data.User user = snapshot.toObject(User.class);
-                    if(user != null) {
-                        gradeNumber=user.getGradeNumber();
-                        boardNumber=user.getBoardNumber();
 
-                        gradeSpinner.setAdapter(gradeAdapter);
-                        gradeSpinner.setSelection(gradeNumber-1);
-//                        Toast.makeText(getApplicationContext(),"Board number: "+boardNumber,Toast.LENGTH_SHORT).show();
+            gradeNumber = userPref.getInt(getString(R.string.p_grade),2);
+            boardNumber = userPref.getInt(getString(R.string.p_board),2);
+            year = userPref.getInt(getString(R.string.p_year),0);
 
+            gradeSpinner.setAdapter(gradeAdapter);
+            gradeSpinner.setSelection(gradeNumber-1);
 
-                        if (gradeNumber>=7) {
-                            boardDegreeLabel.setText("Degree / course");
-//
-//                            findViewById(R.id.boardLL).setVisibility(View.INVISIBLE);
-//                            findViewById(R.id.collegeDegreeAndYearLL).setVisibility(View.VISIBLE);
+//                        Toast.makeText(getApplicationContext(),"Grade number: "+gradeNumber,Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "autoFillGradeAndBoard: "+boardNumber);
+            if (gradeNumber < 7) {
 
-                            boardDegreeLabel.setText("Degree / Board");
-                            boardSpinner.setAdapter(degreeAdapter);
-                            // TODO: fix issue here
-                            boardSpinner.setSelection(boardNumber-7,true);
-                        }
-                        else {
-                            boardDegreeLabel.setText("Board");
-                            boardSpinner.setAdapter(boardAdapter);
-                            boardSpinner.setSelection(boardNumber-1,true);
-                        }
-                    }
+//                            Toast.makeText(getApplicationContext(),"School",Toast.LENGTH_LONG).show();
 
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.e(TAG, "onFailure: ",e );
-                }
-            });
+                boardDegreeLabel.setText("Board");
+                findViewById(R.id.collegeDegreeAndYearLL).setVisibility(View.GONE);
 
+                boardSpinner.setAdapter(boardAdapter);
+                boardSpinner.setSelection(boardNumber-1);
+            }
+            else {
+
+                boardDegreeLabel.setText("Degree / course");
+                boardSpinner.setAdapter(degreeAdapter);
+                boardSpinner.setSelection(boardNumber - 7);
+
+            }
         }
         catch(Exception e){
             Log.e(TAG, "PopulateUserDetails method failed with  ",e);
