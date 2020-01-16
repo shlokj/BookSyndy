@@ -310,6 +310,7 @@ public class UserProfileActivity extends AppCompatActivity {
                         int board;
                         if (gradeSpinner.getSelectedItemPosition()>=6) {
                             board = boardSpinner.getSelectedItemPosition()+7;
+                            yearNumber = Integer.parseInt(year.getText().toString());
                         }
                         else {
                             board = boardSpinner.getSelectedItemPosition()+1;
@@ -326,7 +327,7 @@ public class UserProfileActivity extends AppCompatActivity {
                         editor.putBoolean(getString(R.string.p_competitive),compExams.isChecked());
                         editor.apply();
                         DocumentReference userReference =  mFirestore.collection("users").document(phoneNumber);
-                        userReference.update("competitiveExam",compExams.isChecked(),"firstName",fName.getText().toString(),"lastName",lName.getText().toString(),"gradeNumber",gradeSpinner.getSelectedItemPosition()+1,"boardNumber",board).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        userReference.update("competitiveExam",compExams.isChecked(),"year",yearNumber,"firstName",fName.getText().toString(),"lastName",lName.getText().toString(),"gradeNumber",gradeSpinner.getSelectedItemPosition()+1,"boardNumber",board).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 if(progressDialog.isShowing())

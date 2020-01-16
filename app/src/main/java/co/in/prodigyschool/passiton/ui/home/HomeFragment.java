@@ -3,6 +3,7 @@ package co.in.prodigyschool.passiton.ui.home;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -77,6 +78,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     private View parentLayout;
     private SharedPreferences userPref;
     private MenuItem filterItem;
+    private double userLat,userLng;
 
 
     @Override
@@ -101,6 +103,8 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         mEmptyView = root.findViewById(R.id.view_empty);
         userPref = getActivity().getSharedPreferences(getString(R.string.UserPref),0);
         preferGuidedMode = userPref.getBoolean(getString(R.string.preferGuidedMode),false);
+        userLat = userPref.getFloat(getString(R.string.p_lat),0.0f);
+        userLng = userPref.getFloat(getString(R.string.p_lng),0.0f);
 
         FloatingActionButton fab = root.findViewById(R.id.fab_home);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -448,6 +452,25 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 
         toBeRemoved.clear();
 
+
+        if(filters.hasBookDistance()){
+            for(Book b:filteredList){
+                if(!getBookUnderDistance(b,filters.getBookDistance(),userLat,userLng)){
+                    toBeRemoved.add(b);
+                }
+            }
+            noFilter = false;
+        }
+
+        for (Book b:toBeRemoved) {
+            filteredList.remove(b);
+        }
+
+        toBeRemoved.clear();
+
+
+
+
         if(filteredList == null || filteredList.isEmpty()){
             if(noFilter){
                 Log.d(TAG, "onFilter: is empty");
@@ -501,6 +524,23 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         bookDetails.putExtra("bookid", book_id);
         bookDetails.putExtra("isHome",true);
         startActivity(bookDetails);
+    }
+
+    public  boolean getBookUnderDistance(Book book,int distance, double latitude, double longitude){
+        int res;
+        if(book.getLat() != 0.0 && book.getLng() != 0.0 && latitude != 0.0 && longitude != 0.0) {
+            Location locationA = new Location("point A");
+            Location locationB = new Location("point B");
+
+            locationA.setLatitude(book.getLat());
+            locationA.setLongitude(book.getLng());
+            locationB.setLatitude(latitude);
+            locationB.setLongitude(longitude);
+            res = (int)(locationA.distanceTo(locationB) / 1000);
+            Log.d(TAG, "getBookUnderDistance: "+res);
+            return (res < distance);
+        }
+        return false;
     }
 
 

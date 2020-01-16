@@ -1,6 +1,8 @@
 package co.in.prodigyschool.passiton.util;
 
 import android.content.Context;
+import android.content.Intent;
+import android.location.Location;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -46,4 +48,7 @@ public class BookUtil {
         double min = 1.0;
         return min + (random.nextDouble() * 4.0);
     }
+
+
+
 }
