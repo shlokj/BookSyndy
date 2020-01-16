@@ -97,7 +97,7 @@ public class FilterCollegeFragment extends Fragment implements View.OnClickListe
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.distancesBy5));
         distAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         distSpinner.setAdapter(distAdapter);
-        distSpinner.setSelection(1);
+
 
         sortByAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.sorts));
         sortByAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -119,6 +119,18 @@ public class FilterCollegeFragment extends Fragment implements View.OnClickListe
         }
         if(filters.hasPrice()){
             freeOnly.setChecked(true);
+        }
+
+        if(filters.hasBookDistance()){
+            switch (filters.getBookDistance()){
+                case 5:distSpinner.setSelection(0);break;
+                case 10:distSpinner.setSelection(1);break;
+                case 15:distSpinner.setSelection(2);break;
+                case 20:distSpinner.setSelection(3);break;
+                case 25:distSpinner.setSelection(4);break;
+                case 30:distSpinner.setSelection(5);break;
+                default:distSpinner.setSelection(6);
+            }
         }
 
         if(filters.hasBookBoard()){
@@ -199,9 +211,23 @@ public class FilterCollegeFragment extends Fragment implements View.OnClickListe
             filters.setIsText(isTextBook());
             filters.setIsNotes(isNotes());
             filters.setBookBoard(getselectedBoard());
+            filters.setBookDistance(getSelectedDistance());
         }
         return filters;
     }
+
+    private int getSelectedDistance(){
+        switch (distSpinner.getSelectedItemPosition()){
+            case 0:return 5;
+            case 1: return 10;
+            case 2:return 15;
+            case 3:return 20;
+            case 4:return 25;
+            case 5:return 30;
+            default: return  -1;
+        }
+    }
+
 
     private int getSelectedPrice() {
         if (freeOnly.isChecked()) {

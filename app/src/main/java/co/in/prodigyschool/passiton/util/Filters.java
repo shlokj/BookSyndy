@@ -1,6 +1,7 @@
 package co.in.prodigyschool.passiton.util;
 
 import android.content.Context;
+import android.location.Location;
 import android.text.TextUtils;
 
 import com.google.firebase.firestore.Query;
@@ -8,6 +9,7 @@ import com.google.firebase.firestore.Query;
 import java.util.ArrayList;
 import java.util.List;
 
+import co.in.prodigyschool.passiton.Data.Book;
 import co.in.prodigyschool.passiton.R;
 
 public class Filters {
@@ -17,6 +19,7 @@ public class Filters {
     private int price = -1;
     private String sortBy = null;
     private Query.Direction sortDirection = null;
+    private int distance = -1;
 
     private boolean isText = false;
     private boolean isNotes = false;
@@ -52,6 +55,8 @@ public class Filters {
     public boolean hasBookBoard(){return (bookBoard.size() > 0);}
 
     public boolean hasBookGrade(){return (bookGrade.size() > 0);}
+
+    public boolean hasBookDistance(){return  (distance > -1);}
 
 
 
@@ -166,6 +171,12 @@ public class Filters {
     }
 
 
+    public void setBookDistance(int selectedDistance) {
+        this.distance = selectedDistance;
+    }
+    public int getBookDistance(){
+        return distance;
+    }
 
 
 }
