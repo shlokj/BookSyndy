@@ -25,7 +25,7 @@
                 android:orientation="vertical"
                 android:layout_margin="16dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@+id/seller_dp">
 
                 <TextView
                     android:id="@+id/reqTitleLabel"
@@ -183,7 +183,7 @@
                     android:textSize="18sp" />
             </LinearLayout>
 
-            <LinearLayout
+  <!--          <LinearLayout
                 android:id="@+id/reqByLL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -208,10 +208,41 @@
                     android:text="@string/username"
                     android:textColor="@color/colorTextBlack"
                     android:textSize="18sp" />
-            </LinearLayout>
+            </LinearLayout>-->
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/seller_dp1"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_margin="24dp"
+                android:cropToPadding="true"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_account_circle_24px" />
+
+
+            <TextView
+                android:id="@+id/sellerName1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/seller_dp1"
+                android:layout_alignBottom="@id/seller_dp1"
+                android:layout_toEndOf="@+id/seller_dp"
+                android:fontFamily="@font/roboto_light"
+                android:gravity="center_vertical"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:layout_marginStart="20dp"
+                app:layout_constraintBottom_toBottomOf="@+id/seller_dp"
+                app:layout_constraintStart_toEndOf="@+id/seller_dp"
+                app:layout_constraintTop_toTopOf="@+id/seller_dp"
+                tools:text="Book Syndicate" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

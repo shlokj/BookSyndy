@@ -50,7 +50,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     private FirebaseFirestore mFirestore;
     private Book currentBook;
     private User bookOwner;
-    private TextView view_bookname,view_address,view_price,view_category,view_description, view_grade_and_board, sellerName;
+    private TextView view_bookname,view_address,view_price,view_description, view_grade_and_board, sellerName;
     private ImageView view_bookimage;
     private CircleImageView sellerDp;
     private ListenerRegistration mBookUserRegistration,mBookRegistration,mBookMarkRegistration;
