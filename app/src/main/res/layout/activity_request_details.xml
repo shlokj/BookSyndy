@@ -25,7 +25,7 @@
                 android:orientation="vertical"
                 android:layout_margin="16dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/seller_dp">
+                app:layout_constraintTop_toBottomOf="@+id/seller_dp1">
 
                 <TextView
                     android:id="@+id/reqTitleLabel"
@@ -229,15 +229,15 @@
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@id/seller_dp1"
                 android:layout_alignBottom="@id/seller_dp1"
-                android:layout_toEndOf="@+id/seller_dp"
+                android:layout_toEndOf="@+id/seller_dp1"
                 android:fontFamily="@font/roboto_light"
                 android:gravity="center_vertical"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:layout_marginStart="20dp"
-                app:layout_constraintBottom_toBottomOf="@+id/seller_dp"
-                app:layout_constraintStart_toEndOf="@+id/seller_dp"
-                app:layout_constraintTop_toTopOf="@+id/seller_dp"
+                app:layout_constraintBottom_toBottomOf="@+id/seller_dp1"
+                app:layout_constraintStart_toEndOf="@+id/seller_dp1"
+                app:layout_constraintTop_toTopOf="@+id/seller_dp1"
                 tools:text="Book Syndicate" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -246,7 +246,7 @@
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab18"
+        android:id="@+id/fab_chatreq"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"

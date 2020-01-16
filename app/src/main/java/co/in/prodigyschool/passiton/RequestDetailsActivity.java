@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,6 +55,14 @@ public class RequestDetailsActivity extends AppCompatActivity {
         sellerName = findViewById(R.id.sellerName1);
         sellerDp = findViewById(R.id.seller_dp1);
 
+        initFireStore();
+
+        findViewById(R.id.fab_chatreq).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // open chat
+            }
+        });
 
         View.OnClickListener toOpenProfile = new View.OnClickListener() {
             @Override
@@ -212,11 +221,21 @@ public class RequestDetailsActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void initFireStore() {
         mFirestore = FirebaseFirestore.getInstance();
 
         if(mFirestore != null){
-            bookRef =  mFirestore.collection("books").document(bookid);
+            bookRef =  mFirestore.collection("bookRequest").document(bookid);
             curAppUser = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
 
         }
