@@ -132,6 +132,9 @@ public class FilterCollegeFragment extends Fragment implements View.OnClickListe
                 default:distSpinner.setSelection(6);
             }
         }
+        else{
+            distSpinner.setSelection(6);
+        }
 
         if(filters.hasBookBoard()){
             for(int i:filters.getBookBoard()){
