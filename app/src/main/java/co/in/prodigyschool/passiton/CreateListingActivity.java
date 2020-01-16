@@ -144,7 +144,7 @@ public class CreateListingActivity extends AppCompatActivity {
 
         initFireBase();
         populateUserLocation();
-        locField.setEnabled(false);
+//        locField.setEnabled(false);
         findViewById(R.id.btn_search_listing).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -299,7 +299,10 @@ public class CreateListingActivity extends AppCompatActivity {
                 String bys;
                 forCompExam = competitiveExam.isChecked();
 
-                if (bookName.length()<10) {
+                if (selectedImageUri==null) {
+                    showSnackbar("Please take or select a picture of your book");
+                }
+                else if (bookName.length()<10) {
                     showSnackbar("Please enter at least 10 characters for your book's name");
                 }
                 else if (bookDescription.length()<10) {

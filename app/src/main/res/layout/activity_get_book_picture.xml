@@ -56,7 +56,7 @@
                 android:id="@+id/retakePicInstructions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/white"
                 android:text="Click to retake"
                 android:visibility="invisible"
                 app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
@@ -147,13 +147,13 @@
                 android:id="@+id/rechoosePicInstructions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/white"
                 android:text="Click to choose again"
                 android:visibility="invisible"
-                app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout4"/>
 
             <LinearLayout
                 android:id="@+id/chooseFromGalleryLL"

@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,6 +30,7 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -46,8 +48,9 @@ import java.util.Locale;
 public class GetBookPictureActivity extends AppCompatActivity {
 
     public static String TAG = "GET_BOOK_PICTURE";
-    LinearLayout takePic, choosePic;
+    private LinearLayout takePic, choosePic;
     private ImageView takenPic, chosenPic;
+    private TextView rtpi, rcpi;
     private StorageReference bookPhotosStorageReference;
     private FirebaseStorage mFirebaseStorage;
     private String book_photo_url = null;
@@ -72,6 +75,8 @@ public class GetBookPictureActivity extends AppCompatActivity {
 
         takenPic = findViewById(R.id.picTakenIV);
         chosenPic = findViewById(R.id.picChosenIV);
+        rtpi = findViewById(R.id.retakePicInstructions);
+        rcpi = findViewById(R.id.rechoosePicInstructions);
 
         takePic = findViewById(R.id.takePicLL);
         choosePic = findViewById(R.id.chooseFromGalleryLL);
@@ -100,14 +105,16 @@ public class GetBookPictureActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent getBookType = new Intent(GetBookPictureActivity.this, GetBookMaterialTypeActivity.class);
                 // To find an efficient way to pass on the image of the book; mostly the uri
-                if(selectedImageUri != null)
+                if(selectedImageUri != null) {
                     getBookType.putExtra("BOOK_IMAGE_URI", selectedImageUri.toString());
-
-                getBookType.putExtra("GRADE_NUMBER",gradeNumber);
-                getBookType.putExtra("BOARD_NUMBER",boardNumber);
-                getBookType.putExtra("YEAR_NUMBER", year);
-
-                startActivity(getBookType);
+                    getBookType.putExtra("GRADE_NUMBER", gradeNumber);
+                    getBookType.putExtra("BOARD_NUMBER", boardNumber);
+                    getBookType.putExtra("YEAR_NUMBER", year);
+                    startActivity(getBookType);
+                }
+                else {
+                    showSnackbar("Please take or select a picture of your book");
+                }
             }
         });
     }
@@ -140,11 +147,21 @@ public class GetBookPictureActivity extends AppCompatActivity {
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
 //                        takenPic.setImageBitmap(bitmap);
                         if (fromCamera) {
+                            chosenPic.setImageResource(android.R.color.transparent);
+                            takePic.setVisibility(View.INVISIBLE);
+                            choosePic.setVisibility(View.VISIBLE);
+                            rtpi.setVisibility(View.VISIBLE);
+                            rcpi.setVisibility(View.INVISIBLE);
                             Glide.with(takenPic.getContext())
                                     .load(resultUri)
                                     .into(takenPic);
                         }
                         else {
+                            takenPic.setImageResource(android.R.color.transparent);
+                            takePic.setVisibility(View.VISIBLE);
+                            choosePic.setVisibility(View.INVISIBLE);
+                            rtpi.setVisibility(View.INVISIBLE);
+                            rcpi.setVisibility(View.VISIBLE);
                             Glide.with(chosenPic.getContext())
                                     .load(resultUri)
                                     .into(chosenPic);
@@ -295,4 +312,19 @@ public class GetBookPictureActivity extends AppCompatActivity {
         startActivity(homeActivity);
         finish();
     }
+
+
+    public void showSnackbar(String message) {
+        View parentLayout = findViewById(android.R.id.content);
+        Snackbar.make(parentLayout, message, Snackbar.LENGTH_SHORT)
+                .setAction("OKAY", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                })
+                .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                .show();
+    }
+
 }

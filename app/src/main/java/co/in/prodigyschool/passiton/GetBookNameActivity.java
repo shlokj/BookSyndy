@@ -43,7 +43,7 @@ public class GetBookNameActivity extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                bookName = bookNameField.getText().toString();
+                bookName = bookNameField.getText().toString().trim();
                 if (bookName.length() < 10) {
                     View parentLayout = findViewById(android.R.id.content);
                     Snackbar.make(parentLayout, "Please enter at least 10 characters", Snackbar.LENGTH_SHORT)
