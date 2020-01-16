@@ -162,5 +162,7 @@
     <string name="type_a_message">Type a message</string>
     <string name="type_textbook">Textbook / published material</string>
     <string name="type_notes">Notes / any other material</string>
+    <string name="title">Title</string>
+    <string name="by">By</string>
 
 </resources>

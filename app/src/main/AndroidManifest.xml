@@ -23,7 +23,8 @@
         android:roundIcon="@drawable/ic_booksyndy_logo_square"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".EditListingActivity"></activity>
+        <activity android:name=".RequestDetailsActivity"></activity>
+        <activity android:name=".EditListingActivity" />
         <activity android:name=".WelcomeActivity" />
         <activity android:name=".RequestBookActivity" />
         <activity android:name=".SendFeedbackActivity" />
@@ -35,8 +36,9 @@
         <activity android:name=".ConfirmListingActivity" />
         <activity android:name=".GetCollegeBranchActivity" />
         <activity android:name=".FilterActivity" />
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat"/>
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
         <activity
             android:name=".ChatActivity"
             android:label="@string/title_activity_chat"

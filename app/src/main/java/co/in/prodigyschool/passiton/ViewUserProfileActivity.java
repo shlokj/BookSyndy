@@ -47,6 +47,8 @@ public class ViewUserProfileActivity extends AppCompatActivity implements BookAd
     private RecyclerView.LayoutManager layoutManager;
     private Menu menu;
 
+    // TODO: book request layout
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

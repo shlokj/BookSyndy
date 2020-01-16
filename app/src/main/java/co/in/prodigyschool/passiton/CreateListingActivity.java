@@ -162,7 +162,7 @@ public class CreateListingActivity extends AppCompatActivity {
         boardAdapter = new ArrayAdapter<String>(CreateListingActivity.this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.boards));
         boardAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        boardSpinner.setAdapter(boardAdapter);
+//        boardSpinner.setAdapter(boardAdapter);
 
         degreeAdapter = new ArrayAdapter<String>(CreateListingActivity.this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.degrees));
@@ -454,7 +454,7 @@ public class CreateListingActivity extends AppCompatActivity {
 
                         gradeSpinner.setAdapter(gradeAdapter);
                         gradeSpinner.setSelection(gradeNumber-1);
-                        Toast.makeText(getApplicationContext(),"Board number: "+boardNumber,Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(),"Board number: "+boardNumber,Toast.LENGTH_SHORT).show();
 
 
                         if (gradeNumber>=7) {
