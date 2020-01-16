@@ -7,10 +7,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -33,18 +36,32 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.theartofdev.edmodo.cropper.CropImage;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import co.in.prodigyschool.passiton.Data.User;
 import co.in.prodigyschool.passiton.util.GalleryUtil;
@@ -71,6 +88,11 @@ public class UserProfileActivity extends AppCompatActivity {
     private ArrayAdapter<String> boardAdapter, degreeAdapter, gradeAdapter;
     private SharedPreferences userPref;
     private SharedPreferences.Editor editor;
+    private String book_photo_url = null;
+    private String imageFilePath;
+    private Uri selectedImageUri;
+    private StorageReference bookPhotosStorageReference;
+    private FirebaseStorage mFirebaseStorage;
 
     private final int GALLERY_ACTIVITY_CODE=200;
     private final int RESULT_CROP = 400;
@@ -87,6 +109,8 @@ public class UserProfileActivity extends AppCompatActivity {
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
+        mFirebaseStorage = FirebaseStorage.getInstance();
+        bookPhotosStorageReference = mFirebaseStorage.getReference().child("book_photos");
 
         profilePic = findViewById(R.id.profilePic);
         preferGuidedMode = findViewById(R.id.preferGuidedMode);
@@ -160,10 +184,27 @@ public class UserProfileActivity extends AppCompatActivity {
 
         profilePic.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent pickPhoto = new Intent(Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(pickPhoto, 1);
+            public void onClick(View v) {final CharSequence[] options = {"Take Photo", "Choose from Gallery"};
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(UserProfileActivity.this);
+//                builder.setTitle("Select Pic Using...");
+                builder.setItems(options, new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int item) {
+                        if (options[item].equals("Take Photo")) {
+                            openCameraIntent();
+                        } else if (options[item].equals("Choose from Gallery")) {
+
+                            Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            startActivityForResult(pickPhoto, 1);
+
+                        }
+                    }
+                });
+
+                builder.show();
             }
         });
 
@@ -453,37 +494,173 @@ public class UserProfileActivity extends AppCompatActivity {
         }
     }
 
-    private void performCrop(String picUri) {
-        try {
-            //Start Crop Activity
+    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+        switch (requestCode) {
+            case 0:// camera intent
+                if (resultCode == RESULT_OK ) {
+                    File f = new File(imageFilePath);
+                    selectedImageUri = FileProvider.getUriForFile(UserProfileActivity.this, BuildConfig.APPLICATION_ID + ".provider",f);
+                    CropImage(selectedImageUri);
 
-            Intent cropIntent = new Intent("com.android.camera.action.CROP");
-            // indicate image type and Uri
+                }
+                break;
 
-            File f = new File(picUri);
-            Uri contentUri = Uri.fromFile(f);
+            case 1:// gallery intent
+                if (resultCode == RESULT_OK && imageReturnedIntent != null && imageReturnedIntent.getData() != null) {
+                    selectedImageUri = imageReturnedIntent.getData();
+                    CropImage(selectedImageUri);
+                }
+                break;
+            //new crop image
+            case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
+                CropImage.ActivityResult result = CropImage.getActivityResult(imageReturnedIntent);
+                if (resultCode == RESULT_OK) {
+                    Uri resultUri = result.getUri();
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
+//                        profilePic.setImageBitmap(bitmap);
+                        Glide.with(profilePic.getContext())
+                                .load(resultUri)
+                                .into(profilePic);
+             
+                        storeBookImage(bitmap);
+                    } catch (IOException e) {
+                        Log.e(TAG, "onActivityResult: CROP ERROR:",e);
+                        Toast.makeText(this, "CROP ERROR:"+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
 
-            cropIntent.setDataAndType(contentUri, "image/*");
-            // set crop properties
-            cropIntent.putExtra("crop", "true");
-            // indicate aspect of desired crop
-            cropIntent.putExtra("aspectX", 1);
-            cropIntent.putExtra("aspectY", 1);
-            // indicate output X and Y
-            cropIntent.putExtra("outputX", 256);
-            cropIntent.putExtra("outputY", 256);
-
-            // retrieve data on return
-            cropIntent.putExtra("return-data", true);
-            // start the activity - we handle returning in onActivityResult
-            startActivityForResult(cropIntent, RESULT_CROP);
-        }
-        // respond to users whose devices do not support the crop action
-        catch (ActivityNotFoundException anfe) {
-            // display an error message
-            String errorMessage = "your device doesn't support the crop action!";
-            Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
-            toast.show();
+                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                    Exception error = result.getError();
+                    Toast.makeText(this, "CROP ERROR:"+error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+                break;
         }
     }
+
+    private File createImageFile() throws IOException {
+
+        String imageFileName = "BOOK" + "_";
+        File storageDir =
+                getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        imageFilePath = image.getAbsolutePath();
+        return image;
+    }
+
+    private void openCameraIntent() {
+        Intent pictureIntent = new Intent(
+                MediaStore.ACTION_IMAGE_CAPTURE);
+        if (pictureIntent.resolveActivity(getPackageManager()) != null) {
+            //Create a file to store the image
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            }
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this, "co.in.prodigyschool.passiton.provider", photoFile);
+                pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                        photoURI);
+                startActivityForResult(pictureIntent, 0);
+            }
+        }
+    }
+
+    private void storeBookImage(Bitmap bmp) {
+
+        byte[] compressedImage = CompressResizeImage(bmp);
+
+        //show progress
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Uploading");
+        //progressDialog.show();
+
+        try {
+            String timeStamp =
+                    new SimpleDateFormat("yyyyMMdd_HHmmss",
+                            Locale.getDefault()).format(new Date());
+            // Get a reference to store file at book_photos/<FILENAME>
+            final StorageReference photoRef = bookPhotosStorageReference.child(timeStamp + "_" + selectedImageUri.getLastPathSegment());
+
+            // Upload file to Firebase Storage
+            UploadTask uploadTask = photoRef.putBytes(compressedImage);
+            uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                    if (!task.isSuccessful()) {
+                        Log.e(TAG, "then: failure download url", task.getException());
+                        progressDialog.dismiss();
+                    }
+
+                    // Continue with the task to get the download URL
+                    return photoRef.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
+                        book_photo_url = task.getResult().toString();
+//                        Toast.makeText(getApplicationContext(), "upload success", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                        Log.d(TAG, "onComplete: success url: " + book_photo_url);
+                    } else {
+                        // Handle failures
+                        progressDialog.dismiss();
+                        Log.e(TAG, "onComplete: failure", task.getException());
+                    }
+                }
+            });
+
+            uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                    //calculating progress percentage
+                    double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+
+                    //displaying percentage in progress dialog
+                    progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
+                }
+            });
+
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            progressDialog.dismiss();
+        }
+    }
+
+    protected void CropImage(Uri picUri) {
+        try {
+            CropImage.activity(picUri)
+                    .setAspectRatio(1,1)
+                    .setRequestedSize(200,200)
+                    .start(this);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, "Your device doesn't support the crop action!", Toast.LENGTH_SHORT).show();
+
+        }
+    }
+
+    public byte[] CompressResizeImage(Bitmap bm)
+    {
+        int bmWidth = bm.getWidth();
+        int bmHeight = bm.getHeight();
+        int ivWidth = profilePic.getWidth();
+        int ivHeight = profilePic.getHeight();
+
+        int new_height = (int) Math.floor((double) bmHeight *( (double) ivWidth / (double) bmWidth));
+        Bitmap newbitMap = Bitmap.createScaledBitmap(bm, ivWidth, new_height, true);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        newbitMap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] b = baos.toByteArray();
+        return b;
+    }
+
 }

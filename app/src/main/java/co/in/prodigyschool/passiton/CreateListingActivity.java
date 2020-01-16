@@ -1,7 +1,6 @@
 package co.in.prodigyschool.passiton;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
@@ -13,8 +12,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.ConnectivityManager;
@@ -804,6 +801,8 @@ public class CreateListingActivity extends AppCompatActivity {
     protected void CropImage(Uri picUri) {
         try {
             CropImage.activity(picUri)
+                    .setAspectRatio(1,1)
+                    .setRequestedSize(500,500)
                     .start(this);
         } catch (ActivityNotFoundException e) {
             Toast.makeText(this, "Your device doesn't support the crop action!", Toast.LENGTH_SHORT).show();

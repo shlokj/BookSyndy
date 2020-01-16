@@ -102,6 +102,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private User user = null;
     private ListenerRegistration  messageSenderRegistration;
 
+    // TODO: start view user profile activity by clicking in actionbar
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
