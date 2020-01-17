@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                                     finish();
 
                                 } else {
-                                    Toast.makeText(getApplicationContext(), "error getting user Data", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(), "Error getting user data", Toast.LENGTH_LONG).show();
                                     // Log.d(TAG, "Error getting documents: ", task.getException());
                                 }
                             }

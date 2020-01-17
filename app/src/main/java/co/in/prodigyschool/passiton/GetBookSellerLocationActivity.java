@@ -203,7 +203,7 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
     }
 
     private void addBook(Book book) {
-        // TODO(developer): Add random restaurants
+
         CollectionReference books = mFireStore.collection("books");
         books.add(book).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override

@@ -8,7 +8,6 @@
     tools:context=".ChatActivity"
     android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
-<!--TODO: change fonts and aesthetics-->
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:id="@+id/appbarlayout"

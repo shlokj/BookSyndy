@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -60,7 +61,6 @@ public class GetBookPictureActivity extends AppCompatActivity {
     private boolean fromCamera;
     final int PIC_CROP = 3;
 
-    // TODO: disallow user to go to the next activity if no picture selected
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +80,11 @@ public class GetBookPictureActivity extends AppCompatActivity {
 
         takePic = findViewById(R.id.takePicLL);
         choosePic = findViewById(R.id.chooseFromGalleryLL);
+
+        if(getSupportActionBar()!= null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
         takePic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -313,6 +318,15 @@ public class GetBookPictureActivity extends AppCompatActivity {
         finish();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                break;
+        }
+        return true;
+    }
 
     public void showSnackbar(String message) {
         View parentLayout = findViewById(android.R.id.content);

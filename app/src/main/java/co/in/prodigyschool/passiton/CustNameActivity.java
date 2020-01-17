@@ -95,7 +95,7 @@ public class CustNameActivity extends AppCompatActivity {
                     getGrade.putExtra("IS_PARENT", isParent);
                     getGrade.putExtra("FIRST_NAME",firstName);
                     getGrade.putExtra("LAST_NAME",lastName);
-                    getGrade.putExtra("USERNAME",username);//TODO: username pass on implementation for other registration info activities
+                    getGrade.putExtra("USERNAME",username);
                     startActivity(getGrade);
                 }
             }

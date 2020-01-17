@@ -58,7 +58,8 @@ public class FilterDialogFragment extends DialogFragment implements TabLayout.On
         super.onResume();
         getDialog().getWindow().setLayout(
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
     }
 
     @Override

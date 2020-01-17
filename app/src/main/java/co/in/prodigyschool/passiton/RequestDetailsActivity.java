@@ -40,7 +40,6 @@ public class RequestDetailsActivity extends AppCompatActivity {
     private String curAppUser, shareableLink="", bookid;
     private double latA,lngA;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
