@@ -1,7 +1,10 @@
 package co.in.prodigyschool.passiton;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -21,13 +24,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import co.in.prodigyschool.passiton.Adapters.BookAdapter;
 import co.in.prodigyschool.passiton.Data.Book;
@@ -39,7 +47,7 @@ public class ViewUserProfileActivity extends AppCompatActivity implements BookAd
 
     private CircleImageView user_photo;
     private TextView mUserName,mUserId;
-    private String fullName,userID,imageUrl,phone;
+    private String fullName,userID,imageUrl,phone,curUserPhone;
     private List<Book> userBookList;
     private FirebaseFirestore mFireStore;
     private RecyclerView recyclerView;
@@ -50,7 +58,6 @@ public class ViewUserProfileActivity extends AppCompatActivity implements BookAd
     private Menu menu;
     private LinearLayout sendMessageLL;
 
-    // TODO: book request layout
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +97,8 @@ public class ViewUserProfileActivity extends AppCompatActivity implements BookAd
     private void initFireBase() {
         mFireStore = FirebaseFirestore.getInstance();
         mQuery =  mFireStore.collection("books").whereEqualTo("userId",phone).whereEqualTo("bookSold",false);
+        if(FirebaseAuth.getInstance().getCurrentUser() != null)
+        curUserPhone = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
         mAdapter = new BookAdapter(mQuery,this,this){
 
                @Override
@@ -152,6 +161,7 @@ public class ViewUserProfileActivity extends AppCompatActivity implements BookAd
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // code to report
+                        reportUser();
                         Toast.makeText(getApplicationContext(),"Reported",Toast.LENGTH_SHORT).show();
                         onBackPressed();
                     }
@@ -166,6 +176,23 @@ public class ViewUserProfileActivity extends AppCompatActivity implements BookAd
         }
 
         return true;
+    }
+
+    private void reportUser() {
+        if(!checkConnection(this)){
+            Toast.makeText(this, "InterNet Required", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(userID != null && mFireStore!= null) {
+            Map<String,Object> userDetails = new HashMap<>();
+            DocumentReference userRef = mFireStore.collection("users").document(phone);
+            userDetails.put("user details",userRef);
+            userDetails.put("Reported By",curUserPhone);
+            CollectionReference reportRef = mFireStore.collection("report_user");
+            reportRef.add(userDetails);
+
+        }
+
     }
 
     @Override
@@ -195,5 +222,23 @@ public class ViewUserProfileActivity extends AppCompatActivity implements BookAd
                     })
                     .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
                     .show();        }
+    }
+
+
+    public static boolean checkConnection(Context context) {
+        final ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (connMgr != null) {
+            NetworkInfo activeNetworkInfo = connMgr.getActiveNetworkInfo();
+
+            if (activeNetworkInfo != null) { // connected to the internet
+                // connected to the mobile provider's data plan
+                if (activeNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+                    // connected to wifi
+                    return true;
+                } else return activeNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE;
+            }
+        }
+        return false;
     }
 }

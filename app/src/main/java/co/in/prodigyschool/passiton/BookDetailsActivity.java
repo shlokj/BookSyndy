@@ -38,6 +38,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import co.in.prodigyschool.passiton.Data.Book;
 import co.in.prodigyschool.passiton.Data.User;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -128,20 +131,24 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     }
 
     public void getUserLocation() {
-        mFirestore.collection("address").document(curAppUser).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.e("BOOK_ADAPTER_INNER", "onEvent: exception", e);
-                    return;
-                }
-                if(snapshot.getDouble("lat") != null && snapshot.getDouble("lng") != null) {
-                    latA = snapshot.getDouble("lat");
-                    lngA = snapshot.getDouble("lng");
-                }
 
-            }
-        });
+        latA = userPref.getFloat(getString(R.string.p_lat),0.0f);
+        lngA = userPref.getFloat(getString(R.string.p_lng),0.0f);
+
+//        mFirestore.collection("address").document(curAppUser).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+//            @Override
+//            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+//                if (e != null) {
+//                    Log.e("BOOK_ADAPTER_INNER", "onEvent: exception", e);
+//                    return;
+//                }
+//                if(snapshot.getDouble("lat") != null && snapshot.getDouble("lng") != null) {
+//                    latA = snapshot.getDouble("lat");
+//                    lngA = snapshot.getDouble("lng");
+//                }
+//
+//            }
+//        });
     }
 
 
@@ -508,7 +515,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 rBuilder.setPositiveButton("Report", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // TODO: code to report
+                        reportListing();
                         Toast.makeText(getApplicationContext(),"Reported",Toast.LENGTH_SHORT).show();
                         onBackPressed();
                     }
@@ -526,6 +533,23 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
 
         }
         return true;
+    }
+
+    private void reportListing() {
+        if(!checkConnection(this)){
+            Toast.makeText(this, "InterNet Required", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(currentBook != null && curAppUser != null) {
+            Map<String,Object> bookDetails = new HashMap<>();
+            bookDetails.put("bookDetails",currentBook);
+            bookDetails.put("Reported By",curAppUser);
+            CollectionReference reportRef = mFirestore.collection("report_book");
+            reportRef.add(bookDetails);
+
+        }
+
+
     }
 
     private void markAsSold(boolean sold){

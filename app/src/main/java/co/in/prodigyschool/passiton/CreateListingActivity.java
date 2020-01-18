@@ -676,7 +676,6 @@ public class CreateListingActivity extends AppCompatActivity {
                         }
 
                 } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
-                    // TODO: Handle the error.
                     Status status = Autocomplete.getStatusFromIntent(imageReturnedIntent);
                     Toast.makeText(CreateListingActivity.this, "Error: " + status.getStatusMessage(), Toast.LENGTH_LONG).show();
                     Log.i(TAG, status.getStatusMessage());

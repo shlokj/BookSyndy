@@ -463,7 +463,6 @@ public class RequestBookActivity extends AppCompatActivity {
                 }
 
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
-                // TODO: Handle the error.
                 Status status = Autocomplete.getStatusFromIntent(data);
                 Toast.makeText(RequestBookActivity.this, "Error: " + status.getStatusMessage(), Toast.LENGTH_LONG).show();
                 Log.i(TAG, status.getStatusMessage());

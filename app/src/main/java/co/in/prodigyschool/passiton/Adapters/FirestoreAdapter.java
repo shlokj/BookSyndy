@@ -55,7 +55,6 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder>
     }
 
     public void startListening() {
-        // TODO(developer): Implement
         if(mQuery != null && mRegistration == null){
             mRegistration = mQuery.addSnapshotListener(this);
         }
