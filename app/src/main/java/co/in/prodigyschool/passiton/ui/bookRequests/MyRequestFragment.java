@@ -32,11 +32,12 @@ import co.in.prodigyschool.passiton.Adapters.RequestAdapter;
 import co.in.prodigyschool.passiton.Data.BookRequest;
 import co.in.prodigyschool.passiton.R;
 import co.in.prodigyschool.passiton.RequestBookActivity;
+import co.in.prodigyschool.passiton.RequestDetailsActivity;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MyRequestFragment extends Fragment implements EventListener<QuerySnapshot> {
+public class MyRequestFragment extends Fragment implements EventListener<QuerySnapshot> , RequestAdapter.OnRequestSelectedListener  {
 
     public static String TAG = "MYREQUEST";
 
@@ -68,7 +69,7 @@ public class MyRequestFragment extends Fragment implements EventListener<QuerySn
         bookRequests = new ArrayList<>();
         bookRequestsFull = new ArrayList<>();
         initFireStore();
-        mAdapter = new RequestAdapter(getContext(),bookRequests) {
+        mAdapter = new RequestAdapter(getContext(),bookRequests,this) {
 
             @Override
             public void onDataChanged() {
@@ -164,4 +165,14 @@ public class MyRequestFragment extends Fragment implements EventListener<QuerySn
         populateRequestAdapter(queryDocumentSnapshots);
     }
 
+    @Override
+    public void onRequestSelected(BookRequest request) {
+        if(request != null){
+
+            Intent requestDetails = new Intent(getActivity(), RequestDetailsActivity.class);
+            requestDetails.putExtra("bookid",request.getDocumentId());
+            startActivity(requestDetails);
+
+        }
+    }
 }

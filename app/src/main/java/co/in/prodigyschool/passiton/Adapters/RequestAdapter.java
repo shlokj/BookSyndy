@@ -31,17 +31,23 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
     private FirebaseFirestore mFireStore;
     private double latA,lngA;
     private SharedPreferences userPref;
+    private OnRequestSelectedListener mListener;
+
+    public interface OnRequestSelectedListener {
+        void onRequestSelected(BookRequest request);
+    }
 
     public RequestAdapter() {
     }
 
-    public RequestAdapter(Context context, List<BookRequest> requestList) {
+    public RequestAdapter(Context context, List<BookRequest> requestList, OnRequestSelectedListener listener) {
         this.context = context;
         this.requestList = requestList;
         mFireStore = FirebaseFirestore.getInstance();
         userPref = context.getSharedPreferences(context.getString(R.string.UserPref),0);
         latA = userPref.getFloat(context.getString(R.string.p_lat),0.0f);
         lngA = userPref.getFloat(context.getString(R.string.p_lng),0.0f);
+        this.mListener = listener;
     }
 
     public List<BookRequest> getRequestList() {
@@ -75,6 +81,15 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
         //Log.d(TAG, "onBindViewHolder: "+addDistance(requestItem.getLat(),requestItem.getLng()));
         //Log.d(TAG, "onBindViewHolder: "+latA+" "+lngA);
         holder.cityView.append("  "+addDistance(requestItem.getLat(),requestItem.getLng()));
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mListener != null){
+                    mListener.onRequestSelected(requestItem);
+                }
+            }
+        });
 
     }
 

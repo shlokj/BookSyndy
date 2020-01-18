@@ -177,7 +177,8 @@ public class CreateListingActivity extends AppCompatActivity {
 
         mBookImage.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {final CharSequence[] options = {"Take Photo", "Choose from Gallery"};
+            public void onClick(View v) {
+                final CharSequence[] options = {"Take Photo", "Choose from Gallery"};
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(CreateListingActivity.this);
 //                builder.setTitle("Select Pic Using...");

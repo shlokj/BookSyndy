@@ -1,11 +1,17 @@
 package co.in.prodigyschool.passiton.Data;
 
+import com.google.firebase.firestore.DocumentId;
+
 public class BookRequest {
     private String title,description,bookAddress, phone,userId,time;
     private int grade,board,bookYear;
 
     private boolean isCompetitive,isComplete,isText;
     private double lat,lng;
+
+    @com.google.firebase.firestore.DocumentId
+    private String DocumentId;
+
 
     public BookRequest() {
     }
@@ -24,6 +30,14 @@ public class BookRequest {
         this.isCompetitive = isCompetitive;
         this.isComplete = isComplete;
         this.isText = isText;
+    }
+
+    public String getDocumentId() {
+        return DocumentId;
+    }
+
+    public void setDocumentId(String documentId) {
+        DocumentId = documentId;
     }
 
     public double getLat() {
