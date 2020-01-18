@@ -362,7 +362,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.deleteChat:
-
                 AlertDialog.Builder dBuilder = new AlertDialog.Builder(ChatActivity.this);
                 dBuilder.setTitle("Delete chat");
                 dBuilder.setIcon(R.drawable.ic_delete_24px_black);
@@ -382,6 +381,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 });
                 dBuilder.show();
                 break;
+            case R.id.reportUserChat:
+
             case android.R.id.home:
                 this.finish();
                 break;

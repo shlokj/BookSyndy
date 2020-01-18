@@ -172,6 +172,8 @@ public class UserProfileActivity extends AppCompatActivity {
         uName.addTextChangedListener(checkChange);
         year.addTextChangedListener(checkChange);
 
+        profilePic.setImageDrawable(getDrawable(R.drawable.ic_account_circle_24px));
+
         fName.setEnabled(false);
         lName.setEnabled(false);
         uName.setEnabled(false);
@@ -181,6 +183,7 @@ public class UserProfileActivity extends AppCompatActivity {
         boardSpinner.setEnabled(false);
         degreeSpinner.setEnabled(false);
         preferGuidedMode.setEnabled(false);
+        profilePic.setEnabled(false);
 
         profilePic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -277,6 +280,7 @@ public class UserProfileActivity extends AppCompatActivity {
                     boardSpinner.setEnabled(true);
                     degreeSpinner.setEnabled(true);
                     preferGuidedMode.setEnabled(true);
+                    profilePic.setEnabled(true);
                     // phoneNumber.setEnabled(true);
                     menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_check_24px))
                             .setTitle("Save changes");
@@ -306,6 +310,7 @@ public class UserProfileActivity extends AppCompatActivity {
                         boardSpinner.setEnabled(false);
                         degreeSpinner.setEnabled(false);
                         preferGuidedMode.setEnabled(false);
+                        profilePic.setEnabled(true);
 
                         int board;
                         if (gradeSpinner.getSelectedItemPosition()>=6) {

@@ -188,6 +188,7 @@ public class FilterCollegeFragment extends Fragment implements View.OnClickListe
         filterDegreeLlb.setChecked(false);
         filterDegreeMbbs.setChecked(false);
         filterDegreeOther.setChecked(false);
+        distSpinner.setSelection(distAdapter.getCount()-2);
     }
 
 

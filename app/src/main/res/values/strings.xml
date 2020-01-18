@@ -32,7 +32,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="menu_home">Home</string>
-    <string name="menu_mylistings">My Listings</string>
+    <string name="menu_mylistings">Your Listings</string>
     <string name="menu_slideshow">Chats</string>
     <string name="menu_tools">Bookmarks</string>
     <string name="menu_share">Help and FAQs</string>
@@ -40,7 +40,7 @@
     <string name="action_signOut">Sign out</string>
     <string name="main_activity">This is Main Activity</string>
     <string name="starred">Starred</string>
-    <string name="my_listings">My listings</string>
+    <string name="my_listings">Your listings</string>
     <string name="settings">Settings</string>
     <string name="get_started">Let\'s get started!</string>
     <string name="book_desc_q">What best describes what you\'re here to put up?</string>
@@ -164,5 +164,6 @@
     <string name="type_notes">Notes / any other material</string>
     <string name="title">Title</string>
     <string name="by">By</string>
+    <string name="delete_chat">Delete chat</string>
 
 </resources>

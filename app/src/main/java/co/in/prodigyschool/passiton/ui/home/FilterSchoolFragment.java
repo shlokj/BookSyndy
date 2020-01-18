@@ -222,6 +222,8 @@ public class FilterSchoolFragment extends Fragment implements View.OnClickListen
         filterBoardIgcse.setChecked(false);
         filterBoardState.setChecked(false);
 
+        distSpinner.setSelection(distAdapter.getCount()-2);
+
     }
 
     public void onFilterApplied() {

@@ -190,9 +190,7 @@ public class ViewUserProfileActivity extends AppCompatActivity implements BookAd
             userDetails.put("Reported By",curUserPhone);
             CollectionReference reportRef = mFireStore.collection("report_user");
             reportRef.add(userDetails);
-
         }
-
     }
 
     @Override
