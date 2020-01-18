@@ -23,11 +23,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
@@ -184,13 +186,32 @@ public class ViewUserProfileActivity extends AppCompatActivity implements BookAd
             return;
         }
         if(userID != null && mFireStore!= null) {
-            Map<String,Object> userDetails = new HashMap<>();
-            DocumentReference userRef = mFireStore.collection("users").document(phone);
-            userDetails.put("user details",userRef);
-            userDetails.put("Reported By",curUserPhone);
-            CollectionReference reportRef = mFireStore.collection("report_user");
-            reportRef.add(userDetails);
+
+            final DocumentReference reportRef = mFireStore.collection("report_user").document(phone);
+            final DocumentReference userRef = mFireStore.collection("users").document(phone);
+
+            reportRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot snapshot) {
+                    if(snapshot.exists()){
+                        //update
+                        reportRef.update("Report Count",FieldValue.increment(1));
+                    }
+                    else{
+                        //create
+                        Map<String,Object> userDetails = new HashMap<>();
+                        userDetails.put("userRef",userRef);
+                        userDetails.put("Reported By",curUserPhone);
+                        userDetails.put("Report Count", FieldValue.increment(1));
+                        reportRef.set(userDetails);
+                    }
+                }
+            });
+
+
+
         }
+
     }
 
     @Override

@@ -34,10 +34,12 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -541,11 +543,28 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
             return;
         }
         if(currentBook != null && curAppUser != null) {
-            Map<String,Object> bookDetails = new HashMap<>();
-            bookDetails.put("bookDetails",currentBook);
-            bookDetails.put("Reported By",curAppUser);
-            CollectionReference reportRef = mFirestore.collection("report_book");
-            reportRef.add(bookDetails);
+            final DocumentReference reportRef = mFirestore.collection("report_book").document(currentBook.getDocumentId());
+            final DocumentReference bookRef = mFirestore.collection("books").document(currentBook.getDocumentId());
+            reportRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot snapshot) {
+                    if(snapshot.exists()){
+                        //update here
+                        reportRef.update("Report count",FieldValue.increment(1));
+                    }
+                    else{
+                        //create here
+                        Map<String,Object> bookDetails = new HashMap<>();
+                        bookDetails.put("bookDetails",currentBook);
+                        bookDetails.put("bookRef",bookRef);
+                        bookDetails.put("Reported By",curAppUser);
+                        bookDetails.put("Report count", FieldValue.increment(1));
+                        reportRef.set(bookDetails);
+                    }
+                }
+            });
+
+
 
         }
 
