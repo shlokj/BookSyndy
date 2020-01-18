@@ -33,8 +33,17 @@ public class FilterDialogFragment extends DialogFragment implements TabLayout.On
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private FilterAdapter mFilterAdapter;
+    private int curGrade;
 
-    //TODO: check default filters as per rules
+
+    public FilterDialogFragment(){
+
+    }
+
+    public FilterDialogFragment(int grade){
+        curGrade = grade;
+    }
+
     public static FilterDialogFragment newInstance() {
         return new FilterDialogFragment();
     }
@@ -49,7 +58,12 @@ public class FilterDialogFragment extends DialogFragment implements TabLayout.On
         mViewPager.setAdapter(mFilterAdapter);
         mTabLayout.addOnTabSelectedListener(this);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
-
+        if(curGrade < 7){
+            mViewPager.setCurrentItem(0);
+        }
+        else{
+            mViewPager.setCurrentItem(1);
+        }
         return mRootView;
     }
 

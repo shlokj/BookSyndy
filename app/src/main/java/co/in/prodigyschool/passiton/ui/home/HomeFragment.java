@@ -69,8 +69,8 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     private String curUserId;
     private int gradeNumber, boardNumber, year;
     private boolean preferGuidedMode;
-    FilterDialogFragment mFilterDialog;
-    FilterCollegeFragment mCFdialog;
+    private FilterDialogFragment mFilterDialog;
+    private FilterCollegeFragment mCFdialog;
     private List<Book> bookList;
     private List<Book> bookListFull;
     private ListenerRegistration booksRegistration;
@@ -95,13 +95,14 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         //        ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         parentLayout = root;
-        mFilterDialog = new FilterDialogFragment();
+        userPref = getActivity().getSharedPreferences(getString(R.string.UserPref),0);
+        mFilterDialog = new FilterDialogFragment(userPref.getInt(getString(R.string.p_grade),4));
         mCFdialog = new FilterCollegeFragment();
         setHasOptionsMenu(true);
         /* recycler view */
         recyclerView = root.findViewById(R.id.home_recycler_view);
         mEmptyView = root.findViewById(R.id.view_empty);
-        userPref = getActivity().getSharedPreferences(getString(R.string.UserPref),0);
+
         preferGuidedMode = userPref.getBoolean(getString(R.string.preferGuidedMode),false);
         userLat = userPref.getFloat(getString(R.string.p_lat),0.0f);
         userLng = userPref.getFloat(getString(R.string.p_lng),0.0f);
