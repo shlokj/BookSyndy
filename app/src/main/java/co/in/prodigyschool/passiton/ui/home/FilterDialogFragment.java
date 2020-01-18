@@ -54,16 +54,26 @@ public class FilterDialogFragment extends DialogFragment implements TabLayout.On
         mRootView =  inflater.inflate(R.layout.filter_dialog_fragment, container, false);
         mViewPager = mRootView.findViewById(R.id.filters_viewpager);
         mTabLayout = mRootView.findViewById(R.id.filters_tab);
-        mFilterAdapter = new FilterAdapter(getChildFragmentManager(),mTabLayout.getTabCount());
-        mViewPager.setAdapter(mFilterAdapter);
-        mTabLayout.addOnTabSelectedListener(this);
-        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
-        if(curGrade < 7){
-            mViewPager.setCurrentItem(0);
+        if(curGrade <= 5){
+            mFilterAdapter = new FilterAdapter(getChildFragmentManager(),1);
+            mViewPager.setAdapter(mFilterAdapter);
+            //mViewPager.setCurrentItem(0);
+            mTabLayout.removeTabAt(1);
+        }
+        else if(curGrade == 6){
+            mFilterAdapter = new FilterAdapter(getChildFragmentManager(),mTabLayout.getTabCount());
+            mViewPager.setAdapter(mFilterAdapter);
+            mTabLayout.addOnTabSelectedListener(this);
+            mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
+
         }
         else{
-            mViewPager.setCurrentItem(1);
+            mFilterAdapter = new FilterAdapter(getChildFragmentManager(),1);
+            mViewPager.setAdapter(mFilterAdapter);
+//            mViewPager.setCurrentItem(1);
+            mTabLayout.removeTabAt(0);
         }
+
         return mRootView;
     }
 
