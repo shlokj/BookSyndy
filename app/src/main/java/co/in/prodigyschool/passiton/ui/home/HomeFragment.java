@@ -70,7 +70,6 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     private int gradeNumber, boardNumber, year;
     private boolean preferGuidedMode;
     private FilterDialogFragment mFilterDialog;
-    private FilterCollegeFragment mCFdialog;
     private List<Book> bookList;
     private List<Book> bookListFull;
     private ListenerRegistration booksRegistration;
@@ -79,6 +78,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     private SharedPreferences userPref;
     private MenuItem filterItem;
     private double userLat,userLng;
+    private int userGrade;
 
 
     @Override
@@ -96,8 +96,8 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         parentLayout = root;
         userPref = getActivity().getSharedPreferences(getString(R.string.UserPref),0);
+        userGrade = userPref.getInt(getString(R.string.p_grade),4);
         mFilterDialog = new FilterDialogFragment(userPref.getInt(getString(R.string.p_grade),4));
-        mCFdialog = new FilterCollegeFragment();
         setHasOptionsMenu(true);
         /* recycler view */
         recyclerView = root.findViewById(R.id.home_recycler_view);
@@ -227,6 +227,12 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         mFirestore = FirebaseFirestore.getInstance();
         curUserId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
         mQuery = mFirestore.collection("books").whereEqualTo("bookSold",false).limit(LIMIT);
+        if(userGrade <= 5){
+           mQuery = mQuery.whereLessThan("gradeNumber",7);
+        }
+        else{
+            mQuery = mQuery.whereGreaterThan("gradeNumber",5);
+        }
         booksRegistration = mQuery.addSnapshotListener(this);
         //removeUserBooks(mQuery);
     }
