@@ -176,6 +176,7 @@
             android:text="Loading description"
             android:textColor="@color/colorTextBlack"
             android:textSize="14sp"
+            android:autoLink="web"
             android:fontFamily="@font/roboto_light"
             android:scrollbars = "vertical"
             android:layout_marginStart="16dp"

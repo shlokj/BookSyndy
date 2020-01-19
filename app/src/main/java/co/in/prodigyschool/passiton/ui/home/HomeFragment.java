@@ -275,6 +275,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                onQueryTextChange(query);
                 return false;
             }
 
@@ -286,21 +287,44 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                     filteredList1.addAll(bookListFull);
                 }
                 else{
+
                     String filterPattern = newText.toLowerCase().trim();
+                    String[] strgs = filterPattern.split("\\W+");
                     for (Book book : filteredList1) {
                         int foundIndex = book.getBookName().toLowerCase().indexOf(filterPattern);
 //                        Toast.makeText(getActivity(),"Found at "+foundIndex,Toast.LENGTH_SHORT).show();
                         if (book.getBookName().toLowerCase().contains(filterPattern)) {
-                            if (foundIndex!=-1 && (foundIndex==0 || book.getBookName().substring(foundIndex-1,foundIndex).equals(" "))) {
+                            if (foundIndex != -1 && (foundIndex == 0 || book.getBookName().substring(foundIndex - 1, foundIndex).equals(" ")) && !filteredList1.contains(book)) {
                                 filteredList1.add(book);
+                            }
+                        }
+                    }
+                    for (Book book : filteredList1) {
+                        for (String s:strgs) {
+                            int foundIndex = book.getBookName().toLowerCase().indexOf(s);
+//                        Toast.makeText(getActivity(),"Found at "+foundIndex,Toast.LENGTH_SHORT).show();
+                            if (book.getBookName().toLowerCase().contains(s)) {
+                                if (foundIndex != -1 && (foundIndex == 0 || book.getBookName().substring(foundIndex - 1, foundIndex).equals(" ")) && !filteredList1.contains(book)) {
+                                    filteredList1.add(book);
+                                }
                             }
                         }
                     }
                     for (Book book : bookListFull) {
                         int foundIndex = book.getBookName().toLowerCase().indexOf(filterPattern);
                         if (book.getBookName().toLowerCase().contains(filterPattern)) {
-                            if (foundIndex!=-1 && (foundIndex==0 || book.getBookName().substring(foundIndex-1,foundIndex).equals(" "))) {
+                            if (foundIndex != -1 && (foundIndex == 0 || book.getBookName().substring(foundIndex - 1, foundIndex).equals(" ")) &&  !filteredList1.contains(book)) {
                                 filteredList1.add(book);
+                            }
+                        }
+                    }
+                    for (String s:strgs) {
+                        for (Book book : bookListFull) {
+                            int foundIndex = book.getBookName().toLowerCase().indexOf(s);
+                            if (book.getBookName().toLowerCase().contains(s)) {
+                                if (foundIndex != -1 && (foundIndex == 0 || book.getBookName().substring(foundIndex - 1, foundIndex).equals(" ")) &&  !filteredList1.contains(book)) {
+                                    filteredList1.add(book);
+                                }
                             }
                         }
                     }
