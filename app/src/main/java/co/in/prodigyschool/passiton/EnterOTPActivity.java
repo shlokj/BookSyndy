@@ -15,6 +15,8 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 
 import androidx.annotation.NonNull;
@@ -22,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -192,6 +195,9 @@ public class EnterOTPActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         try{
                         if (task.isSuccessful()) {
+
+                            saveToken(userId);
+
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 if (document.getId().equalsIgnoreCase(userId)) {
 
@@ -239,6 +245,24 @@ public class EnterOTPActivity extends AppCompatActivity {
 
                 });
     }
+
+    private void saveToken(final String userId) {
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+                        FirebaseFirestore.getInstance().collection("users").document(userId).update("token",token);
+                    }
+                });
+    }
+
 
     @Override
     protected void onResume() {

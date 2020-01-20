@@ -166,4 +166,7 @@
     <string name="by">By</string>
     <string name="delete_chat">Delete chat</string>
 
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="notification_title">New Message</string>
+
 </resources>

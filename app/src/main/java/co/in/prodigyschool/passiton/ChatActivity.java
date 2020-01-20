@@ -79,7 +79,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     /*firebase */
     private FirebaseAuth mAuth;
     private FirebaseFirestore mFireStore;
-    private DatabaseReference RootRef;
+    private DatabaseReference RootRef,NotificationRef;
     private StorageReference bookPhotosStorageReference;
     private FirebaseStorage mFirebaseStorage;
     private DocumentReference messageSenderRef;
@@ -123,6 +123,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         mAuth = FirebaseAuth.getInstance();
         mFireStore = FirebaseFirestore.getInstance();
         RootRef = FirebaseDatabase.getInstance().getReference();
+        NotificationRef = RootRef.child("Notifications");
         mFirebaseStorage = FirebaseStorage.getInstance();
         bookPhotosStorageReference = mFirebaseStorage.getReference().child("chat_photos");
 
@@ -434,6 +435,11 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 //                        Toast.makeText(ChatActivity.this, "Message Sent Successfully", Toast.LENGTH_SHORT).show();
                         //populateChatDetails();
                         updateChatPage();
+                        HashMap<String,String> mNotification = new HashMap<>();
+                        mNotification.put("from",message_sender_id);
+                        mNotification.put("type","message");
+
+                        NotificationRef.child(receiver_user_id).push().setValue(mNotification);
                     }
                     else
                     {

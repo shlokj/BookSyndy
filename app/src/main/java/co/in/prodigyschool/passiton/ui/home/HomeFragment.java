@@ -227,12 +227,12 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         mFirestore = FirebaseFirestore.getInstance();
         curUserId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
         mQuery = mFirestore.collection("books").whereEqualTo("bookSold",false).limit(LIMIT);
-        if(userGrade <= 5){
-           mQuery = mQuery.whereLessThan("gradeNumber",7);
-        }
-        else{
-            mQuery = mQuery.whereGreaterThan("gradeNumber",5);
-        }
+//        if(userGrade <= 5){
+//           mQuery = mQuery.whereLessThan("gradeNumber",7);
+//        }
+//        else{
+//            mQuery = mQuery.whereGreaterThan("gradeNumber",5);
+//        }
         booksRegistration = mQuery.addSnapshotListener(this);
         //removeUserBooks(mQuery);
     }
@@ -541,7 +541,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                 defaultFilters.setBookGrade(gradesList);
                 defaultFilters.setBookBoard(boardsList);
                 defaultFilters.setIsText(true);
-                defaultFilters.setBookDistance(10);
+                defaultFilters.setBookDistance(-1);
                 homeViewModel.setFilters(defaultFilters);
                 onFilter(homeViewModel.getFilters());
             }
@@ -559,7 +559,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     }
 
     public  boolean getBookUnderDistance(Book book,int distance, double latitude, double longitude){
-        int res;
+        float res;
         if(book.getLat() != 0.0 && book.getLng() != 0.0 && latitude != 0.0 && longitude != 0.0) {
             Location locationA = new Location("point A");
             Location locationB = new Location("point B");
@@ -568,9 +568,9 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             locationA.setLongitude(book.getLng());
             locationB.setLatitude(latitude);
             locationB.setLongitude(longitude);
-            res = (int)(locationA.distanceTo(locationB) / 1000);
+            res = (locationA.distanceTo(locationB) / 1000);
             Log.d(TAG, "getBookUnderDistance: "+res);
-            return (res < distance);
+            return (res <= distance);
         }
         return false;
     }
