@@ -109,7 +109,7 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
                     .set(curFirebaseUser).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
-                    Toast.makeText(getApplicationContext(), "User Registered Successfully " + phoneNumber, Toast.LENGTH_LONG).show();
+//                    Toast.makeText(getApplicationContext(), "User Registered Successfully " + phoneNumber, Toast.LENGTH_LONG).show();
                     // Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
                     startMainActivity.putExtra("SNACKBAR_MSG","Hey there! Thanks for signing up!");
                     startActivity(startMainActivity);

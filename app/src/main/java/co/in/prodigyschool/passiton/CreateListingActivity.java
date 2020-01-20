@@ -255,7 +255,9 @@ public class CreateListingActivity extends AppCompatActivity {
                 if (position<6) {
                     boardDegreeLabel.setText("Board");
                     boardSpinner.setAdapter(boardAdapter);
-//                    boardSpinner.setSelection(boardNumber-1);
+                    for (int i=0; i<10;i++) {
+                        boardSpinner.setSelection(boardNumber - 1);
+                    }
                     yearField.setVisibility(View.GONE);
                     if (position==4 || position==5) {
                         competitiveExam.setVisibility(View.VISIBLE);
@@ -415,6 +417,9 @@ public class CreateListingActivity extends AppCompatActivity {
                 }
             }
         });
+/*        for (int i=0; i<100;i++) {
+            boardSpinner.setSelection(3);
+        }*/
     }
 
 
@@ -456,16 +461,19 @@ public class CreateListingActivity extends AppCompatActivity {
 //                            Toast.makeText(getApplicationContext(),"School",Toast.LENGTH_LONG).show();
 
                 boardDegreeLabel.setText("Board");
-                findViewById(R.id.collegeDegreeAndYearLL).setVisibility(View.GONE);
+                findViewById(R.id.collegeDegreeAndYearLL_c).setVisibility(View.GONE);
 
                 boardSpinner.setAdapter(boardAdapter);
-                boardSpinner.setSelection(boardNumber-1);
+                for (int i=0; i<4;i++) {
+                    boardSpinner.setSelection(boardNumber-1);
+                }
             }
             else {
-
-                boardDegreeLabel.setText("Degree / course");
                 boardSpinner.setAdapter(degreeAdapter);
-                boardSpinner.setSelection(boardNumber - 7);
+                boardDegreeLabel.setText("Degree / course");
+                for (int i=0; i<10;i++) {
+                    boardSpinner.setSelection(boardNumber - 7);
+                }
 
             }
         }

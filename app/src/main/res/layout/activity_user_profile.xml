@@ -207,7 +207,7 @@
                     android:text="Board" />
 
                 <Spinner
-                    android:id="@+id/boardSpinner"
+                    android:id="@+id/profileBoardSpinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:enabled="false"

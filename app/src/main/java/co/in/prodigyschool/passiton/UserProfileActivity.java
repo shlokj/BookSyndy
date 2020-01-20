@@ -78,7 +78,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private Menu menu;
     private int clickCount,gradeNumber,boardNumber,yearNumber;
     private CheckBox compExams,preferGuidedMode;
-    private boolean detailsChanged = false, newUNameOK=true, tempCE;//TODO: add code to check whether new username is OK
+    private boolean detailsChanged = false, newUNameOK=true, tempCE, editing;//TODO: add code to check whether new username is OK
     private TextView boardLabel;
     private LinearLayout yearLL;
     private String firstName, lastName, phoneNumber,userId;
@@ -123,7 +123,7 @@ public class UserProfileActivity extends AppCompatActivity {
         phoneNo = findViewById(R.id.profilePhoneNumberField);
 
         gradeSpinner = findViewById(R.id.gradeSpinner);
-        boardSpinner = findViewById(R.id.boardSpinner);
+        boardSpinner = findViewById(R.id.profileBoardSpinner);
         degreeSpinner = findViewById(R.id.degreeSpinner);
 
         boardLabel = findViewById(R.id.boardLabel);
@@ -270,7 +270,7 @@ public class UserProfileActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.edit_profile:
-                if (clickCount%2==0) {
+                if (!editing) {
                     fName.setEnabled(true);
                     lName.setEnabled(true);
                     //uName.setEnabled(true);
@@ -284,23 +284,49 @@ public class UserProfileActivity extends AppCompatActivity {
                     // phoneNumber.setEnabled(true);
                     menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_check_24px))
                             .setTitle("Save changes");
-                    clickCount = clickCount + 1;
+                    editing = true;
+
                 }
                 else {
 
                     final ProgressDialog progressDialog = new ProgressDialog(this);
-                    progressDialog.setTitle("Saving your changes");
-                    progressDialog.setMessage("Please wait while we update your profile...");
-                    progressDialog.setCancelable(false);
-                    progressDialog.show();
-
                     // phoneNumber.setEnabled(false);
-                    menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_edit_24px))
-                            .setTitle("Edit profile");
-                    clickCount = clickCount + 1;
+
+//                    clickCount = clickCount + 1;
 
                     if (!(fName.getText().toString().length()==0 || lName.getText().toString().length()==0 || uName.getText().toString().length()==0 /*|| year.getText().toString().length()==0*/)) {
 
+                        progressDialog.setTitle("Saving your changes");
+                        progressDialog.setMessage("Updating your profile");
+                        progressDialog.setCancelable(false);
+
+                        int board;
+                        if (gradeSpinner.getSelectedItemPosition()>=6) {
+                            board = boardSpinner.getSelectedItemPosition()+7;
+                            String ys = year.getText().toString();
+                            if (!(ys==null || ys.length()==0)) {
+                                yearNumber = Integer.parseInt(year.getText().toString());
+                                progressDialog.show();
+                            }
+                            else {
+                                View parentLayout = findViewById(android.R.id.content);
+                                Snackbar.make(parentLayout, "Please enter a year", Snackbar.LENGTH_SHORT)
+                                        .setAction("OKAY", new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+
+                                            }
+                                        })
+                                        .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                                        .show();
+                                return false;
+                            }
+                        }
+                        else {
+                            board = boardSpinner.getSelectedItemPosition()+1;
+                        }
+                        menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_edit_24px))
+                                .setTitle("Edit profile");
                         fName.setEnabled(false);
                         lName.setEnabled(false);
                         uName.setEnabled(false);
@@ -311,15 +337,8 @@ public class UserProfileActivity extends AppCompatActivity {
                         degreeSpinner.setEnabled(false);
                         preferGuidedMode.setEnabled(false);
                         profilePic.setEnabled(true);
+                        progressDialog.show();
 
-                        int board;
-                        if (gradeSpinner.getSelectedItemPosition()>=6) {
-                            board = boardSpinner.getSelectedItemPosition()+7;
-                            yearNumber = Integer.parseInt(year.getText().toString());
-                        }
-                        else {
-                            board = boardSpinner.getSelectedItemPosition()+1;
-                        }
 
                         editor = userPref.edit();
                         editor.putBoolean(getString(R.string.preferGuidedMode),preferGuidedMode.isChecked());

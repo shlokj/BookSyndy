@@ -103,6 +103,7 @@ public class EnterOTPActivity extends AppCompatActivity {
         }
         catch (Exception e) {
             progressDialog.dismiss();
+            progressDialog.setCancelable(true);
             View parentLayout = findViewById(android.R.id.content);
             Snackbar.make(parentLayout, "Incorrect verification code (t1)", Snackbar.LENGTH_SHORT)
                     .setAction("OKAY", new View.OnClickListener() {

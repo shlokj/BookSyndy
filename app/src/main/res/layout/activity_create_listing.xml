@@ -169,10 +169,15 @@
 
             <Spinner
                 android:id="@+id/boardSpinner1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:layout_editor_absoluteX="1dp"
-                tools:layout_editor_absoluteY="321dp" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <!-- <Spinner
+                 android:id="@+id/boardSpinner1"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 tools:layout_editor_absoluteX="1dp"
+                 tools:layout_editor_absoluteY="321dp" />-->
         </LinearLayout>
 
 
@@ -190,7 +195,7 @@
             app:layout_constraintStart_toEndOf="@+id/boardLL" />
 
         <LinearLayout
-            android:id="@+id/collegeDegreeAndYearLL"
+            android:id="@+id/collegeDegreeAndYearLL_c"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"

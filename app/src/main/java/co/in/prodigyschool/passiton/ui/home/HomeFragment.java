@@ -305,7 +305,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                             }
                         }
                     }
-                    for (Book book : filteredList1) {
+/*                    for (Book book : filteredList1) {
                         for (String s:strgs) {
                             int foundIndex = book.getBookName().toLowerCase().indexOf(s);
 //                        Toast.makeText(getActivity(),"Found at "+foundIndex,Toast.LENGTH_SHORT).show();
@@ -315,7 +315,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                                 }
                             }
                         }
-                    }
+                    }*/
                     for (Book book : bookListFull) {
                         int foundIndex = book.getBookName().toLowerCase().indexOf(filterPattern);
                         if (book.getBookName().toLowerCase().contains(filterPattern)) {
@@ -324,7 +324,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                             }
                         }
                     }
-                    for (String s:strgs) {
+/*                    for (String s:strgs) {
                         for (Book book : bookListFull) {
                             int foundIndex = book.getBookName().toLowerCase().indexOf(s);
                             if (book.getBookName().toLowerCase().contains(s)) {
@@ -333,7 +333,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                                 }
                             }
                         }
-                    }
+                    }*/
                 }
                 mAdapter.setBookList(filteredList1);
 
@@ -651,6 +651,4 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                 .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
                 .show();
     }
-
-
 }
