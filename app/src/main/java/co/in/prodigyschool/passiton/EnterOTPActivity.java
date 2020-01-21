@@ -80,6 +80,7 @@ public class EnterOTPActivity extends AppCompatActivity {
                 //check if otp is correct here
                 if (otpField.getText().toString().length() == 6) {
                     verifyCode(otpField.getText().toString().trim());
+                    if(!progressDialog.isShowing())
                     progressDialog.show();
                 } else {
                     View parentLayout = findViewById(android.R.id.content);
@@ -117,6 +118,7 @@ public class EnterOTPActivity extends AppCompatActivity {
                     })
                     .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
                     .show();
+            if(progressDialog.isShowing())
             progressDialog.dismiss();
         }
     }
@@ -129,6 +131,7 @@ public class EnterOTPActivity extends AppCompatActivity {
                     isRegisteredUser();
                 }
                 else {
+                    if(progressDialog.isShowing())
                     progressDialog.dismiss();
                     View parentLayout = findViewById(android.R.id.content);
                     Snackbar.make(parentLayout, "Incorrect verification code (t2)", Snackbar.LENGTH_SHORT)
@@ -140,6 +143,7 @@ public class EnterOTPActivity extends AppCompatActivity {
                             })
                             .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
                             .show();
+                    if(progressDialog.isShowing())
                     progressDialog.dismiss();
 
                 }
@@ -172,6 +176,7 @@ public class EnterOTPActivity extends AppCompatActivity {
             if (code != null) {
                 verifyCode(code);
                 otpField.setText(code);
+                if(!progressDialog.isShowing())
                 progressDialog.show();
             }
         }

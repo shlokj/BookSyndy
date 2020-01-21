@@ -41,6 +41,7 @@ import co.in.prodigyschool.passiton.Data.BookRequest;
 import co.in.prodigyschool.passiton.R;
 import co.in.prodigyschool.passiton.RequestBookActivity;
 import co.in.prodigyschool.passiton.RequestDetailsActivity;
+import co.in.prodigyschool.passiton.ui.home.FilterDialogFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,11 +57,13 @@ public class PendingRequestFragment extends Fragment implements View.OnClickList
     private FirebaseFirestore mFirestore;
     private Query mQuery;
     private ListView devicesListView;
+    private FilterDialogFragment mFilterDialog;
     private RequestAdapter mAdapter;
     private List<BookRequest> bookRequests,bookRequestsFull;
     private ListenerRegistration requestRegistration;
     private String curUserId;
     private SharedPreferences userPref;
+
 
     /* search *
 
@@ -83,6 +86,7 @@ public class PendingRequestFragment extends Fragment implements View.OnClickList
         userPref = getContext().getSharedPreferences(getContext().getString(R.string.UserPref),0);
         fab = rootView.findViewById(R.id.fab_request);
         setHasOptionsMenu(true);
+        mFilterDialog = new FilterDialogFragment(userPref.getInt(getString(R.string.p_grade),4));
         recyclerView = rootView.findViewById(R.id.request_recycler_view);
         mEmptyView = rootView.findViewById(R.id.view_empty_r);
         bookRequests = new ArrayList<>();
@@ -210,12 +214,21 @@ public class PendingRequestFragment extends Fragment implements View.OnClickList
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.home, menu);
-        MenuItem searchItem = menu.findItem(R.id.action_search);
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
         filterItem = menu.findItem(R.id.filter);
         searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 filterItem.setVisible(false);
+                return true;
+            }
+        });
+
+        filterItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if(!mFilterDialog.isAdded())
+                    mFilterDialog.show(getChildFragmentManager(), FilterDialogFragment.TAG);
                 return true;
             }
         });
