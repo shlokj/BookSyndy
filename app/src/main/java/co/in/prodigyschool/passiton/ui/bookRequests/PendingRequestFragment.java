@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,9 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.SearchView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -57,6 +62,13 @@ public class PendingRequestFragment extends Fragment implements View.OnClickList
     private String curUserId;
     private SharedPreferences userPref;
 
+    /* search *
+
+     */
+
+    private MenuItem filterItem;
+
+
 
     public PendingRequestFragment() {
         // Required empty public constructor
@@ -70,6 +82,7 @@ public class PendingRequestFragment extends Fragment implements View.OnClickList
         View rootView =  inflater.inflate(R.layout.fragment_pending_request, container, false);
         userPref = getContext().getSharedPreferences(getContext().getString(R.string.UserPref),0);
         fab = rootView.findViewById(R.id.fab_request);
+        setHasOptionsMenu(true);
         recyclerView = rootView.findViewById(R.id.request_recycler_view);
         mEmptyView = rootView.findViewById(R.id.view_empty_r);
         bookRequests = new ArrayList<>();
@@ -187,7 +200,92 @@ public class PendingRequestFragment extends Fragment implements View.OnClickList
             startActivity(requestDetails);
 
         }
-
-
     }
+
+    /*search
+
+     */
+
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.home, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        filterItem = menu.findItem(R.id.filter);
+        searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                filterItem.setVisible(false);
+                return true;
+            }
+        });
+        final SearchView searchView = (SearchView)searchItem.getActionView();
+        searchView.setQueryHint("Search");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                onQueryTextChange(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                List<BookRequest> filteredList1 = new ArrayList<>();
+                if(newText == null || newText.trim().isEmpty())
+                {
+                    filteredList1.addAll(bookRequestsFull);
+                }
+                else{
+
+                    String filterPattern = newText.toLowerCase().trim();
+                    String[] strgs = filterPattern.split("\\W+");
+                    for (BookRequest book : filteredList1) {
+                        int foundIndex = book.getTitle().toLowerCase().indexOf(filterPattern);
+//                        Toast.makeText(getActivity(),"Found at "+foundIndex,Toast.LENGTH_SHORT).show();
+                        if (book.getTitle().toLowerCase().contains(filterPattern)) {
+                            if (foundIndex != -1 && (foundIndex == 0 || book.getTitle().substring(foundIndex - 1, foundIndex).equals(" ")) && !filteredList1.contains(book)) {
+                                filteredList1.add(book);
+                            }
+                        }
+                    }
+/*                    for (Book book : filteredList1) {
+                        for (String s:strgs) {
+                            int foundIndex = book.getBookName().toLowerCase().indexOf(s);
+//                        Toast.makeText(getActivity(),"Found at "+foundIndex,Toast.LENGTH_SHORT).show();
+                            if (book.getBookName().toLowerCase().contains(s)) {
+                                if (foundIndex != -1 && (foundIndex == 0 || book.getBookName().substring(foundIndex - 1, foundIndex).equals(" ")) && !filteredList1.contains(book)) {
+                                    filteredList1.add(book);
+                                }
+                            }
+                        }
+                    }*/
+                    for (BookRequest book : bookRequestsFull) {
+                        int foundIndex = book.getTitle().toLowerCase().indexOf(filterPattern);
+                        if (book.getTitle().toLowerCase().contains(filterPattern)) {
+                            if (foundIndex != -1 && (foundIndex == 0 || book.getTitle().substring(foundIndex - 1, foundIndex).equals(" ")) &&  !filteredList1.contains(book)) {
+                                filteredList1.add(book);
+                            }
+                        }
+                    }
+/*                    for (String s:strgs) {
+                        for (Book book : bookListFull) {
+                            int foundIndex = book.getBookName().toLowerCase().indexOf(s);
+                            if (book.getBookName().toLowerCase().contains(s)) {
+                                if (foundIndex != -1 && (foundIndex == 0 || book.getBookName().substring(foundIndex - 1, foundIndex).equals(" ")) &&  !filteredList1.contains(book)) {
+                                    filteredList1.add(book);
+                                }
+                            }
+                        }
+                    }*/
+                }
+                mAdapter.setRequestList(filteredList1);
+
+                return false;
+            }
+        });
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+
 }

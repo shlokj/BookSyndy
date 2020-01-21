@@ -4,8 +4,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,6 +24,10 @@ import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import co.in.prodigyschool.passiton.Data.Book;
 import co.in.prodigyschool.passiton.R;
 import co.in.prodigyschool.passiton.SignInActivity;
 import co.in.prodigyschool.passiton.ui.bookRequests.PageAdapter;
@@ -34,6 +42,9 @@ public class ReqFragment extends Fragment implements TabLayout.OnTabSelectedList
     private TabLayout mTabLayout;
     private TabItem tab_available,tab_sold;
     private PageAdapter mPageAdapter;
+
+
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -50,6 +61,7 @@ public class ReqFragment extends Fragment implements TabLayout.OnTabSelectedList
 
         return root;
     }
+
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
