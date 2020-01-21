@@ -201,9 +201,9 @@ public class RequestBookActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // add validation and populate the fields here
 
-                bookTitle = titleField.getText().toString();
-                bookDesc = descField.getText().toString();
-                bookAddress = locField.getText().toString();
+                bookTitle = titleField.getText().toString().trim();
+                bookDesc = descField.getText().toString().trim();
+                bookAddress = locField.getText().toString().trim();
                 isTextbook = typeSpinner.getSelectedItemPosition()==0;
                 gradeNumber = gradeSpinner.getSelectedItemPosition()+1;
                 if (gradeNumber>=7) {

@@ -56,7 +56,7 @@ public class EnterOTPActivity extends AppCompatActivity {
         userPhoneNumber = getIntent().getStringExtra("USER_MOB").trim();
         sendVerificationCode(userPhoneNumber);
         startResendTimer(15);
-
+        getSupportActionBar().setTitle("Verification");
         resendOtp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

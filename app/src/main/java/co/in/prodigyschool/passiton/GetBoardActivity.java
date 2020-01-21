@@ -27,6 +27,7 @@ public class GetBoardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_board);
+        getSupportActionBar().setTitle("Sign up");
         isParent = getIntent().getBooleanExtra("IS_PARENT", false);
         firstName = getIntent().getStringExtra("FIRST_NAME");
         lastName = getIntent().getStringExtra("LAST_NAME");

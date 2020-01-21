@@ -26,6 +26,7 @@ public class GetCollegeSpecificsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_college_specifics);
+        getSupportActionBar().setTitle("Sign up");
         yearField = (EditText) findViewById(R.id.yearField);
         yearField.setFocusable(false);
         isParent = getIntent().getBooleanExtra("IS_PARENT", false);

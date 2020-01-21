@@ -20,6 +20,7 @@ public class ParOrStudActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_par_or_stud);
+        getSupportActionBar().setTitle("Sign up");
 
         studOrParButtons = (RadioGroup) findViewById(R.id.studentOrParentRadioGroup);
         FloatingActionButton next = findViewById(R.id.fab3);

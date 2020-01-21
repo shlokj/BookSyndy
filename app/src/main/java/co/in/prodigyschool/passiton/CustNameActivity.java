@@ -3,8 +3,11 @@ package co.in.prodigyschool.passiton;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,19 +40,37 @@ public class CustNameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cust_name);
+        getSupportActionBar().setTitle("Sign up");
+
         final View parentLayout = findViewById(android.R.id.content);
         isParent = getIntent().getBooleanExtra("IS_PARENT",false);
         userIdField = (EditText) findViewById(R.id.usernameField);
         firstNameField = (EditText) findViewById(R.id.firstName);
         lastNameField = (EditText) findViewById(R.id.lastName);
+        firstNameField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    lastNameField.requestFocus();
+                }
+                return false;
+            }
+        });
+        lastNameField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    userIdField.requestFocus();
+                }
+                return false;
+            }
+        });
         FloatingActionButton next = (FloatingActionButton) findViewById(R.id.fab4);
         userNamesList = new ArrayList<>();
         initFireStore();
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                firstName = firstNameField.getText().toString();
-                lastName = lastNameField.getText().toString();
+                firstName = firstNameField.getText().toString().trim();
+                lastName = lastNameField.getText().toString().trim();
                 username = userIdField.getText().toString();
                 isValidUsername = false;
                 isValidUsername = (username != null) && username.matches("[A-Za-z0-9_]+");
