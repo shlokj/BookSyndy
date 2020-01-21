@@ -75,9 +75,9 @@ public class MainActivity extends AppCompatActivity {
                                         if (document.getId().equalsIgnoreCase(userId)) {
                                             //user session exist
                                             User user = document.toObject(User.class);
-                                            String userId = userPref.getString(getString(R.string.p_userid),null);
+                                            String userPhone = userPref.getString(getString(R.string.p_userphone),null);
                                             Intent homeActivity;
-                                            if(userId == null || !userId.equalsIgnoreCase(user.getUserId())){
+                                            if(userPhone == null || !userPhone.equalsIgnoreCase(user.getPhone())){
                                                 homeActivity = new Intent(MainActivity.this,WelcomeActivity.class);
                                             }
                                             else{
@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
                                             editor.putString(getString(R.string.p_userid),user.getUserId());
                                             editor.putString(getString(R.string.p_firstname),user.getFirstName());
                                             editor.putString(getString(R.string.p_lastname),user.getLastName());
+                                            editor.putString(getString(R.string.p_username),user.getUserId());
                                             editor.putString(getString(R.string.p_imageurl),user.getImageUrl());
                                             editor.putInt(getString(R.string.p_grade),user.getGradeNumber());
                                             editor.putInt(getString(R.string.p_board),user.getBoardNumber());

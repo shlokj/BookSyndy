@@ -33,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -49,7 +50,10 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -60,7 +64,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import co.in.prodigyschool.passiton.Data.User;
@@ -81,7 +87,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private boolean detailsChanged = false, newUNameOK=true, tempCE, editing;//TODO: add code to check whether new username is OK
     private TextView boardLabel;
     private LinearLayout yearLL;
-    private String firstName, lastName, phoneNumber,userId;
+    private String firstName, lastName, phoneNumber,userId, iUsername;
     private FirebaseFirestore mFirestore;
     private User curUser;
     private Uri selectedImage;
@@ -93,6 +99,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private Uri selectedImageUri;
     private StorageReference bookPhotosStorageReference;
     private FirebaseStorage mFirebaseStorage;
+    private List<String> userNamesList;
 
     private final int GALLERY_ACTIVITY_CODE=200;
     private final int RESULT_CROP = 400;
@@ -106,6 +113,8 @@ public class UserProfileActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
         getSupportActionBar().setTitle("Profile");
+
+        userNamesList = new ArrayList<>();
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
@@ -167,6 +176,7 @@ public class UserProfileActivity extends AppCompatActivity {
         mFirestore  = FirebaseFirestore.getInstance();
         getUserPreference();
         populateUserDetails();
+        iUsername = uName.getText().toString();
         fName.addTextChangedListener(checkChange);
         lName.addTextChangedListener(checkChange);
         uName.addTextChangedListener(checkChange);
@@ -249,6 +259,7 @@ public class UserProfileActivity extends AppCompatActivity {
             }
 
         });
+
     }
 
     private void getUserPreference() {
@@ -273,7 +284,7 @@ public class UserProfileActivity extends AppCompatActivity {
                 if (!editing) {
                     fName.setEnabled(true);
                     lName.setEnabled(true);
-                    //uName.setEnabled(true);
+                    uName.setEnabled(true);
                     year.setEnabled(true);
                     compExams.setEnabled(true);
                     gradeSpinner.setEnabled(true);
@@ -296,6 +307,10 @@ public class UserProfileActivity extends AppCompatActivity {
 
                     if (!(fName.getText().toString().length()==0 || lName.getText().toString().length()==0 || uName.getText().toString().length()==0 /*|| year.getText().toString().length()==0*/)) {
 
+                        if (!checkUserName(uName.getText().toString())) {
+                            showSnackbar("This username is not available. Please try another");
+                            return true;
+                        }
                         progressDialog.setTitle("Saving your changes");
                         progressDialog.setMessage("Updating your profile");
                         progressDialog.setCancelable(false);
@@ -351,7 +366,7 @@ public class UserProfileActivity extends AppCompatActivity {
                         editor.putBoolean(getString(R.string.p_competitive),compExams.isChecked());
                         editor.apply();
                         DocumentReference userReference =  mFirestore.collection("users").document(phoneNumber);
-                        userReference.update("competitiveExam",compExams.isChecked(),"year",yearNumber,"firstName",fName.getText().toString(),"lastName",lName.getText().toString(),"gradeNumber",gradeSpinner.getSelectedItemPosition()+1,"boardNumber",board).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        userReference.update("competitiveExam",compExams.isChecked(),"year",yearNumber,"firstName",fName.getText().toString(),"lastName",lName.getText().toString(),"gradeNumber",gradeSpinner.getSelectedItemPosition()+1,"boardNumber",board,"userId",uName.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 if(progressDialog.isShowing())
@@ -387,6 +402,7 @@ public class UserProfileActivity extends AppCompatActivity {
                                 })
                                 .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
                                 .show();
+
                     }
                 }
                 break;
@@ -686,6 +702,45 @@ public class UserProfileActivity extends AppCompatActivity {
         newbitMap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] b = baos.toByteArray();
         return b;
+    }
+
+    private boolean checkUserName(String username) {
+        mFirestore.collection("users").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if(e != null){
+                    Log.e(TAG, "onEvent: usernames fetch error",e );
+                }
+                if(!queryDocumentSnapshots.isEmpty()){
+                    for (User user:queryDocumentSnapshots.toObjects(User.class)){
+                        userNamesList.add(user.getUserId());
+                    }
+
+                }
+
+            }
+        });
+        if(username != null && username!=iUsername){
+            for(String userId:userNamesList){
+                if(userId.equalsIgnoreCase(username)){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public void showSnackbar(String message) {
+        View parentLayout = findViewById(android.R.id.content);
+        Snackbar.make(parentLayout, message, Snackbar.LENGTH_SHORT)
+                .setAction("OKAY", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                })
+                .setActionTextColor(getResources().getColor(android.R.color.holo_orange_light))
+                .show();
     }
 
 }

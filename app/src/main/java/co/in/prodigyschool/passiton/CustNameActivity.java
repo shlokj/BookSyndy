@@ -103,15 +103,14 @@ public class CustNameActivity extends AppCompatActivity {
     }
 
     private boolean checkUserName(String username) {
-        boolean flag = true;
         if(username != null){
            for(String userId:userNamesList){
                if(userId.equalsIgnoreCase(username)){
-                   flag = false;
+                   return false;
                }
            }
         }
-        return flag;
+        return true;
     }
 
     private void initFireStore() {
@@ -120,7 +119,7 @@ public class CustNameActivity extends AppCompatActivity {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                      if(e != null){
-                         Log.e(TAG, "onEvent: user names feth error",e );
+                         Log.e(TAG, "onEvent: usernames fetch error",e );
                      }
                      if(!queryDocumentSnapshots.isEmpty()){
                          for (User user:queryDocumentSnapshots.toObjects(User.class)){

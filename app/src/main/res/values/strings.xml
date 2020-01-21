@@ -132,6 +132,7 @@
     <string name="p_userphone">USERPHONE</string>
     <string name="p_firstname">FNAME</string>
     <string name="p_lastname">LNAME</string>
+    <string name="p_username">UNAME</string>
     <string name="p_lat">LAT</string>
     <string name="p_lng">LNG</string>
     <string name="preferGuidedMode">preferGuidedMode</string>

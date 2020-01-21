@@ -336,6 +336,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
+//        userPref = this.getSharedPreferences(getString(R.string.UserPref),0);
+//        Toast.makeText(HomeActivity.this, "onResume", Toast.LENGTH_SHORT).show();
+//        populateUserDetails();
     }
 
     @Override

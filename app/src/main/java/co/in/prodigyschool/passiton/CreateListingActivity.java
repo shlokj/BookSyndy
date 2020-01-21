@@ -255,9 +255,9 @@ public class CreateListingActivity extends AppCompatActivity {
                 if (position<6) {
                     boardDegreeLabel.setText("Board");
                     boardSpinner.setAdapter(boardAdapter);
-                    for (int i=0; i<10;i++) {
+/*                    for (int i=0; i<10;i++) {
                         boardSpinner.setSelection(boardNumber - 1);
-                    }
+                    }*/
                     yearField.setVisibility(View.GONE);
                     if (position==4 || position==5) {
                         competitiveExam.setVisibility(View.VISIBLE);
@@ -277,7 +277,14 @@ public class CreateListingActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
-
+                int bn1 = getIntent().getIntExtra("BOARD_NUMBER",1);
+                int gn1 = getIntent().getIntExtra("GRADE_NUMBER",4);
+                if (gn1<=6) {
+                    boardSpinner.setSelection(bn1 - 1);
+                }
+                else {
+                    boardSpinner.setSelection(bn1 - 7);
+                }
             }
 
         });
@@ -417,9 +424,19 @@ public class CreateListingActivity extends AppCompatActivity {
                 }
             }
         });
-/*        for (int i=0; i<100;i++) {
-            boardSpinner.setSelection(3);
-        }*/
+
+        int bn1 = getIntent().getIntExtra("BOARD_NUMBER",1);
+        int gn1 = getIntent().getIntExtra("GRADE_NUMBER",4);
+        if (gn1<=6) {
+            for (int i=0;i<50;i++) {
+                boardSpinner.setSelection(bn1 - 1);
+            }
+        }
+        else {
+            for (int i=0;i<50;i++) {
+                boardSpinner.setSelection(bn1 - 7);
+            }
+        }
     }
 
 
@@ -472,7 +489,7 @@ public class CreateListingActivity extends AppCompatActivity {
                 boardSpinner.setAdapter(degreeAdapter);
                 boardDegreeLabel.setText("Degree / course");
                 for (int i=0; i<10;i++) {
-                    boardSpinner.setSelection(boardNumber - 7);
+                    boardSpinner.setSelection(boardNumber - 7,true);
                 }
 
             }
