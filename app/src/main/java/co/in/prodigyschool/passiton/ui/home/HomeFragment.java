@@ -485,12 +485,17 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 
 
         if(filters.hasBookDistance()){
-            for(Book b:filteredList){
-                if(!getBookUnderDistance(b,filters.getBookDistance(),userLat,userLng)){
-                    toBeRemoved.add(b);
+            if(userLat != 0.0 && userLng != 0.0) {
+                for (Book b : filteredList) {
+                    if (!getBookUnderDistance(b, filters.getBookDistance(), userLat, userLng)) {
+                        toBeRemoved.add(b);
+                    }
                 }
+                noFilter = false;
             }
-            noFilter = false;
+            else {
+                filters.setBookDistance(-1);
+            }
         }
 
         for (Book b:toBeRemoved) {
@@ -560,7 +565,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 
     public  boolean getBookUnderDistance(Book book,int distance, double latitude, double longitude){
         float res;
-        if(book.getLat() != 0.0 && book.getLng() != 0.0 && latitude != 0.0 && longitude != 0.0) {
+        if(book.getLat() != 0.0 && book.getLng() != 0.0 ) {
             Location locationA = new Location("point A");
             Location locationB = new Location("point B");
 
@@ -572,6 +577,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             Log.d(TAG, "getBookUnderDistance: "+res);
             return (res <= distance);
         }
+
         return false;
     }
 
