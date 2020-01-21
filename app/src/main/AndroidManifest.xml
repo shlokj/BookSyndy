@@ -87,7 +87,8 @@
             android:name=".CustNameActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".ParOrStudActivity" />
-        <activity android:name=".EnterOTPActivity" />
+        <activity android:name=".EnterOTPActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".SignInActivity"
             android:windowSoftInputMode="adjustResize">

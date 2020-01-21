@@ -607,7 +607,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        showSnackbar("Removed from bookmarks");
+//                        showSnackbar("Removed from bookmarks");
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
