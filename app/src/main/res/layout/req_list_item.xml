@@ -53,4 +53,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintWidth_default="wrap" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.2dp"
+        android:background="@android:color/darker_gray"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

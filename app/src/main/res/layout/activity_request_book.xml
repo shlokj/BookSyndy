@@ -57,7 +57,7 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="Title"
-                android:inputType="textCapWords|textShortMessage" />
+                android:inputType="textCapSentences|textShortMessage" />
 
         </LinearLayout>
 
