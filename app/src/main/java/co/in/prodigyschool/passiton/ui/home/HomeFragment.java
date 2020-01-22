@@ -267,7 +267,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.home, menu);
-        MenuItem searchItem = menu.findItem(R.id.action_search);
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
         filterItem = menu.findItem(R.id.filter);
         searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -291,6 +291,8 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                 if(newText == null || newText.trim().isEmpty())
                 {
                     filteredList1.addAll(bookListFull);
+                    searchView.clearFocus();
+                    return true;
                 }
                 else{
 

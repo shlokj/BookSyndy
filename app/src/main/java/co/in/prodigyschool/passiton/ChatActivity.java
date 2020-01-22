@@ -1,11 +1,16 @@
 package co.in.prodigyschool.passiton;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Html;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -39,6 +44,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
@@ -84,7 +90,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private FirebaseStorage mFirebaseStorage;
     private DocumentReference messageSenderRef;
     private CircleImageView visitor_profile_picture;
-    private String receiver_user_id,visit_user_name,visit_image,message_sender_id;
+    private String receiver_user_id,visit_user_name,visit_image,message_sender_id,curUserName;
     private TextView visitor_name,userLastSeen;
     private ImageView mPhotoPickerButton;
     private EditText mMessageEditText;
@@ -94,6 +100,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private final List<Messages> messagesList = new ArrayList<>();
     private MessageAdapter messageAdapter;
     private RecyclerView userMessagesList;
+    private SharedPreferences userPref;
 
     private String saveCurrentTime, saveCurrentDate;
 
@@ -113,12 +120,16 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        userPref = getSharedPreferences(getString(R.string.UserPref),0);
+        curUserName = userPref.getString(getString(R.string.p_userid),"");
         visitor_profile_picture = findViewById(R.id.visit_profile_image);
         mPhotoPickerButton =  findViewById(R.id.photoPickerButton);
         mMessageEditText = findViewById(R.id.messageEditText);
         visitor_name = findViewById(R.id.visit_profile_name);
         userLastSeen =  findViewById(R.id.user_last_seen);
+        userLastSeen.setVisibility(View.GONE);
         mSendButton = findViewById(R.id.sendButton);
+        userMessagesList =  findViewById(R.id.private_messages_list_of_users);
         mSendButton.setEnabled(false);
         mAuth = FirebaseAuth.getInstance();
         mFireStore = FirebaseFirestore.getInstance();
@@ -134,7 +145,43 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         window.setStatusBarColor(ContextCompat.getColor(ChatActivity.this,R.color.colorPrimaryDark));
 
         initializeChatRoom();
+        displayMessages();
         DisplayLastSeen();
+    }
+
+    private void displayMessages() {
+
+        RootRef.child("Messages").child(message_sender_id).child(receiver_user_id)
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s)
+                    {
+                        Messages messages = dataSnapshot.getValue(Messages.class);
+                        messagesList.add(messages);
+                        messageAdapter.notifyDataSetChanged();
+                        userMessagesList.smoothScrollToPosition(userMessagesList.getAdapter().getItemCount());
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     private void initializeChatRoom() {
@@ -175,7 +222,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
         /* messages adpater */
         messageAdapter = new MessageAdapter(messagesList);
-        userMessagesList =  findViewById(R.id.private_messages_list_of_users);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         userMessagesList.setLayoutManager(linearLayoutManager);
         userMessagesList.setAdapter(messageAdapter);
@@ -295,45 +341,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    @Override
-    protected void onStart()
-    {
-        super.onStart();
 
-        RootRef.child("Messages").child(message_sender_id).child(receiver_user_id)
-                .addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s)
-                    {
-                        Messages messages = dataSnapshot.getValue(Messages.class);
-                        messagesList.add(messages);
-                        messageAdapter.notifyDataSetChanged();
-                        userMessagesList.smoothScrollToPosition(userMessagesList.getAdapter().getItemCount());
-                    }
-
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
-
-    }
 
     @Override
     protected void onStop() {
@@ -353,13 +361,14 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_indiv_chat, menu);
         this.menu = menu;
+        getMenuInflater().inflate(R.menu.menu_indiv_chat, menu);
 
         return true;
     }
 
-    @Override
+
+        @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.deleteChat:
@@ -370,7 +379,14 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 dBuilder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // TODO: code to delete chat
+                       //delte chat
+                        String messageSenderRef = "Messages/" + message_sender_id + "/" + receiver_user_id;
+                        DocumentReference chat_sender_ref = mFireStore.collection("chats").document(message_sender_id).collection("receiver_chats").document(receiver_user_id);
+
+                        RootRef.child(messageSenderRef).removeValue();
+                        chat_sender_ref.delete();
+
+
                         Toast.makeText(getApplicationContext(),"Deleted",Toast.LENGTH_SHORT).show();
                         onBackPressed();
                     }
@@ -383,6 +399,27 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 dBuilder.show();
                 break;
             case R.id.reportUserChat:
+                AlertDialog.Builder rBuilder = new AlertDialog.Builder(ChatActivity.this);
+                rBuilder.setTitle("Report listing");
+                rBuilder.setIcon(R.drawable.ic_report_24px_outlined);
+                rBuilder.setMessage(Html.fromHtml("Are you sure you want to report <b>"+visit_user_name+"</b>?"));
+                rBuilder.setPositiveButton("Report", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // code to report
+                        reportUser();
+                        Toast.makeText(getApplicationContext(),"Reported",Toast.LENGTH_SHORT).show();
+                        onBackPressed();
+                    }
+                });
+                rBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+                rBuilder.show();
+                break;
+
 
             case android.R.id.home:
                 this.finish();
@@ -393,9 +430,43 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
+    private void reportUser() {
+        if(!checkConnection(this)){
+            Toast.makeText(this, "InterNet Required", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if( mFireStore!= null) {
+
+            final DocumentReference reportRef = mFireStore.collection("report_user").document(receiver_user_id);
+            final DocumentReference userRef = mFireStore.collection("users").document(receiver_user_id);
+
+            reportRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot snapshot) {
+                    if(snapshot.exists()){
+                        //update
+                        reportRef.update("Report Count", FieldValue.increment(1));
+                    }
+                    else{
+                        //create
+                        Map<String,Object> userDetails = new HashMap<>();
+                        userDetails.put("userRef",userRef);
+                        userDetails.put("Reported By",message_sender_id);
+                        userDetails.put("Report Count", FieldValue.increment(1));
+                        reportRef.set(userDetails);
+                    }
+                }
+            });
+
+
+
+        }
+
+    }
+
     private void SendMessage(String msg, String messageType)
     {
-        String messageText =  msg;
+        final String messageText =  msg;
 
         if (TextUtils.isEmpty(messageText))
         {
@@ -438,6 +509,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                         HashMap<String,String> mNotification = new HashMap<>();
                         mNotification.put("from",message_sender_id);
                         mNotification.put("type","message");
+                        mNotification.put("message",messageText);
+                        mNotification.put("fname",curUserName);
 
                         NotificationRef.child(receiver_user_id).push().setValue(mNotification);
                     }
@@ -522,4 +595,23 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
         user = snapshot.toObject(User.class);
     }
+
+
+    public static boolean checkConnection(Context context) {
+        final ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (connMgr != null) {
+            NetworkInfo activeNetworkInfo = connMgr.getActiveNetworkInfo();
+
+            if (activeNetworkInfo != null) { // connected to the internet
+                // connected to the mobile provider's data plan
+                if (activeNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+                    // connected to wifi
+                    return true;
+                } else return activeNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE;
+            }
+        }
+        return false;
+    }
+
 }

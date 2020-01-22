@@ -31,10 +31,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     private List<Messages> userMessagesList;
     private FirebaseAuth mAuth;
 
+    public interface OnMessageSelectedListener{
+        public void OnMessageSelected(Messages message);
+}
+
 
     public MessageAdapter (List<Messages> userMessagesList)
     {
         this.userMessagesList = userMessagesList;
+
     }
 
 
@@ -79,7 +84,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     public void onBindViewHolder(@NonNull final MessageViewHolder messageViewHolder, int i)
     {
         String messageSenderId = mAuth.getCurrentUser().getPhoneNumber();
-        Messages messages = userMessagesList.get(i);
+        final Messages messages = userMessagesList.get(i);
 
         String fromUserID = messages.getFrom();
         String fromMessageType = messages.getType();
@@ -90,7 +95,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         messageViewHolder.senderMessageTime.setVisibility(View.GONE);
         messageViewHolder.messageSenderPicture.setVisibility(View.GONE);
         messageViewHolder.messageReceiverPicture.setVisibility(View.GONE);
-
 
         if (fromMessageType.equals("text"))
         {
@@ -108,6 +112,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                 messageViewHolder.senderMessageText.setTextColor(Color.WHITE);
                 messageViewHolder.senderMessageTime.setText(messages.getTime() + "  " + strDate);
                 messageViewHolder.senderMessageText.setText(messages.getMessage()/* + "\n \n" + messages.getTime() + " - " + messages.getDate()*/);
+
 
             }
             else
