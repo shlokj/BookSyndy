@@ -1,12 +1,15 @@
 package co.in.prodigyschool.passiton;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -21,7 +24,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 
-import co.in.prodigyschool.passiton.Data.Book;
 import co.in.prodigyschool.passiton.Data.BookRequest;
 import co.in.prodigyschool.passiton.Data.User;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -36,6 +38,7 @@ public class RequestDetailsActivity extends AppCompatActivity {
     private DocumentReference bookRef;
     private ListenerRegistration mBookUserRegistration,mBookRegistration,mBookMarkRegistration;
     private CircleImageView sellerDp;
+    private Menu menu;
     private static final String TAG = "REQUEST_DETAILS";
     private String curAppUser, shareableLink="", bookid;
     private double latA,lngA;
@@ -220,12 +223,42 @@ public class RequestDetailsActivity extends AppCompatActivity {
         }
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_request_details, menu);
+        this.menu = menu;
+
+        return true;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 this.finish();
                 return true;
+            case R.id.reportRequest:
+                AlertDialog.Builder rBuilder = new AlertDialog.Builder(RequestDetailsActivity.this);
+                rBuilder.setTitle("Report request");
+                rBuilder.setIcon(R.drawable.ic_report_24px_outlined);
+                rBuilder.setMessage("Are you sure you want to report this request?");
+                rBuilder.setPositiveButton("Report", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        reportRequest();
+                        Toast.makeText(getApplicationContext(),"Reported",Toast.LENGTH_SHORT).show();
+                        // todo: remove the listing from the recyclerview on going back
+                        onBackPressed();
+                    }
+                });
+                rBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+                rBuilder.show();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
