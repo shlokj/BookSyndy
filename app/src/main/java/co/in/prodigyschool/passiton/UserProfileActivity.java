@@ -174,6 +174,7 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         };
         mFirestore  = FirebaseFirestore.getInstance();
+        fetchUserNameList();
         getUserPreference();
         populateUserDetails();
         iUsername = uName.getText().toString();
@@ -304,6 +305,12 @@ public class UserProfileActivity extends AppCompatActivity {
                     // phoneNumber.setEnabled(false);
 
 //                    clickCount = clickCount + 1;
+
+                    if(!checkConnection(this)){
+                        showSnackbar("Internet is required");
+                        return true;
+                    }
+
 
                     if (!(fName.getText().toString().length()==0 || lName.getText().toString().length()==0 || uName.getText().toString().length()==0 /*|| year.getText().toString().length()==0*/)) {
                         boolean isAvailableUsername = checkUserName(uName.getText().toString().trim());
@@ -707,7 +714,7 @@ public class UserProfileActivity extends AppCompatActivity {
         return b;
     }
 
-    private boolean checkUserName(String username) {
+    private void fetchUserNameList(){
         mFirestore.collection("users").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -717,14 +724,18 @@ public class UserProfileActivity extends AppCompatActivity {
                 if(!queryDocumentSnapshots.isEmpty()){
                     for (User user:queryDocumentSnapshots.toObjects(User.class)){
                         userNamesList.add(user.getUserId());
-                        Log.d(TAG, "onEvent: username:"+user.getUserId()+"...");
+                        //Log.d(TAG, "onEvent: username:"+user.getUserId()+"...");
                     }
 
                 }
 
             }
         });
-        if(!username.equals(iUsername)){
+    }
+
+    private boolean checkUserName(String username) {
+       // Log.d(TAG, "checkUserName: "+username);
+        if(!username.equalsIgnoreCase(iUsername)){
             for(String userId:userNamesList){
                 if(userId.equalsIgnoreCase(username)){
                     return false;
