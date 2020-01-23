@@ -110,6 +110,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private ListenerRegistration  messageSenderRegistration;
 
     // TODO: start view user profile activity by clicking in actionbar
+    // TODO: show full photo on clicking on in chat
+    // TODO: give option to copy message on long click
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -57,6 +57,8 @@ public class ChatsFragment extends Fragment implements EventListener<QuerySnapsh
     private ListenerRegistration chatsRegistration;
     private Snackbar snackbar;
 
+    // TODO: show newest chat on top
+
     public ChatsFragment() {
 
     }
