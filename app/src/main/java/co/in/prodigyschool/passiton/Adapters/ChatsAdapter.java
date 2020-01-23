@@ -58,7 +58,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
 
     @Override
     public void onBindViewHolder(@NonNull ChatsViewHolder holder, int position) {
-            final Chat chatItem = chatList.get(position);
+        final Chat chatItem = chatList.get(position);
         final  String imageUrl = chatItem.getImageUrl();
         final String username = chatItem.getUserName();
         //final String userStatus = chatItem.getUserStatus();

@@ -28,7 +28,7 @@
 
     <TextView
         android:id="@+id/bookMaterialName_r"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -37,6 +37,7 @@
         android:text="(Book name here)"
         android:textColor="@color/colorTextBlack"
         android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/bookPictureCV"
         app:layout_constraintTop_toTopOf="parent" />
 

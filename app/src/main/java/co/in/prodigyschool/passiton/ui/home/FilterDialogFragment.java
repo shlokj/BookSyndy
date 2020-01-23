@@ -35,6 +35,7 @@ public class FilterDialogFragment extends DialogFragment implements TabLayout.On
     private FilterAdapter mFilterAdapter;
     private int curGrade;
 
+    // TODO: save filters for the same session
 
     public FilterDialogFragment(){
 

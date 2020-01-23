@@ -813,7 +813,7 @@ public class CreateListingActivity extends AppCompatActivity {
     protected void CropImage(Uri picUri) {
         try {
             CropImage.activity(picUri)
-                    .setAspectRatio(1,1)
+//                    .setAspectRatio(1,1)
                     .setRequestedSize(500,500)
                     .start(this);
         } catch (ActivityNotFoundException e) {
