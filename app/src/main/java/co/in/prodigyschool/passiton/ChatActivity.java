@@ -148,7 +148,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
         initializeChatRoom();
         displayMessages();
-        DisplayLastSeen();
+        //DisplayLastSeen();
     }
 
     private void displayMessages() {
@@ -344,22 +344,28 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(messageSenderRegistration == null){
+            messageSenderRef.addSnapshotListener(this);
+        }
+    }
 
     @Override
     protected void onStop() {
         super.onStop();
-        messagesList.clear();
         if(messageSenderRegistration != null){
             messageSenderRegistration.remove();
             messageSenderRegistration = null;
         }
     }
 
-    @Override
-    protected void onPause(){
-        super.onPause();
-        messagesList.clear();
-    }
+//    @Override
+//    protected void onPause(){
+//        super.onPause();
+//        messagesList.clear();
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
