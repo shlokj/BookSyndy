@@ -2,11 +2,17 @@ package co.in.prodigyschool.passiton.Data;
 
 import android.text.TextUtils;
 
+import com.google.firebase.firestore.DocumentId;
+
 import org.w3c.dom.Text;
 
 public class Chat {
     private String imageUrl;
     private String userName,userStatus,userId;
+
+
+    @DocumentId
+    private String DocumentId;
 
     public Chat(){
 
@@ -24,6 +30,15 @@ public class Chat {
         }
         return true;
     }
+
+    public String getDocumentId() {
+        return DocumentId;
+    }
+
+    public void setDocumentId(String documentId) {
+        this.DocumentId = documentId;
+    }
+
 
     public String getUserId() {
         return userId;

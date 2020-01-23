@@ -1,6 +1,7 @@
 package co.in.prodigyschool.passiton.Adapters;
 
 import android.content.Context;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +14,22 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentId;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import co.in.prodigyschool.passiton.Data.Chat;
+import co.in.prodigyschool.passiton.Data.Messages;
 import co.in.prodigyschool.passiton.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -26,6 +38,9 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
 
     private Context context;
     private List<Chat> chatList;
+    private String lastMessage;
+    private String curUserPhone;
+
 
     public interface OnChatSelectedListener {
 
@@ -40,6 +55,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
         this.context = context;
         this.chatList = chatList;
         mListener = listener;
+        curUserPhone = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
 
     }
 
@@ -69,6 +85,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
                 .into(holder.profileImage);
         holder.userName.setText(username);
         holder.userStatus.setText("offline");
+        setLastMessage(chatItem.getDocumentId(),holder.userStatus);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +95,40 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
                 }
             }
         });
+
+
+    }
+
+    private void setLastMessage(String userId, final TextView lastMessageView){
+            lastMessage = "default";
+       DatabaseReference messageRef = FirebaseDatabase.getInstance().getReference().child("Messages").child(curUserPhone).child(userId);
+
+       messageRef.addValueEventListener(new ValueEventListener() {
+           @Override
+           public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+                    Messages message = snapshot.getValue(Messages.class);
+                    if(message != null){
+                        lastMessage = message.getMessage();
+                    }
+                }
+
+                switch (lastMessage){
+                    case "default":
+                        lastMessageView.setText("");
+                        break;
+                        default: lastMessageView.setText(lastMessage);
+                }
+
+                lastMessage = "default";
+           }
+
+           @Override
+           public void onCancelled(@NonNull DatabaseError databaseError) {
+
+           }
+       });
+
 
 
     }
