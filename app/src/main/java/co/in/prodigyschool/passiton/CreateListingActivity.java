@@ -428,12 +428,12 @@ public class CreateListingActivity extends AppCompatActivity {
         int bn1 = getIntent().getIntExtra("BOARD_NUMBER",1);
         int gn1 = getIntent().getIntExtra("GRADE_NUMBER",4);
         if (gn1<=6) {
-            for (int i=0;i<50;i++) {
+            for (int i=0;i<10;i++) {
                 boardSpinner.setSelection(bn1 - 1);
             }
         }
         else {
-            for (int i=0;i<50;i++) {
+            for (int i=0;i<10;i++) {
                 boardSpinner.setSelection(bn1 - 7);
             }
         }
@@ -631,6 +631,19 @@ public class CreateListingActivity extends AppCompatActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+
+        if (boardSpinner.getSelectedItemPosition()==0) {
+
+            int gradeNumber1 = userPref.getInt(getString(R.string.p_grade), 2);
+            int boardNumber1 = userPref.getInt(getString(R.string.p_board), 2);
+
+            if (gradeNumber1 <= 6) {
+                boardSpinner.setSelection(boardNumber1 - 1);
+            } else {
+                boardSpinner.setSelection(boardNumber1 - 7);
+            }
+
+        }
         switch (requestCode) {
             case 0:// camera intent
                 if (resultCode == RESULT_OK ) {
@@ -837,5 +850,6 @@ public class CreateListingActivity extends AppCompatActivity {
         byte[] b = baos.toByteArray();
         return b;
     }
+
 
 }

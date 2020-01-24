@@ -145,7 +145,7 @@ public class BookMarksFragment extends Fragment implements BookMarkAdapter.OnBoo
                                     }
                                 });
 
-                snackbar.setActionTextColor(getResources().getColor(android.R.color.holo_orange_light));
+                snackbar.setActionTextColor(getResources().getColor(android.R.color.holo_blue_light));
                 snackbar.show();
             }
 
@@ -215,7 +215,7 @@ public class BookMarksFragment extends Fragment implements BookMarkAdapter.OnBoo
 
                     dialog.dismiss();
 
-                    snackbar.setActionTextColor(getResources().getColor(android.R.color.holo_orange_light));
+                    snackbar.setActionTextColor(getResources().getColor(android.R.color.holo_blue_light));
                     snackbar.show();
                 }
             }

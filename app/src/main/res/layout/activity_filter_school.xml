@@ -43,7 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:text="Grade" />
+                android:text="@string/grade" />
 
             <CheckBox
                 android:id="@+id/filterGrade5orBelow"
@@ -134,13 +134,13 @@
                 android:id="@+id/filterBoardOther"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Other" />
+                android:text="@string/other" />
 
             <CheckBox
                 android:id="@+id/filterBoardCompetitiveExams"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Competitive exams" />
+                android:text="@string/competitive_exams" />
         </LinearLayout>
 
 

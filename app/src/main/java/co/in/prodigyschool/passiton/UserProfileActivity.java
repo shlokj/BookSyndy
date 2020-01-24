@@ -754,7 +754,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
                     }
                 })
-                .setActionTextColor(getResources().getColor(android.R.color.holo_orange_light))
+                .setActionTextColor(getResources().getColor(android.R.color.holo_blue_light))
                 .show();
     }
 

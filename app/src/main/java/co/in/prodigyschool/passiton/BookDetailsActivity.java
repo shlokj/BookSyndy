@@ -637,7 +637,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
 
                     }
                 })
-                .setActionTextColor(getResources().getColor(android.R.color.holo_orange_light))
+                .setActionTextColor(getResources().getColor(android.R.color.holo_blue_light))
                 .show();
     }
 
