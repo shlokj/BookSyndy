@@ -6,9 +6,14 @@ import com.google.firebase.firestore.DocumentId;
 
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class Chat {
     private String imageUrl;
     private String userName,userStatus,userId;
+    private String timestamp;
 
 
     @DocumentId
@@ -29,6 +34,32 @@ public class Chat {
             return false;
         }
         return true;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public int getTimeDiff(){
+try {
+    SimpleDateFormat myFormat = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+    String currentDate = myFormat.format(new Date());
+
+    Date dateBefore = myFormat.parse(currentDate);
+    Date dateAfter = myFormat.parse(timestamp);
+    if(dateAfter == null || dateBefore == null){
+        return -1;
+    }
+    return (int)(dateBefore.getTime() - dateAfter.getTime())/(1000 );
+}
+catch (Exception e){
+
+    return -1;
+}
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 
     public String getDocumentId() {

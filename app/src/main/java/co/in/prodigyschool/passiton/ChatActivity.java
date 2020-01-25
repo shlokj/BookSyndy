@@ -241,10 +241,16 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
     private void updateChatPage(){
         if(user != null){
+            String timeStamp =
+                    new SimpleDateFormat("yyyyMMdd_HHmmss",
+                            Locale.getDefault()).format(new Date());
            DocumentReference chat_sender_ref = mFireStore.collection("chats").document(message_sender_id).collection("receiver_chats").document(receiver_user_id);
            DocumentReference chat_receiver_ref = mFireStore.collection("chats").document(receiver_user_id).collection("receiver_chats").document(message_sender_id);
             Chat senderchat = new Chat(visit_image, visit_user_name, "online",receiver_user_id);
             Chat receiverchat = new Chat(user.getImageUrl(), user.getUserId(), "online",message_sender_id);
+
+            senderchat.setTimestamp(timeStamp);
+            receiverchat.setTimestamp(timeStamp);
 
             Task t1 = chat_sender_ref.set(senderchat);
             Task t2 = chat_receiver_ref.set(receiverchat);

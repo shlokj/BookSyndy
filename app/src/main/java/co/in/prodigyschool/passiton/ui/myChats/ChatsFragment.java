@@ -33,6 +33,8 @@ import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import co.in.prodigyschool.passiton.Adapters.ChatsAdapter;
@@ -122,6 +124,22 @@ public class ChatsFragment extends Fragment implements EventListener<QuerySnapsh
         if (!queryDocumentSnapshots.isEmpty()) {
             chatList.clear();
             chatList.addAll(queryDocumentSnapshots.toObjects(Chat.class));
+            //sort here
+            Collections.sort(chatList, new Comparator<Chat>() {
+                public int compare(Chat o1, Chat o2) {
+                    if (o1.getTimeDiff() == -1|| o2.getTimeDiff() == -1)
+                        return 0;
+                    if(o1.getTimeDiff() > o2.getTimeDiff()){
+                        return 1;
+                    }
+                    else
+                        return -1;
+                }
+            });
+            for (Chat chat:chatList){
+                Log.d(TAG, chat.getDocumentId()+" time: "+chat.getTimeDiff());
+
+            }
             mAdapter.setChatList(chatList);
             chatListFull = new ArrayList<>(chatList);
             mAdapter.onDataChanged();
