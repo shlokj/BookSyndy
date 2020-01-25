@@ -106,10 +106,13 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
        messageRef.addValueEventListener(new ValueEventListener() {
            @Override
            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+               boolean fromMe=false;
                 for(DataSnapshot snapshot:dataSnapshot.getChildren()){
                     Messages message = snapshot.getValue(Messages.class);
+
                     if(message != null){
                         lastMessage = message.getMessage();
+                        fromMe = message.getFrom().equals(curUserPhone);
                     }
                 }
 
@@ -117,7 +120,13 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
                     case "default":
                         lastMessageView.setText("");
                         break;
-                        default: lastMessageView.setText(lastMessage);
+                        default:
+                            if (fromMe) {
+                                lastMessageView.setText("You: "+lastMessage);
+                            }
+                            else {
+                                lastMessageView.setText(lastMessage);
+                            }
                 }
 
                 lastMessage = "default";
