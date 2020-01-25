@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="co.in.prodigyschool.passiton.RequestDetailsActivity">
+
+    <item
+        android:id="@+id/reportRequest"
+        android:title="@string/report_request"
+        app:showAsAction="never"/>
+</menu>

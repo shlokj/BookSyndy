@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="co.in.prodigyschool.passiton.BookDetailsActivity">
+
+    <item
+        android:id="@+id/share"
+        android:title="@string/share"
+        android:icon="@drawable/ic_share_white_24px"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/bookmark"
+        android:title="@string/bookmark"
+        android:icon="@drawable/ic_bookmark_border_24px"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/reportListing"
+        android:title="@string/report_listing"
+        app:showAsAction="never"/>
+</menu>

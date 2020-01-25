@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home_24px"
+            android:title="@string/home" />
+        <item
+            android:id="@+id/nav_booklist"
+            android:icon="@drawable/ic_list_24px"
+            android:title="@string/my_listings" />
+        <item
+            android:id="@+id/nav_requests"
+            android:icon="@drawable/ic_requirement_24px"
+            android:title="@string/book_reqs" />
+        <item
+            android:id="@+id/nav_chats"
+            android:icon="@drawable/ic_chat_outlined_24px"
+            android:title="@string/my_chats" />
+
+        <item
+            android:id="@+id/nav_starred"
+            android:icon="@drawable/ic_bookmarks_24px"
+            android:title="@string/bookmarks" />
+
+        <item
+            android:id="@+id/nav_help"
+            android:icon="@drawable/ic_help_outline_24px"
+            android:title="@string/help" />
+        <item
+            android:id="@+id/nav_signout"
+            android:icon="@drawable/ic_exit_to_app_24px"
+            android:title="@string/action_signOut" />
+    </group>
+
+    <item android:title="">
+        <menu>
+
+        </menu>
+    </item>
+
+</menu>

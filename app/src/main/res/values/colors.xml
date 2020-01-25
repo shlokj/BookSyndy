@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#202020</color>
+    <color name="colorPrimaryDark">#151515</color>
+    <color name="colorAccent">#06768D</color>
+    <color name="colorBackground">#FAFAFA</color>
+    <color name="colorLink">#05C5CF</color>
+    <color name="colorTextBlack">#151515</color>
+    <color name="greyDisabled">#61000000</color>
+    <color name="greySecondary">#8B000000</color>
+    <color name="tab_blue">#009688</color>
+    <color name="white">#FFFFFF</color>
+    <color name="green">#C7EA46</color>
+    <color name="bookSwipeBg">#ED2939</color>
+    <color name="chatBoxBlue">#0CB0C6</color>
+    <color name="chatBoxGrey">#AAB4B5</color>
+
+    <!--For walkthrough-->
+    <!-- Screens background color-->
+    <color name="bg_slider_screen1">#202020</color>
+    <color name="bg_slider_screen2">#202020</color>
+    <color name="bg_slider_screen3">#202020</color>
+    <!-- dots inactive colors -->
+    <color name="dot_inactive_screen1">#AAB4B5</color>
+    <color name="dot_inactive_screen2">#AAB4B5</color>
+    <color name="dot_inactive_screen3">#AAB4B5</color>
+    <!-- dots active colors -->
+    <color name="dot_active_screen1">#0CB0C6</color>
+    <color name="dot_active_screen2">#0CB0C6</color>
+    <color name="dot_active_screen3">#0CB0C6</color>
+    <array name="array_dot_active">
+        <item>@color/dot_active_screen1</item>
+        <item>@color/dot_active_screen2</item>
+        <item>@color/dot_active_screen3</item>
+    </array>
+    <array name="array_dot_inactive">
+        <item>@color/dot_inactive_screen1</item>
+        <item>@color/dot_inactive_screen2</item>
+        <item>@color/dot_inactive_screen3</item>
+    </array>
+</resources>
