@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="co.in.prodigyschool.passiton">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
+    <application
+        android:name="androidx.multidex.MultiDexApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_booksyndy_logo_square"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/ic_booksyndy_logo_square"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+
+        <activity android:name=".RequestDetailsActivity" />
+        <activity android:name=".EditListingActivity" />
+        <activity android:name=".WelcomeActivity" />
+        <activity android:name=".RequestBookActivity" />
+        <activity android:name=".SendFeedbackActivity" />
+        <activity android:name=".util.GalleryUtil" />
+        <activity android:name=".ViewUserProfileActivity" />
+        <activity android:name=".CreateListingActivity" />
+        <activity android:name=".ViewPictureActivity" />
+        <activity android:name=".CollegeFilterActivity" />
+        <activity android:name=".ConfirmListingActivity" />
+        <activity android:name=".GetCollegeBranchActivity" />
+        <activity android:name=".FilterActivity" />
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
+        <activity
+            android:name=".ChatActivity"
+            android:label="@string/title_activity_chat"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".BookDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".GetFeedbackActivity" />
+        <activity android:name=".EnterLocationManuallyActivity" />
+        <activity
+            android:name=".UserProfileActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".GetBookSellerLocationActivity" />
+
+        <service
+            android:name=".GetAddressIntentService"
+            android:exported="false" />
+
+        <activity android:name=".GetBookPictureActivity" />
+        <activity
+            android:name=".GetBookPriceActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".GetBookDegreeActivity" />
+        <activity android:name=".GetBookBoardActivity" />
+        <activity
+            android:name=".GetBookDescriptionActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".GetBookClassActivity" />
+        <activity
+            android:name=".GetBookNameActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".GetBookMaterialTypeActivity" />
+        <activity
+            android:name=".HomeActivity"
+            android:label="@string/title_activity_home"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".GetCollegeSpecificsActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".GetJoinPurposeActivity" />
+        <activity android:name=".GetBoardActivity" />
+        <activity android:name=".GetGradeActivity" />
+        <activity
+            android:name=".CustNameActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ParOrStudActivity" />
+        <activity android:name=".EnterOTPActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".SignInActivity"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <service
+            android:name=".notification.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="co.in.prodigyschool.passiton.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_booksyndy_logo_square" />
+        <!--
+ Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more.
+        -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" /> <!-- [END fcm_default_icon] -->
+        <!-- [START fcm_default_channel] -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+    </application>
+
+</manifest>

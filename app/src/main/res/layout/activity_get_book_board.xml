@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".GetBookBoardActivity">
+
+
+    <RadioGroup
+        android:id="@+id/bookBoardsButtonList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="24dp"
+        android:fontFamily="@font/roboto_light">
+
+        <RadioButton
+            android:id="@+id/cbseBook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cbse"
+            android:textSize="20sp"
+            android:fontFamily="@font/roboto_light"
+            android:paddingStart="8dp"
+            android:layout_marginBottom="8dp"/>
+
+        <RadioButton
+            android:id="@+id/icseBook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/icse"
+            android:fontFamily="@font/roboto_light"
+            android:paddingStart="8dp"
+            android:textSize="20sp"
+            android:layout_marginBottom="8dp"/>
+
+        <RadioButton
+            android:id="@+id/ibBook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ib"
+            android:textSize="20sp"
+            android:fontFamily="@font/roboto_light"
+            android:paddingStart="8dp"
+            android:layout_marginBottom="8dp"/>
+
+        <RadioButton
+            android:id="@+id/igcseBook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/igcse"
+            android:fontFamily="@font/roboto_light"
+            android:paddingStart="8dp"
+            android:textSize="20sp"
+            android:layout_marginBottom="8dp"/>
+
+        <RadioButton
+            android:id="@+id/stateBook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/state_board"
+            android:textSize="20sp"
+            android:fontFamily="@font/roboto_light"
+            android:paddingStart="8dp"
+            android:layout_marginBottom="8dp"/>
+
+        <RadioButton
+            android:id="@+id/otherBoardBook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Other"
+            android:textSize="20sp"
+            android:fontFamily="@font/roboto_light"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:layout_marginBottom="8dp"/>
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/bookBoardQuestionTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_light"
+        android:text="Which educational board is this book for?"
+        android:textColor="@color/colorTextBlack"
+        android:textSize="22sp"
+        android:layout_marginBottom="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/bookBoardsButtonList"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab15"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@drawable/ic_navigate_next_24px"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

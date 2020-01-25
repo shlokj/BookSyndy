@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".GetBookDegreeActivity">
+
+
+    <RadioGroup
+        android:id="@+id/bookDegreesButtonList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="24dp">
+
+        <RadioButton
+            android:id="@+id/btechBook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/b_tech"
+            android:fontFamily="@font/roboto_light"
+            android:textSize="20sp"
+            android:layout_marginBottom="8dp"/>
+
+        <RadioButton
+            android:id="@+id/bscBook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/b_sc"
+            android:fontFamily="@font/roboto_light"
+            android:textSize="20sp"
+            android:layout_marginBottom="8dp"/>
+
+        <RadioButton
+            android:id="@+id/bcomBook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/b_com"
+            android:fontFamily="@font/roboto_light"
+            android:textSize="20sp"
+            android:layout_marginBottom="8dp"/>
+
+        <RadioButton
+            android:id="@+id/baBook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_light"
+            android:text="@string/ba"
+            android:textSize="20sp"
+            android:layout_marginBottom="8dp"/>
+
+        <RadioButton
+            android:id="@+id/bbaBook"
+            android:layout_width="match_parent"
+            android:fontFamily="@font/roboto_light"
+            android:layout_height="wrap_content"
+            android:text="@string/bba"
+            android:textSize="20sp"
+            android:layout_marginBottom="8dp"/>
+
+        <RadioButton
+            android:id="@+id/bcaBook"
+            android:layout_width="match_parent"
+            android:fontFamily="@font/roboto_light"
+            android:layout_height="wrap_content"
+            android:text="@string/bca"
+            android:textSize="20sp"
+            android:layout_marginBottom="8dp"/>
+
+        <RadioButton
+            android:id="@+id/bedBook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/b_ed"
+            android:fontFamily="@font/roboto_light"
+            android:textSize="20sp"
+            android:layout_marginBottom="8dp"/>
+
+        <RadioButton
+            android:id="@+id/llbBook"
+            android:layout_width="match_parent"
+            android:fontFamily="@font/roboto_light"
+            android:layout_height="wrap_content"
+            android:text="@string/llb"
+            android:textSize="20sp"
+            android:layout_marginBottom="8dp"/>
+
+        <RadioButton
+            android:id="@+id/mbbsBook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/mbbs"
+            android:fontFamily="@font/roboto_light"
+            android:textSize="20sp"
+            android:layout_marginBottom="8dp"/>
+
+        <RadioButton
+            android:id="@+id/otherDegreeBook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Other"
+            android:fontFamily="@font/roboto_light"
+            android:textSize="20sp"
+            android:layout_marginBottom="8dp"/>
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/bookDegreeQuestionTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_light"
+        android:text="@string/which_degree_book"
+        android:layout_marginBottom="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:textSize="22sp"
+        android:textColor="@color/colorTextBlack"
+        app:layout_constraintBottom_toTopOf="@+id/bookDegreesButtonList"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+
+    <EditText
+        android:id="@+id/bookYearField"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:ems="10"
+        android:hint="Year"
+        android:inputType="number"
+        android:maxLength="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/bookDegreesButtonList"
+        app:layout_constraintTop_toBottomOf="@+id/bookDegreeQuestionTV" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab16"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@drawable/ic_navigate_next_24px"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
