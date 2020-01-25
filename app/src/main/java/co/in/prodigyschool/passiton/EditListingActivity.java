@@ -200,7 +200,7 @@ public class EditListingActivity extends AppCompatActivity {
         mBookImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // todo: add dialog to choose between camera or gallery
+
 //                Intent pickPhoto = new Intent(Intent.ACTION_PICK,
 //                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 //                startActivityForResult(pickPhoto, 1);

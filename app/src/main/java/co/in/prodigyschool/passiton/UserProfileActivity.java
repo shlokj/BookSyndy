@@ -84,7 +84,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private Menu menu;
     private int clickCount,gradeNumber,boardNumber,yearNumber;
     private CheckBox compExams,preferGuidedMode;
-    private boolean detailsChanged = false, newUNameOK=true, tempCE, editing;//TODO: add code to check whether new username is OK
+    private boolean detailsChanged = false, newUNameOK=true, tempCE, editing;
     private TextView boardLabel;
     private LinearLayout yearLL;
     private String firstName, lastName, phoneNumber,userId, iUsername;

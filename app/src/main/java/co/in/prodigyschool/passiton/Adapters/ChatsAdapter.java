@@ -112,6 +112,9 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
 
                     if(message != null){
                         lastMessage = message.getMessage();
+                        if(!message.getType().equals("text")){
+                            lastMessage = "Image";
+                        }
                         fromMe = message.getFrom().equals(curUserPhone);
                     }
                 }

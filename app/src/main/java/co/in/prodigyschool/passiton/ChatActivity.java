@@ -78,7 +78,7 @@ import co.in.prodigyschool.passiton.Data.Messages;
 import co.in.prodigyschool.passiton.Data.User;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ChatActivity extends AppCompatActivity implements View.OnClickListener, EventListener<DocumentSnapshot> {
+public class ChatActivity extends AppCompatActivity implements View.OnClickListener, EventListener<DocumentSnapshot>, MessageAdapter.OnMessageSelectedListener, MessageAdapter.OnMessageLongSelectedListerner {
     public static final int DEFAULT_MSG_LENGTH_LIMIT = 1000;
     private static final int RC_PHOTO_PICKER = 2;
     private static final String TAG = "CHAT_ACTIVITY";
@@ -223,7 +223,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         mMessageEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(DEFAULT_MSG_LENGTH_LIMIT)});
 
         /* messages adpater */
-        messageAdapter = new MessageAdapter(messagesList);
+        messageAdapter = new MessageAdapter(messagesList,this,this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         userMessagesList.setLayoutManager(linearLayoutManager);
         userMessagesList.setAdapter(messageAdapter);
@@ -628,4 +628,23 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         return false;
     }
 
+    @Override
+    public void OnMessageSelected(Messages message) {
+        if(message.getType().equals("text")){
+
+        }
+        else{
+
+            Intent viewPic = new Intent(ChatActivity.this,ViewPictureActivity.class);
+            viewPic.putExtra("IMAGE_STR",message.getMessage());
+            startActivity(viewPic);
+        }
+
+
+    }
+
+    @Override
+    public void OnMessagesLongSelected(Messages message) {
+        Toast.makeText(getApplicationContext(), "long clicked", Toast.LENGTH_SHORT).show();
+    }
 }

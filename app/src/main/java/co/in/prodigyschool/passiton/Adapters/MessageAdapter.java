@@ -30,15 +30,24 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     public static String TAG = "MESSAGE_ADAPTER";
     private List<Messages> userMessagesList;
     private FirebaseAuth mAuth;
+    private  OnMessageSelectedListener mListener;
+    private OnMessageLongSelectedListerner mLongListener;
+
 
     public interface OnMessageSelectedListener{
         public void OnMessageSelected(Messages message);
 }
 
+public interface OnMessageLongSelectedListerner{
+        public void OnMessagesLongSelected(Messages message);
+}
 
-    public MessageAdapter (List<Messages> userMessagesList)
+
+    public MessageAdapter (List<Messages> userMessagesList,OnMessageSelectedListener listener,OnMessageLongSelectedListerner longListener)
     {
         this.userMessagesList = userMessagesList;
+        this.mListener = listener;
+        this.mLongListener = longListener;
 
     }
 
@@ -96,11 +105,33 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         messageViewHolder.messageSenderPicture.setVisibility(View.GONE);
         messageViewHolder.messageReceiverPicture.setVisibility(View.GONE);
 
+        messageViewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if(mLongListener != null){
+                    mLongListener.OnMessagesLongSelected(messages);
+                }
+                return true;
+            }
+        });
+
+
+        messageViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mListener != null){
+                    mListener.OnMessageSelected(messages);
+                }
+            }
+        });
+
         if (fromMessageType.equals("text"))
         {
             String strDate = messages.getDate();
             SimpleDateFormat format = new SimpleDateFormat("dd/MM");
             strDate = format.format(Date.parse(strDate));
+
+
 
 
             if (fromUserID.equals(messageSenderId))
