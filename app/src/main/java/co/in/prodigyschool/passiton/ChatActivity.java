@@ -109,9 +109,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private User user = null;
     private ListenerRegistration  messageSenderRegistration;
 
-    // TODO: start view user profile activity by clicking in actionbar
-    // TODO: show full photo on clicking on in chat
-    // TODO: give option to copy message on long click
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,6 +121,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setOnClickListener(this);
         userPref = getSharedPreferences(getString(R.string.UserPref),0);
         curUserName = userPref.getString(getString(R.string.p_userid),"");
         visitor_profile_picture = findViewById(R.id.visit_profile_image);
@@ -295,6 +295,14 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.sendButton:
                 SendMessage(mMessageEditText.getText().toString().trim(),"text");
+                break;
+            case R.id.chat_toolbar:
+                Intent viewProfile = new Intent(ChatActivity.this, ViewUserProfileActivity.class);
+                viewProfile.putExtra("USER_PHONE", receiver_user_id);
+                viewProfile.putExtra("USER_NAME", "");
+                viewProfile.putExtra("USER_ID", visit_user_name);
+                viewProfile.putExtra("USER_PHOTO", visit_image);
+                startActivity(viewProfile);
                 break;
                 default:
         }

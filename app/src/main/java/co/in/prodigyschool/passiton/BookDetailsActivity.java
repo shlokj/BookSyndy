@@ -137,20 +137,6 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         latA = userPref.getFloat(getString(R.string.p_lat),0.0f);
         lngA = userPref.getFloat(getString(R.string.p_lng),0.0f);
 
-//        mFirestore.collection("address").document(curAppUser).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-//            @Override
-//            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
-//                if (e != null) {
-//                    Log.e("BOOK_ADAPTER_INNER", "onEvent: exception", e);
-//                    return;
-//                }
-//                if(snapshot.getDouble("lat") != null && snapshot.getDouble("lng") != null) {
-//                    latA = snapshot.getDouble("lat");
-//                    lngA = snapshot.getDouble("lng");
-//                }
-//
-//            }
-//        });
     }
 
 
