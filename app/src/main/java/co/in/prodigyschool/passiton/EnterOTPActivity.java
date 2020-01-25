@@ -278,6 +278,14 @@ public class EnterOTPActivity extends AppCompatActivity {
             resumeCount=resumeCount+1;
         }
     }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        progressDialog.dismiss();
+    }
+
     public void startResendTimer(int seconds) {
         timerTV.setVisibility(View.VISIBLE);
         resendOtp.setEnabled(false);

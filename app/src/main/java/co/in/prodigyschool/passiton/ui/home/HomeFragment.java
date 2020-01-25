@@ -226,7 +226,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         /* firestore */
         mFirestore = FirebaseFirestore.getInstance();
         curUserId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
-        mQuery = mFirestore.collection("books").whereEqualTo("bookSold",false).limit(LIMIT);
+        mQuery = mFirestore.collection("books").whereEqualTo("bookSold",false);
 //        if(userGrade <= 5){
 //           mQuery = mQuery.whereLessThan("gradeNumber",7);
 //        }

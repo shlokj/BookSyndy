@@ -142,7 +142,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         };
 
         if(getIntent().getBooleanExtra("showGPS",false))
-        showGpsSettingDialog();
+        startLocationUpdates();
+            //showGpsSettingDialog();
 
 
     }
@@ -184,7 +185,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     LOCATION_PERMISSION_REQUEST_CODE);
         }
         else {
-
+                showGpsSettingDialog();
                 fusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
                     @Override
                     public void onSuccess(Location location) {

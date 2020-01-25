@@ -117,7 +117,7 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
             /* firestore */
             mFirestore = FirebaseFirestore.getInstance();
             String userId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
-            mQuery = mFirestore.collection("books").whereEqualTo("userId", userId).whereEqualTo("bookSold",false).limit(LIMIT);
+            mQuery = mFirestore.collection("books").whereEqualTo("userId", userId).whereEqualTo("bookSold",false);
             populateBookAdapter();
 
         } catch (Exception e) {

@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -26,6 +27,7 @@ import co.in.prodigyschool.passiton.R;
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "MyFirebaseMsgService";
     private FirebaseFirestore mFireStore;
+    private SharedPreferences userPref;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -61,10 +63,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void sendRegistrationToServer(String token) {
-        String currentUser = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
-        mFireStore = FirebaseFirestore.getInstance();
-        mFireStore.collection("users").document(currentUser).update("token",token);
-
+        userPref = getSharedPreferences(getString(R.string.UserPref),0);
+        String currentUser = userPref.getString(getString(R.string.p_userphone),null);
+        if(currentUser != null) {
+            mFireStore = FirebaseFirestore.getInstance();
+            mFireStore.collection("users").document(currentUser).update("token", token);
+        }
     }
 
 

@@ -29,7 +29,7 @@ public class HelpFragment extends Fragment {
     private HashMap<String,String> hashMap;
     private int cc = 1;
     /*
-    todo: add or remove question here
+
     private String[] questions = new String[]{"How does BookSyndy work?","question 2","question 3"};
     private String[] answers = new String[]{"BookSyndy works like charm.","answer 2","answer 3"};
 */
