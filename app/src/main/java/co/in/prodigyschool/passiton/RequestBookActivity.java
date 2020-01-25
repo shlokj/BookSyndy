@@ -453,6 +453,9 @@ public class RequestBookActivity extends AppCompatActivity {
                 } else {
 
                     Address address = addresses.get(0);
+                    if(address.getSubLocality() != null || address.getLocality() != null){
+                        locField.setText("");
+                    }
                     if(address.getSubLocality() != null){
                         locField.setText(address.getSubLocality());
                         locField.append(", ");

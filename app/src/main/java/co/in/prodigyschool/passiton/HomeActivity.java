@@ -77,6 +77,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private String curUserId, snackbarMessage;
     private SharedPreferences userPref;
     private SharedPreferences.Editor editor;
+    private boolean showGPS = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +112,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 Snackbar.make(parentLayout, snackbarMessage, Snackbar.LENGTH_SHORT).show();
             }
         }
+
         populateUserDetails();
 
 
@@ -139,6 +141,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }
         };
 
+        if(getIntent().getBooleanExtra("showGPS",false))
         showGpsSettingDialog();
 
 

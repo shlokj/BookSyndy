@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
 //                                            Intent homeActivity = new Intent(MainActivity.this,HomeActivity.class);
                                             homeActivity.putExtra("username",user.getFirstName() + " " + user.getLastName());
                                             homeActivity.putExtra("userphone",user.getPhone());
+                                            homeActivity.putExtra("showGPS",true);
                                             startActivity(homeActivity);
                                             finish();
                                             return;
