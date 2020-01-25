@@ -22,7 +22,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class GetJoinPurposeActivity extends AppCompatActivity {
 
-    public static final String default_pic_url = "https://firebasestorage.googleapis.com/v0/b/booksyndy-e8ef6.appspot.com/o/default_photos%2Fdefault_profile_image.png?alt=media&token=3dc5c2c2-2b7b-4ae7-8f50-23ea58874fb9";
+    //public static final String default_pic_url = "https://firebasestorage.googleapis.com/v0/b/booksyndy-e8ef6.appspot.com/o/default_photos%2Fdefault_profile_image.png?alt=media&token=3dc5c2c2-2b7b-4ae7-8f50-23ea58874fb9";
+    private static final String default_pic_url = "https://firebasestorage.googleapis.com/v0/b/booksyndy-e8ef6.appspot.com/o/default_photos%2Fdefault_user_dp.png?alt=media&token=23b43df7-8143-4ad7-bb87-51e49da095c6";
 
     boolean isParent, toSell, competitiveExam;
     TextView reasonsQuestion;
