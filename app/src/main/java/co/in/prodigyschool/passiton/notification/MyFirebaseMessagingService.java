@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 
+import co.in.prodigyschool.passiton.ChatActivity;
 import co.in.prodigyschool.passiton.MainActivity;
 
 import androidx.core.app.NotificationCompat;
@@ -90,6 +91,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         .setSound(defaultSoundUri)
                         .setContentIntent(pendingIntent);
 
+        Intent notificationIntent = new Intent(this.getApplicationContext(), ChatActivity.class);
+        //TODO: get user details and put in intent
+        PendingIntent contentIntent = PendingIntent.getActivity(this.getApplicationContext(), 0, notificationIntent, 0);
+
+        notificationBuilder.setContentIntent(contentIntent);
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 

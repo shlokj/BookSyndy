@@ -63,7 +63,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     private DocumentReference bookRef;
     private DocumentReference bookMarkRef;
     private Menu menu;
-    private final int MENU_DELETE = 123;
+    private final int MENU_DELETE = 123, MENU_SHARE=234;
     private String curAppUser, shareableLink="";
     private double latA,lngA;
     private SharedPreferences userPref;
@@ -405,6 +405,8 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 else {
                     menu.add(0, MENU_DELETE, Menu.NONE, "Mark as unsold").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
                 }
+                menu.add(1, MENU_SHARE, Menu.NONE, "Share").setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+                menu.getItem(1).setIcon(R.drawable.ic_share_white_24px);
             }
         }
         return super.onPrepareOptionsMenu(menu);
@@ -468,7 +470,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 }
                 break;
             case R.id.share:
-
+            case MENU_SHARE:
                 AlertDialog.Builder builder = new AlertDialog.Builder(BookDetailsActivity.this);
                 builder.setTitle("Share link");
 //                builder.setMessage("Share this link with someone who might be interested in this book");

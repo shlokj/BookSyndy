@@ -528,10 +528,10 @@ public class CreateListingActivity extends AppCompatActivity {
                         Intent homeIntent = new Intent(CreateListingActivity.this,HomeActivity.class);
                         homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                         if (isTextbook) {
-                            homeIntent.putExtra("SNACKBAR_MSG", "Your book has been listed!");
+                            homeIntent.putExtra("SNACKBAR_MSG", "Your book has been listed! You can find it in the \'Your listings\' section of the app.");
                         }
                         else {
-                            homeIntent.putExtra("SNACKBAR_MSG", "Your material has been listed!");
+                            homeIntent.putExtra("SNACKBAR_MSG", "Your material has been listed! You can find it in the \'Your listings\' section of the app.");
                         }
                         startActivity(homeIntent);
                     }
@@ -632,18 +632,8 @@ public class CreateListingActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
 
-        if (boardSpinner.getSelectedItemPosition()==0) {
+        autofillBoardTemp();
 
-            int gradeNumber1 = userPref.getInt(getString(R.string.p_grade), 2);
-            int boardNumber1 = userPref.getInt(getString(R.string.p_board), 2);
-
-            if (gradeNumber1 <= 6) {
-                boardSpinner.setSelection(boardNumber1 - 1);
-            } else {
-                boardSpinner.setSelection(boardNumber1 - 7);
-            }
-
-        }
         switch (requestCode) {
             case 0:// camera intent
                 if (resultCode == RESULT_OK ) {
@@ -854,5 +844,19 @@ public class CreateListingActivity extends AppCompatActivity {
         return b;
     }
 
+    public void autofillBoardTemp(){
+        if (boardSpinner.getSelectedItemPosition()==0) {
+
+            int gradeNumber1 = userPref.getInt(getString(R.string.p_grade), 2);
+            int boardNumber1 = userPref.getInt(getString(R.string.p_board), 2);
+
+            if (gradeNumber1 <= 6) {
+                boardSpinner.setSelection(boardNumber1 - 1);
+            } else {
+                boardSpinner.setSelection(boardNumber1 - 7);
+            }
+
+        }
+    }
 
 }

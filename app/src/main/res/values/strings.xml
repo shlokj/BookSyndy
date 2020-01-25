@@ -170,7 +170,7 @@
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
     <string name="notification_title">New Message</string>
     <string name="report_request">Report request</string>
-    <string name="no_sms_q">Didn\'t get an SMS?</string>
+    <string name="no_sms_q">Didn\'t get an SMS? </string>
     <string name="other">Other</string>
 
 </resources>

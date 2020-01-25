@@ -10,7 +10,7 @@ public class SendViewModel extends ViewModel {
 
     public SendViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("Sign out?");
+        mText.setValue("Signing out");
     }
 
     public LiveData<String> getText() {
