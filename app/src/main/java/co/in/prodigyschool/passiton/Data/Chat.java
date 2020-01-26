@@ -14,6 +14,7 @@ public class Chat {
     private String imageUrl;
     private String userName,userStatus,userId;
     private String timestamp;
+    private String LstMsgTime;
 
 
     @DocumentId
@@ -22,11 +23,13 @@ public class Chat {
     public Chat(){
 
     }
-    public Chat(String imageUrl, String userName, String userStatus,String userId) {
+    public Chat(String imageUrl, String userName, String userStatus,String userId,String timestamp,String lstMsgTime) {
         this.imageUrl = imageUrl;
         this.userName = userName;
         this.userStatus = userStatus;
         this.userId = userId;
+        this.timestamp = timestamp;
+        this.LstMsgTime = lstMsgTime;
     }
 
     public boolean hasAllFields(){
@@ -101,5 +104,13 @@ catch (Exception e){
 
     public void setUserStatus(String userStatus) {
         this.userStatus = userStatus;
+    }
+
+    public String getLstMsgTime() {
+        return LstMsgTime;
+    }
+
+    public void setLstMsgTime(String lstMsgTime) {
+        LstMsgTime = lstMsgTime;
     }
 }

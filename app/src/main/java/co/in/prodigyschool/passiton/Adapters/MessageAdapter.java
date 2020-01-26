@@ -35,11 +35,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
 
     public interface OnMessageSelectedListener{
-        public void OnMessageSelected(Messages message);
+       void OnMessageSelected(Messages message);
 }
 
 public interface OnMessageLongSelectedListerner{
-        public void OnMessagesLongSelected(Messages message);
+       void OnMessagesLongSelected(Messages message);
 }
 
 

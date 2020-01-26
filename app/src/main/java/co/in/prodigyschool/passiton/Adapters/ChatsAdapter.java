@@ -1,6 +1,7 @@
 package co.in.prodigyschool.passiton.Adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,9 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -23,10 +26,16 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import co.in.prodigyschool.passiton.Data.Chat;
 import co.in.prodigyschool.passiton.Data.Messages;
@@ -35,11 +44,15 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHolder> {
 
+    public static String TAG = "CHATADAPTER";
 
     private Context context;
     private List<Chat> chatList;
     private String lastMessage;
     private String curUserPhone;
+    private SharedPreferences chatPref;
+    private SimpleDateFormat dateFormat;
+    private CollectionReference RootRef;
 
 
     public interface OnChatSelectedListener {
@@ -56,6 +69,9 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
         this.chatList = chatList;
         mListener = listener;
         curUserPhone = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
+        chatPref = context.getSharedPreferences(context.getString(R.string.ChatPref),0);
+        dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+        RootRef = FirebaseFirestore.getInstance().collection("chats").document(curUserPhone).collection("receiver_chats");
 
     }
 
@@ -86,13 +102,60 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
         holder.userName.setText(username);
         holder.userStatus.setText("offline");
         setLastMessage(chatItem.getDocumentId(),holder.userStatus);
-
+        showUnreadChats(chatItem.getUserName(),chatItem.getUserId(),holder);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mListener != null) {
                     mListener.OnChatSelected(chatItem);
                 }
+            }
+        });
+
+
+    }
+
+    private void showUnreadChats(final String userId,String phone,final ChatsViewHolder holder) {
+
+        final String curTimeStamp = chatPref.getString(userId,null);
+
+        RootRef.document(phone).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+               if(snapshot != null && snapshot.exists()){
+                   Chat chat = snapshot.toObject(Chat.class);
+
+                   if(curTimeStamp != null && chat.getLstMsgTime() != null){
+                       try {
+                           Log.d(TAG, "showUnreadChats: userid"+userId+" lastSeen: "+curTimeStamp+" lastMessage: "+chat.getLstMsgTime());
+                           Date lastSeen = dateFormat.parse(curTimeStamp);
+                           Date lastMsg = dateFormat.parse(chat.getLstMsgTime());
+
+                           if(lastSeen.before(lastMsg)){
+                               holder.userName.setTextColor(context.getResources().getColor(R.color.green));
+                               holder.unread_icon.setVisibility(View.VISIBLE);
+                           }
+                           else{
+                               holder.userName.setTextColor(context.getResources().getColor(R.color.colorTextBlack));
+                               holder.unread_icon.setVisibility(View.GONE);
+                           }
+
+                       }
+                       catch (Exception exception){
+                           Log.d("CHATSADAPTER", "showUnreadChats: error",exception);
+                       }
+                   }
+                   //for first time only
+                   else if(curTimeStamp == null && chat.getLstMsgTime() != null){
+                       holder.userName.setTextColor(context.getResources().getColor(R.color.green));
+                       holder.unread_icon.setVisibility(View.VISIBLE);
+                   }
+                   else {
+                       holder.userName.setTextColor(context.getResources().getColor(R.color.colorTextBlack));
+                       holder.unread_icon.setVisibility(View.GONE);
+                   }
+
+               }
             }
         });
 
@@ -158,6 +221,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
     {
         CircleImageView profileImage;
         TextView userStatus, userName;
+        ImageView unread_icon;
 
 
         public ChatsViewHolder(@NonNull View itemView)
@@ -167,6 +231,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
             profileImage = itemView.findViewById(R.id.custom_profile_image);
             userStatus = itemView.findViewById(R.id.custom_user_last_seen);
             userName = itemView.findViewById(R.id.custom_profile_name);
+            unread_icon = itemView.findViewById(R.id.chat_unread_icon);
         }
     }
 

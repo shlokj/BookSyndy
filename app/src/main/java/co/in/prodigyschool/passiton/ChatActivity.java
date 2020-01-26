@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.common.util.concurrent.HandlerExecutor;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -100,7 +101,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private final List<Messages> messagesList = new ArrayList<>();
     private MessageAdapter messageAdapter;
     private RecyclerView userMessagesList;
-    private SharedPreferences userPref;
+    private SharedPreferences userPref,chatPref;
+    private SharedPreferences.Editor editor;
 
     private String saveCurrentTime, saveCurrentDate;
 
@@ -123,6 +125,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         toolbar.setOnClickListener(this);
         userPref = getSharedPreferences(getString(R.string.UserPref),0);
+        chatPref = getSharedPreferences(getString(R.string.ChatPref),0);
         curUserName = userPref.getString(getString(R.string.p_userid),"");
         visitor_profile_picture = findViewById(R.id.visit_profile_image);
         mPhotoPickerButton =  findViewById(R.id.photoPickerButton);
@@ -241,30 +244,54 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
     private void updateChatPage(){
         if(user != null){
-            String timeStamp =
+            final String timeStamp =
                     new SimpleDateFormat("yyyyMMdd_HHmmss",
                             Locale.getDefault()).format(new Date());
-           DocumentReference chat_sender_ref = mFireStore.collection("chats").document(message_sender_id).collection("receiver_chats").document(receiver_user_id);
-           DocumentReference chat_receiver_ref = mFireStore.collection("chats").document(receiver_user_id).collection("receiver_chats").document(message_sender_id);
-            Chat senderchat = new Chat(visit_image, visit_user_name, "online",receiver_user_id);
-            Chat receiverchat = new Chat(user.getImageUrl(), user.getUserId(), "online",message_sender_id);
+           final DocumentReference chat_sender_ref = mFireStore.collection("chats").document(message_sender_id).collection("receiver_chats").document(receiver_user_id);
+           final DocumentReference chat_receiver_ref = mFireStore.collection("chats").document(receiver_user_id).collection("receiver_chats").document(message_sender_id);
 
-            senderchat.setTimestamp(timeStamp);
-            receiverchat.setTimestamp(timeStamp);
+            final Chat senderchat = new Chat(visit_image, visit_user_name, "online",receiver_user_id,timeStamp,timeStamp);
 
-            Task t1 = chat_sender_ref.set(senderchat);
-            Task t2 = chat_receiver_ref.set(receiverchat);
-            Tasks.whenAll(t1,t2).addOnSuccessListener(new OnSuccessListener<Void>() {
+            final Chat receiverchat = new Chat(user.getImageUrl(), user.getUserId(), "online",message_sender_id,timeStamp,null);
+
+                      chat_sender_ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
-                public void onSuccess(Void aVoid) {
-                    Log.d(TAG, "onSuccess: chat page updated");
+                public void onSuccess(DocumentSnapshot snapshot) {
+                    if(snapshot.exists()){
+                        //update here
+                        chat_sender_ref.update("timestamp",timeStamp);
+                    }
+                    else{
+                        //set here
+                        chat_sender_ref.set(senderchat);
+                    }
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Log.d(TAG, "onFailure: Failed: chat page update",e);
+                    Log.d(TAG, "sender: udpateChatPage",e);
                 }
             });
+
+            chat_receiver_ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot snapshot) {
+                    if(snapshot.exists()){
+                        //update here
+                        chat_receiver_ref.update("timestamp",timeStamp,"lstMsgTime",timeStamp);
+                    }
+                    else{
+                        //set here
+                        chat_receiver_ref.set(receiverchat);
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d(TAG, "sender: udpateChatPage",e);
+                }
+            });
+
         }
 
 
@@ -364,15 +391,32 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         if(messageSenderRegistration == null){
             messageSenderRef.addSnapshotListener(this);
         }
+        String timeStamp =
+                new SimpleDateFormat("yyyyMMdd_HHmmss",
+                        Locale.getDefault()).format(new Date());
+
+        editor = chatPref.edit();
+        editor.putString(visit_user_name,timeStamp);
+        editor.apply();
+
     }
 
     @Override
     protected void onStop() {
+        String timeStamp =
+                new SimpleDateFormat("yyyyMMdd_HHmmss",
+                        Locale.getDefault()).format(new Date());
+
+        editor = chatPref.edit();
+        editor.putString(visit_user_name,timeStamp);
+        editor.apply();
         super.onStop();
         if(messageSenderRegistration != null){
             messageSenderRegistration.remove();
             messageSenderRegistration = null;
         }
+
+
     }
 
 //    @Override

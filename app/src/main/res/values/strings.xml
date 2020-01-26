@@ -172,5 +172,6 @@
     <string name="report_request">Report request</string>
     <string name="no_sms_q">Didn\'t get an SMS? </string>
     <string name="other">Other</string>
+    <string name="ChatPref">CHATPREFERENCE</string>
 
 </resources>

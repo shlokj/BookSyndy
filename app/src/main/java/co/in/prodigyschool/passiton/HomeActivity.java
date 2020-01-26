@@ -234,7 +234,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             case LOCATION_PERMISSION_REQUEST_CODE: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        showGpsSettingDialog();
+                        startLocationUpdates();
                 } else {
                     Toast.makeText(this, "Location permission not granted, " +
                                     "restart the app if you want the feature",
@@ -265,7 +265,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     LocationSettingsResponse response = task.getResult(ApiException.class);
                     // All location settings are satisfied. The client can initialize location
                     // requests here.
-                    startLocationUpdates();
+                    //startLocationUpdates();
 
                 } catch (ApiException exception) {
                     switch (exception.getStatusCode()) {
