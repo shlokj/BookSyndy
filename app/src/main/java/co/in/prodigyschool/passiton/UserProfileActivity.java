@@ -721,7 +721,7 @@ public class UserProfileActivity extends AppCompatActivity {
                 if(e != null){
                     Log.e(TAG, "onEvent: usernames fetch error",e );
                 }
-                if(!queryDocumentSnapshots.isEmpty()){
+                if(queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()){
                     for (User user:queryDocumentSnapshots.toObjects(User.class)){
                         userNamesList.add(user.getUserId());
                         //Log.d(TAG, "onEvent: username:"+user.getUserId()+"...");
