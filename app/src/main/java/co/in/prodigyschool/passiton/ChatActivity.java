@@ -111,6 +111,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private User user = null;
     private ListenerRegistration  messageSenderRegistration;
 
+    private boolean firstOpen=true;
 
 
     @Override
@@ -152,6 +153,16 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         initializeChatRoom();
         displayMessages();
         //DisplayLastSeen();
+
+        mMessageEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (firstOpen) {
+                    userMessagesList.scrollToPosition(messagesList.size()- 1);
+                    firstOpen=false;
+                }
+            }
+        });
     }
 
     private void displayMessages() {

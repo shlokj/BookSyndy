@@ -166,6 +166,7 @@
     <string name="title">Title</string>
     <string name="by">By</string>
     <string name="delete_chat">Delete chat</string>
+    <string name="incorrect_code_t1">Oops, we faced an issue with verification. Please restart the app and contact the developer if the issue persists.</string>
 
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
     <string name="notification_title">New Message</string>

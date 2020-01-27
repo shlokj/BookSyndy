@@ -14,7 +14,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -460,14 +462,23 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 AlertDialog.Builder builder = new AlertDialog.Builder(BookDetailsActivity.this);
                 builder.setTitle("Share link");
 //                builder.setMessage("Share this link with someone who might be interested in this book");
-                final EditText editText = new EditText(getApplicationContext());
+                final EditText linkET = new EditText(getApplicationContext());
 
                 // fill this edittext with a dynamic link from firebase
 
+                FrameLayout container = new FrameLayout(getApplicationContext());
+                FrameLayout.LayoutParams params = new  FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.leftMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
+                params.rightMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
+                linkET.setLayoutParams(params);
+                container.addView(linkET);
+                builder.setView(container);
+                linkET.setText("link here");
+                linkET.setSelectAllOnFocus(true);
                 builder.setPositiveButton("Copy link", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        shareableLink = editText.getText().toString();
+                        shareableLink = linkET.getText().toString();
 
                         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                         ClipData clip = ClipData.newPlainText("shareable_link", shareableLink);
@@ -489,6 +500,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                     clipboard.setPrimaryClip(clip);
                 }
                 builder.show();
+                linkET.requestFocus();
                 showSnackbar("Copied to clipboard!");
                 break;
 
