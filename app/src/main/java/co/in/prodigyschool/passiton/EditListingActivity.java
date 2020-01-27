@@ -441,8 +441,8 @@ public class EditListingActivity extends AppCompatActivity {
 
     private void uploadBook() {
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Posting...");
-        progressDialog.setTitle("Creating your listing");
+        progressDialog.setMessage("Just a moment...");
+        progressDialog.setTitle("Saving your changes");
         progressDialog.setCancelable(false);
         progressDialog.show();
         try {

@@ -464,7 +464,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
 //                builder.setMessage("Share this link with someone who might be interested in this book");
                 final EditText linkET = new EditText(getApplicationContext());
 
-                // fill this edittext with a dynamic link from firebase
+                // TODO: fill this edittext with a dynamic link from firebase
 
                 FrameLayout container = new FrameLayout(getApplicationContext());
                 FrameLayout.LayoutParams params = new  FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
