@@ -11,6 +11,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -37,11 +38,17 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (!FirebaseApp.getApps(this).isEmpty())
-            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
+        try {
+            if (!FirebaseApp.getApps(this).isEmpty())
+                FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        }
+        catch (Exception e){
+            Log.d("MainActivity", "onCreate: persistance error");
+        }
         userPref = this.getSharedPreferences(getString(R.string.UserPref),0);
 
         doesSessionExist();
