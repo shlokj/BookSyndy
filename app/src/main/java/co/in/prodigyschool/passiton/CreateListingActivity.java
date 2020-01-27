@@ -299,11 +299,17 @@ public class CreateListingActivity extends AppCompatActivity {
                 bookAddress = locField.getText().toString();
                 isTextbook = typeSpinner.getSelectedItemPosition()==0;
                 gradeNumber = gradeSpinner.getSelectedItemPosition()+1;
-                if (gradeNumber>=7) {
-                    boardNumber = boardSpinner.getSelectedItemPosition() + 7;
+                forCompExam = competitiveExam.isChecked();
+                if (forCompExam) {
+                    gradeNumber=0;
+                    boardNumber=20;
                 }
                 else {
-                    boardNumber = boardSpinner.getSelectedItemPosition() + 1;
+                    if (gradeNumber >= 7) {
+                        boardNumber = boardSpinner.getSelectedItemPosition() + 7;
+                    } else {
+                        boardNumber = boardSpinner.getSelectedItemPosition() + 1;
+                    }
                 }
                 String bps = priceField.getText().toString().trim();
                 String bys;
