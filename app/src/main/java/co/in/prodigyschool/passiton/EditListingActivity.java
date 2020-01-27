@@ -377,7 +377,6 @@ public class EditListingActivity extends AppCompatActivity {
                                     displaySnackbarYears(5);
                                 }
                             } else if (boardNumber == 15) {
-                                boardNumber = 15;
 //                                Toast.makeText(getApplicationContext(),"MBBS",Toast.LENGTH_LONG).show();
                                 if (year > 6 || year == 0) {
                                     validYear = false;
