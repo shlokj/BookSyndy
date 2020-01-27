@@ -177,7 +177,7 @@ public class UserProfileActivity extends AppCompatActivity {
         fetchUserNameList();
         getUserPreference();
         populateUserDetails();
-        iUsername = uName.getText().toString();
+        iUsername = uName.getText().toString().trim();
         fName.addTextChangedListener(checkChange);
         lName.addTextChangedListener(checkChange);
         uName.addTextChangedListener(checkChange);
@@ -366,8 +366,8 @@ public class UserProfileActivity extends AppCompatActivity {
 
                         editor = userPref.edit();
                         editor.putBoolean(getString(R.string.preferGuidedMode),preferGuidedMode.isChecked());
-                        editor.putString(getString(R.string.p_firstname),fName.getText().toString());
-                        editor.putString(getString(R.string.p_lastname),lName.getText().toString());
+                        editor.putString(getString(R.string.p_firstname),fName.getText().toString().trim());
+                        editor.putString(getString(R.string.p_lastname),lName.getText().toString().trim());
                         editor.putString(getString(R.string.p_userid),uName.getText().toString().trim());
 //                        editor.putString(getString(R.string.p_imageurl),user.getImageUrl());
                         editor.putInt(getString(R.string.p_grade),gradeSpinner.getSelectedItemPosition() +1);

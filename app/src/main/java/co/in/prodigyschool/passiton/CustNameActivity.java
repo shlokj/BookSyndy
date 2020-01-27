@@ -71,7 +71,7 @@ public class CustNameActivity extends AppCompatActivity {
             public void onClick(View view) {
                 firstName = firstNameField.getText().toString().trim();
                 lastName = lastNameField.getText().toString().trim();
-                username = userIdField.getText().toString();
+                username = userIdField.getText().toString().trim();
                 isValidUsername = false;
                 isValidUsername = (username != null) && username.matches("[A-Za-z0-9_]+");
                 isAvailableUsername = checkUserName(username);

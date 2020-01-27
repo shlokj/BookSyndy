@@ -294,9 +294,9 @@ public class CreateListingActivity extends AppCompatActivity {
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bookName = nameField.getText().toString();
-                bookDescription = descField.getText().toString();
-                bookAddress = locField.getText().toString();
+                bookName = nameField.getText().toString().trim();
+                bookDescription = descField.getText().toString().trim();
+                bookAddress = locField.getText().toString().trim();
                 isTextbook = typeSpinner.getSelectedItemPosition()==0;
                 gradeNumber = gradeSpinner.getSelectedItemPosition()+1;
                 forCompExam = competitiveExam.isChecked();

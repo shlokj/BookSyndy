@@ -244,7 +244,7 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
             boardNumber = getIntent().getIntExtra("DEGREE_NUMBER", boardNumber);
             bookPrice = getIntent().getIntExtra("BOOK_PRICE",0);
             selectedImage = getIntent().getStringExtra("BOOK_IMAGE_URI");
-            bookAddress = locationTV.getText().toString();
+            bookAddress = locationTV.getText().toString().trim();
             if(userId == null){
                 userId = mAuth.getCurrentUser().getPhoneNumber();
             }
