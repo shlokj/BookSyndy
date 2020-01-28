@@ -265,43 +265,46 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
             final Chat receiverchat = new Chat(user.getImageUrl(), user.getUserId(), "online",message_sender_id,timeStamp,null);
 
-                      chat_sender_ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot snapshot) {
-                    if(snapshot.exists()){
-                        //update here
-                        chat_sender_ref.update("imageUrl",visit_image,"userName",visit_user_name,"timestamp",timeStamp);
-                    }
-                    else{
-                        //set here
-                        chat_sender_ref.set(senderchat);
-                    }
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.d(TAG, "sender: udpateChatPage",e);
-                }
-            });
-
-            chat_receiver_ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot snapshot) {
-                    if(snapshot.exists()){
-                        //update here
-                        chat_receiver_ref.update("imageUrl",user.getImageUrl(),"userName",user.getUserId(),"timestamp",timeStamp,"lstMsgTime",timeStamp);
-                    }
-                    else{
-                        //set here
-                        chat_receiver_ref.set(receiverchat);
-                    }
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.d(TAG, "sender: udpateChatPage",e);
-                }
-            });
+            chat_sender_ref.set(senderchat);
+            chat_receiver_ref.set(receiverchat);
+//
+//                      chat_sender_ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                @Override
+//                public void onSuccess(DocumentSnapshot snapshot) {
+//                    if(snapshot.exists()){
+//                        //update here
+//                        chat_sender_ref.update("imageUrl",visit_image,"userName",visit_user_name,"timestamp",timeStamp);
+//                    }
+//                    else{
+//                        //set here
+//                        chat_sender_ref.set(senderchat);
+//                    }
+//                }
+//            }).addOnFailureListener(new OnFailureListener() {
+//                @Override
+//                public void onFailure(@NonNull Exception e) {
+//                    Log.d(TAG, "sender: udpateChatPage",e);
+//                }
+//            });
+//
+//            chat_receiver_ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                @Override
+//                public void onSuccess(DocumentSnapshot snapshot) {
+//                    if(snapshot.exists()){
+//                        //update here
+//                        chat_receiver_ref.update("imageUrl",user.getImageUrl(),"userName",user.getUserId(),"timestamp",timeStamp,"lstMsgTime",timeStamp);
+//                    }
+//                    else{
+//                        //set here
+//                        chat_receiver_ref.set(receiverchat);
+//                    }
+//                }
+//            }).addOnFailureListener(new OnFailureListener() {
+//                @Override
+//                public void onFailure(@NonNull Exception e) {
+//                    Log.d(TAG, "sender: udpateChatPage",e);
+//                }
+//            });
 
         }
 
@@ -543,6 +546,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
     private void SendMessage(String msg, String messageType)
     {
+        final String timeStamp =
+                new SimpleDateFormat("yyyyMMdd_HHmmss",
+                        Locale.getDefault()).format(new Date());
         final String messageText =  msg;
 
         if (TextUtils.isEmpty(messageText))
@@ -567,6 +573,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             messageTextBody.put("messageID", messagePushID);
             messageTextBody.put("time", saveCurrentTime);
             messageTextBody.put("date", saveCurrentDate);
+            messageTextBody.put("LstMsgTime", timeStamp);
+
 
             Map messageBodyDetails = new HashMap();
             messageBodyDetails.put(messageSenderRef + "/" + messagePushID, messageTextBody);

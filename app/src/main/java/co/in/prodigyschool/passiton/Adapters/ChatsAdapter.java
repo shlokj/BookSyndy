@@ -43,7 +43,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
 
     private Context context;
     private List<Chat> chatList;
-    private String lastMessage;
+    private String lastMessage,lastMsgTime;
     private String curUserPhone;
     private SharedPreferences chatPref;
     private SimpleDateFormat dateFormat;
@@ -96,8 +96,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
                 .into(holder.profileImage);
         holder.userName.setText(username);
         holder.userStatus.setText("offline");
-        setLastMessage(chatItem.getDocumentId(),holder.userStatus);
-        showUnreadChats(chatItem.getUserName(),chatItem.getUserId(),holder);
+        setLastMessage(chatItem.getDocumentId(),chatItem.getUserName(),holder.userStatus,holder);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -110,71 +109,12 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
 
     }
 
-    private void showUnreadChats(final String userId,String phone,final ChatsViewHolder holder) {
-
-        final String curTimeStamp = chatPref.getString(userId,null);
-
-        RootRef.document(phone).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
-               if(snapshot != null && snapshot.exists()){
-                   Chat chat = snapshot.toObject(Chat.class);
-
-                   if(curTimeStamp != null && chat.getLstMsgTime() != null){
-                       try {
-                           Log.d(TAG, "showUnreadChats: userid"+userId+" lastSeen: "+curTimeStamp+" lastMessage: "+chat.getLstMsgTime());
-                           Date lastSeen = dateFormat.parse(curTimeStamp);
-                           Date lastMsg = dateFormat.parse(chat.getLstMsgTime());
-
-                           if(lastSeen.before(lastMsg)){
-                               holder.userName.setTypeface(holder.userName.getTypeface(), Typeface.BOLD);
-                               holder.userStatus.setTypeface(holder.userStatus.getTypeface(), Typeface.BOLD);
-                               holder.userName.setTypeface(Typeface.DEFAULT_BOLD);
-                               holder.userStatus.setTypeface(Typeface.DEFAULT_BOLD);
-//                               holder.userName.setTextColor(context.getResources().getColor(R.color.green));
-                               holder.unread_icon.setVisibility(View.VISIBLE);
-                           }
-                           else{
-                               holder.userName.setTypeface(holder.userName.getTypeface(), Typeface.NORMAL);
-                               holder.userStatus.setTypeface(holder.userName.getTypeface(), Typeface.NORMAL);
-                               holder.userName.setTypeface(Typeface.DEFAULT);
-                               holder.userStatus.setTypeface(Typeface.DEFAULT);
-//                               holder.userName.setTextColor(context.getResources().getColor(R.color.colorTextBlack));
-                               holder.unread_icon.setVisibility(View.GONE);
-                           }
-
-                       }
-                       catch (Exception exception){
-                           Log.d("CHATSADAPTER", "showUnreadChats: error",exception);
-                       }
-                   }
-                   //for first time only
-                   else if(curTimeStamp == null && chat.getLstMsgTime() != null){
-//                       holder.userName.setTextColor(context.getResources().getColor(R.color.green));
-                       holder.userName.setTypeface(holder.userName.getTypeface(), Typeface.BOLD);
-                       holder.userStatus.setTypeface(holder.userStatus.getTypeface(), Typeface.BOLD);
-                       holder.userName.setTypeface(Typeface.DEFAULT_BOLD);
-                       holder.userStatus.setTypeface(Typeface.DEFAULT_BOLD);
-                       holder.unread_icon.setVisibility(View.VISIBLE);
-                   }
-                   else {
-//                       holder.userName.setTextColor(context.getResources().getColor(R.color.colorTextBlack));
-                       holder.userName.setTypeface(holder.userName.getTypeface(), Typeface.NORMAL);
-                       holder.userStatus.setTypeface(holder.userName.getTypeface(), Typeface.NORMAL);
-                       holder.userName.setTypeface(Typeface.DEFAULT);
-                       holder.userStatus.setTypeface(Typeface.DEFAULT);
-                       holder.unread_icon.setVisibility(View.GONE);
-                   }
-
-               }
-            }
-        });
 
 
-    }
-
-    private void setLastMessage(String userId, final TextView lastMessageView){
+    private void setLastMessage(String userId, final String userName, final TextView lastMessageView, final ChatsViewHolder holder){
             lastMessage = "default";
+        final String curTimeStamp = chatPref.getString(userName,null);
+        lastMsgTime = null;
        DatabaseReference messageRef = FirebaseDatabase.getInstance().getReference().child("Messages").child(curUserPhone).child(userId);
 
        messageRef.addValueEventListener(new ValueEventListener() {
@@ -186,6 +126,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
 
                     if(message != null){
                         lastMessage = message.getMessage();
+                        lastMsgTime = message.getLstMsgTime();
                         if(!message.getType().equals("text")){
                             lastMessage = "Image";
                         }
@@ -203,10 +144,41 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
                             }
                             else {
                                 lastMessageView.setText(lastMessage);
+                                if(curTimeStamp != null && lastMsgTime != null){
+                                    try {
+//                                        Log.d(TAG, "showUnreadChats: userid"+userName+" lastSeen: "+curTimeStamp+" lastMessage: "+lastMsgTime);
+                                        Date lastSeen = dateFormat.parse(curTimeStamp);
+                                        Date lastMsg = dateFormat.parse(lastMsgTime);
+
+                                        if(lastSeen.before(lastMsg)){
+                                            holder.userName.setTypeface(holder.userName.getTypeface(), Typeface.BOLD);
+                                            holder.userStatus.setTypeface(holder.userStatus.getTypeface(), Typeface.BOLD);
+                                            holder.userName.setTypeface(Typeface.DEFAULT_BOLD);
+                                            holder.userStatus.setTypeface(Typeface.DEFAULT_BOLD);
+//                               holder.userName.setTextColor(context.getResources().getColor(R.color.green));
+                                            holder.unread_icon.setVisibility(View.VISIBLE);
+                                        }
+                                        else{
+                                            holder.userName.setTypeface(holder.userName.getTypeface(), Typeface.NORMAL);
+                                            holder.userStatus.setTypeface(holder.userName.getTypeface(), Typeface.NORMAL);
+                                            holder.userName.setTypeface(Typeface.DEFAULT);
+                                            holder.userStatus.setTypeface(Typeface.DEFAULT);
+//                               holder.userName.setTextColor(context.getResources().getColor(R.color.colorTextBlack));
+                                            holder.unread_icon.setVisibility(View.GONE);
+                                        }
+
+                                    }
+                                    catch (Exception exception){
+                                        Log.d("CHATSADAPTER", "showUnreadChats: error",exception);
+                                    }
+                                }
+
+
                             }
                 }
 
                 lastMessage = "default";
+                lastMsgTime = null;
            }
 
            @Override
