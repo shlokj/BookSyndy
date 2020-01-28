@@ -10,6 +10,7 @@ import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -475,6 +476,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 builder.setView(container);
                 linkET.setText("link here");
                 linkET.setSelectAllOnFocus(true);
+                linkET.setInputType(InputType.TYPE_NULL);
                 builder.setPositiveButton("Copy link", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

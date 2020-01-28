@@ -171,6 +171,7 @@ public class MyRequestFragment extends Fragment implements EventListener<QuerySn
 
             Intent requestDetails = new Intent(getActivity(), RequestDetailsActivity.class);
             requestDetails.putExtra("bookid",request.getDocumentId());
+            requestDetails.putExtra("byme",true);
             startActivity(requestDetails);
 
         }

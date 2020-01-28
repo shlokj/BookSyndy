@@ -42,6 +42,7 @@ public class RequestDetailsActivity extends AppCompatActivity {
     private static final String TAG = "REQUEST_DETAILS";
     private String curAppUser, shareableLink="", bookid;
     private double latA,lngA;
+    private boolean byme;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +50,7 @@ public class RequestDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_request_details);
         getSupportActionBar().setTitle("View request");
         bookid = getIntent().getStringExtra("bookid");
-
+        byme = getIntent().getBooleanExtra("byme",false);
         view_bookname = findViewById(R.id.reqTitle);
         view_description = findViewById(R.id.reqDescription);
         view_grade_and_board = findViewById(R.id.reqCategory);
@@ -226,8 +227,14 @@ public class RequestDetailsActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_request_details, menu);
-        this.menu = menu;
+        if (!byme) {
+            getMenuInflater().inflate(R.menu.menu_request_details, menu);
+            this.menu = menu;
+        }
+        else {
+            getMenuInflater().inflate(R.menu.menu_myreq, menu);
+            this.menu = menu;
+        }
 
         return true;
     }
@@ -259,6 +266,26 @@ public class RequestDetailsActivity extends AppCompatActivity {
                 });
                 rBuilder.show();
                 break;
+            case R.id.deleteRequest:
+                AlertDialog.Builder dBuilder = new AlertDialog.Builder(RequestDetailsActivity.this);
+                dBuilder.setTitle("Delete this request?");
+                dBuilder.setMessage("Once you delete a request, it can't be restored.");
+                dBuilder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        Toast.makeText(getApplicationContext(),"Deleted",Toast.LENGTH_SHORT).show();
+                        // todo: deleted the current request from firestore OR have a field called completed and mark that as true
+                        // if completed is true, don't show the book in the list
+                        onBackPressed();
+                    }
+                });
+                dBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+                dBuilder.show();
         }
         return super.onOptionsItemSelected(item);
     }
