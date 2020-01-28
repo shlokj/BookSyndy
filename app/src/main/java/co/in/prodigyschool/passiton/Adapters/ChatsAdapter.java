@@ -129,12 +129,16 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
                            if(lastSeen.before(lastMsg)){
                                holder.userName.setTypeface(holder.userName.getTypeface(), Typeface.BOLD);
                                holder.userStatus.setTypeface(holder.userStatus.getTypeface(), Typeface.BOLD);
+                               holder.userName.setTypeface(Typeface.DEFAULT_BOLD);
+                               holder.userStatus.setTypeface(Typeface.DEFAULT_BOLD);
 //                               holder.userName.setTextColor(context.getResources().getColor(R.color.green));
                                holder.unread_icon.setVisibility(View.VISIBLE);
                            }
                            else{
                                holder.userName.setTypeface(holder.userName.getTypeface(), Typeface.NORMAL);
                                holder.userStatus.setTypeface(holder.userName.getTypeface(), Typeface.NORMAL);
+                               holder.userName.setTypeface(Typeface.DEFAULT);
+                               holder.userStatus.setTypeface(Typeface.DEFAULT);
 //                               holder.userName.setTextColor(context.getResources().getColor(R.color.colorTextBlack));
                                holder.unread_icon.setVisibility(View.GONE);
                            }
@@ -146,11 +150,19 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
                    }
                    //for first time only
                    else if(curTimeStamp == null && chat.getLstMsgTime() != null){
-                       holder.userName.setTextColor(context.getResources().getColor(R.color.green));
+//                       holder.userName.setTextColor(context.getResources().getColor(R.color.green));
+                       holder.userName.setTypeface(holder.userName.getTypeface(), Typeface.BOLD);
+                       holder.userStatus.setTypeface(holder.userStatus.getTypeface(), Typeface.BOLD);
+                       holder.userName.setTypeface(Typeface.DEFAULT_BOLD);
+                       holder.userStatus.setTypeface(Typeface.DEFAULT_BOLD);
                        holder.unread_icon.setVisibility(View.VISIBLE);
                    }
                    else {
-                       holder.userName.setTextColor(context.getResources().getColor(R.color.colorTextBlack));
+//                       holder.userName.setTextColor(context.getResources().getColor(R.color.colorTextBlack));
+                       holder.userName.setTypeface(holder.userName.getTypeface(), Typeface.NORMAL);
+                       holder.userStatus.setTypeface(holder.userName.getTypeface(), Typeface.NORMAL);
+                       holder.userName.setTypeface(Typeface.DEFAULT);
+                       holder.userStatus.setTypeface(Typeface.DEFAULT);
                        holder.unread_icon.setVisibility(View.GONE);
                    }
 
