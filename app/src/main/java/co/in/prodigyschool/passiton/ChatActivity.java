@@ -270,7 +270,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 public void onSuccess(DocumentSnapshot snapshot) {
                     if(snapshot.exists()){
                         //update here
-                        chat_sender_ref.update("timestamp",timeStamp);
+                        chat_sender_ref.update("imageUrl",visit_image,"userName",visit_user_name,"timestamp",timeStamp);
                     }
                     else{
                         //set here
@@ -289,7 +289,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 public void onSuccess(DocumentSnapshot snapshot) {
                     if(snapshot.exists()){
                         //update here
-                        chat_receiver_ref.update("timestamp",timeStamp,"lstMsgTime",timeStamp);
+                        chat_receiver_ref.update("imageUrl",user.getImageUrl(),"userName",user.getUserId(),"timestamp",timeStamp,"lstMsgTime",timeStamp);
                     }
                     else{
                         //set here
