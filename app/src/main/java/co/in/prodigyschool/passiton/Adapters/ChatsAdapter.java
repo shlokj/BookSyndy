@@ -2,13 +2,11 @@ package co.in.prodigyschool.passiton.Adapters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.provider.ContactsContract;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,15 +22,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentId;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -132,11 +127,15 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
                            Date lastMsg = dateFormat.parse(chat.getLstMsgTime());
 
                            if(lastSeen.before(lastMsg)){
-                               holder.userName.setTextColor(context.getResources().getColor(R.color.green));
+                               holder.userName.setTypeface(holder.userName.getTypeface(), Typeface.BOLD);
+                               holder.userStatus.setTypeface(holder.userStatus.getTypeface(), Typeface.BOLD);
+//                               holder.userName.setTextColor(context.getResources().getColor(R.color.green));
                                holder.unread_icon.setVisibility(View.VISIBLE);
                            }
                            else{
-                               holder.userName.setTextColor(context.getResources().getColor(R.color.colorTextBlack));
+                               holder.userName.setTypeface(holder.userName.getTypeface(), Typeface.NORMAL);
+                               holder.userStatus.setTypeface(holder.userName.getTypeface(), Typeface.NORMAL);
+//                               holder.userName.setTextColor(context.getResources().getColor(R.color.colorTextBlack));
                                holder.unread_icon.setVisibility(View.GONE);
                            }
 

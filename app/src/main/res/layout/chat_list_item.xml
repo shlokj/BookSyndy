@@ -27,8 +27,7 @@
         android:layout_marginTop="14dp"
         android:text="@string/display_username"
         android:textColor="@android:color/background_dark"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/custom_user_last_seen"
@@ -42,6 +41,7 @@
         android:textSize="14sp" />
 
 
+<!--TODO: replace src with a blue dot-->
     <ImageView
         android:visibility="gone"
         android:id="@+id/chat_unread_icon"
