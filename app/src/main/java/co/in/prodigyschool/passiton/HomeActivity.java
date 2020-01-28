@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
@@ -55,7 +56,10 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -221,11 +225,49 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             return;
         }
 
-        Intent intent = new Intent(this, GetAddressIntentService.class);
-        intent.putExtra("add_receiver", addressResultReceiver);
-        intent.putExtra("add_location", currentLocation);
-        startService(intent);
+
+        Geocoder geocoder = new Geocoder(this, Locale.ENGLISH);
+
+
+        try {
+            List<Address> addresses = geocoder.getFromLocation(currentLocation.getLatitude(), currentLocation.getLongitude(), 1);
+
+            if (addresses != null && addresses.size() > 0) {
+                Address fetchedAddress = addresses.get(0);
+                StringBuilder strAddress = new StringBuilder();
+                for (int i = 0; i < fetchedAddress.getMaxAddressLineIndex(); i++) {
+                    strAddress.append(fetchedAddress.getAddressLine(i)).append(" ");
+                }
+                Log.d(TAG, "getAddress: "+strAddress);
+                editor = userPref.edit();
+                editor.putFloat(getString(R.string.p_lat),(float)currentLocation.getLatitude());
+                editor.putFloat(getString(R.string.p_lng),(float)currentLocation.getLongitude());
+                editor.putString(getString(R.string.p_area),fetchedAddress.getSubLocality());
+                editor.putString(getString(R.string.p_city),fetchedAddress.getLocality());
+                editor.apply();
+
+            } else {
+                Toast.makeText(HomeActivity.this,
+                        "Address not found, " ,
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(HomeActivity.this,
+                    "Address not found, " ,
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
+//        Intent intent = new Intent(this, GetAddressIntentService.class);
+//        intent.putExtra("add_receiver", addressResultReceiver);
+//        intent.putExtra("add_location", currentLocation);
+//        startService(intent);
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
@@ -265,7 +307,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     LocationSettingsResponse response = task.getResult(ApiException.class);
                     // All location settings are satisfied. The client can initialize location
                     // requests here.
-                    //startLocationUpdates();
+                    startLocationUpdates();
 
                 } catch (ApiException exception) {
                     switch (exception.getStatusCode()) {
