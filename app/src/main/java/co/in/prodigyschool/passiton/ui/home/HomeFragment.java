@@ -546,6 +546,9 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                 List<Integer> boardsList = new ArrayList<Integer>();
                 boardsList.add(currentUser.getBoardNumber());
                 defaultFilters.setBookGrade(gradesList);
+                if (currentUser.isCompetitiveExam()) {
+                    boardsList.add(20);
+                }
                 defaultFilters.setBookBoard(boardsList);
                 defaultFilters.setIsText(true);
                 defaultFilters.setBookDistance(-1);
