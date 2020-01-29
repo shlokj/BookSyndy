@@ -2,14 +2,14 @@ package co.in.prodigyschool.passiton.Data;
 
 public class Messages
 {
-    private String from, message, type, to, messageID, time, date, name;
+    private String from, message, type, to, messageID, time, date, name,LstMsgTime;
 
     public Messages()
     {
 
     }
 
-    public Messages(String from, String message, String type, String to, String messageID, String time, String date, String name) {
+    public Messages(String from, String message, String type, String to, String messageID, String time, String date, String name,String LstMsgTime) {
         this.from = from;
         this.message = message;
         this.type = type;
@@ -18,6 +18,7 @@ public class Messages
         this.time = time;
         this.date = date;
         this.name = name;
+        this.LstMsgTime = LstMsgTime;
     }
 
     public String getFrom() {
@@ -82,5 +83,13 @@ public class Messages
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getLstMsgTime() {
+        return LstMsgTime;
+    }
+
+    public void setLstMsgTime(String lstMsgTime) {
+        LstMsgTime = lstMsgTime;
     }
 }
