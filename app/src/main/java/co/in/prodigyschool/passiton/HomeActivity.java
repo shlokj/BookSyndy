@@ -81,7 +81,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private String curUserId, snackbarMessage;
     private SharedPreferences userPref;
     private SharedPreferences.Editor editor;
-    private boolean showGPS = false;
+    private boolean showGPS = false, sbLong;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,15 +110,20 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navUsername.setOnClickListener(this);
         navUserphone.setOnClickListener(this);
         snackbarMessage = getIntent().getStringExtra("SNACKBAR_MSG");
+        sbLong = getIntent().getBooleanExtra("SB_LONG",false);
         if (snackbarMessage!=null) {
             if (snackbarMessage.length() > 0) {
                 View parentLayout = findViewById(android.R.id.content);
-                Snackbar.make(parentLayout, snackbarMessage, Snackbar.LENGTH_SHORT).show();
+                if (sbLong) {
+                    Snackbar.make(parentLayout, snackbarMessage, Snackbar.LENGTH_LONG).show();
+                }
+                else {
+                    Snackbar.make(parentLayout, snackbarMessage, Snackbar.LENGTH_SHORT).show();
+                }
             }
         }
 
         populateUserDetails();
-
 
     }
 

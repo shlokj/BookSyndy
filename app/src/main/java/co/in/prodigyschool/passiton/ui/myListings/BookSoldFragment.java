@@ -2,6 +2,7 @@ package co.in.prodigyschool.passiton.ui.myListings;
 
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -186,7 +187,21 @@ public class BookSoldFragment extends Fragment implements BookAdapter.OnBookSele
                 String opt = ((TextView) view).getText().toString();
                 if (opt.equals("Mark as unsold")) {
                     // move the selected book to completed
-                    markAsSold(false);
+                    AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
+                    mBuilder.setTitle("Mark as unsold?");
+                    mBuilder.setMessage("Your listing will be visible to others and will be moved to the 'Ongoing' tab.");
+                    mBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            markAsSold(false);
+                        }
+                    });
+                    mBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                        }
+                    });
+                    mBuilder.show();
                     dialog.dismiss();
                 }
             }

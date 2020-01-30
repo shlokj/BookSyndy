@@ -275,7 +275,7 @@ public class RequestDetailsActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
 
                         Toast.makeText(getApplicationContext(),"Deleted",Toast.LENGTH_SHORT).show();
-                        // todo: deleted the current request from firestore OR have a field called completed and mark that as true
+                        // todo: delete the current request from firestore OR have a field called completed and mark that as true
                         // if completed is true, don't show the book in the list
                         onBackPressed();
                     }

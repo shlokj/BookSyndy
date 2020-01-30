@@ -77,6 +77,6 @@
         <item name="answer8">No. This platform is entirely free for everyone to use.</item>
         <item name="answer9">Not as of now. BookSyndy currently focuses deeply on academics, to help students find what they need. If you feel we should accept a broader range of books, do let us know in the feedback section.</item>
         <item name="answer10">No problem! Go to the book requests section and request what you want. Other users can message you if they have it.</item>
-        <item name="answerLast">Write to us at contact@booksyndy.com</item><!--TODO: actually create this email id-->
+        <item name="answerLast">Write to us at connect@booksyndy.com</item><!--TODO: actually create this email id-->
     </string-array>
 </resources>

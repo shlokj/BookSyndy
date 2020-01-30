@@ -539,6 +539,7 @@ public class CreateListingActivity extends AppCompatActivity {
                         else {
                             homeIntent.putExtra("SNACKBAR_MSG", "Your material has been listed! You can find it in the \'Your listings\' section of the app.");
                         }
+                        homeIntent.putExtra("SB_LONG",true);
                         startActivity(homeIntent);
                     }
                     else{
