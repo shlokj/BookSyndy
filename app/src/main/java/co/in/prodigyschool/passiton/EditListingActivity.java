@@ -162,26 +162,19 @@ public class EditListingActivity extends AppCompatActivity {
         year = getIntent().getIntExtra("BOOK_YEAR",0);
         documentId = getIntent().getStringExtra("DOCUMENT_ID");
 
-        gradeSpinner.setSelection(gradeNumber - 1);
+        gradeSpinner.setSelection(gradeNumber - 1, true);
 
         if (boardNumber<20) {
 
             if (gradeNumber >= 7) {
                 boardSpinner.setAdapter(degreeAdapter);
                 boardDegreeLabel.setText("Degree / course");
-                boardSpinner.post(new Runnable() {
-                    public void run() {
-                        boardSpinner.setSelection(boardNumber - 7);
-                    }
-                });
+                boardSpinner.setSelection(boardNumber - 7, true);
             } else {
                 boardSpinner.setAdapter(boardAdapter);
                 boardDegreeLabel.setText("Board");
-                boardSpinner.post(new Runnable() {
-                    public void run() {
-                        boardSpinner.setSelection(boardNumber - 1);
-                    }
-                });
+                boardSpinner.setSelection(boardNumber - 1, true);
+
             }
         }
 
@@ -196,7 +189,7 @@ public class EditListingActivity extends AppCompatActivity {
             boardSpinner.setFocusable(false);
             boardSpinner.setFocusableInTouchMode(false);
             gradeSpinner.setVisibility(View.INVISIBLE);
-            boardSpinner.setVisibility(View.VISIBLE);
+            boardSpinner.setVisibility(View.INVISIBLE);
         }
 
         if (year>0) {
@@ -466,12 +459,12 @@ public class EditListingActivity extends AppCompatActivity {
             if (gradeNumber >= 7) {
                 boardSpinner.setAdapter(degreeAdapter);
                 boardDegreeLabel.setText("Degree / course");
-                boardSpinner.setSelection(boardNumber - 7);
+                boardSpinner.setSelection(boardNumber - 7, true);
 
             } else {
                 boardSpinner.setAdapter(boardAdapter);
                 boardDegreeLabel.setText("Board");
-                boardSpinner.setSelection(boardNumber - 1);
+                boardSpinner.setSelection(boardNumber - 1, true);
 
             }
         }

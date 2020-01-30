@@ -280,10 +280,10 @@ public class CreateListingActivity extends AppCompatActivity {
                 int bn1 = getIntent().getIntExtra("BOARD_NUMBER",1);
                 int gn1 = getIntent().getIntExtra("GRADE_NUMBER",4);
                 if (gn1<=6) {
-                    boardSpinner.setSelection(bn1 - 1);
+                    boardSpinner.setSelection(bn1 - 1, true);
                 }
                 else {
-                    boardSpinner.setSelection(bn1 - 7);
+                    boardSpinner.setSelection(bn1 - 7, true);
                 }
             }
 
@@ -433,15 +433,13 @@ public class CreateListingActivity extends AppCompatActivity {
 
         int bn1 = getIntent().getIntExtra("BOARD_NUMBER",1);
         int gn1 = getIntent().getIntExtra("GRADE_NUMBER",4);
+
         if (gn1<=6) {
-            for (int i=0;i<10;i++) {
-                boardSpinner.setSelection(bn1 - 1);
-            }
+            boardSpinner.setSelection(bn1 - 1, true);
+
         }
         else {
-            for (int i=0;i<10;i++) {
-                boardSpinner.setSelection(bn1 - 7);
-            }
+            boardSpinner.setSelection(bn1 - 7, true);
         }
     }
 
@@ -475,7 +473,7 @@ public class CreateListingActivity extends AppCompatActivity {
             year = userPref.getInt(getString(R.string.p_year),0);
 
             gradeSpinner.setAdapter(gradeAdapter);
-            gradeSpinner.setSelection(gradeNumber-1);
+            gradeSpinner.setSelection(gradeNumber-1, true);
 
 //                        Toast.makeText(getApplicationContext(),"Grade number: "+gradeNumber,Toast.LENGTH_SHORT).show();
             Log.d(TAG, "autoFillGradeAndBoard: "+boardNumber);
@@ -487,16 +485,13 @@ public class CreateListingActivity extends AppCompatActivity {
                 findViewById(R.id.collegeDegreeAndYearLL_c).setVisibility(View.GONE);
 
                 boardSpinner.setAdapter(boardAdapter);
-                for (int i=0; i<4;i++) {
-                    boardSpinner.setSelection(boardNumber-1);
-                }
+                boardSpinner.setSelection(boardNumber-1, true);
+
             }
             else {
                 boardSpinner.setAdapter(degreeAdapter);
                 boardDegreeLabel.setText("Degree / course");
-                for (int i=0; i<10;i++) {
-                    boardSpinner.setSelection(boardNumber - 7,true);
-                }
+                boardSpinner.setSelection(boardNumber - 7,true);
 
             }
         }
@@ -858,9 +853,9 @@ public class CreateListingActivity extends AppCompatActivity {
             int boardNumber1 = userPref.getInt(getString(R.string.p_board), 2);
 
             if (gradeNumber1 <= 6) {
-                boardSpinner.setSelection(boardNumber1 - 1);
+                boardSpinner.setSelection(boardNumber1 - 1,true);
             } else {
-                boardSpinner.setSelection(boardNumber1 - 7);
+                boardSpinner.setSelection(boardNumber1 - 7,true);
             }
 
         }
