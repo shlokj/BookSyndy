@@ -21,7 +21,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_add_24px" />
+        app:srcCompat="@drawable/ic_booksyndy_add_more_books" />
 
 
 
