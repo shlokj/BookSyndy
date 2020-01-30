@@ -156,6 +156,14 @@ public class FilterCollegeFragment extends Fragment implements View.OnClickListe
 
         }
 
+        if(filters.hasSortBy()){
+            switch (filters.getSortBy()){
+                case "time": sortBySpinner.setSelection(1);break;
+                case "distance": sortBySpinner.setSelection(2);break;
+                default:
+            }
+        }
+
 
 
     }
@@ -216,8 +224,24 @@ public class FilterCollegeFragment extends Fragment implements View.OnClickListe
             filters.setIsNotes(isNotes());
             filters.setBookBoard(getselectedBoard());
             filters.setBookDistance(getSelectedDistance());
+            filters.setSortBy(getSortBy());
         }
         return filters;
+    }
+
+    private String getSortBy() {
+        //default  sortBy = "Relevance";
+        switch (sortBySpinner.getSelectedItemPosition()){
+            case 1:
+                return "time";
+
+            case 2:
+                return "distance";
+
+            default: return "Relevance";
+        }
+
+
     }
 
     private int getSelectedDistance(){
