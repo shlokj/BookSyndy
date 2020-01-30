@@ -41,8 +41,13 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import co.in.prodigyschool.passiton.Adapters.HomeAdapter;
 import co.in.prodigyschool.passiton.BookDetailsActivity;
@@ -79,6 +84,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     private MenuItem filterItem;
     private double userLat,userLng;
     private int userGrade;
+    private SimpleDateFormat dateFormat;
 
 
     @Override
@@ -86,6 +92,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         super.onCreate(savedInstanceState);
         getUserDetails();
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
+        dateFormat =  new SimpleDateFormat("dd MM yyyy HH",Locale.getDefault());
     }
 
     
@@ -496,6 +503,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                 noFilter = false;
             }
             else {
+                showSnackbar("Error Fetching User Location");
                 filters.setBookDistance(-1);
             }
         }
@@ -507,6 +515,69 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         toBeRemoved.clear();
 
 
+        if(filters.hasSortBy()){
+
+            if(filters.getSortBy().equalsIgnoreCase("time")){
+                //sort by book duration
+                Collections.sort(filteredList, new Comparator<Book>() {
+                    @Override
+                    public int compare(Book o1, Book o2) {
+                        try {
+                            Date d1 = dateFormat.parse(o1.getBookTime());
+                            Date d2 = dateFormat.parse(o2.getBookTime());
+                            if(d1.before(d2)){
+                                return 1;
+                            }
+                            else{
+                                return -1;
+                            }
+
+                        }
+                        catch (Exception e){
+                            return 0;
+                        }
+                    }
+                });
+
+            }
+            else{
+                //sort by book distance
+
+                if(userLat != 0.0 && userLng != 0.0) {
+
+                    Collections.sort(filteredList, new Comparator<Book>() {
+                        @Override
+                        public int compare(Book o1, Book o2) {
+                            Location userLocation = new Location("point A");
+                            userLocation.setLatitude(userLat);
+                            userLocation.setLongitude(userLng);
+
+                            Location B1 = new Location("point B");
+                            B1.setLongitude(o1.getLng());
+                            B1.setLatitude(o1.getLat());
+
+                            Location B2 = new Location("point C");
+                            B2.setLongitude(o2.getLng());
+                            B2.setLatitude(o2.getLat());
+
+
+                            if(B1.distanceTo(userLocation) > B2.distanceTo(userLocation)){
+                                return 1;
+                            }
+                            else{
+                                return -1;
+                            }
+                        }
+                    });
+                }
+                else {
+                    showSnackbar("Error Fetching User Location");
+                    filters.setSortBy("Relevance");
+                }
+
+            }
+
+        }
 
 
         if(filteredList == null || filteredList.isEmpty()){

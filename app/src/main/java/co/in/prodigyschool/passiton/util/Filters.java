@@ -17,7 +17,7 @@ public class Filters {
     private String category = null;
     private String city = null;
     private int price = -1;
-    private String sortBy = null;
+    private String sortBy = "Relevance";
     private Query.Direction sortDirection = null;
     private int distance = -1;
 
@@ -61,7 +61,7 @@ public class Filters {
 
 
     public boolean hasSortBy() {
-        return !(TextUtils.isEmpty(sortBy));
+        return !(sortBy.equalsIgnoreCase("Relevance"));
     }
 
     public String getCategory() {
