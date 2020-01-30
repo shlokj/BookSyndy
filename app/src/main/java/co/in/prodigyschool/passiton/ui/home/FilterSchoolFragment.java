@@ -40,7 +40,7 @@ public class FilterSchoolFragment extends Fragment implements View.OnClickListen
     private TextView openCollegeFilters;
     private HomeViewModel homeViewModel;
     private FilterDialogFragment parentFragment;
-    private Spinner distSpinner,sortBySpinner;
+    private Spinner distSpinner, sortBySpinner;
     private ArrayAdapter<String> distAdapter, sortByAdapter;
 
 
@@ -48,26 +48,21 @@ public class FilterSchoolFragment extends Fragment implements View.OnClickListen
         // Required empty public constructor
     }
 
-    public void onAttachToParentFragment(Fragment fragment)
-    {
-        try
-        {
-            mOnFilterSelectedListener = (OnFilterSelectionListener)fragment;
+    public void onAttachToParentFragment(Fragment fragment) {
+        try {
+            mOnFilterSelectedListener = (OnFilterSelectionListener) fragment;
 
-        }
-        catch (ClassCastException e)
-        {
+        } catch (ClassCastException e) {
             throw new ClassCastException(
                     fragment.toString() + " must implement OnFilterSelectionListener");
         }
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
-        parentFragment = (FilterDialogFragment)getParentFragment();
+        parentFragment = (FilterDialogFragment) getParentFragment();
         onAttachToParentFragment(parentFragment.getParentFragment());
         homeViewModel = ViewModelProviders.of(parentFragment.getParentFragment()).get(HomeViewModel.class);
         // ...
@@ -79,7 +74,7 @@ public class FilterSchoolFragment extends Fragment implements View.OnClickListen
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        mRootView =  inflater.inflate(R.layout.fragment_filter_school_dialog, container, false);
+        mRootView = inflater.inflate(R.layout.fragment_filter_school_dialog, container, false);
         freeOnly = mRootView.findViewById(R.id.freeOnlyCB);
         mRootView.findViewById(R.id.button_apply).setOnClickListener(this);
         mRootView.findViewById(R.id.button_cancel).setOnClickListener(this);
@@ -126,73 +121,111 @@ public class FilterSchoolFragment extends Fragment implements View.OnClickListen
     }
 
     private void setFilterView(Filters filters) {
-        if(filters.IsNotes()){
+        if (filters.IsNotes()) {
             filterNotes.setChecked(true);
         }
-        if(filters.IsText()){
+        if (filters.IsText()) {
             filterTextbook.setChecked(true);
         }
-        if(filters.hasPrice()){
+        if (filters.hasPrice()) {
             freeOnly.setChecked(true);
         }
 
-        if(filters.hasBookDistance()){
-            switch (filters.getBookDistance()){
-                case 5:distSpinner.setSelection(0);break;
-                case 10:distSpinner.setSelection(1);break;
-                case 15:distSpinner.setSelection(2);break;
-                case 20:distSpinner.setSelection(3);break;
-                case 25:distSpinner.setSelection(4);break;
-                case 30:distSpinner.setSelection(5);break;
-                default:distSpinner.setSelection(6);
+        if (filters.hasBookDistance()) {
+            switch (filters.getBookDistance()) {
+                case 5:
+                    distSpinner.setSelection(0);
+                    break;
+                case 10:
+                    distSpinner.setSelection(1);
+                    break;
+                case 15:
+                    distSpinner.setSelection(2);
+                    break;
+                case 20:
+                    distSpinner.setSelection(3);
+                    break;
+                case 25:
+                    distSpinner.setSelection(4);
+                    break;
+                case 30:
+                    distSpinner.setSelection(5);
+                    break;
+                default:
+                    distSpinner.setSelection(6);
             }
-        }
-        else{
+        } else {
             distSpinner.setSelection(6);
         }
 
-        if(filters.hasBookBoard()){
-            for(int i:filters.getBookBoard()){
-                switch (i){
-                    case 1:filterBoardCbse.setChecked(true);break;
-                    case 2:filterBoardIcse.setChecked(true);break;
-                    case 3:filterBoardIb.setChecked(true);break;
-                    case 4:filterBoardIgcse.setChecked(true);break;
-                    case 5:filterBoardState.setChecked(true);break;
-                    case 6:filterBoardOther.setChecked(true);break;
-                    case 20:filterBoardCompetitiveExams.setChecked(true);
+        if (filters.hasBookBoard()) {
+            for (int i : filters.getBookBoard()) {
+                switch (i) {
+                    case 1:
+                        filterBoardCbse.setChecked(true);
+                        break;
+                    case 2:
+                        filterBoardIcse.setChecked(true);
+                        break;
+                    case 3:
+                        filterBoardIb.setChecked(true);
+                        break;
+                    case 4:
+                        filterBoardIgcse.setChecked(true);
+                        break;
+                    case 5:
+                        filterBoardState.setChecked(true);
+                        break;
+                    case 6:
+                        filterBoardOther.setChecked(true);
+                        break;
+                    case 20:
+                        filterBoardCompetitiveExams.setChecked(true);
                     default:
                 }
             }
 
         }
 
-        if(filters.hasBookGrade()){
-            for(int i:filters.getBookGrade()){
-                switch (i){
-                    case 1:filterGrade5orBelow.setChecked(true);break;
-                    case 2:filterGrade6to8.setChecked(true);break;
-                    case 3:filterGrade9.setChecked(true);break;
-                    case 4:filterGrade10.setChecked(true);break;
-                    case 5:filterGrade11.setChecked(true);break;
-                    case 6:filterGrade12.setChecked(true);
+        if (filters.hasBookGrade()) {
+            for (int i : filters.getBookGrade()) {
+                switch (i) {
+                    case 1:
+                        filterGrade5orBelow.setChecked(true);
+                        break;
+                    case 2:
+                        filterGrade6to8.setChecked(true);
+                        break;
+                    case 3:
+                        filterGrade9.setChecked(true);
+                        break;
+                    case 4:
+                        filterGrade10.setChecked(true);
+                        break;
+                    case 5:
+                        filterGrade11.setChecked(true);
+                        break;
+                    case 6:
+                        filterGrade12.setChecked(true);
                     default:
                 }
             }
 
         }
 
-        if(filters.hasSortBy()){
-            switch (filters.getSortBy()){
-                case "time": sortBySpinner.setSelection(1);break;
-                case "distance": sortBySpinner.setSelection(2);break;
+        if (filters.hasSortBy()) {
+            switch (filters.getSortBy()) {
+                case "time":
+                    sortBySpinner.setSelection(1);
+                    break;
+                case "distance":
+                    sortBySpinner.setSelection(2);
+                    break;
                 default:
             }
         }
 
     }
-
-
 
 
     @Override
@@ -230,21 +263,22 @@ public class FilterSchoolFragment extends Fragment implements View.OnClickListen
         filterBoardIgcse.setChecked(false);
         filterBoardState.setChecked(false);
 
-        distSpinner.setSelection(distAdapter.getCount()-2);
+        distSpinner.setSelection(distAdapter.getCount() - 2);
+        sortBySpinner.setSelection(0);
 
     }
 
     public void onFilterApplied() {
 
         Log.d(TAG, "onFilterApplied: search clicked:");
-        if(mOnFilterSelectedListener != null)
+        if (mOnFilterSelectedListener != null)
             mOnFilterSelectedListener.onFilter(getFilters());
-        if(parentFragment != null)
+        if (parentFragment != null)
             parentFragment.dismiss();
     }
 
     public void onCancelClicked() {
-        if(parentFragment != null)
+        if (parentFragment != null)
             parentFragment.dismiss();
     }
 
@@ -265,28 +299,36 @@ public class FilterSchoolFragment extends Fragment implements View.OnClickListen
 
     private String getSortBy() {
         //default  sortBy = "Relevance";
-        switch (sortBySpinner.getSelectedItemPosition()){
+        switch (sortBySpinner.getSelectedItemPosition()) {
             case 1:
                 return "time";
 
             case 2:
                 return "distance";
 
-            default: return "Relevance";
+            default:
+                return "Relevance";
         }
 
 
     }
 
-    private int getSelectedDistance(){
-        switch (distSpinner.getSelectedItemPosition()){
-            case 0:return 5;
-            case 1: return 10;
-            case 2:return 15;
-            case 3:return 20;
-            case 4:return 25;
-            case 5:return 30;
-            default: return  -1;
+    private int getSelectedDistance() {
+        switch (distSpinner.getSelectedItemPosition()) {
+            case 0:
+                return 5;
+            case 1:
+                return 10;
+            case 2:
+                return 15;
+            case 3:
+                return 20;
+            case 4:
+                return 25;
+            case 5:
+                return 30;
+            default:
+                return -1;
         }
     }
 
@@ -317,25 +359,25 @@ public class FilterSchoolFragment extends Fragment implements View.OnClickListen
 
     private List<Integer> getselectedBoard() {
         ArrayList<Integer> selectedBoard = new ArrayList<>();
-        if(filterBoardCbse.isChecked()){
+        if (filterBoardCbse.isChecked()) {
             selectedBoard.add(1);
         }
-        if(filterBoardIcse.isChecked()){
+        if (filterBoardIcse.isChecked()) {
             selectedBoard.add(2);
         }
-        if(filterBoardIb.isChecked()){
+        if (filterBoardIb.isChecked()) {
             selectedBoard.add(3);
         }
-        if(filterBoardIgcse.isChecked()){
+        if (filterBoardIgcse.isChecked()) {
             selectedBoard.add(4);
         }
-        if(filterBoardState.isChecked()){
+        if (filterBoardState.isChecked()) {
             selectedBoard.add(5);
         }
-        if(filterBoardOther.isChecked()){
+        if (filterBoardOther.isChecked()) {
             selectedBoard.add(6);
         }
-        if(filterBoardCompetitiveExams.isChecked()){
+        if (filterBoardCompetitiveExams.isChecked()) {
             selectedBoard.add(20);
         }
         return selectedBoard;
@@ -343,22 +385,22 @@ public class FilterSchoolFragment extends Fragment implements View.OnClickListen
 
     private List<Integer> getselectedGrade() {
         ArrayList<Integer> selectedGrade = new ArrayList<>();
-        if(filterGrade5orBelow.isChecked()){
+        if (filterGrade5orBelow.isChecked()) {
             selectedGrade.add(1);
         }
-        if(filterGrade6to8.isChecked()){
+        if (filterGrade6to8.isChecked()) {
             selectedGrade.add(2);
         }
-        if(filterGrade9.isChecked()){
+        if (filterGrade9.isChecked()) {
             selectedGrade.add(3);
         }
-        if(filterGrade10.isChecked()){
+        if (filterGrade10.isChecked()) {
             selectedGrade.add(4);
         }
-        if(filterGrade11.isChecked()){
+        if (filterGrade11.isChecked()) {
             selectedGrade.add(5);
         }
-        if(filterGrade12.isChecked()){
+        if (filterGrade12.isChecked()) {
             selectedGrade.add(6);
         }
         return selectedGrade;

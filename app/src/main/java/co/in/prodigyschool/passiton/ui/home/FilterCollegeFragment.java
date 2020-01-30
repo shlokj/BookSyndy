@@ -29,47 +29,39 @@ public class FilterCollegeFragment extends Fragment implements View.OnClickListe
     public static final String TAG = "COLLEGE_FILTER_DIALOG";
 
     private View mRootView;
-    private CheckBox freeOnly, filterTextbook, filterNotes,filterDegreeBtech,filterDegreeBsc
-            ,filterDegreeBcom,filterDegreeBa, filterDegreeBba,filterDegreeBca,filterDegreeBed
-            ,filterDegreeLlb,filterDegreeMbbs,filterDegreeOther;
+    private CheckBox freeOnly, filterTextbook, filterNotes, filterDegreeBtech, filterDegreeBsc, filterDegreeBcom, filterDegreeBa, filterDegreeBba, filterDegreeBca, filterDegreeBed, filterDegreeLlb, filterDegreeMbbs, filterDegreeOther;
     private TextView openSchoolFilters;
     private HomeViewModel homeViewModel;
     private OnFilterSelectionListener mOnFilterSelectedListener;
     private FilterDialogFragment parentFragment;
-    private Spinner distSpinner,sortBySpinner;
+    private Spinner distSpinner, sortBySpinner;
     private ArrayAdapter<String> distAdapter, sortByAdapter;
 
 
-    public void onAttachToParentFragment(Fragment fragment)
-    {
-        try
-        {
-            mOnFilterSelectedListener = (OnFilterSelectionListener)fragment;
+    public void onAttachToParentFragment(Fragment fragment) {
+        try {
+            mOnFilterSelectedListener = (OnFilterSelectionListener) fragment;
 
-        }
-        catch (ClassCastException e)
-        {
+        } catch (ClassCastException e) {
             throw new ClassCastException(
                     fragment.toString() + " must implement OnFilterSelectionListener");
         }
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
-        parentFragment = (FilterDialogFragment)getParentFragment();
+        parentFragment = (FilterDialogFragment) getParentFragment();
         onAttachToParentFragment(parentFragment.getParentFragment());
         homeViewModel = ViewModelProviders.of(parentFragment.getParentFragment()).get(HomeViewModel.class);
     }
 
 
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        mRootView =  inflater.inflate(R.layout.fragment_filter_college_dialog, container, false);
+        mRootView = inflater.inflate(R.layout.fragment_filter_college_dialog, container, false);
         freeOnly = mRootView.findViewById(R.id.freeOnlyCB);
         mRootView.findViewById(R.id.button_apply_c).setOnClickListener(this);
         mRootView.findViewById(R.id.button_cancel_c).setOnClickListener(this);
@@ -111,44 +103,75 @@ public class FilterCollegeFragment extends Fragment implements View.OnClickListe
     }
 
     private void setFilterView(Filters filters) {
-        if(filters.IsNotes()){
+        if (filters.IsNotes()) {
             filterNotes.setChecked(true);
         }
-        if(filters.IsText()){
+        if (filters.IsText()) {
             filterTextbook.setChecked(true);
         }
-        if(filters.hasPrice()){
+        if (filters.hasPrice()) {
             freeOnly.setChecked(true);
         }
 
-        if(filters.hasBookDistance()){
-            switch (filters.getBookDistance()){
-                case 5:distSpinner.setSelection(0);break;
-                case 10:distSpinner.setSelection(1);break;
-                case 15:distSpinner.setSelection(2);break;
-                case 20:distSpinner.setSelection(3);break;
-                case 25:distSpinner.setSelection(4);break;
-                case 30:distSpinner.setSelection(5);break;
-                default:distSpinner.setSelection(6);
+        if (filters.hasBookDistance()) {
+            switch (filters.getBookDistance()) {
+                case 5:
+                    distSpinner.setSelection(0);
+                    break;
+                case 10:
+                    distSpinner.setSelection(1);
+                    break;
+                case 15:
+                    distSpinner.setSelection(2);
+                    break;
+                case 20:
+                    distSpinner.setSelection(3);
+                    break;
+                case 25:
+                    distSpinner.setSelection(4);
+                    break;
+                case 30:
+                    distSpinner.setSelection(5);
+                    break;
+                default:
+                    distSpinner.setSelection(6);
             }
-        }
-        else{
+        } else {
             distSpinner.setSelection(6);
         }
 
-        if(filters.hasBookBoard()){
-            for(int i:filters.getBookBoard()){
-                switch (i){
-                    case 7:filterDegreeBtech.setChecked(true);break;
-                    case 8:filterDegreeBsc.setChecked(true);break;
-                    case 9:filterDegreeBcom.setChecked(true);break;
-                    case 10:filterDegreeBa.setChecked(true);break;
-                    case 11:filterDegreeBba.setChecked(true);break;
-                    case 12:filterDegreeBca.setChecked(true);break;
-                    case 13:filterDegreeBed.setChecked(true);break;
-                    case 14:filterDegreeLlb.setChecked(true);break;
-                    case 15:filterDegreeMbbs.setChecked(true);break;
-                    case 16:filterDegreeOther.setChecked(true);
+        if (filters.hasBookBoard()) {
+            for (int i : filters.getBookBoard()) {
+                switch (i) {
+                    case 7:
+                        filterDegreeBtech.setChecked(true);
+                        break;
+                    case 8:
+                        filterDegreeBsc.setChecked(true);
+                        break;
+                    case 9:
+                        filterDegreeBcom.setChecked(true);
+                        break;
+                    case 10:
+                        filterDegreeBa.setChecked(true);
+                        break;
+                    case 11:
+                        filterDegreeBba.setChecked(true);
+                        break;
+                    case 12:
+                        filterDegreeBca.setChecked(true);
+                        break;
+                    case 13:
+                        filterDegreeBed.setChecked(true);
+                        break;
+                    case 14:
+                        filterDegreeLlb.setChecked(true);
+                        break;
+                    case 15:
+                        filterDegreeMbbs.setChecked(true);
+                        break;
+                    case 16:
+                        filterDegreeOther.setChecked(true);
 
                     default:
                 }
@@ -156,14 +179,17 @@ public class FilterCollegeFragment extends Fragment implements View.OnClickListe
 
         }
 
-        if(filters.hasSortBy()){
-            switch (filters.getSortBy()){
-                case "time": sortBySpinner.setSelection(1);break;
-                case "distance": sortBySpinner.setSelection(2);break;
+        if (filters.hasSortBy()) {
+            switch (filters.getSortBy()) {
+                case "time":
+                    sortBySpinner.setSelection(1);
+                    break;
+                case "distance":
+                    sortBySpinner.setSelection(2);
+                    break;
                 default:
             }
         }
-
 
 
     }
@@ -196,22 +222,23 @@ public class FilterCollegeFragment extends Fragment implements View.OnClickListe
         filterDegreeLlb.setChecked(false);
         filterDegreeMbbs.setChecked(false);
         filterDegreeOther.setChecked(false);
-        distSpinner.setSelection(distAdapter.getCount()-2);
+        distSpinner.setSelection(distAdapter.getCount() - 2);
+        sortBySpinner.setSelection(0);
     }
 
 
     public void onFilterApplied() {
 
-        Log.d(TAG, "onFilterApplied: search clicked:"+getFilters().getPrice());
-        if(mOnFilterSelectedListener != null)
+        Log.d(TAG, "onFilterApplied: search clicked:" + getFilters().getPrice());
+        if (mOnFilterSelectedListener != null)
             mOnFilterSelectedListener.onFilter(getFilters());
-        if(parentFragment != null)
+        if (parentFragment != null)
             parentFragment.dismiss();
 
     }
 
-    public void onCancelClicked(){
-        if(parentFragment != null)
+    public void onCancelClicked() {
+        if (parentFragment != null)
             parentFragment.dismiss();
     }
 
@@ -231,28 +258,36 @@ public class FilterCollegeFragment extends Fragment implements View.OnClickListe
 
     private String getSortBy() {
         //default  sortBy = "Relevance";
-        switch (sortBySpinner.getSelectedItemPosition()){
+        switch (sortBySpinner.getSelectedItemPosition()) {
             case 1:
                 return "time";
 
             case 2:
                 return "distance";
 
-            default: return "Relevance";
+            default:
+                return "Relevance";
         }
 
 
     }
 
-    private int getSelectedDistance(){
-        switch (distSpinner.getSelectedItemPosition()){
-            case 0:return 5;
-            case 1: return 10;
-            case 2:return 15;
-            case 3:return 20;
-            case 4:return 25;
-            case 5:return 30;
-            default: return  -1;
+    private int getSelectedDistance() {
+        switch (distSpinner.getSelectedItemPosition()) {
+            case 0:
+                return 5;
+            case 1:
+                return 10;
+            case 2:
+                return 15;
+            case 3:
+                return 20;
+            case 4:
+                return 25;
+            case 5:
+                return 30;
+            default:
+                return -1;
         }
     }
 
@@ -284,34 +319,34 @@ public class FilterCollegeFragment extends Fragment implements View.OnClickListe
 
     private List<Integer> getselectedBoard() {
         ArrayList<Integer> selectedBoard = new ArrayList<>();
-        if(filterDegreeBtech.isChecked()){
+        if (filterDegreeBtech.isChecked()) {
             selectedBoard.add(7);
         }
-        if(filterDegreeBsc.isChecked()){
+        if (filterDegreeBsc.isChecked()) {
             selectedBoard.add(8);
         }
-        if(filterDegreeBcom.isChecked()){
+        if (filterDegreeBcom.isChecked()) {
             selectedBoard.add(9);
         }
-        if(filterDegreeBa.isChecked()){
+        if (filterDegreeBa.isChecked()) {
             selectedBoard.add(10);
         }
-        if(filterDegreeBba.isChecked()){
+        if (filterDegreeBba.isChecked()) {
             selectedBoard.add(11);
         }
-        if(filterDegreeBca.isChecked()){
+        if (filterDegreeBca.isChecked()) {
             selectedBoard.add(12);
         }
-        if(filterDegreeBed.isChecked()){
+        if (filterDegreeBed.isChecked()) {
             selectedBoard.add(13);
         }
-        if(filterDegreeLlb.isChecked()){
+        if (filterDegreeLlb.isChecked()) {
             selectedBoard.add(14);
         }
-        if(filterDegreeMbbs.isChecked()){
+        if (filterDegreeMbbs.isChecked()) {
             selectedBoard.add(15);
         }
-        if(filterDegreeOther.isChecked()){
+        if (filterDegreeOther.isChecked()) {
             selectedBoard.add(16);
         }
         return selectedBoard;

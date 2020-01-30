@@ -38,7 +38,6 @@ public class FilterSchoolRequest extends DialogFragment implements View.OnClickL
     private ArrayAdapter<String> distAdapter, sortByAdapter;
 
 
-
     public void onAttachToParentFragment(Fragment fragment) {
         try {
             mOnFilterSelectedListener = (OnFilterSelectionListener) fragment;
@@ -204,6 +203,18 @@ public class FilterSchoolRequest extends DialogFragment implements View.OnClickL
 
         }
 
+        if (filters.hasSortBy()) {
+            switch (filters.getSortBy()) {
+                case "time":
+                    sortBySpinner.setSelection(1);
+                    break;
+                case "distance":
+                    sortBySpinner.setSelection(2);
+                    break;
+                default:
+            }
+        }
+
     }
 
 
@@ -243,6 +254,7 @@ public class FilterSchoolRequest extends DialogFragment implements View.OnClickL
         filterBoardState.setChecked(false);
 
         distSpinner.setSelection(distAdapter.getCount() - 2);
+        sortBySpinner.setSelection(0);
 
     }
 
@@ -270,8 +282,25 @@ public class FilterSchoolRequest extends DialogFragment implements View.OnClickL
             filters.setBookBoard(getselectedBoard());
             filters.setBookGrade(getselectedGrade());
             filters.setBookDistance(getSelectedDistance());
+            filters.setSortBy(getSortBy());
         }
         return filters;
+    }
+
+    private String getSortBy() {
+        //default  sortBy = "Relevance";
+        switch (sortBySpinner.getSelectedItemPosition()) {
+            case 1:
+                return "time";
+
+            case 2:
+                return "distance";
+
+            default:
+                return "Relevance";
+        }
+
+
     }
 
     private int getSelectedDistance() {

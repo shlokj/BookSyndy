@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,8 +34,13 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import co.in.prodigyschool.passiton.Adapters.HomeAdapter;
 import co.in.prodigyschool.passiton.Adapters.RequestAdapter;
@@ -69,6 +75,7 @@ public class PendingRequestFragment extends Fragment implements View.OnClickList
     private SharedPreferences userPref;
     private ReqViewModel reqViewModel;
     private double userLat,userLng;
+    private SimpleDateFormat dateFormat;
 
     /* search *
 
@@ -88,6 +95,7 @@ public class PendingRequestFragment extends Fragment implements View.OnClickList
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         reqViewModel = ViewModelProviders.of(this).get(ReqViewModel.class);
+        dateFormat =  new SimpleDateFormat("dd MM yyyy HH", Locale.getDefault());
         View rootView =  inflater.inflate(R.layout.fragment_pending_request, container, false);
         userPref = getContext().getSharedPreferences(getContext().getString(R.string.UserPref),0);
         userLat = userPref.getFloat(getString(R.string.p_lat),0.0f);
@@ -435,6 +443,70 @@ public class PendingRequestFragment extends Fragment implements View.OnClickList
 
         toBeRemoved.clear();
 
+
+        if(filters.hasSortBy()){
+
+            if(filters.getSortBy().equalsIgnoreCase("time")){
+                //sort by book duration
+                Collections.sort(filteredList, new Comparator<BookRequest>() {
+                    @Override
+                    public int compare(BookRequest o1, BookRequest o2) {
+                        try {
+                            Date d1 = dateFormat.parse(o1.getTime());
+                            Date d2 = dateFormat.parse(o2.getTime());
+                            if(d1.before(d2)){
+                                return 1;
+                            }
+                            else{
+                                return -1;
+                            }
+
+                        }
+                        catch (Exception e){
+                            return 0;
+                        }
+                    }
+                });
+
+            }
+            else{
+                //sort by book distance
+
+                if(userLat != 0.0 && userLng != 0.0) {
+
+                    Collections.sort(filteredList, new Comparator<BookRequest>() {
+                        @Override
+                        public int compare(BookRequest o1, BookRequest o2) {
+                            Location userLocation = new Location("point A");
+                            userLocation.setLatitude(userLat);
+                            userLocation.setLongitude(userLng);
+
+                            Location B1 = new Location("point B");
+                            B1.setLongitude(o1.getLng());
+                            B1.setLatitude(o1.getLat());
+
+                            Location B2 = new Location("point C");
+                            B2.setLongitude(o2.getLng());
+                            B2.setLatitude(o2.getLat());
+
+
+                            if(B1.distanceTo(userLocation) > B2.distanceTo(userLocation)){
+                                return 1;
+                            }
+                            else{
+                                return -1;
+                            }
+                        }
+                    });
+                }
+                else {
+                    Toast.makeText(getContext(),"Error Fetching Location",Toast.LENGTH_SHORT).show();
+                    filters.setSortBy("Relevance");
+                }
+
+            }
+
+        }
 
 
 
