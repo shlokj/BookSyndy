@@ -65,7 +65,7 @@ import co.in.prodigyschool.passiton.util.BookUtil;
 public class EditListingActivity extends AppCompatActivity {
 
 
-    private static String TAG = "CREATELISTINGFULL";
+    private static String TAG = "EDITLISTING";
     private static final int AUTOCOMPLETE_REQUEST_CODE = 108;
     private Spinner typeSpinner,gradeSpinner,boardSpinner;
     private double book_lat,book_lng;
@@ -99,7 +99,7 @@ public class EditListingActivity extends AppCompatActivity {
 
         typeSpinner = findViewById(R.id.bookTypeSpinner_e);
         gradeSpinner = findViewById(R.id.gradeSpinner_e);
-        boardSpinner = findViewById(R.id.boardSpinner_e);
+        boardSpinner = findViewById(R.id.board_spinner_e);
         boardDegreeLabel = findViewById(R.id.boardLabel_e);
         postButton = findViewById(R.id.postButton_e);
         competitiveExam = findViewById(R.id.forCompetitiveExams_e);
@@ -149,7 +149,6 @@ public class EditListingActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        //TODO: get other details as well
         gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
         boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 6);
         bookName = getIntent().getStringExtra("BOOK_NAME");
@@ -165,13 +164,39 @@ public class EditListingActivity extends AppCompatActivity {
 
         gradeSpinner.setSelection(gradeNumber - 1);
 
-        if (gradeNumber>=7) {
-            boardDegreeLabel.setText("Degree / course");
-            boardSpinner.setSelection(boardNumber-7);
+        if (boardNumber<20) {
+
+            if (gradeNumber >= 7) {
+                boardSpinner.setAdapter(degreeAdapter);
+                boardDegreeLabel.setText("Degree / course");
+                boardSpinner.post(new Runnable() {
+                    public void run() {
+                        boardSpinner.setSelection(boardNumber - 7);
+                    }
+                });
+            } else {
+                boardSpinner.setAdapter(boardAdapter);
+                boardDegreeLabel.setText("Board");
+                boardSpinner.post(new Runnable() {
+                    public void run() {
+                        boardSpinner.setSelection(boardNumber - 1);
+                    }
+                });
+            }
         }
-        else {
-            boardDegreeLabel.setText("Board");
-            boardSpinner.setSelection(boardNumber-1);
+
+
+        else if (boardNumber==20) {
+            competitiveExam.setVisibility(View.VISIBLE);
+            competitiveExam.setChecked(true);
+            gradeSpinner.setEnabled(false);
+            gradeSpinner.setFocusable(false);
+            gradeSpinner.setFocusableInTouchMode(false);
+            boardSpinner.setEnabled(false);
+            boardSpinner.setFocusable(false);
+            boardSpinner.setFocusableInTouchMode(false);
+            gradeSpinner.setVisibility(View.INVISIBLE);
+            boardSpinner.setVisibility(View.VISIBLE);
         }
 
         if (year>0) {
@@ -418,6 +443,39 @@ public class EditListingActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
+        boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 6);
+        bookName = getIntent().getStringExtra("BOOK_NAME");
+        bookDescription = getIntent().getStringExtra("BOOK_DESC");
+        bookAddress = getIntent().getStringExtra("BOOK_ADDRESS");
+        book_photo_url = getIntent().getStringExtra("BOOK_PHOTO");
+        book_lat = getIntent().getDoubleExtra("BOOK_LAT",0.0);
+        book_lng = getIntent().getDoubleExtra("BOOK_LNG",0.0);
+        isTextbook = getIntent().getBooleanExtra("BOOK_TYPE",false);
+        bookPrice = getIntent().getIntExtra("BOOK_PRICE",0);
+        year = getIntent().getIntExtra("BOOK_YEAR",0);
+        documentId = getIntent().getStringExtra("DOCUMENT_ID");
+
+        gradeSpinner.setSelection(gradeNumber - 1);
+
+        if (boardNumber<20) {
+
+            if (gradeNumber >= 7) {
+                boardSpinner.setAdapter(degreeAdapter);
+                boardDegreeLabel.setText("Degree / course");
+                boardSpinner.setSelection(boardNumber - 7);
+
+            } else {
+                boardSpinner.setAdapter(boardAdapter);
+                boardDegreeLabel.setText("Board");
+                boardSpinner.setSelection(boardNumber - 1);
+
+            }
+        }
+    }
 
     private void initFireBase() {
         try {
