@@ -193,7 +193,7 @@ public class GetBookDegreeActivity extends AppCompatActivity {
                                     .show();
                         }
                     }
-                    Toast.makeText(getApplicationContext(),"Board number: "+degreeNumber,Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(),"Board number: "+degreeNumber,Toast.LENGTH_SHORT).show();
                     getPrice.putExtra("BOARD_NUMBER",degreeNumber);
                     getPrice.putExtra("BOOK_IMAGE_URI", selectedImage);
                     getPrice.putExtra("IS_TEXTBOOK", isTextbook);

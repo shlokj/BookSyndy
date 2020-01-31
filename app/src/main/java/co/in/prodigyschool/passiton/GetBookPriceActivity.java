@@ -51,7 +51,7 @@ public class GetBookPriceActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),"School student",Toast.LENGTH_SHORT).show();
             boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 6);
         }
-        Toast.makeText(getApplicationContext(),"Board number: "+boardNumber,Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(),"Board number: "+boardNumber,Toast.LENGTH_SHORT).show();
 
         if(!isTextbook) {
             pricingInstructions.setText(R.string.material_pricing_instructions);

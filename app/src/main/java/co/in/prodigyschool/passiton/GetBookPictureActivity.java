@@ -104,6 +104,24 @@ public class GetBookPictureActivity extends AppCompatActivity {
             }
         });
 
+        takenPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fromCamera = true;
+                openCameraIntent();
+            }
+        });
+
+        chosenPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fromCamera = false;
+                Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(pickPhoto, 1);
+            }
+        });
+
         FloatingActionButton next = findViewById(R.id.fab19);
         next.setOnClickListener(new View.OnClickListener() {
             @Override

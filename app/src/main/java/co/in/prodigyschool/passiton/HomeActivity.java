@@ -83,6 +83,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private SharedPreferences.Editor editor;
     private boolean showGPS = false, sbLong;
 
+    //TODO: use showcase view to showcase fab and button to open navigation drawer
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
