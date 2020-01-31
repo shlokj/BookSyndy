@@ -23,7 +23,6 @@ public class MyListingsFragment extends Fragment implements TabLayout.OnTabSelec
 
     private GalleryViewModel galleryViewModel;
 
-    // TODO: sort books in my listings by date (newest on top)
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         galleryViewModel =

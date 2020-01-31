@@ -132,6 +132,7 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
         if (mQuery == null) {
             Log.w(TAG, "No query, not initializing RecyclerView");
         }
+        mQuery = mQuery.orderBy("bookTime", Query.Direction.DESCENDING);
         // specify an adapter
         mAdapter = new BookAdapter(mQuery, this,this) {
 
