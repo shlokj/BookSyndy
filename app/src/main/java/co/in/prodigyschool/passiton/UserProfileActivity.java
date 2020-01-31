@@ -156,7 +156,6 @@ public class UserProfileActivity extends AppCompatActivity {
 
         compExams = findViewById(R.id.profileCompetitiveExams);
 
-
         checkChange = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -165,7 +164,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                saveChanges.show();
+                detailsChanged=true;
             }
 
             @Override
@@ -282,173 +281,11 @@ public class UserProfileActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.edit_profile:
-                if (!editing) {
-                    fName.setEnabled(true);
-                    lName.setEnabled(true);
-                    uName.setEnabled(true);
-                    year.setEnabled(true);
-                    compExams.setEnabled(true);
-                    gradeSpinner.setEnabled(true);
-                    boardSpinner.setEnabled(true);
-                    degreeSpinner.setEnabled(true);
-                    preferGuidedMode.setEnabled(true);
-                    profilePic.setEnabled(true);
-                    // phoneNumber.setEnabled(true);
-                    menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_check_24px))
-                            .setTitle("Save changes");
-                    editing = true;
-
-                }
-                else {
-
-                    final ProgressDialog progressDialog = new ProgressDialog(this);
-                    // phoneNumber.setEnabled(false);
-
-//                    clickCount = clickCount + 1;
-
-                    if(!checkConnection(this)){
-                        showSnackbar("Internet is required");
-                        return true;
-                    }
-
-
-                    if (!(fName.getText().toString().length()==0 || lName.getText().toString().length()==0 || uName.getText().toString().length()==0 /*|| year.getText().toString().length()==0*/)) {
-                        boolean isAvailableUsername = checkUserName(uName.getText().toString().trim());
-
-                        if (!isAvailableUsername) {
-                            showSnackbar("This username is not available. Please try another");
-                            return true;
-                        }
-                        else{
-                        progressDialog.setTitle("Saving your changes");
-                        progressDialog.setMessage("Updating your profile");
-                        progressDialog.setCancelable(false);
-
-                        int board;
-                        if (gradeSpinner.getSelectedItemPosition()>=6) {
-                            board = boardSpinner.getSelectedItemPosition()+7;
-                            String ys = year.getText().toString();
-                            if (!(ys==null || ys.length()==0)) {
-                                yearNumber = Integer.parseInt(year.getText().toString());
-                                progressDialog.show();
-                            }
-                            else {
-                                View parentLayout = findViewById(android.R.id.content);
-                                Snackbar.make(parentLayout, "Please enter a year", Snackbar.LENGTH_SHORT)
-                                        .setAction("OKAY", new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View view) {
-
-                                            }
-                                        })
-                                        .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
-                                        .show();
-                                return false;
-                            }
-                        }
-                        else {
-                            board = boardSpinner.getSelectedItemPosition()+1;
-                        }
-                        menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_edit_24px))
-                                .setTitle("Edit profile");
-                        fName.setEnabled(false);
-                        lName.setEnabled(false);
-                        uName.setEnabled(false);
-                        year.setEnabled(false);
-                        compExams.setEnabled(false);
-                        gradeSpinner.setEnabled(false);
-                        boardSpinner.setEnabled(false);
-                        degreeSpinner.setEnabled(false);
-                        preferGuidedMode.setEnabled(false);
-                        profilePic.setEnabled(true);
-                        progressDialog.show();
-
-
-                        editor = userPref.edit();
-                        editor.putBoolean(getString(R.string.preferGuidedMode),preferGuidedMode.isChecked());
-                        editor.putString(getString(R.string.p_firstname),fName.getText().toString().trim());
-                        editor.putString(getString(R.string.p_lastname),lName.getText().toString().trim());
-                        editor.putString(getString(R.string.p_userid),uName.getText().toString().trim());
-//                        editor.putString(getString(R.string.p_imageurl),user.getImageUrl());
-                        editor.putInt(getString(R.string.p_grade),gradeSpinner.getSelectedItemPosition() +1);
-                        editor.putInt(getString(R.string.p_board),board);
-                        editor.putInt(getString(R.string.p_year),yearNumber);
-                        editor.putBoolean(getString(R.string.p_competitive),compExams.isChecked());
-                        editor.apply();
-                        DocumentReference userReference =  mFirestore.collection("users").document(phoneNumber);
-                        userReference.update("competitiveExam",compExams.isChecked(),"year",yearNumber,"firstName",fName.getText().toString(),"lastName",lName.getText().toString(),"gradeNumber",gradeSpinner.getSelectedItemPosition()+1,"boardNumber",board,"userId",uName.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                if(progressDialog.isShowing())
-                                    progressDialog.dismiss();
-                                Intent homeIntent = new Intent(UserProfileActivity.this, HomeActivity.class);
-                                homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                homeIntent.putExtra("SNACKBAR_MSG", "Your profile has been saved");
-                                startActivity(homeIntent);
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                if(progressDialog.isShowing())
-                                    progressDialog.dismiss();
-                                Log.d(TAG, "onFailure: update user",e);
-                                Toast.makeText(getApplicationContext(), "Update Failed", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-
-                    }}
-
-                    else {
-                        if(progressDialog.isShowing())
-                            progressDialog.dismiss();
-
-                        View parentLayout = findViewById(android.R.id.content);
-                        Snackbar.make(parentLayout, "Please fill in all fields", Snackbar.LENGTH_SHORT)
-                                .setAction("OKAY", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-
-                                    }
-                                })
-                                .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
-                                .show();
-
-                    }
-                }
+                saveChangesAndExit();
                 break;
             case android.R.id.home:
-                if (detailsChanged) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(UserProfileActivity.this);
-                    builder.setTitle("Save your changes?");
-                    builder.setMessage("Would you like to save the changes you made to your profile?");
-                    builder.setPositiveButton("Save and exit", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent homeIntent = new Intent(UserProfileActivity.this, HomeActivity.class);
-                            homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            homeIntent.putExtra("SNACKBAR_MSG", "Your profile has been saved");
-                            startActivity(homeIntent);
-                        }
-                    });
-                    builder.setNegativeButton("Exit without saving", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            finishActivity1();
-                        }
-                    });
-                    builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    });
-                    builder.show();
-                }
-                else {
-                    finishActivity1();
-                }
+                showSaveDialog();
                 break;
-
         }
         return true;
     }
@@ -461,7 +298,8 @@ public class UserProfileActivity extends AppCompatActivity {
     }
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        showSaveDialog();
+//        super.onBackPressed();
     }
     public void finishActivity1 () {
         this.finish();
@@ -756,6 +594,178 @@ public class UserProfileActivity extends AppCompatActivity {
                 })
                 .setActionTextColor(getResources().getColor(android.R.color.holo_blue_light))
                 .show();
+    }
+
+    public void saveChangesAndExit() {
+
+        if (!editing) {
+            fName.setEnabled(true);
+            lName.setEnabled(true);
+            uName.setEnabled(true);
+            year.setEnabled(true);
+            compExams.setEnabled(true);
+            gradeSpinner.setEnabled(true);
+            boardSpinner.setEnabled(true);
+            degreeSpinner.setEnabled(true);
+            preferGuidedMode.setEnabled(true);
+            profilePic.setEnabled(true);
+            // phoneNumber.setEnabled(true);
+            menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_check_24px))
+                    .setTitle("Save changes");
+            editing = true;
+
+        }
+        else {
+
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            // phoneNumber.setEnabled(false);
+
+//                    clickCount = clickCount + 1;
+
+            if(!checkConnection(this)){
+                showSnackbar("Internet is required");
+                return;
+            }
+
+
+            if (!(fName.getText().toString().length()==0 || lName.getText().toString().length()==0 || uName.getText().toString().length()==0 /*|| year.getText().toString().length()==0*/)) {
+                boolean isAvailableUsername = checkUserName(uName.getText().toString().trim());
+
+                if (!isAvailableUsername) {
+                    showSnackbar("This username is not available. Please try another");
+                    return;
+                }
+                else{
+                    progressDialog.setTitle("Saving your changes");
+                    progressDialog.setMessage("Updating your profile");
+                    progressDialog.setCancelable(false);
+
+                    int board;
+                    if (gradeSpinner.getSelectedItemPosition()>=6) {
+                        board = boardSpinner.getSelectedItemPosition()+7;
+                        String ys = year.getText().toString();
+                        if (!(ys==null || ys.length()==0)) {
+                            yearNumber = Integer.parseInt(year.getText().toString());
+                            progressDialog.show();
+                        }
+                        else {
+                            View parentLayout = findViewById(android.R.id.content);
+                            Snackbar.make(parentLayout, "Please enter a year", Snackbar.LENGTH_SHORT)
+                                    .setAction("OKAY", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+
+                                        }
+                                    })
+                                    .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                                    .show();
+                            return;
+                        }
+                    }
+                    else {
+                        board = boardSpinner.getSelectedItemPosition()+1;
+                    }
+                    menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_edit_24px))
+                            .setTitle("Edit profile");
+                    fName.setEnabled(false);
+                    lName.setEnabled(false);
+                    uName.setEnabled(false);
+                    year.setEnabled(false);
+                    compExams.setEnabled(false);
+                    gradeSpinner.setEnabled(false);
+                    boardSpinner.setEnabled(false);
+                    degreeSpinner.setEnabled(false);
+                    preferGuidedMode.setEnabled(false);
+                    profilePic.setEnabled(true);
+                    progressDialog.show();
+
+
+                    editor = userPref.edit();
+                    editor.putBoolean(getString(R.string.preferGuidedMode),preferGuidedMode.isChecked());
+                    editor.putString(getString(R.string.p_firstname),fName.getText().toString().trim());
+                    editor.putString(getString(R.string.p_lastname),lName.getText().toString().trim());
+                    editor.putString(getString(R.string.p_userid),uName.getText().toString().trim());
+//                        editor.putString(getString(R.string.p_imageurl),user.getImageUrl());
+                    editor.putInt(getString(R.string.p_grade),gradeSpinner.getSelectedItemPosition() +1);
+                    editor.putInt(getString(R.string.p_board),board);
+                    editor.putInt(getString(R.string.p_year),yearNumber);
+                    editor.putBoolean(getString(R.string.p_competitive),compExams.isChecked());
+                    editor.apply();
+                    DocumentReference userReference =  mFirestore.collection("users").document(phoneNumber);
+                    userReference.update("competitiveExam",compExams.isChecked(),"year",yearNumber,"firstName",fName.getText().toString(),"lastName",lName.getText().toString(),"gradeNumber",gradeSpinner.getSelectedItemPosition()+1,"boardNumber",board,"userId",uName.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            if(progressDialog.isShowing())
+                                progressDialog.dismiss();
+                            Intent homeIntent = new Intent(UserProfileActivity.this, HomeActivity.class);
+                            homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            homeIntent.putExtra("SNACKBAR_MSG", "Your profile has been saved");
+                            startActivity(homeIntent);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            if(progressDialog.isShowing())
+                                progressDialog.dismiss();
+                            Log.d(TAG, "onFailure: update user",e);
+                            Toast.makeText(getApplicationContext(), "Update Failed", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                }}
+
+            else {
+                if(progressDialog.isShowing())
+                    progressDialog.dismiss();
+
+                View parentLayout = findViewById(android.R.id.content);
+                Snackbar.make(parentLayout, "Please fill in all fields", Snackbar.LENGTH_SHORT)
+                        .setAction("OKAY", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                            }
+                        })
+                        .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                        .show();
+
+            }
+        }
+    }
+
+    public void showSaveDialog() {
+
+        if (detailsChanged) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(UserProfileActivity.this);
+            builder.setTitle("Save your changes?");
+            builder.setMessage("Would you like to save the changes you made to your profile?");
+            builder.setPositiveButton("Save and exit", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+//                            Intent homeIntent = new Intent(UserProfileActivity.this, HomeActivity.class);
+//                            homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                            homeIntent.putExtra("SNACKBAR_MSG", "Your profile has been saved");
+//                            startActivity(homeIntent);
+                    saveChangesAndExit();
+                }
+            });
+            builder.setNegativeButton("Exit without saving", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    finishActivity1();
+                }
+            });
+            builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            builder.show();
+        }
+        else {
+            finishActivity1();
+        }
     }
 
 }
