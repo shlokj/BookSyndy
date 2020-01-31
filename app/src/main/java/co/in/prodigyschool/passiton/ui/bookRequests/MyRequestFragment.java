@@ -69,7 +69,7 @@ public class MyRequestFragment extends Fragment implements EventListener<QuerySn
         bookRequests = new ArrayList<>();
         bookRequestsFull = new ArrayList<>();
         initFireStore();
-        mAdapter = new RequestAdapter(getContext(),bookRequests,this) {
+        mAdapter = new RequestAdapter(getContext(),bookRequests,this,"MRF") {
 
             @Override
             public void onDataChanged() {

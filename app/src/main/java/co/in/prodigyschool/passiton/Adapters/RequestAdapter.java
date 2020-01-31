@@ -21,6 +21,7 @@ import java.util.Locale;
 
 import co.in.prodigyschool.passiton.Data.BookRequest;
 import co.in.prodigyschool.passiton.R;
+import co.in.prodigyschool.passiton.ui.bookRequests.PendingRequestFragment;
 
 public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHolder> {
 
@@ -40,13 +41,19 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
     public RequestAdapter() {
     }
 
-    public RequestAdapter(Context context, List<BookRequest> requestList, OnRequestSelectedListener listener) {
+    public RequestAdapter(Context context, List<BookRequest> requestList, OnRequestSelectedListener listener,String caller) {
         this.context = context;
         this.requestList = requestList;
         mFireStore = FirebaseFirestore.getInstance();
         userPref = context.getSharedPreferences(context.getString(R.string.UserPref),0);
-        latA = userPref.getFloat(context.getString(R.string.p_lat),0.0f);
-        lngA = userPref.getFloat(context.getString(R.string.p_lng),0.0f);
+         if(caller.equals("PRF")){
+            latA = userPref.getFloat(context.getString(R.string.p_lat), 0.0f);
+            lngA = userPref.getFloat(context.getString(R.string.p_lng), 0.0f);
+        }
+        else{
+            latA = 0.0f;
+            lngA = 0.0f;
+        }
         this.mListener = listener;
     }
 

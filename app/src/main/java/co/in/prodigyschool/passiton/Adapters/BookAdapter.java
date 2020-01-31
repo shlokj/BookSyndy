@@ -30,7 +30,7 @@ import co.in.prodigyschool.passiton.R;
 
 public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder> {
 
-    double latA,lngA;
+    private double latA,lngA;
     private FirebaseFirestore mFirestore;
 
 
@@ -50,7 +50,7 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder> {
     private OnBookSelectedListener mListener;
     private OnBookLongSelectedListener mLongListener;
 
-    public BookAdapter(Query query, OnBookSelectedListener listener,OnBookLongSelectedListener longListener) {
+    protected BookAdapter(Query query, OnBookSelectedListener listener,OnBookLongSelectedListener longListener) {
         super(query);
         mListener = listener;
         mLongListener = longListener;
@@ -58,22 +58,27 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder> {
         getUserLocation();
     }
 
-    public void getUserLocation() {
-        final String curUserId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
-        mFirestore.collection("address").document(curUserId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.e("BOOK_ADAPTER_INNER", "onEvent: exception", e);
-                    return;
-                }
-                if(snapshot.getDouble("lat") != null && snapshot.getDouble("lng") != null) {
-                    latA = snapshot.getDouble("lat");
-                    lngA = snapshot.getDouble("lng");
-                }
+    private void getUserLocation() {
+        try {
+            final String curUserId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
+            mFirestore.collection("address").document(curUserId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+                    if (e != null) {
+                        Log.e("BOOK_ADAPTER_INNER", "onEvent: exception", e);
+                        return;
+                    }
+                    if (snapshot.getDouble("lat") != null && snapshot.getDouble("lng") != null) {
+                        latA = snapshot.getDouble("lat");
+                        lngA = snapshot.getDouble("lng");
+                    }
 
-            }
-        });
+                }
+            });
+        }
+        catch (Exception e){
+           e.printStackTrace();
+        }
     }
 
     @NonNull
@@ -91,10 +96,7 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder> {
 
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-
-
             holder.bind(getSnapshot(position), mListener,mLongListener,latA,lngA);
-
 
     }
 
@@ -110,7 +112,7 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder> {
         double latA,lngA;
         private FirebaseFirestore mFirestore;
 
-        public ViewHolder(View itemView) {
+        private ViewHolder(View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.bookPicture);
             nameView = itemView.findViewById(R.id.bookMaterialName_r);
@@ -123,7 +125,7 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder> {
 
 
 
-        public void bind(final DocumentSnapshot snapshot,
+        private void bind(final DocumentSnapshot snapshot,
                          final OnBookSelectedListener listener, final OnBookLongSelectedListener longListener, double latitude, final double longitude) {
             Book book = snapshot.toObject(Book.class);
             String userId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
