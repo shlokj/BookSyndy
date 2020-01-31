@@ -109,7 +109,7 @@ public class PendingRequestFragment extends Fragment implements View.OnClickList
         bookRequestsFull = new ArrayList<>();
         initFireStore();
         fab.setOnClickListener(this);
-        mAdapter = new RequestAdapter(getContext(),bookRequests,this) {
+        mAdapter = new RequestAdapter(getContext(),bookRequests,this,"PRF") {
 
             @Override
             public void onDataChanged() {
@@ -527,7 +527,7 @@ public class PendingRequestFragment extends Fragment implements View.OnClickList
     }
 
 
-    public  boolean getBookUnderDistance(BookRequest book,int distance, double latitude, double longitude){
+    private  boolean getBookUnderDistance(BookRequest book,int distance, double latitude, double longitude){
         float res;
         if(book.getLat() != 0.0 && book.getLng() != 0.0 ) {
             Location locationA = new Location("point A");
