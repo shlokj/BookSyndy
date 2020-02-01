@@ -24,6 +24,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -89,7 +90,7 @@ public class CreateListingActivity extends AppCompatActivity {
     private static String TAG = "CREATELISTINGFULL";
     private Spinner typeSpinner,gradeSpinner,boardSpinner;
     private double book_lat,book_lng;
-    private boolean isTextbook, forCompExam;
+    private boolean isTextbook, forCompExam, detailsChanged = false;
     private String curUserId, bookName, bookDescription, phoneNumber, userId, bookAddress, bookImageUrl, selectedImage,book_photo_url;
     private int gradeNumber, boardNumber, year;
     private int bookPrice;
@@ -110,6 +111,7 @@ public class CreateListingActivity extends AppCompatActivity {
     private FirebaseStorage mFirebaseStorage;
     private StorageReference bookPhotosStorageReference;
     private SharedPreferences userPref;
+    private TextWatcher checkChange;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,10 +139,30 @@ public class CreateListingActivity extends AppCompatActivity {
         }
         getSupportActionBar().setTitle("Create a listing");
 
-        if(getSupportActionBar()!= null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        checkChange = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                detailsChanged=true;
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        };
+
+        nameField.addTextChangedListener(checkChange);
+        descField.addTextChangedListener(checkChange);
+        priceField.addTextChangedListener(checkChange);
+        yearField.addTextChangedListener(checkChange);
+
 
         initFireBase();
         populateUserLocation();
@@ -294,140 +316,7 @@ public class CreateListingActivity extends AppCompatActivity {
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bookName = nameField.getText().toString().trim();
-                bookDescription = descField.getText().toString().trim();
-                bookAddress = locField.getText().toString().trim();
-                isTextbook = typeSpinner.getSelectedItemPosition()==0;
-                gradeNumber = gradeSpinner.getSelectedItemPosition()+1;
-                forCompExam = competitiveExam.isChecked();
-                if (forCompExam) {
-                    gradeNumber=0;
-                    boardNumber=20;
-                }
-                else {
-                    if (gradeNumber >= 7) {
-                        boardNumber = boardSpinner.getSelectedItemPosition() + 7;
-                    } else {
-                        boardNumber = boardSpinner.getSelectedItemPosition() + 1;
-                    }
-                }
-                String bps = priceField.getText().toString().trim();
-                String bys;
-                forCompExam = competitiveExam.isChecked();
-
-                if (selectedImageUri==null) {
-                    showSnackbar("Please take or select a picture of your book");
-                }
-                else if (bookName.length()<10) {
-                    showSnackbar("Please enter at least 10 characters for your book's name");
-                }
-                else if (bookDescription.length()<10) {
-                    showSnackbar("Please enter at least 10 characters for the description");
-                }
-                else if (gradeNumber>=7 && yearField.getText().toString().length()==0) {
-                    showSnackbar("Please enter a year for your book");
-                }
-                else if (bookAddress.length()==0) {
-                    showSnackbar("Couldn't get your location. Please enter it manually.");
-                }
-                else if (bps.length()==0) {
-                    showSnackbar("Please enter a price or give it for free");
-                }
-/*                else if (book_photo_url==null || book_photo_url.length()==0) {
-                    showSnackbar("Please take a picture of your book");
-                }*/
-                else {
-                    boolean validYear = true;
-                    bookPrice = Integer.parseInt(bps);
-                    if (gradeNumber>=7) {
-//                        Toast.makeText(getApplicationContext(),"Undergrad",Toast.LENGTH_SHORT).show();
-//                        Toast.makeText(getApplicationContext(),"Board number: "+boardNumber,Toast.LENGTH_SHORT).show();
-
-                        bys = yearField.getText().toString().trim();
-                        if (bys.length()==0) {
-                            showSnackbar("Please enter a year for your book");
-                        }
-                        else {
-                            year = Integer.parseInt(bys);
-
-                            if (boardNumber == 7) {
-                                if (year > 4 || year == 0) {
-                                    validYear = false;
-                                    displaySnackbarYears(4);
-                                }
-                            } else if (boardNumber == 8) {
-                                if (year > 4 || year == 0) {
-                                    validYear = false;
-                                    displaySnackbarYears(4);
-                                }
-                            } else if (boardNumber == 9) {
-                                if (year > 4 || year == 0) {
-                                    validYear = false;
-                                    displaySnackbarYears(4);
-                                }
-                            } else if (boardNumber == 10) {
-                                if (year > 4 || year == 0) {
-                                    validYear = false;
-                                    displaySnackbarYears(4);
-                                }
-                            } else if (boardNumber == 11) {
-                                if (year > 4 || year == 0) {
-                                    validYear = false;
-                                    displaySnackbarYears(4);
-                                }
-                            } else if (boardNumber == 12) {
-                                if (year > 4 || year == 0) {
-                                    validYear = false;
-                                    displaySnackbarYears(4);
-                                }
-                            } else if (boardNumber == 13) {
-                                if (year > 4 || year == 0) {
-                                    validYear = false;
-                                    displaySnackbarYears(4);
-                                }
-                            } else if (boardNumber == 14) {
-                                if (year > 5 || year == 0) {
-                                    validYear = false;
-                                    displaySnackbarYears(5);
-                                }
-                            } else if (boardNumber == 15) {
-                                //boardNumber = 15;
-//                                Toast.makeText(getApplicationContext(),"MBBS",Toast.LENGTH_LONG).show();
-                                if (year > 6 || year == 0) {
-                                    validYear = false;
-                                    displaySnackbarYears(6);
-                                }
-                            } else if (boardNumber == 16) {
-                                if (year == 0) {
-                                    validYear = false;
-                                    View parentLayout = findViewById(android.R.id.content);
-                                    Snackbar.make(parentLayout, "Your year can't be 0", Snackbar.LENGTH_SHORT)
-                                            .setAction("OKAY", new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View view) {
-
-                                                }
-                                            })
-                                            .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
-                                            .show();
-                                }
-                            }
-                        }
-                        if (bys.length()==0) {
-                            showSnackbar("Please enter a year for your book");
-                        }
-                        else {
-                            year=Integer.parseInt(bys);
-                        }
-                    }
-                    else {
-                        year=0;
-                    }
-                    if (validYear) {
-//                        Toast.makeText(getApplicationContext(),"Valid, start upload",Toast.LENGTH_SHORT).show();
-                        uploadBook();
-                    }
-                }
+                checkAndUploadBook();
             }
         });
 
@@ -573,9 +462,8 @@ public class CreateListingActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent homeActivity = new Intent(CreateListingActivity.this, HomeActivity.class);
-        startActivity(homeActivity);
-        finish();
+        showSaveDialog();
+
     }
 
     public void displaySnackbarYears(int year) {
@@ -660,6 +548,7 @@ public class CreateListingActivity extends AppCompatActivity {
                     try {
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
                         mBookImage.setImageBitmap(bitmap);
+                        detailsChanged=true;
                         storeBookImage(bitmap);
                     } catch (IOException e) {
                         Log.e(TAG, "onActivityResult: CROP ERROR:",e);
@@ -861,4 +750,183 @@ public class CreateListingActivity extends AppCompatActivity {
         }
     }
 
+    public void checkAndUploadBook() {
+        bookName = nameField.getText().toString().trim();
+        bookDescription = descField.getText().toString().trim();
+        bookAddress = locField.getText().toString().trim();
+        isTextbook = typeSpinner.getSelectedItemPosition()==0;
+        gradeNumber = gradeSpinner.getSelectedItemPosition()+1;
+        forCompExam = competitiveExam.isChecked();
+        if (forCompExam) {
+            gradeNumber=0;
+            boardNumber=20;
+        }
+        else {
+            if (gradeNumber >= 7) {
+                boardNumber = boardSpinner.getSelectedItemPosition() + 7;
+            } else {
+                boardNumber = boardSpinner.getSelectedItemPosition() + 1;
+            }
+        }
+        String bps = priceField.getText().toString().trim();
+        String bys;
+        forCompExam = competitiveExam.isChecked();
+
+        if (selectedImageUri==null) {
+            showSnackbar("Please take or select a picture of your book");
+        }
+        else if (bookName.length()<10) {
+            showSnackbar("Please enter at least 10 characters for your book's name");
+        }
+        else if (bookDescription.length()<10) {
+            showSnackbar("Please enter at least 10 characters for the description");
+        }
+        else if (gradeNumber>=7 && yearField.getText().toString().length()==0) {
+            showSnackbar("Please enter a year for your book");
+        }
+        else if (bookAddress.length()==0) {
+            showSnackbar("Couldn't get your location. Please enter it manually.");
+        }
+        else if (bps.length()==0) {
+            showSnackbar("Please enter a price or give it for free");
+        }
+/*                else if (book_photo_url==null || book_photo_url.length()==0) {
+                    showSnackbar("Please take a picture of your book");
+                }*/
+        else {
+            boolean validYear = true;
+            bookPrice = Integer.parseInt(bps);
+            if (gradeNumber>=7) {
+//                        Toast.makeText(getApplicationContext(),"Undergrad",Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(),"Board number: "+boardNumber,Toast.LENGTH_SHORT).show();
+
+                bys = yearField.getText().toString().trim();
+                if (bys.length()==0) {
+                    showSnackbar("Please enter a year for your book");
+                }
+                else {
+                    year = Integer.parseInt(bys);
+
+                    if (boardNumber == 7) {
+                        if (year > 4 || year == 0) {
+                            validYear = false;
+                            displaySnackbarYears(4);
+                        }
+                    } else if (boardNumber == 8) {
+                        if (year > 4 || year == 0) {
+                            validYear = false;
+                            displaySnackbarYears(4);
+                        }
+                    } else if (boardNumber == 9) {
+                        if (year > 4 || year == 0) {
+                            validYear = false;
+                            displaySnackbarYears(4);
+                        }
+                    } else if (boardNumber == 10) {
+                        if (year > 4 || year == 0) {
+                            validYear = false;
+                            displaySnackbarYears(4);
+                        }
+                    } else if (boardNumber == 11) {
+                        if (year > 4 || year == 0) {
+                            validYear = false;
+                            displaySnackbarYears(4);
+                        }
+                    } else if (boardNumber == 12) {
+                        if (year > 4 || year == 0) {
+                            validYear = false;
+                            displaySnackbarYears(4);
+                        }
+                    } else if (boardNumber == 13) {
+                        if (year > 4 || year == 0) {
+                            validYear = false;
+                            displaySnackbarYears(4);
+                        }
+                    } else if (boardNumber == 14) {
+                        if (year > 5 || year == 0) {
+                            validYear = false;
+                            displaySnackbarYears(5);
+                        }
+                    } else if (boardNumber == 15) {
+                        //boardNumber = 15;
+//                                Toast.makeText(getApplicationContext(),"MBBS",Toast.LENGTH_LONG).show();
+                        if (year > 6 || year == 0) {
+                            validYear = false;
+                            displaySnackbarYears(6);
+                        }
+                    } else if (boardNumber == 16) {
+                        if (year == 0) {
+                            validYear = false;
+                            View parentLayout = findViewById(android.R.id.content);
+                            Snackbar.make(parentLayout, "Your year can't be 0", Snackbar.LENGTH_SHORT)
+                                    .setAction("OKAY", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+
+                                        }
+                                    })
+                                    .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                                    .show();
+                        }
+                    }
+                }
+                if (bys.length()==0) {
+                    showSnackbar("Please enter a year for your book");
+                }
+                else {
+                    year=Integer.parseInt(bys);
+                }
+            }
+            else {
+                year=0;
+            }
+            if (validYear) {
+//                        Toast.makeText(getApplicationContext(),"Valid, start upload",Toast.LENGTH_SHORT).show();
+                uploadBook();
+            }
+        }
+    }
+
+    public void showSaveDialog() {
+
+        if (detailsChanged) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(CreateListingActivity.this);
+            builder.setTitle("Save your changes?");
+            builder.setMessage("You have unsaved changes. Would you like to stay or discard them?");
+            builder.setPositiveButton("Stay", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+//                            Intent homeIntent = new Intent(UserProfileActivity.this, HomeActivity.class);
+//                            homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                            homeIntent.putExtra("SNACKBAR_MSG", "Your profile has been saved");
+//                            startActivity(homeIntent);
+
+                }
+            });
+            builder.setNegativeButton("Exit without saving", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Intent homeActivity = new Intent(CreateListingActivity.this, HomeActivity.class);
+                    startActivity(homeActivity);
+                    finish();
+                }
+            });
+            builder.show();
+        }
+        else {
+            Intent homeActivity = new Intent(CreateListingActivity.this, HomeActivity.class);
+            startActivity(homeActivity);
+            finish();
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                showSaveDialog();
+        }
+        return true;
+    }
 }
+

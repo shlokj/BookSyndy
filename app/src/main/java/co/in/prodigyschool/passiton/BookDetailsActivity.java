@@ -509,8 +509,10 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
 //                builder.setMessage("Share this link with someone who might be interested in this book");
                 final EditText linkET = new EditText(getApplicationContext());
                 final ProgressDialog progressDialog = new ProgressDialog(this);
-                progressDialog.setTitle("generating Link");
+                progressDialog.setTitle("Generating link");
+                progressDialog.setMessage("Just a moment...");
                 progressDialog.show();
+
 
                 Task<ShortDynamicLink> shortLinkTask = FirebaseDynamicLinks.getInstance().createDynamicLink()
                         .setLink(Uri.parse("https://booksyndy.com/" + currentBook.getDocumentId()))
