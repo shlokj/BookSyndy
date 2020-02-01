@@ -85,6 +85,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     private double userLat,userLng;
     private int userGrade;
     private SimpleDateFormat dateFormat;
+    private List<Book> filteredList;
 
 
     @Override
@@ -95,7 +96,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         dateFormat =  new SimpleDateFormat("dd MM yyyy HH",Locale.getDefault());
     }
 
-    
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         //homeViewModel =
@@ -165,7 +166,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                     refreshHome();
                 }
                 else{
-                    showSnackbar("Check Your Internet!");
+                    showSnackbar("Check your internet!");
                     if(mSwipeRefreshLayout.isRefreshing()){
                         mSwipeRefreshLayout.setRefreshing(false);
                     }
@@ -191,7 +192,6 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         if (booksRegistration == null) {
             booksRegistration = mQuery.addSnapshotListener(this);
         }
-
     }
 
 
@@ -201,7 +201,6 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         if (mAdapter != null) {
             mAdapter.onDataChanged();
         }
-
     }
 
     @Override
@@ -212,8 +211,6 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             booksRegistration = null;
             mAdapter.onDataChanged();
         }
-
-
     }
 
     private void refreshHome() {
@@ -222,7 +219,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             booksRegistration = null;
             booksRegistration = mQuery.addSnapshotListener(this);
         }
-       // mSwipeRefreshLayout.setRefreshing(false);
+        // mSwipeRefreshLayout.setRefreshing(false);
     }
 
 
@@ -299,21 +296,39 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                 {
                     filteredList1.addAll(bookListFull);
                     searchView.clearFocus();
+                    mAdapter.setBookList(filteredList1);
                     return true;
                 }
-                else{
 
-                    String filterPattern = newText.toLowerCase().trim();
-                    String[] strgs = filterPattern.split("\\W+");
-                    for (Book book : filteredList1) {
-                        int foundIndex = book.getBookName().toLowerCase().indexOf(filterPattern);
-//                        Toast.makeText(getActivity(),"Found at "+foundIndex,Toast.LENGTH_SHORT).show();
-                        if (book.getBookName().toLowerCase().contains(filterPattern)) {
-                            if (foundIndex != -1 && (foundIndex == 0 || book.getBookName().substring(foundIndex - 1, foundIndex).equals(" ")) && !filteredList1.contains(book)) {
-                                filteredList1.add(book);
+                String filterPattern = newText.toLowerCase().trim();
+                String[] qws = filterPattern.split("\\W+");
+                for (Book book : filteredList) {
+//                    int foundIndex = book.getBookName().toLowerCase().indexOf(filterPattern);
+                    String[] tags = book.getBookName().toLowerCase().split("\\W+");
+                    for (String tag : tags) {
+                        for (String qw : qws) {
+                            if (tag.indexOf(qw)==0) {
+                                if (!filteredList1.contains(book)) {
+                                    filteredList1.add(book);
+                                }
+//                                break;
                             }
                         }
                     }
+//                        Toast.makeText(getActivity(),"Found at "+foundIndex,Toast.LENGTH_SHORT).show();
+                    /*if (book.getBookName().toLowerCase().contains(filterPattern)) {
+                        if (foundIndex != -1) {
+                            continue;
+                        }
+                        if (foundIndex == 0) {
+                            filteredList1.add(book);
+                            continue;
+                        }
+                        if ((book.getBookName().toLowerCase().substring(foundIndex - 1, foundIndex).equals(" ")) && !filteredList1.contains(book)) {
+                            filteredList1.add(book);
+                        }
+                    }*/
+                }
 /*                    for (Book book : filteredList1) {
                         for (String s:strgs) {
                             int foundIndex = book.getBookName().toLowerCase().indexOf(s);
@@ -325,14 +340,25 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                             }
                         }
                     }*/
-                    for (Book book : bookListFull) {
-                        int foundIndex = book.getBookName().toLowerCase().indexOf(filterPattern);
-                        if (book.getBookName().toLowerCase().contains(filterPattern)) {
-                            if (foundIndex != -1 && (foundIndex == 0 || book.getBookName().substring(foundIndex - 1, foundIndex).equals(" ")) &&  !filteredList1.contains(book)) {
-                                filteredList1.add(book);
+                for (Book book : bookListFull) {
+                    /*int foundIndex = book.getBookName().toLowerCase().indexOf(filterPattern);
+                    if (book.getBookName().toLowerCase().contains(filterPattern)) {
+                        if (foundIndex != -1 && (foundIndex == 0 || book.getBookName().toLowerCase().substring(foundIndex - 1, foundIndex).equals(" ")) &&  !filteredList1.contains(book)) {
+                            filteredList1.add(book);
+                        }
+                    }*/
+                    String[] tags = book.getBookName().toLowerCase().split(" ");
+                    for (String tag : tags) {
+                        for (String qw : qws) {
+                            if (tag.indexOf(qw)==0) {
+                                if (!filteredList1.contains(book)) {
+                                    filteredList1.add(book);
+                                }
+                                break;
                             }
                         }
                     }
+                }
 /*                    for (String s:strgs) {
                         for (Book book : bookListFull) {
                             int foundIndex = book.getBookName().toLowerCase().indexOf(s);
@@ -343,7 +369,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                             }
                         }
                     }*/
-                }
+
                 mAdapter.setBookList(filteredList1);
 
                 return false;
@@ -377,7 +403,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     @Override
     public void onFilter(Filters filters) {
         Log.d(TAG, "onFilter: entered :price"+filters.hasPrice());
-        List<Book> filteredList = new ArrayList<>();
+        filteredList = new ArrayList<>();
         List<Book> toBeRemoved = new ArrayList<>();
 
         boolean noFilter = true;
@@ -452,9 +478,9 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 
             // remove competitive exam books from the list as we don't want them by default
             for (int a = 0; a < filteredList.size(); a++) {
-                    if (filteredList.get(a).getBoardNumber() == 20) {
-                        toBeRemoved.add(filteredList.get(a));
-                    }
+                if (filteredList.get(a).getBoardNumber() == 20) {
+                    toBeRemoved.add(filteredList.get(a));
+                }
             }
         }
 
@@ -602,11 +628,11 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         mFirestore.collection("users").document(curUserId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
-           if(e != null){
-               Log.e(TAG, "onEvent: listener error",e );
-               return;
-           }
-           currentUser = snapshot.toObject(User.class);
+                if(e != null){
+                    Log.e(TAG, "onEvent: listener error",e );
+                    return;
+                }
+                currentUser = snapshot.toObject(User.class);
                 Log.d(TAG, "setDefaultFilters: success");
                 Filters defaultFilters = new Filters();
                 List<Integer> gradesList = new ArrayList<Integer>();
@@ -682,7 +708,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             return;
         }
         if(mFirestore == null)
-        mFirestore = FirebaseFirestore.getInstance();
+            mFirestore = FirebaseFirestore.getInstance();
         try{
             curUserId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
             DocumentReference userReference =  mFirestore.collection("users").document(curUserId);
