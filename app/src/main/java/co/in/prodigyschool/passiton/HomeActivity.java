@@ -3,7 +3,6 @@ package co.in.prodigyschool.passiton;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
@@ -17,7 +16,6 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,7 +23,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -53,7 +50,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
@@ -82,6 +78,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private SharedPreferences userPref;
     private SharedPreferences.Editor editor;
     private boolean showGPS = false, sbLong;
+    private String dynamicBookId;
 
     //TODO: use showcase view to showcase fab and button to open navigation drawer
 
@@ -111,6 +108,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navUserphone = headerView.findViewById(R.id.user_phone);
         navUsername.setOnClickListener(this);
         navUserphone.setOnClickListener(this);
+        dynamicBookId = getIntent().getStringExtra("dynamicBookId");
         snackbarMessage = getIntent().getStringExtra("SNACKBAR_MSG");
         sbLong = getIntent().getBooleanExtra("SB_LONG",false);
         if (snackbarMessage!=null) {
@@ -126,7 +124,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
 
         populateUserDetails();
+        showDynamicBook();
 
+    }
+
+    private void showDynamicBook() {
+        if (dynamicBookId != null) {
+            Intent bookDetails = new Intent(HomeActivity.this, BookDetailsActivity.class);
+            bookDetails.putExtra("bookid", dynamicBookId);
+            bookDetails.putExtra("isHome", true);
+            startActivity(bookDetails);
+        }
     }
 
     private void populateUserDetails() {

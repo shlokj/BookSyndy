@@ -68,7 +68,7 @@
     <string name="material_board_q">Which educational board is this material for?</string>
     <string name="material_pricing_instructions">Keep the price nominal and as low as possible. Do keep in mind the condition of your material and its original price, if any.</string>
     <string name="book_reqs">Requests</string>
-<!--    <string name="message_no_results">Oops, couldn\'t find any results\n Try adding some</string>-->
+    <!--    <string name="message_no_results">Oops, couldn\'t find any results\n Try adding some</string>-->
     <string name="search_on_maps">Search on Maps</string>
     <string name="getting_loc">Search for your location</string>
     <string name="grade_choosing_instructions">If you just completed a grade, choose the option that corresponds to the one you just completed and not the one you will be entering.\n\nIf you\'re a college student, choose \'Undergraduate\' and you will later be asked for your year.</string>
@@ -102,7 +102,7 @@
     <string name="all_books">All Books</string>
     <string name="action_search">Search</string>
     <string name="filters">Filters</string>
-<!--    <string name="hello_blank_fragment">Hello blank fragment</string>-->
+    <!--    <string name="hello_blank_fragment">Hello blank fragment</string>-->
     <string name="degree">Degree</string>
     <string name="school_filters">School filters</string>
     <string name="apply">Apply</string>

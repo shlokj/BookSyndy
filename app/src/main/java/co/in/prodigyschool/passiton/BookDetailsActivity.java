@@ -1,5 +1,6 @@
 package co.in.prodigyschool.passiton;
 
+import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -9,6 +10,7 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -29,10 +31,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.dynamiclinks.DynamicLink;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
+import com.google.firebase.dynamiclinks.ShortDynamicLink;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -42,7 +50,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -84,8 +91,10 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         isUserProfile = getIntent().getBooleanExtra("isProfile",false);
         isBookmarks = getIntent().getBooleanExtra("isBookmarks",false);
         userPref = this.getSharedPreferences(getString(R.string.UserPref),0);
+        receiveDynamicLink();
         initFireStore();
         getUserLocation();
+
         view_bookname = findViewById(R.id.book_name);
         view_address = findViewById(R.id.book_address);
 //        view_category = findViewById(R.id.book_category);
@@ -120,6 +129,36 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         }
 
 
+    }
+
+    private void receiveDynamicLink() {
+
+        FirebaseDynamicLinks.getInstance()
+                .getDynamicLink(getIntent())
+                .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {
+                    @Override
+                    public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
+                        // Get deep link from result (may be null if no link is found)
+                        Uri deepLink = null;
+                        if (pendingDynamicLinkData != null) {
+                            deepLink = pendingDynamicLinkData.getLink();
+                            Log.d(TAG, "onSuccess: deepLink " + deepLink);
+                        }
+
+                        // Handle the deep link. For example, open the linked
+                        // content, or apply promotional credit to the user's
+                        // account.
+                        // ...
+
+                        // ...
+                    }
+                })
+                .addOnFailureListener(this, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "getDynamicLink:onFailure", e);
+                    }
+                });
     }
 
     private void initFireStore() {
@@ -380,7 +419,12 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
             Log.w(TAG, "book:onEvent", e);
             return;
         }
-        populateBookDetails(snapshot.toObject(Book.class));
+        if (snapshot != null && snapshot.exists())
+            populateBookDetails(snapshot.toObject(Book.class));
+        else {
+            Toast.makeText(getApplicationContext(), "Book Not Available", Toast.LENGTH_SHORT).show();
+            onBackPressed();
+        }
     }
 
     @Override
@@ -460,50 +504,78 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 break;
             case R.id.share:
             case MENU_SHARE:
-                AlertDialog.Builder builder = new AlertDialog.Builder(BookDetailsActivity.this);
+                final AlertDialog.Builder builder = new AlertDialog.Builder(BookDetailsActivity.this);
                 builder.setTitle("Share link");
 //                builder.setMessage("Share this link with someone who might be interested in this book");
                 final EditText linkET = new EditText(getApplicationContext());
+                final ProgressDialog progressDialog = new ProgressDialog(this);
+                progressDialog.setTitle("generating Link");
+                progressDialog.show();
 
-                // TODO: fill this edittext with a dynamic link from firebase
+                Task<ShortDynamicLink> shortLinkTask = FirebaseDynamicLinks.getInstance().createDynamicLink()
+                        .setLink(Uri.parse("https://booksyndy.com/" + currentBook.getDocumentId()))
+                        .setDomainUriPrefix("https://booksyndy.com/")
+                        // Set parameters
+                        .setAndroidParameters(new DynamicLink.AndroidParameters.Builder().build())
+                        // ...
+                        .buildShortDynamicLink()
+                        .addOnCompleteListener(this, new OnCompleteListener<ShortDynamicLink>() {
+                            @Override
+                            public void onComplete(@NonNull Task<ShortDynamicLink> task) {
+                                if (progressDialog.isShowing()) {
+                                    progressDialog.dismiss();
+                                }
+                                if (task.isSuccessful()) {
+                                    // Short link created
+                                    Uri shortLink = task.getResult().getShortLink();
+                                    Uri flowchartLink = task.getResult().getPreviewLink();
+                                    Log.d(TAG, "onComplete: longLink: " + flowchartLink);
+                                    linkET.setText(shortLink.toString());
+                                    FrameLayout container = new FrameLayout(getApplicationContext());
+                                    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                                    params.leftMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
+                                    params.rightMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
+                                    linkET.setLayoutParams(params);
+                                    container.addView(linkET);
+                                    builder.setView(container);
+                                    //linkET.setText("link here");
+                                    linkET.setSelectAllOnFocus(true);
+                                    linkET.setInputType(InputType.TYPE_NULL);
+                                    builder.setPositiveButton("Copy link", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            shareableLink = linkET.getText().toString();
 
-                FrameLayout container = new FrameLayout(getApplicationContext());
-                FrameLayout.LayoutParams params = new  FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.leftMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
-                params.rightMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
-                linkET.setLayoutParams(params);
-                container.addView(linkET);
-                builder.setView(container);
-                linkET.setText("link here");
-                linkET.setSelectAllOnFocus(true);
-                linkET.setInputType(InputType.TYPE_NULL);
-                builder.setPositiveButton("Copy link", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        shareableLink = linkET.getText().toString();
+                                            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                                            ClipData clip = ClipData.newPlainText("shareable_link", shareableLink);
+                                            if (shareableLink.length() != 0) {
+                                                clipboard.setPrimaryClip(clip);
+                                            }
+                                            showSnackbar("Copied to clipboard!");
+                                        }
+                                    });
+                                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
 
-                        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText("shareable_link", shareableLink);
-                        if (shareableLink.length()!=0) {
-                            clipboard.setPrimaryClip(clip);
-                        }
-                        showSnackbar("Copied to clipboard!");
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        }
+                                    });
+                                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                                    ClipData clip = ClipData.newPlainText("shareable_link", shareableLink);
+                                    if (shareableLink.length() != 0) {
+                                        clipboard.setPrimaryClip(clip);
+                                    }
+                                    builder.show();
+                                    linkET.requestFocus();
+                                } else {
+                                    // Error
+                                    Toast.makeText(getApplicationContext(), "Error getting URL", Toast.LENGTH_SHORT).show();
+                                    Log.d(TAG, "onComplete: failrue", task.getException());
+                                    // ...
+                                }
+                            }
+                        });
 
-                    }
-                });
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("shareable_link", shareableLink);
-                if (shareableLink.length()!=0) {
-                    clipboard.setPrimaryClip(clip);
-                }
-                builder.show();
-                linkET.requestFocus();
-                showSnackbar("Copied to clipboard!");
                 break;
 
             case MENU_DELETE:

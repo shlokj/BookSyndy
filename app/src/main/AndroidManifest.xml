@@ -23,31 +23,40 @@
         android:roundIcon="@drawable/ic_booksyndy_logo_square"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-
-        <activity android:name=".RequestDetailsActivity"
+        <activity
+            android:name=".RequestDetailsActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".EditListingActivity"
+        <activity
+            android:name=".EditListingActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".WelcomeActivity"
+        <activity
+            android:name=".WelcomeActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".RequestBookActivity"
+        <activity
+            android:name=".RequestBookActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".SendFeedbackActivity"
+        <activity
+            android:name=".SendFeedbackActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".util.GalleryUtil" />
-        <activity android:name=".ViewUserProfileActivity"
+        <activity
+            android:name=".ViewUserProfileActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".CreateListingActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".CreateListingActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".ViewPictureActivity" />
-        <activity android:name=".CollegeFilterActivity"
+        <activity
+            android:name=".CollegeFilterActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ConfirmListingActivity"
+        <activity
+            android:name=".ConfirmListingActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".GetCollegeBranchActivity"
+        <activity
+            android:name=".GetCollegeBranchActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".FilterActivity"
+        <activity
+            android:name=".FilterActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
@@ -58,13 +67,16 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".BookDetailsActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait">
+
+        </activity>
         <activity android:name=".GetFeedbackActivity" />
         <activity android:name=".EnterLocationManuallyActivity" />
         <activity
             android:name=".UserProfileActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".GetBookSellerLocationActivity"
+        <activity
+            android:name=".GetBookSellerLocationActivity"
             android:screenOrientation="portrait" />
 
         <service
@@ -76,21 +88,25 @@
             android:name=".GetBookPriceActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".GetBookDegreeActivity"
+        <activity
+            android:name=".GetBookDegreeActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".GetBookBoardActivity"
+        <activity
+            android:name=".GetBookBoardActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".GetBookDescriptionActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".GetBookClassActivity"
+        <activity
+            android:name=".GetBookClassActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".GetBookNameActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".GetBookMaterialTypeActivity"
+        <activity
+            android:name=".GetBookMaterialTypeActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".HomeActivity"
@@ -100,17 +116,21 @@
         <activity
             android:name=".GetCollegeSpecificsActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".GetJoinPurposeActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".GetBoardActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".GetGradeActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".GetJoinPurposeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".GetBoardActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".GetGradeActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".CustNameActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".ParOrStudActivity" />
-        <activity android:name=".EnterOTPActivity"
+        <activity
+            android:name=".EnterOTPActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
@@ -121,15 +141,26 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="booksyndy.com"
+                    android:scheme="https" />
+            </intent-filter>
         </activity>
+
         <service
             android:name=".notification.MyFirebaseMessagingService"
             android:exported="false">
