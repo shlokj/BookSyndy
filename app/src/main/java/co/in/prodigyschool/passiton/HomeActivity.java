@@ -79,6 +79,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private SharedPreferences.Editor editor;
     private boolean showGPS = false, sbLong;
     private String dynamicBookId;
+    private NavController navController;
 
     //TODO: use showcase view to showcase fab and button to open navigation drawer
 
@@ -100,7 +101,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 R.id.nav_starred, R.id.nav_help, R.id.nav_signout)
                 .setDrawerLayout(drawer)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
         View headerView = navigationView.getHeaderView(0);
@@ -125,7 +126,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         populateUserDetails();
         showDynamicBook();
+        showChats();
 
+    }
+
+    private void showChats() {
+        if (getIntent().getBooleanExtra("openChat", false)) {
+            navigationView.setCheckedItem(R.id.nav_chats);
+            navController.navigate(R.id.nav_chats);
+        }
     }
 
     private void showDynamicBook() {
@@ -380,10 +389,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-
         switch (menuItem.getItemId()) {
             case R.id.nav_signout:
-
         }
         return false;
     }

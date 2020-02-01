@@ -115,6 +115,10 @@ public class MainActivity extends AppCompatActivity {
                                             homeActivity.putExtra("userphone", user.getPhone());
                                             homeActivity.putExtra("showGPS", true);
                                             homeActivity.putExtra("dynamicBookId", dynamicBookId);
+                                            if (getIntent().getExtras() != null) {
+                                                homeActivity.putExtra("openChat", true);
+
+                                            }
                                             startActivity(homeActivity);
                                             finish();
                                             return;

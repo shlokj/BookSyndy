@@ -3,26 +3,21 @@ package co.in.prodigyschool.passiton.notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.IBinder;
 import android.util.Log;
-
-import co.in.prodigyschool.passiton.ChatActivity;
-import co.in.prodigyschool.passiton.MainActivity;
 
 import androidx.core.app.NotificationCompat;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import co.in.prodigyschool.passiton.MainActivity;
 import co.in.prodigyschool.passiton.R;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
@@ -76,6 +71,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private void sendNotification(String messageBody,String Title) {
         Intent intent = new Intent(this,MainActivity.class );
+        intent.setData(Uri.parse("openChat"));
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
@@ -91,11 +87,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         .setSound(defaultSoundUri)
                         .setContentIntent(pendingIntent);
 
-        Intent notificationIntent = new Intent(this.getApplicationContext(), ChatActivity.class);
-        //TODO: get user details and put in intent
-        PendingIntent contentIntent = PendingIntent.getActivity(this.getApplicationContext(), 0, notificationIntent, 0);
 
-        notificationBuilder.setContentIntent(contentIntent);
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
