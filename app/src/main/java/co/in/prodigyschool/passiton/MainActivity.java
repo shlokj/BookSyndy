@@ -117,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
                                             homeActivity.putExtra("dynamicBookId", dynamicBookId);
                                             if (getIntent().getExtras() != null) {
                                                 homeActivity.putExtra("openChat", true);
-
                                             }
                                             startActivity(homeActivity);
                                             finish();

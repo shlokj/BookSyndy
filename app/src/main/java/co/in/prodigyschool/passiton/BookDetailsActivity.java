@@ -1,7 +1,6 @@
 package co.in.prodigyschool.passiton;
 
 import android.app.ProgressDialog;
-import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,14 +11,10 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -65,70 +60,25 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     private FirebaseFirestore mFirestore;
     private Book currentBook;
     private User bookOwner;
-    private TextView view_bookname,view_address,view_price,view_description, view_grade_and_board, sellerName;
+    private final int MENU_DELETE = 123, MENU_SHARE = 234;
     private ImageView view_bookimage;
     private CircleImageView sellerDp;
-    private ListenerRegistration mBookUserRegistration,mBookRegistration,mBookMarkRegistration;
+    private TextView view_bookname, view_address, view_price, view_description, view_grade_and_board, sellerName;
     private DocumentReference bookUserRef;
     private DocumentReference bookRef;
     private DocumentReference bookMarkRef;
     private Menu menu;
-    private final int MENU_DELETE = 123, MENU_SHARE=234;
-    private String curAppUser, shareableLink="";
-    private double latA,lngA;
+    private ListenerRegistration mBookUserRegistration, mBookRegistration, mBookMarkRegistration;
+    private String curAppUser, shareableLink = "";
+    private double latA, lngA;
     private SharedPreferences userPref;
     private SharedPreferences.Editor editor;
 
     private static final String TAG = "BOOK_DETAILS";
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_book_details);
-        bookid = getIntent().getStringExtra("bookid");
-        isHome = getIntent().getBooleanExtra("isHome",false);
-        isUserProfile = getIntent().getBooleanExtra("isProfile",false);
-        isBookmarks = getIntent().getBooleanExtra("isBookmarks",false);
-        userPref = this.getSharedPreferences(getString(R.string.UserPref),0);
-        receiveDynamicLink();
-        initFireStore();
-        getUserLocation();
-
-        view_bookname = findViewById(R.id.book_name);
-        view_address = findViewById(R.id.book_address);
-//        view_category = findViewById(R.id.book_category);
-        view_price = findViewById(R.id.book_price);
-        view_bookimage = findViewById(R.id.book_image);
-        view_description = findViewById(R.id.bookDescriptionTV);
-        view_grade_and_board = findViewById(R.id.book_grade_and_board);
-        sellerDp = findViewById(R.id.seller_dp);
-        sellerName = findViewById(R.id.sellerName);
-
-        View.OnClickListener toOpenProfile = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent viewProfile = new Intent(BookDetailsActivity.this, ViewUserProfileActivity.class);
-                viewProfile.putExtra("USER_PHONE", bookOwner.getPhone());
-                viewProfile.putExtra("USER_NAME", bookOwner.getFirstName() + " " + bookOwner.getLastName());
-                viewProfile.putExtra("USER_ID", bookOwner.getUserId());
-                viewProfile.putExtra("USER_PHOTO", bookOwner.getImageUrl());
-                startActivity(viewProfile);
-            }
-        };
-
-        sellerName.setOnClickListener(toOpenProfile);
-        sellerDp.setOnClickListener(toOpenProfile);
-
-        getSupportActionBar().setTitle("View listing");
-        findViewById(R.id.fab_chat).setOnClickListener(this);
-
-        if(getSupportActionBar()!= null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
-
-
+    public static String ordinal(int i) {
+        String[] suffixes = new String[]{"th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th"};
+        return i + suffixes[i % 10];
     }
 
     private void receiveDynamicLink() {
@@ -161,33 +111,79 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 });
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_book_details);
+        bookid = getIntent().getStringExtra("bookid");
+        isHome = getIntent().getBooleanExtra("isHome", false);
+        isUserProfile = getIntent().getBooleanExtra("isProfile", false);
+        isBookmarks = getIntent().getBooleanExtra("isBookmarks", false);
+        userPref = this.getSharedPreferences(getString(R.string.UserPref), 0);
+        receiveDynamicLink();
+        initFireStore();
+        getUserLocation();
+
+        view_bookname = findViewById(R.id.book_name);
+        view_address = findViewById(R.id.book_address);
+//        view_category = findViewById(R.id.book_category);
+        view_price = findViewById(R.id.book_price);
+        view_bookimage = findViewById(R.id.book_image);
+        view_description = findViewById(R.id.bookDescriptionTV);
+        view_grade_and_board = findViewById(R.id.book_grade_and_board);
+        sellerDp = findViewById(R.id.seller_dp);
+        sellerName = findViewById(R.id.sellerName);
+
+        View.OnClickListener toOpenProfile = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent viewProfile = new Intent(BookDetailsActivity.this, ViewUserProfileActivity.class);
+                viewProfile.putExtra("USER_PHONE", bookOwner.getPhone());
+                viewProfile.putExtra("USER_NAME", bookOwner.getFirstName() + " " + bookOwner.getLastName());
+                viewProfile.putExtra("USER_ID", bookOwner.getUserId());
+                viewProfile.putExtra("USER_PHOTO", bookOwner.getImageUrl());
+                startActivity(viewProfile);
+            }
+        };
+
+        sellerName.setOnClickListener(toOpenProfile);
+        sellerDp.setOnClickListener(toOpenProfile);
+
+        getSupportActionBar().setTitle("View listing");
+        findViewById(R.id.fab_chat).setOnClickListener(this);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
+
+    }
+
     private void initFireStore() {
         mFirestore = FirebaseFirestore.getInstance();
 
-        if(mFirestore != null){
-            bookRef =  mFirestore.collection("books").document(bookid);
+        if (mFirestore != null) {
+            bookRef = mFirestore.collection("books").document(bookid);
             curAppUser = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
 
-        }
-        else{
-            Toast.makeText(getApplicationContext(),"Firebase error",Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "Firebase error", Toast.LENGTH_SHORT).show();
         }
     }
 
     public void getUserLocation() {
 
-        latA = userPref.getFloat(getString(R.string.p_lat),0.0f);
-        lngA = userPref.getFloat(getString(R.string.p_lng),0.0f);
+        latA = userPref.getFloat(getString(R.string.p_lat), 0.0f);
+        lngA = userPref.getFloat(getString(R.string.p_lng), 0.0f);
 
     }
-
-
 
     private void populateBookDetails(Book book) {
 
         try {
             currentBook = book;
-            if(currentBook == null){
+            if (currentBook == null) {
                 Log.d(TAG, "populateBookDetails: current book error");
                 return;
             }
@@ -207,8 +203,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
 
             if (boardNumber == 20) {
                 view_grade_and_board.append("Competitive exams");
-            }
-            else {
+            } else {
                 if (gradeNumber == 1) {
                     view_grade_and_board.append("Grade 5 or below");
                 } else if (gradeNumber == 2) {
@@ -247,8 +242,8 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                         view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " other degree");
                     }
 
-                    if (year!=0) {
-                        view_grade_and_board.append(", "+ordinal(year)+" year");
+                    if (year != 0) {
+                        view_grade_and_board.append(", " + ordinal(year) + " year");
                     }
                 }
 
@@ -286,7 +281,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                         return;
                     }
                     bookOwner = snapshot.toObject(User.class);
-                    if (bookOwner!=null) {
+                    if (bookOwner != null) {
                         sellerName.setText(bookOwner.getUserId());
                         Glide.with(sellerDp.getContext())
                                 .load(bookOwner.getImageUrl())
@@ -294,29 +289,28 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                     }
                 }
             });
-        }
-        catch(Exception e){
-            Log.e(TAG, "populateBookDetails: exception",e);
+        } catch (Exception e) {
+            Log.e(TAG, "populateBookDetails: exception", e);
         }
 
 
         view_bookimage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(currentBook != null) {
+                if (currentBook != null) {
                     Intent viewFullPic = new Intent(BookDetailsActivity.this, ViewPictureActivity.class);
                     viewFullPic.putExtra("IMAGE_STR", currentBook.getBookPhoto());
                     startActivity(viewFullPic);
                 }
             }
         });
-        addDistance(currentBook.getLat(),currentBook.getLng());
+        addDistance(currentBook.getLat(), currentBook.getLng());
         updateBookMark();
     }
 
-    private void addDistance(double latitude,double longitude){
+    private void addDistance(double latitude, double longitude) {
         float res;
-        if(latA != 0.0 && lngA != 0.0 && latitude != 0.0 && longitude != 0.0) {
+        if (latA != 0.0 && lngA != 0.0 && latitude != 0.0 && longitude != 0.0) {
             Location locationA = new Location("point A");
             Location locationB = new Location("point B");
 
@@ -328,20 +322,19 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
             if (res > 0.0f && res < 1000f) {
                 res = Math.round(res);
                 if (res > 0.0f)
-                    view_address.append("  " + getString(R.string.divider_bullet) + " " + (int)res + " m");            }
-            else if(res > 1000f){
+                    view_address.append("  " + getString(R.string.divider_bullet) + " " + (int) res + " m");
+            } else if (res > 1000f) {
                 res = Math.round(res / 100);
                 res = res / 10;
                 if (res > 0.0f)
-                    view_address.append(" " + getString(R.string.divider_bullet) + " " + res + " km");            }
+                    view_address.append(" " + getString(R.string.divider_bullet) + " " + res + " km");
+            }
         }
     }
 
-
-
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.fab_chat:
                 startChatActivity();
                 break;
@@ -355,19 +348,10 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
             chatIntent.putExtra("visit_user_name", bookOwner.getUserId()); // unique user id
             chatIntent.putExtra("visit_image", bookOwner.getImageUrl());
             startActivity(chatIntent);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             showSnackbar("Please try again");
         }
     }
-
-    private boolean isBookSold(){
-        if(currentBook != null){
-            return currentBook.isBookSold();
-        }
-        return false;
-    }
-
 
 
     public static boolean checkConnection(Context context) {
@@ -387,29 +371,22 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         return false;
     }
 
+    private boolean isBookSold() {
+        if (currentBook != null) {
+            return currentBook.isBookSold();
+        }
+        return false;
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
         mBookRegistration = bookRef.addSnapshotListener(this);
 
-        if(isHome){
+        if (isHome) {
             findViewById(R.id.fab_chat).setVisibility(View.VISIBLE);
-        }
-        else{
+        } else {
             findViewById(R.id.fab_chat).setVisibility(View.INVISIBLE);
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if(mBookUserRegistration != null){
-            mBookUserRegistration.remove();
-            mBookUserRegistration = null;
-        }
-        if(mBookRegistration != null){
-            mBookRegistration.remove();
-            mBookRegistration = null;
         }
     }
 
@@ -428,21 +405,16 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        if (!isHome) {
-            if (!isBookmarks && !isUserProfile) {
-                menu.clear();
-                if (!isBookSold()) {
-                    menu.add(0, MENU_DELETE, Menu.NONE, "Mark as sold").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-                }
-                else {
-                    menu.add(0, MENU_DELETE, Menu.NONE, "Mark as unsold").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-                }
-                menu.add(1, MENU_SHARE, Menu.NONE, "Share").setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-                menu.getItem(1).setIcon(R.drawable.ic_share_white_24px);
-            }
+    protected void onStop() {
+        super.onStop();
+        if (mBookUserRegistration != null) {
+            mBookUserRegistration.remove();
+            mBookUserRegistration = null;
         }
-        return super.onPrepareOptionsMenu(menu);
+        if (mBookRegistration != null) {
+            mBookRegistration.remove();
+            mBookRegistration = null;
+        }
     }
 
     @Override
@@ -453,6 +425,22 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         return true;
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (!isHome) {
+            if (!isBookmarks && !isUserProfile) {
+                menu.clear();
+                if (!isBookSold()) {
+                    menu.add(0, MENU_DELETE, Menu.NONE, "Mark as sold").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+                } else {
+                    menu.add(0, MENU_DELETE, Menu.NONE, "Mark as unsold").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+                }
+                menu.add(1, MENU_SHARE, Menu.NONE, "Share").setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+                menu.getItem(1).setIcon(R.drawable.ic_share_white_24px);
+            }
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
 
     private void updateBookMark() {
         try {
@@ -472,17 +460,16 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                     }
 
                     if (snapshot.exists()) {
-                            menu.findItem(R.id.bookmark).setIcon(ContextCompat.getDrawable(getBaseContext(), R.drawable.ic_bookmark_filled_24px));
-                            saved = true;
-                            // menu.getItem(0).setEnabled(false);
+                        menu.findItem(R.id.bookmark).setIcon(ContextCompat.getDrawable(getBaseContext(), R.drawable.ic_bookmark_filled_24px));
+                        saved = true;
+                        // menu.getItem(0).setEnabled(false);
                     }
                 }
             });
 
-        }
-        catch (Exception e){
-            Log.e(TAG, "updateBookMark: failed with",e);
-            Toast.makeText(getApplicationContext(),"Bookmark Failed",Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Log.e(TAG, "updateBookMark: failed with", e);
+            Toast.makeText(getApplicationContext(), "Bookmark Failed", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -495,8 +482,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                     addToBookMark();
                     menu.findItem(R.id.bookmark).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_bookmark_filled_24px));
                     saved = true;
-                }
-                else {
+                } else {
                     removeFromBookMarks();
                     menu.findItem(R.id.bookmark).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_bookmark_border_24px));
                     saved = false;
@@ -504,10 +490,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 break;
             case R.id.share:
             case MENU_SHARE:
-                final AlertDialog.Builder builder = new AlertDialog.Builder(BookDetailsActivity.this);
-                builder.setTitle("Share link");
-//                builder.setMessage("Share this link with someone who might be interested in this book");
-                final EditText linkET = new EditText(getApplicationContext());
+
                 final ProgressDialog progressDialog = new ProgressDialog(this);
                 progressDialog.setTitle("Generating link");
                 progressDialog.setMessage("Just a moment...");
@@ -527,48 +510,25 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                                 if (progressDialog.isShowing()) {
                                     progressDialog.dismiss();
                                 }
-                                if (task.isSuccessful()) {
+                                if (task.isSuccessful() && task.getResult() != null) {
                                     // Short link created
                                     Uri shortLink = task.getResult().getShortLink();
                                     Uri flowchartLink = task.getResult().getPreviewLink();
                                     Log.d(TAG, "onComplete: longLink: " + flowchartLink);
-                                    linkET.setText(shortLink.toString());
-                                    FrameLayout container = new FrameLayout(getApplicationContext());
-                                    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                                    params.leftMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
-                                    params.rightMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
-                                    linkET.setLayoutParams(params);
-                                    container.addView(linkET);
-                                    builder.setView(container);
-                                    //linkET.setText("link here");
-                                    linkET.setSelectAllOnFocus(true);
-                                    linkET.setInputType(InputType.TYPE_NULL);
-                                    builder.setPositiveButton("Copy link", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            shareableLink = linkET.getText().toString();
-
-                                            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                                            ClipData clip = ClipData.newPlainText("shareable_link", shareableLink);
-                                            if (shareableLink.length() != 0) {
-                                                clipboard.setPrimaryClip(clip);
-                                            }
-                                            showSnackbar("Copied to clipboard!");
-                                        }
-                                    });
-                                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-
-                                        }
-                                    });
                                     ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                                    ClipData clip = ClipData.newPlainText("shareable_link", shareableLink);
-                                    if (shareableLink.length() != 0) {
-                                        clipboard.setPrimaryClip(clip);
+                                    if (shortLink != null) {
+                                        shareableLink = shortLink.toString();
+                                        Intent sendIntent = new Intent();
+                                        sendIntent.setAction(Intent.ACTION_SEND);
+                                        sendIntent.putExtra(Intent.EXTRA_TEXT, shareableLink);
+                                        sendIntent.setType("text/plain");
+                                        startActivity(sendIntent);
+
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), "Error getting Short URL", Toast.LENGTH_SHORT).show();
+                                        Log.d(TAG, "onComplete: failrue", task.getException());
                                     }
-                                    builder.show();
-                                    linkET.requestFocus();
+
                                 } else {
                                     // Error
                                     Toast.makeText(getApplicationContext(), "Error getting URL", Toast.LENGTH_SHORT).show();
@@ -594,7 +554,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         reportListing();
-                        Toast.makeText(getApplicationContext(),"Reported",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Reported", Toast.LENGTH_SHORT).show();
                         onBackPressed();
                     }
                 });
@@ -614,26 +574,25 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void reportListing() {
-        if(!checkConnection(this)){
+        if (!checkConnection(this)) {
             Toast.makeText(this, "InterNet Required", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(currentBook != null && curAppUser != null) {
+        if (currentBook != null && curAppUser != null) {
             final DocumentReference reportRef = mFirestore.collection("report_book").document(currentBook.getDocumentId());
             final DocumentReference bookRef = mFirestore.collection("books").document(currentBook.getDocumentId());
             reportRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot snapshot) {
-                    if(snapshot.exists()){
+                    if (snapshot.exists()) {
                         //update here
-                        reportRef.update("Report count",FieldValue.increment(1));
-                    }
-                    else{
+                        reportRef.update("Report count", FieldValue.increment(1));
+                    } else {
                         //create here
-                        Map<String,Object> bookDetails = new HashMap<>();
-                        bookDetails.put("bookDetails",currentBook);
-                        bookDetails.put("bookRef",bookRef);
-                        bookDetails.put("Reported By",curAppUser);
+                        Map<String, Object> bookDetails = new HashMap<>();
+                        bookDetails.put("bookDetails", currentBook);
+                        bookDetails.put("bookRef", bookRef);
+                        bookDetails.put("Reported By", curAppUser);
                         bookDetails.put("Report count", FieldValue.increment(1));
                         reportRef.set(bookDetails);
                     }
@@ -641,25 +600,9 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
             });
 
 
-
         }
 
 
-    }
-
-    private void markAsSold(boolean sold){
-        final CollectionReference bookRef = mFirestore.collection("books");
-        bookRef.document(bookid).update("bookSold",sold).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(),"Error: Please Try Again!",Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     private void addToBookMark() {
@@ -699,9 +642,19 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         return true;
     }
 
-    public static String ordinal(int i) {
-        String[] suffixes = new String[] { "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th" };
-        return i + suffixes[i % 10];
+    private void markAsSold(boolean sold) {
+        final CollectionReference bookRef = mFirestore.collection("books");
+        bookRef.document(bookid).update("bookSold", sold).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(), "Error: Please Try Again!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void showSnackbar(String message) {

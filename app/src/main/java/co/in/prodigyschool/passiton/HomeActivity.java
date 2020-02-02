@@ -125,25 +125,29 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
 
         populateUserDetails();
-        showDynamicBook();
-        showChats();
+        handleOtherIntent();
 
     }
 
-    private void showChats() {
-        if (getIntent().getBooleanExtra("openChat", false)) {
-            navigationView.setCheckedItem(R.id.nav_chats);
-            navController.navigate(R.id.nav_chats);
-        }
-    }
-
-    private void showDynamicBook() {
+    private void handleOtherIntent() {
         if (dynamicBookId != null) {
             Intent bookDetails = new Intent(HomeActivity.this, BookDetailsActivity.class);
             bookDetails.putExtra("bookid", dynamicBookId);
             bookDetails.putExtra("isHome", true);
             startActivity(bookDetails);
+        } else if (getIntent().getBooleanExtra("openChat", false)) {
+            navigationView.setCheckedItem(R.id.nav_chats);
+            navController.navigate(R.id.nav_chats);
         }
+
+    }
+
+    private void showChats() {
+
+    }
+
+    private void showDynamicBook() {
+
     }
 
     private void populateUserDetails() {
