@@ -1,6 +1,5 @@
 package co.in.prodigyschool.passiton;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -15,7 +14,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
@@ -47,9 +45,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -70,11 +66,10 @@ import java.util.List;
 import java.util.Locale;
 
 import co.in.prodigyschool.passiton.Data.User;
-import co.in.prodigyschool.passiton.util.GalleryUtil;
 
 public class UserProfileActivity extends AppCompatActivity {
 
-    private static final String TAG = "USERPROFILEACTIVITY" ;
+    private static final String TAG = "USERPROFILEACTIVITY";
 
     private ImageView profilePic;
     private EditText fName, lName, year, phoneNo, uName;
@@ -82,33 +77,32 @@ public class UserProfileActivity extends AppCompatActivity {
     private FloatingActionButton saveChanges;
     private TextWatcher checkChange;
     private Menu menu;
-    private int clickCount,gradeNumber,boardNumber,yearNumber;
-    private CheckBox compExams,preferGuidedMode;
-    private boolean detailsChanged = false, newUNameOK=true, tempCE, editing;
+    private final int GALLERY_ACTIVITY_CODE = 200;
+    private int clickCount, gradeNumber, boardNumber, yearNumber;
+    private CheckBox compExams, preferGuidedMode;
     private TextView boardLabel;
     private LinearLayout yearLL;
-    private String firstName, lastName, phoneNumber,userId, iUsername;
+    private boolean detailsChanged = false, newUNameOK = true, tempCE, editing;
     private FirebaseFirestore mFirestore;
     private User curUser;
     private Uri selectedImage;
     private ArrayAdapter<String> boardAdapter, degreeAdapter, gradeAdapter;
     private SharedPreferences userPref;
     private SharedPreferences.Editor editor;
-    private String book_photo_url = null;
+    private String firstName, lastName, phoneNumber, userId, iUsername;
     private String imageFilePath;
     private Uri selectedImageUri;
     private StorageReference bookPhotosStorageReference;
     private FirebaseStorage mFirebaseStorage;
     private List<String> userNamesList;
-
-    private final int GALLERY_ACTIVITY_CODE=200;
+    private String book_photo_url = "https://firebasestorage.googleapis.com/v0/b/booksyndy-e8ef6.appspot.com/o/default_photos%2Fdefault_user_dp.png?alt=media&token=23b43df7-8143-4ad7-bb87-51e49da095c6";
     private final int RESULT_CROP = 400;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
-        if(getSupportActionBar()!= null) {
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
@@ -119,11 +113,11 @@ public class UserProfileActivity extends AppCompatActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         mFirebaseStorage = FirebaseStorage.getInstance();
-        bookPhotosStorageReference = mFirebaseStorage.getReference().child("book_photos");
+        bookPhotosStorageReference = mFirebaseStorage.getReference().child("user_photos");
 
         profilePic = findViewById(R.id.profilePic);
         preferGuidedMode = findViewById(R.id.preferGuidedMode);
-        userPref = this.getSharedPreferences(getString(R.string.UserPref),0);
+        userPref = this.getSharedPreferences(getString(R.string.UserPref), 0);
 
         fName = findViewById(R.id.firstNameProfile);
         lName = findViewById(R.id.lastNameProfile);
@@ -164,7 +158,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                detailsChanged=true;
+                detailsChanged = true;
             }
 
             @Override
@@ -172,7 +166,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
             }
         };
-        mFirestore  = FirebaseFirestore.getInstance();
+        mFirestore = FirebaseFirestore.getInstance();
         fetchUserNameList();
         getUserPreference();
         populateUserDetails();
@@ -182,7 +176,7 @@ public class UserProfileActivity extends AppCompatActivity {
         uName.addTextChangedListener(checkChange);
         year.addTextChangedListener(checkChange);
 
-        profilePic.setImageDrawable(getDrawable(R.drawable.ic_account_circle_24px));
+        //profilePic.setImageDrawable(getDrawable(R.drawable.ic_account_circle_24px));
 
         fName.setEnabled(false);
         lName.setEnabled(false);
@@ -197,7 +191,8 @@ public class UserProfileActivity extends AppCompatActivity {
 
         profilePic.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {final CharSequence[] options = {"Take Photo", "Choose from Gallery"};
+            public void onClick(View v) {
+                final CharSequence[] options = {"Take Photo", "Choose from Gallery"};
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(UserProfileActivity.this);
 //                builder.setTitle("Select Pic Using...");
@@ -222,30 +217,26 @@ public class UserProfileActivity extends AppCompatActivity {
         });
 
 
-
         gradeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                if (position<6) { //school grade selected
+                if (position < 6) { //school grade selected
                     boardLabel.setText("Board");
                     yearLL.setVisibility(View.GONE);
-                    if (boardSpinner.getAdapter()!=boardAdapter) {
+                    if (boardSpinner.getAdapter() != boardAdapter) {
                         boardSpinner.setAdapter(boardAdapter);
                     }
-                    if (position==4 || position==5) {
+                    if (position == 4 || position == 5) {
                         compExams.setVisibility(View.VISIBLE);
                         compExams.setChecked(tempCE);
-                    }
-                    else {
+                    } else {
                         compExams.setVisibility(View.GONE);
                         compExams.setChecked(false);
                     }
-                }
-
-                else { //undergrad selected
+                } else { //undergrad selected
                     boardLabel.setText("Degree / course");
                     yearLL.setVisibility(View.VISIBLE);
-                    if (boardSpinner.getAdapter()!=degreeAdapter) {
+                    if (boardSpinner.getAdapter() != degreeAdapter) {
                         boardSpinner.setAdapter(degreeAdapter);
                     }
                     compExams.setVisibility(View.GONE);
@@ -264,7 +255,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private void getUserPreference() {
 
-            preferGuidedMode.setChecked(userPref.getBoolean(getString(R.string.preferGuidedMode),false));
+        preferGuidedMode.setChecked(userPref.getBoolean(getString(R.string.preferGuidedMode), false));
 
 
     }
@@ -296,12 +287,14 @@ public class UserProfileActivity extends AppCompatActivity {
         onBackPressed();
         return true;
     }
+
     @Override
     public void onBackPressed() {
         showSaveDialog();
 //        super.onBackPressed();
     }
-    public void finishActivity1 () {
+
+    public void finishActivity1() {
         this.finish();
     }
 
@@ -325,61 +318,60 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private void populateUserDetails() {
 
-        try{
-            phoneNumber = userPref.getString(getString(R.string.p_userphone),"");
+        try {
+            phoneNumber = userPref.getString(getString(R.string.p_userphone), "");
 
-            gradeNumber = userPref.getInt(getString(R.string.p_grade),2);
-            boardNumber = userPref.getInt(getString(R.string.p_board),2);
-            yearNumber = userPref.getInt(getString(R.string.p_year),0);
-
-            firstName = userPref.getString(getString(R.string.p_firstname),"");
-            lastName = userPref.getString(getString(R.string.p_lastname),"");
-            userId = userPref.getString(getString(R.string.p_userid),"");
+            gradeNumber = userPref.getInt(getString(R.string.p_grade), 2);
+            boardNumber = userPref.getInt(getString(R.string.p_board), 2);
+            yearNumber = userPref.getInt(getString(R.string.p_year), 0);
+            book_photo_url = userPref.getString(getString(R.string.p_imageurl), book_photo_url);
+            firstName = userPref.getString(getString(R.string.p_firstname), "");
+            lastName = userPref.getString(getString(R.string.p_lastname), "");
+            userId = userPref.getString(getString(R.string.p_userid), "");
 
             gradeSpinner.setAdapter(gradeAdapter);
-            gradeSpinner.setSelection(gradeNumber-1);
+            gradeSpinner.setSelection(gradeNumber - 1);
 
 //                        Toast.makeText(getApplicationContext(),"Grade number: "+gradeNumber,Toast.LENGTH_SHORT).show();
 
-            if (gradeNumber>=1 && gradeNumber<=6) {
+            if (gradeNumber >= 1 && gradeNumber <= 6) {
 
 //                            Toast.makeText(getApplicationContext(),"School",Toast.LENGTH_LONG).show();
 
                 boardLabel.setText("Board");
                 findViewById(R.id.collegeDegreeAndYearLL).setVisibility(View.GONE);
 
-                if (gradeNumber==5 || gradeNumber==6) {
+                if (gradeNumber == 5 || gradeNumber == 6) {
                     compExams.setVisibility(View.VISIBLE);
-                    tempCE = userPref.getBoolean(getString(R.string.p_competitive),false);
+                    tempCE = userPref.getBoolean(getString(R.string.p_competitive), false);
 //                                Toast.makeText(getApplicationContext(),"Competitive exam: "+tempCE,Toast.LENGTH_SHORT).show();
                     compExams.setChecked(tempCE);
-                }
-                else {
+                } else {
                     compExams.setVisibility(View.GONE);
                 }
 
                 boardSpinner.setAdapter(boardAdapter);
-                boardSpinner.setSelection(boardNumber-1);
-            }
-
-            else {
+                boardSpinner.setSelection(boardNumber - 1);
+            } else {
 
                 boardLabel.setText("Degree / course");
 
                 boardSpinner.setAdapter(degreeAdapter);
-                boardSpinner.setSelection(boardNumber-7);
+                boardSpinner.setSelection(boardNumber - 7);
 
-                year.setText(yearNumber+"");
+                year.setText(yearNumber + "");
             }
 
             fName.setText(firstName);
             lName.setText(lastName);
             uName.setText(userId);
             phoneNo.setText(phoneNumber);
+            Glide.with(profilePic.getContext())
+                    .load(book_photo_url)
+                    .into(profilePic);
 
-        }
-        catch(Exception e){
-            Log.e(TAG, "PopulateUserDetails method failed with  ",e);
+        } catch (Exception e) {
+            Log.e(TAG, "PopulateUserDetails method failed with  ", e);
         }
     }
 
@@ -387,9 +379,9 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
         switch (requestCode) {
             case 0:// camera intent
-                if (resultCode == RESULT_OK ) {
+                if (resultCode == RESULT_OK) {
                     File f = new File(imageFilePath);
-                    selectedImageUri = FileProvider.getUriForFile(UserProfileActivity.this, BuildConfig.APPLICATION_ID + ".provider",f);
+                    selectedImageUri = FileProvider.getUriForFile(UserProfileActivity.this, BuildConfig.APPLICATION_ID + ".provider", f);
                     CropImage(selectedImageUri);
 
                 }
@@ -412,16 +404,16 @@ public class UserProfileActivity extends AppCompatActivity {
                         Glide.with(profilePic.getContext())
                                 .load(resultUri)
                                 .into(profilePic);
-             
+
                         storeBookImage(bitmap);
                     } catch (IOException e) {
-                        Log.e(TAG, "onActivityResult: CROP ERROR:",e);
-                        Toast.makeText(this, "CROP ERROR:"+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, "onActivityResult: CROP ERROR:", e);
+                        Toast.makeText(this, "CROP ERROR:" + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
                 } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                     Exception error = result.getError();
-                    Toast.makeText(this, "CROP ERROR:"+error.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "CROP ERROR:" + error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -429,7 +421,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private File createImageFile() throws IOException {
 
-        String imageFileName = "BOOK" + "_";
+        String imageFileName = "DP" + "_";
         File storageDir =
                 getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
@@ -473,7 +465,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
         try {
             String timeStamp =
-                    new SimpleDateFormat("yyyyMMdd_HHmmss",
+                    new SimpleDateFormat("yyyyMMdd_HH",
                             Locale.getDefault()).format(new Date());
             // Get a reference to store file at book_photos/<FILENAME>
             final StorageReference photoRef = bookPhotosStorageReference.child(timeStamp + "_" + selectedImageUri.getLastPathSegment());
@@ -527,8 +519,8 @@ public class UserProfileActivity extends AppCompatActivity {
     protected void CropImage(Uri picUri) {
         try {
             CropImage.activity(picUri)
-                    .setAspectRatio(1,1)
-                    .setRequestedSize(200,200)
+                    .setAspectRatio(1, 1)
+                    .setRequestedSize(200, 200)
                     .start(this);
         } catch (ActivityNotFoundException e) {
             Toast.makeText(this, "Your device doesn't support the crop action!", Toast.LENGTH_SHORT).show();
@@ -536,14 +528,13 @@ public class UserProfileActivity extends AppCompatActivity {
         }
     }
 
-    public byte[] CompressResizeImage(Bitmap bm)
-    {
+    public byte[] CompressResizeImage(Bitmap bm) {
         int bmWidth = bm.getWidth();
         int bmHeight = bm.getHeight();
         int ivWidth = profilePic.getWidth();
         int ivHeight = profilePic.getHeight();
 
-        int new_height = (int) Math.floor((double) bmHeight *( (double) ivWidth / (double) bmWidth));
+        int new_height = (int) Math.floor((double) bmHeight * ((double) ivWidth / (double) bmWidth));
         Bitmap newbitMap = Bitmap.createScaledBitmap(bm, ivWidth, new_height, true);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -552,15 +543,15 @@ public class UserProfileActivity extends AppCompatActivity {
         return b;
     }
 
-    private void fetchUserNameList(){
+    private void fetchUserNameList() {
         mFirestore.collection("users").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if(e != null){
-                    Log.e(TAG, "onEvent: usernames fetch error",e );
+                if (e != null) {
+                    Log.e(TAG, "onEvent: usernames fetch error", e);
                 }
-                if(queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()){
-                    for (User user:queryDocumentSnapshots.toObjects(User.class)){
+                if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                    for (User user : queryDocumentSnapshots.toObjects(User.class)) {
                         userNamesList.add(user.getUserId());
                         //Log.d(TAG, "onEvent: username:"+user.getUserId()+"...");
                     }
@@ -572,10 +563,10 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     private boolean checkUserName(String username) {
-       // Log.d(TAG, "checkUserName: "+username);
-        if(!username.equalsIgnoreCase(iUsername)){
-            for(String userId:userNamesList){
-                if(userId.equalsIgnoreCase(username)){
+        // Log.d(TAG, "checkUserName: "+username);
+        if (!username.equalsIgnoreCase(iUsername)) {
+            for (String userId : userNamesList) {
+                if (userId.equalsIgnoreCase(username)) {
                     return false;
                 }
             }
@@ -614,41 +605,38 @@ public class UserProfileActivity extends AppCompatActivity {
                     .setTitle("Save changes");
             editing = true;
 
-        }
-        else {
+        } else {
 
             final ProgressDialog progressDialog = new ProgressDialog(this);
             // phoneNumber.setEnabled(false);
 
 //                    clickCount = clickCount + 1;
 
-            if(!checkConnection(this)){
+            if (!checkConnection(this)) {
                 showSnackbar("Internet is required");
                 return;
             }
 
 
-            if (!(fName.getText().toString().length()==0 || lName.getText().toString().length()==0 || uName.getText().toString().length()==0 /*|| year.getText().toString().length()==0*/)) {
+            if (!(fName.getText().toString().length() == 0 || lName.getText().toString().length() == 0 || uName.getText().toString().length() == 0 /*|| year.getText().toString().length()==0*/)) {
                 boolean isAvailableUsername = checkUserName(uName.getText().toString().trim());
 
                 if (!isAvailableUsername) {
                     showSnackbar("This username is not available. Please try another");
                     return;
-                }
-                else{
+                } else {
                     progressDialog.setTitle("Saving your changes");
                     progressDialog.setMessage("Updating your profile");
                     progressDialog.setCancelable(false);
 
                     int board;
-                    if (gradeSpinner.getSelectedItemPosition()>=6) {
-                        board = boardSpinner.getSelectedItemPosition()+7;
+                    if (gradeSpinner.getSelectedItemPosition() >= 6) {
+                        board = boardSpinner.getSelectedItemPosition() + 7;
                         String ys = year.getText().toString();
-                        if (!(ys==null || ys.length()==0)) {
+                        if (!(ys == null || ys.length() == 0)) {
                             yearNumber = Integer.parseInt(year.getText().toString());
                             progressDialog.show();
-                        }
-                        else {
+                        } else {
                             View parentLayout = findViewById(android.R.id.content);
                             Snackbar.make(parentLayout, "Please enter a year", Snackbar.LENGTH_SHORT)
                                     .setAction("OKAY", new View.OnClickListener() {
@@ -661,9 +649,8 @@ public class UserProfileActivity extends AppCompatActivity {
                                     .show();
                             return;
                         }
-                    }
-                    else {
-                        board = boardSpinner.getSelectedItemPosition()+1;
+                    } else {
+                        board = boardSpinner.getSelectedItemPosition() + 1;
                     }
                     menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_edit_24px))
                             .setTitle("Edit profile");
@@ -681,21 +668,28 @@ public class UserProfileActivity extends AppCompatActivity {
 
 
                     editor = userPref.edit();
-                    editor.putBoolean(getString(R.string.preferGuidedMode),preferGuidedMode.isChecked());
-                    editor.putString(getString(R.string.p_firstname),fName.getText().toString().trim());
-                    editor.putString(getString(R.string.p_lastname),lName.getText().toString().trim());
-                    editor.putString(getString(R.string.p_userid),uName.getText().toString().trim());
-//                        editor.putString(getString(R.string.p_imageurl),user.getImageUrl());
-                    editor.putInt(getString(R.string.p_grade),gradeSpinner.getSelectedItemPosition() +1);
-                    editor.putInt(getString(R.string.p_board),board);
-                    editor.putInt(getString(R.string.p_year),yearNumber);
-                    editor.putBoolean(getString(R.string.p_competitive),compExams.isChecked());
+                    editor.putBoolean(getString(R.string.preferGuidedMode), preferGuidedMode.isChecked());
+                    editor.putString(getString(R.string.p_firstname), fName.getText().toString().trim());
+                    editor.putString(getString(R.string.p_lastname), lName.getText().toString().trim());
+                    editor.putString(getString(R.string.p_userid), uName.getText().toString().trim());
+                    editor.putString(getString(R.string.p_imageurl), book_photo_url);
+                    editor.putInt(getString(R.string.p_grade), gradeSpinner.getSelectedItemPosition() + 1);
+                    editor.putInt(getString(R.string.p_board), board);
+                    editor.putInt(getString(R.string.p_year), yearNumber);
+                    editor.putBoolean(getString(R.string.p_competitive), compExams.isChecked());
                     editor.apply();
-                    DocumentReference userReference =  mFirestore.collection("users").document(phoneNumber);
-                    userReference.update("competitiveExam",compExams.isChecked(),"year",yearNumber,"firstName",fName.getText().toString(),"lastName",lName.getText().toString(),"gradeNumber",gradeSpinner.getSelectedItemPosition()+1,"boardNumber",board,"userId",uName.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    DocumentReference userReference = mFirestore.collection("users").document(phoneNumber);
+                    userReference.update("competitiveExam", compExams.isChecked(),
+                            "year", yearNumber,
+                            "firstName", fName.getText().toString(),
+                            "lastName", lName.getText().toString(),
+                            "gradeNumber", gradeSpinner.getSelectedItemPosition() + 1,
+                            "boardNumber", board,
+                            "userId", uName.getText().toString(),
+                            "imageUrl", book_photo_url).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            if(progressDialog.isShowing())
+                            if (progressDialog.isShowing())
                                 progressDialog.dismiss();
                             Intent homeIntent = new Intent(UserProfileActivity.this, HomeActivity.class);
                             homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -705,17 +699,16 @@ public class UserProfileActivity extends AppCompatActivity {
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            if(progressDialog.isShowing())
+                            if (progressDialog.isShowing())
                                 progressDialog.dismiss();
-                            Log.d(TAG, "onFailure: update user",e);
+                            Log.d(TAG, "onFailure: update user", e);
                             Toast.makeText(getApplicationContext(), "Update Failed", Toast.LENGTH_SHORT).show();
                         }
                     });
 
-                }}
-
-            else {
-                if(progressDialog.isShowing())
+                }
+            } else {
+                if (progressDialog.isShowing())
                     progressDialog.dismiss();
 
                 View parentLayout = findViewById(android.R.id.content);
@@ -762,8 +755,7 @@ public class UserProfileActivity extends AppCompatActivity {
                 }
             });
             builder.show();
-        }
-        else {
+        } else {
             finishActivity1();
         }
     }

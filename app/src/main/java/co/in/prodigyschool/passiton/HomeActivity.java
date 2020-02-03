@@ -16,9 +16,11 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +35,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -73,6 +76,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView navigationView;
 
     private TextView navUsername,navUserphone;
+    private ImageView navUserPic;
     private FirebaseFirestore mFirestore;
     private String curUserId, snackbarMessage;
     private SharedPreferences userPref;
@@ -107,6 +111,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         View headerView = navigationView.getHeaderView(0);
         navUsername =  headerView.findViewById(R.id.user_title);
         navUserphone = headerView.findViewById(R.id.user_phone);
+        navUserPic = headerView.findViewById(R.id.nav_profilePic);
         navUsername.setOnClickListener(this);
         navUserphone.setOnClickListener(this);
         dynamicBookId = getIntent().getStringExtra("dynamicBookId");
@@ -154,6 +159,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         String userPhone = userPref.getString(getString(R.string.p_userphone),"");
         String userId = userPref.getString(getString(R.string.p_userid),"");
+        String userPic = userPref.getString(getString(R.string.p_imageurl), "");
+        if (!TextUtils.isEmpty(userPic)) {
+            Glide.with(navUserPic.getContext())
+                    .load(userPic)
+                    .into(navUserPic);
+        }
         navUsername.setText(userId);
         navUserphone.setText(userPhone);
 
