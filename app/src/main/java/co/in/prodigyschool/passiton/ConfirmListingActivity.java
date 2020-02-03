@@ -39,9 +39,9 @@ public class ConfirmListingActivity extends AppCompatActivity {
 
     public static final String TAG = "CONFIRM LISTING";
 
-    boolean isTextbook;
-    String bookName, bookDescription, phoneNumber, userId, bookAddress, bookImageUrl, selectedImage,book_photo_url;
-    int gradeNumber, boardNumber, yearNumber;
+    private boolean isTextbook;
+    private String bookName, bookDescription, phoneNumber, userId, bookAddress, bookImageUrl, selectedImage,book_photo_url;
+    private int gradeNumber, boardNumber, yearNumber;
     private int bookPrice;
     private TextView bookNameTV, bookDescriptionTV, bookTypeTV, bookCategoryTV, bookPriceTV, bookLocTV;
     private Button confirmAndPost;

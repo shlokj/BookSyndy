@@ -130,40 +130,13 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/reqPriceLL"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:orientation="vertical"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/reqCategoryLL">
-
-                <TextView
-                    android:id="@+id/reqPriceLabel"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Price" />
-
-                <TextView
-                    android:id="@+id/reqPrice"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/roboto_light"
-                    android:text="(Free) or (Rs. x with rupee symbol)"
-                    android:textColor="@color/colorTextBlack"
-                    android:textSize="18sp" />
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/reqLocLL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:orientation="vertical"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/reqPriceLL">
+                app:layout_constraintTop_toBottomOf="@+id/reqCategoryLL">
 
                 <TextView
                     android:id="@+id/reqLocLabel"

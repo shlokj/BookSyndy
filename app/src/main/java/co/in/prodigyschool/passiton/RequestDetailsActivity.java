@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -30,9 +31,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RequestDetailsActivity extends AppCompatActivity {
 
+    private boolean isTextbook, sameOwnerAndViewer;
     private BookRequest currentBook;
     private User bookOwner;
-    private TextView view_bookname,view_address,view_description, view_grade_and_board, sellerName;
+    private TextView view_bookname,view_address,view_description, view_grade_and_board, view_type, sellerName;
     private FirebaseFirestore mFirestore;
     private DocumentReference bookUserRef;
     private DocumentReference bookRef;
@@ -43,6 +45,12 @@ public class RequestDetailsActivity extends AppCompatActivity {
     private String curAppUser, shareableLink="", bookid;
     private double latA,lngA;
     private boolean byme;
+    private FloatingActionButton chat;
+
+    private int gradeNumber, boardNumber, yearNumber;
+    private String bookName, bookDescription, phoneNumber, userId, bookAddress;
+
+    //TODO: load requester dp and username
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,19 +61,35 @@ public class RequestDetailsActivity extends AppCompatActivity {
         byme = getIntent().getBooleanExtra("byme",false);
         view_bookname = findViewById(R.id.reqTitle);
         view_description = findViewById(R.id.reqDescription);
+        view_type = findViewById(R.id.reqType);
         view_grade_and_board = findViewById(R.id.reqCategory);
         view_address = findViewById(R.id.reqLoc);
         sellerName = findViewById(R.id.sellerName1);
         sellerDp = findViewById(R.id.seller_dp1);
+        chat = findViewById(R.id.fab_chatreq);
+
+        bookName = getIntent().getStringExtra("REQ_TITLE");
+        bookDescription = getIntent().getStringExtra("REQ_DESC");
+        gradeNumber = getIntent().getIntExtra("REQ_GRADENUMBER",0);
+        boardNumber = getIntent().getIntExtra("REQ_BOARDNUMBER",6);
+        isTextbook = getIntent().getBooleanExtra("REQ_ISTB",true);
+        bookAddress = getIntent().getStringExtra("REQ_ADDRESS");
 
         initFireStore();
 
-        findViewById(R.id.fab_chatreq).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // open chat
-            }
-        });
+        if (sameOwnerAndViewer) {
+            chat.hide();
+        }
+
+        else {
+            chat.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // TODO: open chat with this user
+                }
+            });
+
+        }
 
         View.OnClickListener toOpenProfile = new View.OnClickListener() {
             @Override
@@ -86,6 +110,75 @@ public class RequestDetailsActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
+
+
+        view_bookname.setText(bookName);
+        view_description.setText(bookDescription);
+        if (isTextbook) {
+            view_type.setText("Textbook");
+        } else {
+            view_type.setText("Notes / other material");
+        }
+        if (boardNumber == 20) {
+            view_grade_and_board.setText("Competitive exams");
+        }
+        else {
+            if (gradeNumber == 1) {
+                view_grade_and_board.setText("Grade 5 or below");
+            } else if (gradeNumber == 2) {
+                view_grade_and_board.setText("Grade 6 to 8");
+            } else if (gradeNumber == 3) {
+                view_grade_and_board.setText("Grade 9");
+            } else if (gradeNumber == 4) {
+                view_grade_and_board.setText("Grade 10");
+            } else if (gradeNumber == 5) {
+                view_grade_and_board.setText("Grade 11");
+            } else if (gradeNumber == 6) {
+                view_grade_and_board.setText("Grade 12");
+            } else if (gradeNumber == 7) {
+                view_grade_and_board.setText("Undergraduate");
+//                Toast.makeText(getApplicationContext(),"Grade number: 7\nBoard number: "+boardNumber,Toast.LENGTH_SHORT).show();
+
+                if (boardNumber == 7) {
+                    view_grade_and_board.append(", B. Tech");
+                } else if (boardNumber == 8) {
+                    view_grade_and_board.append(", B. Sc");
+                } else if (boardNumber == 9) {
+                    view_grade_and_board.append(", B. Com");
+                } else if (boardNumber == 10) {
+                    view_grade_and_board.append(", BA");
+                } else if (boardNumber == 11) {
+                    view_grade_and_board.append(", BBA");
+                } else if (boardNumber == 12) {
+                    view_grade_and_board.append(", BCA");
+                } else if (boardNumber == 13) {
+                    view_grade_and_board.append(", B. Ed");
+                } else if (boardNumber == 14) {
+                    view_grade_and_board.append(", LLB");
+                } else if (boardNumber == 15) {
+                    view_grade_and_board.append(", MBBS");
+                } else if (boardNumber == 16) {
+                    view_grade_and_board.append(", other degree");
+                }
+
+                view_grade_and_board.append(", "+ordinal(yearNumber)+" year");
+            }
+
+            if (boardNumber == 1) {
+                view_grade_and_board.append(", CBSE");
+            } else if (boardNumber == 2) {
+                view_grade_and_board.append(", ICSE//ISC");
+            } else if (boardNumber == 3) {
+                view_grade_and_board.append(", IB");
+            } else if (boardNumber == 4) {
+                view_grade_and_board.append(", IGCSE/CAIE");
+            } else if (boardNumber == 5) {
+                view_grade_and_board.append(", state board");
+            } else if (boardNumber == 6) {
+                view_grade_and_board.append(", other board");
+            }
+        }
+        view_address.setText(bookAddress);
     }
 
 
@@ -302,6 +395,7 @@ public class RequestDetailsActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),"Firebase error",Toast.LENGTH_SHORT).show();
         }
     }
+
 
     public static String ordinal(int i) {
         String[] suffixes = new String[] { "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th" };

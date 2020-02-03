@@ -56,7 +56,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class BookDetailsActivity extends AppCompatActivity implements View.OnClickListener, EventListener<DocumentSnapshot> {
 
     private String bookid;
-    private boolean isHome, saved, isBookmarks, isUserProfile;
+    private boolean isHome, saved, isBookmarks, isUserProfile, sameOwnerAndViewer;
     private FirebaseFirestore mFirestore;
     private Book currentBook;
     private User bookOwner;
@@ -287,6 +287,11 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                                 .load(bookOwner.getImageUrl())
                                 .into(sellerDp);
                     }
+                    // TODO: compare current user with book owner and assign to sameOwnerAndViewer
+                    if (sameOwnerAndViewer) {
+                        sellerName.setEnabled(false);
+                        sellerDp.setEnabled(false);
+                    }
                 }
             });
         } catch (Exception e) {
@@ -306,6 +311,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         });
         addDistance(currentBook.getLat(), currentBook.getLng());
         updateBookMark();
+
     }
 
     private void addDistance(double latitude, double longitude) {

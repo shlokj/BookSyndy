@@ -217,6 +217,12 @@ public class PendingRequestFragment extends Fragment implements View.OnClickList
 
             Intent requestDetails = new Intent(getActivity(), RequestDetailsActivity.class);
             requestDetails.putExtra("bookid",request.getDocumentId());
+            requestDetails.putExtra("REQ_TITLE",request.getTitle());
+            requestDetails.putExtra("REQ_DESC",request.getDescription());
+            requestDetails.putExtra("REQ_ISTB",request.isText());
+            requestDetails.putExtra("REQ_BOARDNUMBER",request.getBoard());
+            requestDetails.putExtra("REQ_GRADENUMBER",request.getGrade());
+            requestDetails.putExtra("REQ_ADDRESS",request.getBookAddress());
             startActivity(requestDetails);
 
         }
