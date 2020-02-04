@@ -84,8 +84,7 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="@string/description"
-                android:inputType="textCapSentences"
-                android:lines="5" />
+                android:inputType="textCapSentences|textMultiLine" />
 
         </LinearLayout>
 

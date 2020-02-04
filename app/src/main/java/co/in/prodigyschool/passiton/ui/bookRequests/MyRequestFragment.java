@@ -174,8 +174,9 @@ public class MyRequestFragment extends Fragment implements EventListener<QuerySn
             requestDetails.putExtra("REQ_TITLE",request.getTitle());
             requestDetails.putExtra("REQ_DESC",request.getDescription());
             requestDetails.putExtra("REQ_ISTB",request.isText());
-            requestDetails.putExtra("REQ_BOARDNUMBER",request.getBoard());
             requestDetails.putExtra("REQ_GRADENUMBER",request.getGrade());
+            requestDetails.putExtra("REQ_BOARDNUMBER",request.getBoard());
+            requestDetails.putExtra("REQ_YEAR",request.getBookYear());
             requestDetails.putExtra("REQ_ADDRESS",request.getBookAddress());
             requestDetails.putExtra("byme",true);
             startActivity(requestDetails);

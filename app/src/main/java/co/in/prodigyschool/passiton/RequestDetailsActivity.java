@@ -72,6 +72,7 @@ public class RequestDetailsActivity extends AppCompatActivity {
         bookDescription = getIntent().getStringExtra("REQ_DESC");
         gradeNumber = getIntent().getIntExtra("REQ_GRADENUMBER",0);
         boardNumber = getIntent().getIntExtra("REQ_BOARDNUMBER",6);
+        yearNumber = getIntent().getIntExtra("REQ_YEAR",0);
         isTextbook = getIntent().getBooleanExtra("REQ_ISTB",true);
         bookAddress = getIntent().getStringExtra("REQ_ADDRESS");
 

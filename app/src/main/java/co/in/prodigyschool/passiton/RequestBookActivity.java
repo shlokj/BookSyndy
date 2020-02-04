@@ -316,6 +316,7 @@ public class RequestBookActivity extends AppCompatActivity {
                         year=0;
                     }
                     if (validYear) {
+                        year = Integer.parseInt(yearField.getText().toString());
                         BookRequest bookRequest = new BookRequest(bookTitle,bookDesc,bookAddress,userPhone
                                 ,userId,gradeNumber,boardNumber,year,isCompetitive,false,isTextbook,bookLat,bookLng);
                         postBookRequest(bookRequest);
