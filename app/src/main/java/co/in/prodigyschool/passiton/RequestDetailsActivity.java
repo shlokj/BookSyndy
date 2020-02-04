@@ -1,11 +1,8 @@
 package co.in.prodigyschool.passiton;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,9 +12,12 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -29,36 +29,41 @@ import co.in.prodigyschool.passiton.Data.BookRequest;
 import co.in.prodigyschool.passiton.Data.User;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class RequestDetailsActivity extends AppCompatActivity {
+public class RequestDetailsActivity extends AppCompatActivity implements EventListener<DocumentSnapshot> {
 
-    private boolean isTextbook, sameOwnerAndViewer;
+    private boolean isTextbook;
     private BookRequest currentBook;
     private User bookOwner;
-    private TextView view_bookname,view_address,view_description, view_grade_and_board, view_type, sellerName;
+    private TextView view_bookname, view_address, view_description, view_grade_and_board, view_type, sellerName;
     private FirebaseFirestore mFirestore;
     private DocumentReference bookUserRef;
     private DocumentReference bookRef;
-    private ListenerRegistration mBookUserRegistration,mBookRegistration,mBookMarkRegistration;
+    private ListenerRegistration mBookUserRegistration;
     private CircleImageView sellerDp;
     private Menu menu;
     private static final String TAG = "REQUEST_DETAILS";
-    private String curAppUser, shareableLink="", bookid;
-    private double latA,lngA;
+    private String curAppUser, bookOwnerPhone, shareableLink = "", bookid;
+    private double latA, lngA, bookLat, bookLng;
     private boolean byme;
     private FloatingActionButton chat;
 
     private int gradeNumber, boardNumber, yearNumber;
     private String bookName, bookDescription, phoneNumber, userId, bookAddress;
+    private SharedPreferences userPref;
 
-    //TODO: load requester dp and username
+    public static String ordinal(int i) {
+        String[] suffixes = new String[]{"th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th"};
+        return i + suffixes[i % 10];
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_details);
         getSupportActionBar().setTitle("View request");
+        userPref = this.getSharedPreferences(getString(R.string.UserPref), 0);
         bookid = getIntent().getStringExtra("bookid");
-        byme = getIntent().getBooleanExtra("byme",false);
+        byme = getIntent().getBooleanExtra("byme", false);
         view_bookname = findViewById(R.id.reqTitle);
         view_description = findViewById(R.id.reqDescription);
         view_type = findViewById(R.id.reqType);
@@ -70,19 +75,24 @@ public class RequestDetailsActivity extends AppCompatActivity {
 
         bookName = getIntent().getStringExtra("REQ_TITLE");
         bookDescription = getIntent().getStringExtra("REQ_DESC");
-        gradeNumber = getIntent().getIntExtra("REQ_GRADENUMBER",0);
-        boardNumber = getIntent().getIntExtra("REQ_BOARDNUMBER",6);
-        yearNumber = getIntent().getIntExtra("REQ_YEAR",0);
-        isTextbook = getIntent().getBooleanExtra("REQ_ISTB",true);
+        gradeNumber = getIntent().getIntExtra("REQ_GRADENUMBER", 0);
+        boardNumber = getIntent().getIntExtra("REQ_BOARDNUMBER", 6);
+        yearNumber = getIntent().getIntExtra("REQ_YEAR", 0);
+        isTextbook = getIntent().getBooleanExtra("REQ_ISTB", true);
         bookAddress = getIntent().getStringExtra("REQ_ADDRESS");
-
+        bookOwnerPhone = getIntent().getStringExtra("REQ_PHONE");
+        bookLat = getIntent().getDoubleExtra("REQ_LAT", 0.0);
+        bookLat = getIntent().getDoubleExtra("REQ_LNG", 0.0);
+        curAppUser = userPref.getString(getString(R.string.p_userphone), "");
+        latA = userPref.getFloat(getString(R.string.p_lat), 0.0f);
+        lngA = userPref.getFloat(getString(R.string.p_lng), 0.0f);
         initFireStore();
 
-        if (sameOwnerAndViewer) {
+        if (bookOwnerPhone != null && bookOwnerPhone.equalsIgnoreCase(curAppUser)) {
             chat.hide();
-        }
-
-        else {
+            sellerName.setEnabled(false);
+            sellerDp.setEnabled(false);
+        } else {
             chat.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -107,7 +117,7 @@ public class RequestDetailsActivity extends AppCompatActivity {
         sellerName.setOnClickListener(toOpenProfile);
         sellerDp.setOnClickListener(toOpenProfile);
 
-        if(getSupportActionBar()!= null) {
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
@@ -122,8 +132,7 @@ public class RequestDetailsActivity extends AppCompatActivity {
         }
         if (boardNumber == 20) {
             view_grade_and_board.setText("Competitive exams");
-        }
-        else {
+        } else {
             if (gradeNumber == 1) {
                 view_grade_and_board.setText("Grade 5 or below");
             } else if (gradeNumber == 2) {
@@ -162,7 +171,7 @@ public class RequestDetailsActivity extends AppCompatActivity {
                     view_grade_and_board.append(", other degree");
                 }
 
-                view_grade_and_board.append(", "+ordinal(yearNumber)+" year");
+                view_grade_and_board.append(", " + ordinal(yearNumber) + " year");
             }
 
             if (boardNumber == 1) {
@@ -182,120 +191,25 @@ public class RequestDetailsActivity extends AppCompatActivity {
         view_address.setText(bookAddress);
     }
 
-
-    private void populateReqDetails(BookRequest book) {
+    private void populateReqDetails(User user) {
 
         try {
-            currentBook = book;
-            if(currentBook == null){
-                Log.d(TAG, "populateBookDetails: current book error");
-                return;
-            }
-            bookUserRef = mFirestore.collection("bookRequest").document(currentBook.getUserId());
-            view_bookname.setText(currentBook.getTitle());
-            view_description.setText(currentBook.getDescription());
-            view_address.setText(currentBook.getBookAddress());
-            int gradeNumber = currentBook.getGrade();
-            int boardNumber = currentBook.getBoard();
-            int year = currentBook.getBookYear();
+            bookOwner = user;
+            sellerName.setText(bookOwner.getUserId());
+            Glide.with(sellerDp.getContext())
+                    .load(bookOwner.getImageUrl())
+                    .into(sellerDp);
 
-            if (currentBook.isText()) {
-                view_grade_and_board.setText("Textbook " + getString(R.string.divider_bullet) + " ");
-            } else {
-                view_grade_and_board.setText("Notes / material " + getString(R.string.divider_bullet) + " ");
-            }
-
-            if (boardNumber == 20) {
-                view_grade_and_board.append("Competitive exams");
-            }
-            else {
-                if (gradeNumber == 1) {
-                    view_grade_and_board.append("Grade 5 or below");
-                } else if (gradeNumber == 2) {
-                    view_grade_and_board.append("Grade 6 to 8");
-                } else if (gradeNumber == 3) {
-                    view_grade_and_board.append("Grade 9");
-                } else if (gradeNumber == 4) {
-                    view_grade_and_board.append("Grade 10");
-                } else if (gradeNumber == 5) {
-                    view_grade_and_board.append("Grade 11");
-                } else if (gradeNumber == 6) {
-                    view_grade_and_board.append("Grade 12");
-                } else if (gradeNumber == 7) {
-                    view_grade_and_board.append("Undergraduate");
-//                Toast.makeText(getApplicationContext(),"Grade number: 7\nBoard number: "+boardNumber,Toast.LENGTH_SHORT).show();
-
-                    if (boardNumber == 7) {
-                        view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " B. Tech");
-                    } else if (boardNumber == 8) {
-                        view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " B. Sc");
-                    } else if (boardNumber == 9) {
-                        view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " B. Com");
-                    } else if (boardNumber == 10) {
-                        view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " BA");
-                    } else if (boardNumber == 11) {
-                        view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " BBA");
-                    } else if (boardNumber == 12) {
-                        view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " BCA");
-                    } else if (boardNumber == 13) {
-                        view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " B. Ed");
-                    } else if (boardNumber == 14) {
-                        view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " LLB");
-                    } else if (boardNumber == 15) {
-                        view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " MBBS");
-                    } else if (boardNumber == 16) {
-                        view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " other degree");
-                    }
-
-                    if (year!=0) {
-                        view_grade_and_board.append(", "+ordinal(year)+" year");
-                    }
-                }
-
-                if (boardNumber == 1) {
-                    view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " CBSE");
-                } else if (boardNumber == 2) {
-                    view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " ICSE/ISC");
-                } else if (boardNumber == 3) {
-                    view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " IB");
-                } else if (boardNumber == 4) {
-                    view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " IGCSE/CAIE");
-                } else if (boardNumber == 5) {
-                    view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " state board");
-                } else if (boardNumber == 6) {
-                    view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " other board");
-                }
-
-            }
-
-            mBookUserRegistration = bookUserRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                @Override
-                public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
-                    if (e != null) {
-                        Log.w(TAG, "book:onEvent", e);
-                        return;
-                    }
-                    bookOwner = snapshot.toObject(User.class);
-                    if (bookOwner!=null) {
-                        sellerName.setText(bookOwner.getUserId());
-                        Glide.with(sellerDp.getContext())
-                                .load(bookOwner.getImageUrl())
-                                .into(sellerDp);
-                    }
-                }
-            });
-        }
-        catch(Exception e){
-            Log.e(TAG, "populateBookDetails: exception",e);
+        } catch (Exception e) {
+            Log.e(TAG, "populateBookDetails: exception", e);
         }
 
-        addDistance(currentBook.getLat(),currentBook.getLng());
+        addDistance(bookLat, bookLng);
     }
 
-
-    private void addDistance(double latitude,double longitude){
+    private void addDistance(double latitude, double longitude) {
         float res;
-        if(latA != 0.0 && lngA != 0.0 && latitude != 0.0 && longitude != 0.0) {
+        if (latA != 0.0 && lngA != 0.0 && latitude != 0.0 && longitude != 0.0) {
             Location locationA = new Location("point A");
             Location locationB = new Location("point B");
 
@@ -307,9 +221,8 @@ public class RequestDetailsActivity extends AppCompatActivity {
             if (res > 0.0f && res < 1000f) {
                 res = Math.round(res);
                 if (res > 0.0f)
-                    view_address.append("  " + getString(R.string.divider_bullet) + " " + (int)res + " m");
-            }
-            else if(res > 1000f){
+                    view_address.append("  " + getString(R.string.divider_bullet) + " " + (int) res + " m");
+            } else if (res > 1000f) {
                 res = Math.round(res / 100);
                 res = res / 10;
                 if (res > 0.0f)
@@ -318,14 +231,12 @@ public class RequestDetailsActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!byme) {
             getMenuInflater().inflate(R.menu.menu_request_details, menu);
             this.menu = menu;
-        }
-        else {
+        } else {
             getMenuInflater().inflate(R.menu.menu_myreq, menu);
             this.menu = menu;
         }
@@ -348,7 +259,7 @@ public class RequestDetailsActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 //                        reportRequest();
-                        Toast.makeText(getApplicationContext(),"Reported",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Reported", Toast.LENGTH_SHORT).show();
                         // todo: remove the listing from the recyclerview on going back
                         onBackPressed();
                     }
@@ -368,7 +279,7 @@ public class RequestDetailsActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
-                        Toast.makeText(getApplicationContext(),"Deleted",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Deleted", Toast.LENGTH_SHORT).show();
                         // todo: delete the current request from firestore OR have a field called completed and mark that as true
                         // if completed is true, don't show the book in the list
                         onBackPressed();
@@ -387,20 +298,29 @@ public class RequestDetailsActivity extends AppCompatActivity {
     private void initFireStore() {
         mFirestore = FirebaseFirestore.getInstance();
 
-        if(mFirestore != null){
-            bookRef =  mFirestore.collection("bookRequest").document(bookid);
-            curAppUser = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
+        try {
+            bookRef = mFirestore.collection("bookRequest").document(bookid);
+            bookUserRef = mFirestore.collection("users").document(bookOwnerPhone);
+//            curAppUser = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
+            mBookUserRegistration = bookUserRef.addSnapshotListener(this);
 
-        }
-        else{
-            Toast.makeText(getApplicationContext(),"Firebase error",Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "Firebase error", Toast.LENGTH_SHORT).show();
         }
     }
 
-
-    public static String ordinal(int i) {
-        String[] suffixes = new String[] { "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th" };
-        return i + suffixes[i % 10];
+    //called for mBookRegistration
+    @Override
+    public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+        if (e != null) {
+            Log.w(TAG, "book:onEvent", e);
+            return;
+        }
+        if (snapshot != null && snapshot.exists())
+            populateReqDetails(snapshot.toObject(User.class));
+        else {
+            Toast.makeText(getApplicationContext(), "Book Not Available", Toast.LENGTH_SHORT).show();
+            onBackPressed();
+        }
     }
-
 }

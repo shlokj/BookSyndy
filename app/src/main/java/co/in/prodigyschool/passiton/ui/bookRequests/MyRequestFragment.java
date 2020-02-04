@@ -4,18 +4,16 @@ package co.in.prodigyschool.passiton.ui.bookRequests;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -31,7 +29,6 @@ import java.util.List;
 import co.in.prodigyschool.passiton.Adapters.RequestAdapter;
 import co.in.prodigyschool.passiton.Data.BookRequest;
 import co.in.prodigyschool.passiton.R;
-import co.in.prodigyschool.passiton.RequestBookActivity;
 import co.in.prodigyschool.passiton.RequestDetailsActivity;
 
 /**
@@ -179,6 +176,9 @@ public class MyRequestFragment extends Fragment implements EventListener<QuerySn
             requestDetails.putExtra("REQ_YEAR",request.getBookYear());
             requestDetails.putExtra("REQ_ADDRESS",request.getBookAddress());
             requestDetails.putExtra("byme",true);
+            requestDetails.putExtra("REQ_PHONE", request.getPhone());
+            requestDetails.putExtra("REQ_LAT", request.getLat());
+            requestDetails.putExtra("REQ_LNG", request.getLng());
             startActivity(requestDetails);
 
         }

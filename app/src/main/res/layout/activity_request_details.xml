@@ -205,13 +205,12 @@
                 android:layout_toEndOf="@+id/seller_dp1"
                 android:fontFamily="@font/roboto_light"
                 android:gravity="center_vertical"
-                android:textColor="@color/white"
+                android:textColor="@color/colorTextBlack"
                 android:textSize="18sp"
                 android:layout_marginStart="20dp"
                 app:layout_constraintBottom_toBottomOf="@+id/seller_dp1"
                 app:layout_constraintStart_toEndOf="@+id/seller_dp1"
-                app:layout_constraintTop_toTopOf="@+id/seller_dp1"
-                tools:text="Book Syndicate" />
+                app:layout_constraintTop_toTopOf="@+id/seller_dp1" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

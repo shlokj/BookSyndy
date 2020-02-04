@@ -5,14 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,8 +16,14 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -42,15 +40,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import co.in.prodigyschool.passiton.Adapters.HomeAdapter;
 import co.in.prodigyschool.passiton.Adapters.RequestAdapter;
-import co.in.prodigyschool.passiton.Data.Book;
 import co.in.prodigyschool.passiton.Data.BookRequest;
 import co.in.prodigyschool.passiton.Data.OnFilterSelectionListener;
 import co.in.prodigyschool.passiton.R;
 import co.in.prodigyschool.passiton.RequestBookActivity;
 import co.in.prodigyschool.passiton.RequestDetailsActivity;
-import co.in.prodigyschool.passiton.ui.home.FilterDialogFragment;
 import co.in.prodigyschool.passiton.util.Filters;
 
 /**
@@ -224,6 +219,9 @@ public class PendingRequestFragment extends Fragment implements View.OnClickList
             requestDetails.putExtra("REQ_YEAR",request.getBookYear());
             requestDetails.putExtra("REQ_GRADENUMBER",request.getGrade());
             requestDetails.putExtra("REQ_ADDRESS",request.getBookAddress());
+            requestDetails.putExtra("REQ_PHONE", request.getPhone());
+            requestDetails.putExtra("REQ_LAT", request.getLat());
+            requestDetails.putExtra("REQ_LNG", request.getLng());
             startActivity(requestDetails);
 
         }
