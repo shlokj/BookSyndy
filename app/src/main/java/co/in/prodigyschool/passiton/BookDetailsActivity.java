@@ -568,7 +568,6 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                     } else {
                         //create here
                         Map<String, Object> bookDetails = new HashMap<>();
-                        bookDetails.put("bookDetails", currentBook);
                         bookDetails.put("bookRef", bookRef);
                         bookDetails.put("Reported By", curAppUser);
                         bookDetails.put("Report count", FieldValue.increment(1));

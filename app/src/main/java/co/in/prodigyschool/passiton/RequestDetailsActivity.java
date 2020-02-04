@@ -1,9 +1,12 @@
 package co.in.prodigyschool.passiton;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -24,9 +27,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import co.in.prodigyschool.passiton.Data.BookRequest;
 import co.in.prodigyschool.passiton.Data.User;
@@ -254,6 +261,23 @@ public class RequestDetailsActivity extends AppCompatActivity implements EventLi
         return true;
     }
 
+    public static boolean checkConnection(Context context) {
+        final ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (connMgr != null) {
+            NetworkInfo activeNetworkInfo = connMgr.getActiveNetworkInfo();
+
+            if (activeNetworkInfo != null) { // connected to the internet
+                // connected to the mobile provider's data plan
+                if (activeNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+                    // connected to wifi
+                    return true;
+                } else return activeNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE;
+            }
+        }
+        return false;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -271,6 +295,7 @@ public class RequestDetailsActivity extends AppCompatActivity implements EventLi
 //                        reportRequest();
                         Toast.makeText(getApplicationContext(), "Reported", Toast.LENGTH_SHORT).show();
                         // todo: remove the listing from the recyclerview on going back
+                        reportListing();
                         onBackPressed();
                     }
                 });
@@ -311,6 +336,36 @@ public class RequestDetailsActivity extends AppCompatActivity implements EventLi
                 dBuilder.show();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void reportListing() {
+        if (!checkConnection(this)) {
+            Toast.makeText(this, "InterNet Required", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (curAppUser != null) {
+            final DocumentReference reportRef = mFirestore.collection("report_request").document(bookid);
+//            final DocumentReference bookRef = mFirestore.collection("bookRequest").document(currentBook.getDocumentId());
+            reportRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        //update here
+                        reportRef.update("Report count", FieldValue.increment(1));
+                    } else {
+                        Map<String, Object> bookDetails = new HashMap<>();
+                        bookDetails.put("bookRef", bookRef);
+                        bookDetails.put("Reported By", curAppUser);
+                        bookDetails.put("Report count", FieldValue.increment(1));
+                        reportRef.set(bookDetails);
+                    }
+                }
+            });
+
+
+        }
+
+
     }
 
     private void initFireStore() {
