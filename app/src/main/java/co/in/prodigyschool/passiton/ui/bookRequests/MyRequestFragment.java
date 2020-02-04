@@ -123,10 +123,10 @@ public class MyRequestFragment extends Fragment implements EventListener<QuerySn
         try {
             /* firestore */
             mFirestore = FirebaseFirestore.getInstance();
-            curUserId = userPref.getString(getString(R.string.p_userid),"");
+            curUserId = userPref.getString(getString(R.string.p_userphone), "");
             mQuery = mFirestore.collection("bookRequest").whereEqualTo("complete",false);
             if(curUserId != null){
-                mQuery = mQuery.whereEqualTo("userId",curUserId);
+                mQuery = mQuery.whereEqualTo("phone", curUserId);
             }
             requestRegistration = mQuery.addSnapshotListener(this);
         } catch (Exception e) {

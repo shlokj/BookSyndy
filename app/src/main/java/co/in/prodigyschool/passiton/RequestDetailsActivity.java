@@ -12,11 +12,14 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -96,7 +99,7 @@ public class RequestDetailsActivity extends AppCompatActivity implements EventLi
             chat.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    
+
                     if (bookOwner != null) {
                         Intent chatIntent = new Intent(RequestDetailsActivity.this, ChatActivity.class);
                         chatIntent.putExtra("visit_user_id", bookOwnerPhone); // phone number
@@ -286,10 +289,21 @@ public class RequestDetailsActivity extends AppCompatActivity implements EventLi
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
-                        Toast.makeText(getApplicationContext(), "Deleted", Toast.LENGTH_SHORT).show();
+
                         // todo: delete the current request from firestore OR have a field called completed and mark that as true
-                        // if completed is true, don't show the book in the list
-                        onBackPressed();
+                        bookRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(getApplicationContext(), "Deleted", Toast.LENGTH_SHORT).show();
+                                onBackPressed();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getApplicationContext(), "Error Deleting Request", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
                     }
                 });
                 dBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

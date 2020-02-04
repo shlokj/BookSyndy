@@ -160,7 +160,7 @@ public class PendingRequestFragment extends Fragment implements View.OnClickList
         try {
             /* firestore */
             mFirestore = FirebaseFirestore.getInstance();
-            curUserId = userPref.getString(getString(R.string.p_userid),"");
+            curUserId = userPref.getString(getString(R.string.p_userphone), "");
             mQuery = mFirestore.collection("bookRequest").whereEqualTo("complete",false);
             requestRegistration = mQuery.addSnapshotListener(this);
         } catch (Exception e) {
@@ -176,7 +176,7 @@ public class PendingRequestFragment extends Fragment implements View.OnClickList
             for(QueryDocumentSnapshot snapshot:queryDocumentSnapshots){
                 BookRequest bookRequest = snapshot.toObject(BookRequest.class);
                 Log.d(TAG, "populateRequestAdapter: "+bookRequest.getTitle());
-                if(bookRequest.getUserId() != null && !bookRequest.getUserId().equalsIgnoreCase(curUserId)){
+                if (bookRequest.getUserId() != null && !bookRequest.getPhone().equalsIgnoreCase(curUserId)) {
                     bookRequests.add(bookRequest);
                 }
             }
