@@ -96,7 +96,14 @@ public class RequestDetailsActivity extends AppCompatActivity implements EventLi
             chat.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // TODO: open chat with this user
+                    
+                    if (bookOwner != null) {
+                        Intent chatIntent = new Intent(RequestDetailsActivity.this, ChatActivity.class);
+                        chatIntent.putExtra("visit_user_id", bookOwnerPhone); // phone number
+                        chatIntent.putExtra("visit_user_name", bookOwner.getUserId()); // unique user id
+                        chatIntent.putExtra("visit_image", bookOwner.getImageUrl());
+                        startActivity(chatIntent);
+                    }
                 }
             });
 
