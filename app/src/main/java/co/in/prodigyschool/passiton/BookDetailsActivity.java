@@ -34,7 +34,6 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
-import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 import com.google.firebase.dynamiclinks.ShortDynamicLink;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -81,35 +80,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         return i + suffixes[i % 10];
     }
 
-    private void receiveDynamicLink() {
 
-        FirebaseDynamicLinks.getInstance()
-                .getDynamicLink(getIntent())
-                .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {
-                    @Override
-                    public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
-                        // Get deep link from result (may be null if no link is found)
-                        Uri deepLink = null;
-                        if (pendingDynamicLinkData != null) {
-                            deepLink = pendingDynamicLinkData.getLink();
-                            Log.d(TAG, "onSuccess: deepLink " + deepLink);
-                        }
-
-                        // Handle the deep link. For example, open the linked
-                        // content, or apply promotional credit to the user's
-                        // account.
-                        // ...
-
-                        // ...
-                    }
-                })
-                .addOnFailureListener(this, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "getDynamicLink:onFailure", e);
-                    }
-                });
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +91,6 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         isUserProfile = getIntent().getBooleanExtra("isProfile", false);
         isBookmarks = getIntent().getBooleanExtra("isBookmarks", false);
         userPref = this.getSharedPreferences(getString(R.string.UserPref), 0);
-        receiveDynamicLink();
         initFireStore();
         getUserLocation();
 
@@ -163,11 +133,11 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     private void initFireStore() {
         mFirestore = FirebaseFirestore.getInstance();
 
-        if (mFirestore != null) {
+        try {
             bookRef = mFirestore.collection("books").document(bookid);
             curAppUser = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
 
-        } else {
+        } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "Firebase error", Toast.LENGTH_SHORT).show();
         }
     }
@@ -186,6 +156,11 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
             if (currentBook == null) {
                 Log.d(TAG, "populateBookDetails: current book error");
                 return;
+            }
+
+            if (curAppUser != null && curAppUser.equalsIgnoreCase(currentBook.getUserId())) {
+                sellerName.setEnabled(false);
+                sellerDp.setEnabled(false);
             }
             bookUserRef = mFirestore.collection("users").document(currentBook.getUserId());
             view_bookname.setText(currentBook.getBookName());
@@ -280,18 +255,15 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                         Log.w(TAG, "book:onEvent", e);
                         return;
                     }
-                    bookOwner = snapshot.toObject(User.class);
-                    if (bookOwner != null) {
+
+                    if (snapshot != null && snapshot.exists()) {
+                        bookOwner = snapshot.toObject(User.class);
                         sellerName.setText(bookOwner.getUserId());
                         Glide.with(sellerDp.getContext())
                                 .load(bookOwner.getImageUrl())
                                 .into(sellerDp);
                     }
-                    // TODO: compare current user with book owner and assign to sameOwnerAndViewer
-                    if (sameOwnerAndViewer) {
-                        sellerName.setEnabled(false);
-                        sellerDp.setEnabled(false);
-                    }
+
                 }
             });
         } catch (Exception e) {
