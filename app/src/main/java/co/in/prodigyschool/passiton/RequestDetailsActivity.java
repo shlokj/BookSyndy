@@ -288,10 +288,7 @@ public class RequestDetailsActivity extends AppCompatActivity implements EventLi
                 dBuilder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
-
-                        // todo: delete the current request from firestore OR have a field called completed and mark that as true
-                        bookRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        bookRef.update("complete", true).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Toast.makeText(getApplicationContext(), "Deleted", Toast.LENGTH_SHORT).show();

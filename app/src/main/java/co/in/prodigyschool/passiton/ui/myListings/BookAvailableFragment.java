@@ -101,6 +101,10 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
     @Override
     public void onStop() {

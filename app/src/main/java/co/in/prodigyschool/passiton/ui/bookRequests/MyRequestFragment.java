@@ -92,6 +92,14 @@ public class MyRequestFragment extends Fragment implements EventListener<QuerySn
     public void onStart() {
         super.onStart();
         if (requestRegistration == null) {
+            bookRequests.clear();
+            bookRequestsFull.clear();
+            requestRegistration = mQuery.addSnapshotListener(this);
+        } else {
+            bookRequests.clear();
+            bookRequestsFull.clear();
+            requestRegistration.remove();
+            requestRegistration = null;
             requestRegistration = mQuery.addSnapshotListener(this);
         }
 
@@ -103,6 +111,7 @@ public class MyRequestFragment extends Fragment implements EventListener<QuerySn
         super.onResume();
         if (mAdapter != null) {
             mAdapter.onDataChanged();
+            mAdapter.notifyDataSetChanged();
         }
 
     }
@@ -113,7 +122,9 @@ public class MyRequestFragment extends Fragment implements EventListener<QuerySn
         if (requestRegistration != null) {
             requestRegistration.remove();
             requestRegistration = null;
+            mAdapter.notifyDataSetChanged();
             mAdapter.onDataChanged();
+
         }
 
 
@@ -137,7 +148,7 @@ public class MyRequestFragment extends Fragment implements EventListener<QuerySn
 
     private void populateRequestAdapter(QuerySnapshot queryDocumentSnapshots) {
 
-        if(!queryDocumentSnapshots.isEmpty()) {
+        if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
             bookRequests.clear();
             for(QueryDocumentSnapshot snapshot:queryDocumentSnapshots){
                 BookRequest bookRequest = snapshot.toObject(BookRequest.class);
@@ -147,7 +158,6 @@ public class MyRequestFragment extends Fragment implements EventListener<QuerySn
             mAdapter.setRequestList(bookRequests);
             bookRequestsFull.clear();
             bookRequestsFull.addAll(bookRequests);
-            mAdapter.onDataChanged();
         }
     }
 

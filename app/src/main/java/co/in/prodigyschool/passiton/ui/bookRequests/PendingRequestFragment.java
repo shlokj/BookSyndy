@@ -129,6 +129,14 @@ public class PendingRequestFragment extends Fragment implements View.OnClickList
     public void onStart() {
         super.onStart();
         if (requestRegistration == null) {
+            bookRequests.clear();
+            bookRequestsFull.clear();
+            requestRegistration = mQuery.addSnapshotListener(this);
+        } else {
+            bookRequests.clear();
+            bookRequestsFull.clear();
+            requestRegistration.remove();
+            requestRegistration = null;
             requestRegistration = mQuery.addSnapshotListener(this);
         }
 
@@ -184,7 +192,6 @@ public class PendingRequestFragment extends Fragment implements View.OnClickList
             mAdapter.setRequestList(bookRequests);
             bookRequestsFull.clear();
             bookRequestsFull.addAll(bookRequests);
-            mAdapter.onDataChanged();
         }
     }
 
