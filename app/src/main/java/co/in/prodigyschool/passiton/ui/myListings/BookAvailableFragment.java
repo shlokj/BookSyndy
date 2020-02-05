@@ -14,18 +14,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -59,6 +56,7 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
     private Vibrator vibrator;
     private AlertDialog dialog;
     private String book_id;
+    private FirestoreRecyclerOptions<Book> options;
 
 
     public BookAvailableFragment() {
@@ -83,8 +81,24 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
 
         mSwipeRefreshLayout = root.findViewById(R.id.swiperefreshhome);
         mSwipeRefreshLayout.setRefreshing(false);
-        mSwipeRefreshLayout.setEnabled(false);
         /* use a linear layout manager */
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //code to reload with new books
+                if (mAdapter != null && options != null) {
+                    mAdapter.updateOptions(options);
+                }
+                if (mSwipeRefreshLayout.isRefreshing()) {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+            }
+
+        });
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
+
+
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mAdapter);
@@ -97,14 +111,16 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
         super.onStart();
         if (mAdapter != null)
             mAdapter.startListening();
-
-
     }
+
 
     @Override
     public void onResume() {
         super.onResume();
+        if (mAdapter != null)
+            mAdapter.onDataChanged();
     }
+
 
     @Override
     public void onStop() {
@@ -137,12 +153,15 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
             Log.w(TAG, "No query, not initializing RecyclerView");
         }
         mQuery = mQuery.orderBy("bookTime", Query.Direction.DESCENDING);
-        // specify an adapter
-        mAdapter = new BookAdapter(mQuery, this,this) {
 
+        options = new FirestoreRecyclerOptions.Builder<Book>()
+                .setQuery(mQuery, Book.class)
+                .build();
+        // specify an adapter
+        mAdapter = new BookAdapter(options, this, this) {
 
             @Override
-            protected void onDataChanged() {
+            public void onDataChanged() {
                 super.onDataChanged();
 
                 if (getItemCount() == 0) {
@@ -155,11 +174,11 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
             }
 
             @Override
-            protected void onError(FirebaseFirestoreException e) {
+            public void onError(FirebaseFirestoreException e) {
+
                 Log.e(TAG, "Error: check logs for info.");
             }
         };
-
 
     }
 
@@ -171,7 +190,6 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
             bookDetails.putExtra("isHome",false);
             startActivity(bookDetails);
         }
-
 
 
     private void displayOptions(){
@@ -191,7 +209,7 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
     }
 
     @Override
-    public void onBookLongSelected(DocumentSnapshot snapshot) {
+    public void onBookLongSelected(final DocumentSnapshot snapshot) {
         book_id = snapshot.getId();
         final Book book = snapshot.toObject(Book.class);
 
@@ -211,7 +229,11 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
                     mBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            markAsSold(true);
+                            markAsSold(snapshot);
+
+
+                            Snackbar snackbar = Snackbar.make(getActivity().findViewById(android.R.id.content), "Marked as Sold", Snackbar.LENGTH_LONG);
+                            snackbar.show();
                         }
                     });
                     mBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -243,19 +265,11 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
         });
     }
 
-    private void markAsSold(boolean sold){
-        final CollectionReference bookRef = mFirestore.collection("books");
-        bookRef.document(book_id).update("bookSold",sold).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
+    private void markAsSold(DocumentSnapshot snapshot) {
 
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getActivity(),"Error: Please Try Again!",Toast.LENGTH_SHORT).show();
-            }
-        });
+        mAdapter.markAsSold(snapshot);
+        mAdapter.updateOptions(options);
+
     }
 
 }

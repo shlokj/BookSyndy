@@ -17,7 +17,6 @@
         android:textSize="16sp"
         android:textStyle="bold" />
 
-    <!--TODO: rotate this button 180 deg on click-->
     <ImageView
         android:id="@+id/dropdownDummyButton"
         android:layout_width="wrap_content"

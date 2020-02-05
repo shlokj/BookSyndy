@@ -14,12 +14,13 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -28,11 +29,10 @@ import java.util.Locale;
 import co.in.prodigyschool.passiton.Data.Book;
 import co.in.prodigyschool.passiton.R;
 
-public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder> {
+public class BookAdapter extends FirestoreRecyclerAdapter<Book, BookAdapter.ViewHolder> {
 
     private double latA,lngA;
     private FirebaseFirestore mFirestore;
-
 
 
     public interface OnBookSelectedListener {
@@ -50,8 +50,8 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder> {
     private OnBookSelectedListener mListener;
     private OnBookLongSelectedListener mLongListener;
 
-    protected BookAdapter(Query query, OnBookSelectedListener listener,OnBookLongSelectedListener longListener) {
-        super(query);
+    protected BookAdapter(@NonNull FirestoreRecyclerOptions<Book> options, OnBookSelectedListener listener, OnBookLongSelectedListener longListener) {
+        super(options);
         mListener = listener;
         mLongListener = longListener;
         mFirestore = FirebaseFirestore.getInstance();
@@ -85,21 +85,26 @@ public class BookAdapter extends FirestoreAdapter<BookAdapter.ViewHolder> {
     @Override
     public BookAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         return new ViewHolder(inflater.inflate(R.layout.home_list_item, parent, false));
 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BookAdapter.ViewHolder holder, int position) {
+    protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Book model) {
+        holder.bind(getSnapshots().getSnapshot(position), mListener, mLongListener, latA, lngA);
+    }
 
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
-            holder.bind(getSnapshot(position), mListener,mLongListener,latA,lngA);
+    public void markAsSold(DocumentSnapshot snapshot) {
+        snapshot.getReference().update("bookSold", true);
+
 
     }
 
+    public void markAsUnsold(DocumentSnapshot snapshot) {
+        snapshot.getReference().update("bookSold", false);
+
+    }
 
 
     static class ViewHolder extends RecyclerView.ViewHolder {

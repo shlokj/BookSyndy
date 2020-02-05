@@ -16,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,18 +23,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -117,10 +114,14 @@ public class ViewUserProfileActivity extends AppCompatActivity implements BookAd
                 }
             }
         });
-        mAdapter = new BookAdapter(mQuery,this,this){
+
+        FirestoreRecyclerOptions<Book> options = new FirestoreRecyclerOptions.Builder<Book>()
+                .setQuery(mQuery, Book.class)
+                .build();
+        mAdapter = new BookAdapter(options, this, this) {
 
                @Override
-               protected void onDataChanged() {
+               public void onDataChanged() {
                    super.onDataChanged();
 
                    if (getItemCount() == 0) {
@@ -133,7 +134,7 @@ public class ViewUserProfileActivity extends AppCompatActivity implements BookAd
                }
 
                @Override
-               protected void onError(FirebaseFirestoreException e) {
+               public void onError(FirebaseFirestoreException e) {
 
                    Log.e(TAG, "Error: check logs for info.");
                }
