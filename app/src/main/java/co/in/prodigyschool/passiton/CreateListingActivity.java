@@ -19,6 +19,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -330,6 +331,16 @@ public class CreateListingActivity extends AppCompatActivity {
         else {
             boardSpinner.setSelection(bn1 - 7, true);
         }
+
+        // as normal selection wasn't working
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                autofillBoardTemp();
+            }
+        }, 150); // the value of this delay is what makes the board spinner selection work - has to be considerable big. 100 ms was inconsistent, but 150 works well
+
     }
 
 
@@ -522,7 +533,7 @@ public class CreateListingActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
 
-        autofillBoardTemp();
+//        autofillBoardTemp();
 
         switch (requestCode) {
             case 0:// camera intent
