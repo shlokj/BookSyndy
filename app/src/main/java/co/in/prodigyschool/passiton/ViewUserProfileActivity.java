@@ -192,6 +192,9 @@ public class ViewUserProfileActivity extends AppCompatActivity implements BookAd
                 });
                 rBuilder.show();
                 break;
+            case android.R.id.home:
+                this.finish();
+                break;
         }
 
         return true;

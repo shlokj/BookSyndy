@@ -339,7 +339,7 @@ public class CreateListingActivity extends AppCompatActivity {
             public void run() {
                 autofillBoardTemp();
             }
-        }, 150); // the value of this delay is what makes the board spinner selection work - has to be considerable big. 100 ms was inconsistent, but 150 works well
+        }, 150); // the value of this delay is what makes the board spinner selection work - has to be considerably big. 100 ms was inconsistent, but 150 works well
 
     }
 
