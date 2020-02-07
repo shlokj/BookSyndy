@@ -63,7 +63,7 @@ import co.in.prodigyschool.passiton.util.BookUtil;
 
 public class EditListingActivity extends AppCompatActivity {
 
-    //TODO: competitive exam case, save button in action bar
+    //TODO: save button in action bar
 
     private static String TAG = "EDITLISTING";
     private static final int AUTOCOMPLETE_REQUEST_CODE = 108;
@@ -165,6 +165,12 @@ public class EditListingActivity extends AppCompatActivity {
         documentId = getIntent().getStringExtra("DOCUMENT_ID");
 
         gradeSpinner.setSelection(gradeNumber - 1, true);
+
+        if (gradeNumber==0 && boardNumber==20) {
+            competitiveExam.setChecked(true);
+            boardLL.setVisibility(View.INVISIBLE);
+            gradeLL.setVisibility(View.INVISIBLE);
+        }
 
         if (boardNumber<20) {
 
@@ -291,18 +297,18 @@ public class EditListingActivity extends AppCompatActivity {
                     boardDegreeLabel.setText("Board");
                     boardSpinner.setAdapter(boardAdapter);
                     yearField.setVisibility(View.GONE);
-                    if (position==4 || position==5) {
+/*                    if (position==4 || position==5) {
                         competitiveExam.setVisibility(View.VISIBLE);
                     }
                     else {
                         competitiveExam.setVisibility(View.GONE);
-                    }
+                    }*/
                 }
                 else {
                     boardDegreeLabel.setText("Degree / course");
                     boardSpinner.setAdapter(degreeAdapter);
                     yearField.setVisibility(View.VISIBLE);
-                    competitiveExam.setVisibility(View.GONE);
+//                    competitiveExam.setVisibility(View.GONE);
                 }
             }
 
@@ -321,15 +327,21 @@ public class EditListingActivity extends AppCompatActivity {
                 bookAddress = locField.getText().toString().trim();
                 isTextbook = typeSpinner.getSelectedItemPosition()==0;
                 gradeNumber = gradeSpinner.getSelectedItemPosition()+1;
-                if (gradeNumber>=7) {
-                    boardNumber = boardSpinner.getSelectedItemPosition() + 7;
+                forCompExam = competitiveExam.isChecked();
+
+                if (forCompExam) {
+                    gradeNumber=0;
+                    boardNumber=20;
                 }
                 else {
-                    boardNumber = boardSpinner.getSelectedItemPosition() + 1;
+                    if (gradeNumber >= 7) {
+                        boardNumber = boardSpinner.getSelectedItemPosition() + 7;
+                    } else {
+                        boardNumber = boardSpinner.getSelectedItemPosition() + 1;
+                    }
                 }
                 String bps = priceField.getText().toString().trim();
                 String bys;
-                forCompExam = competitiveExam.isChecked();
 
                 if (bookName.length()<10) {
                     showSnackbar("Please enter at least 10 characters for your book's name");
@@ -463,6 +475,12 @@ public class EditListingActivity extends AppCompatActivity {
         documentId = getIntent().getStringExtra("DOCUMENT_ID");
 
         gradeSpinner.setSelection(gradeNumber - 1);
+
+        if (gradeNumber==0 && boardNumber==20) {
+            competitiveExam.setChecked(true);
+            boardLL.setVisibility(View.INVISIBLE);
+            gradeLL.setVisibility(View.INVISIBLE);
+        }
 
         if (boardNumber<20) {
 

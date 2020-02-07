@@ -123,7 +123,7 @@
     <string name="clear_filter">Clear filters</string>
 
     <string name="pending">Pending</string>
-    <string name="MyRequests">My Requests</string>
+    <string name="MyRequests">Your Requests</string>
 
     <!-- user shared preference -->
     <string name="UserPref">UserPreference</string>
