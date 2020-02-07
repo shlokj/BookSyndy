@@ -619,6 +619,8 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         return true;
     }
 
+
+
     private void markAsSold(boolean sold) {
         final CollectionReference bookRef = mFirestore.collection("books");
         bookRef.document(bookid).update("bookSold", sold).addOnSuccessListener(new OnSuccessListener<Void>() {

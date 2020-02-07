@@ -84,7 +84,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private String curUserId, snackbarMessage;
     private SharedPreferences userPref;
     private SharedPreferences.Editor editor;
-    private boolean showGPS = false, sbLong;
+    private boolean  sbLong;
+    private static boolean showGPS = false;
     private String dynamicBookId;
     private NavController navController;
 
@@ -162,18 +163,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             bookDetails.putExtra("bookid", dynamicBookId);
             bookDetails.putExtra("isHome", true);
             startActivity(bookDetails);
-        } else if (getIntent().getBooleanExtra("openChat", false)) {
-            navigationView.setCheckedItem(R.id.nav_chats);
-            navController.navigate(R.id.nav_chats);
         }
-
-    }
-
-    private void showChats() {
-
-    }
-
-    private void showDynamicBook() {
+//        else if (getIntent().getBooleanExtra("openChat", false)) {
+//            navigationView.setCheckedItem(R.id.nav_chats);
+//            navController.navigate(R.id.nav_chats);
+//        }
 
     }
 
@@ -206,8 +200,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }
         };
 
-        if(getIntent().getBooleanExtra("showGPS",false))
-        startLocationUpdates();
+        if(!showGPS) {
+            startLocationUpdates();
+            showGPS = true;
+        }
             //showGpsSettingDialog();
 
 

@@ -71,8 +71,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private void sendNotification(String messageBody,String Title) {
         Intent intent = new Intent(this,MainActivity.class );
-        intent.setData(Uri.parse("openChat"));
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.setData(Uri.parse("openChat"));
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
