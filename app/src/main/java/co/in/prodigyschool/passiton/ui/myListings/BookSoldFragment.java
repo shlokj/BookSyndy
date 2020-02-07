@@ -221,6 +221,12 @@ public class BookSoldFragment extends Fragment implements BookAdapter.OnBookSele
                             // markAsSold(false);
                             // mAdapter.markAsUnsold(snapshot);
                             markAsSold(snapshot);
+                            mSwipeRefreshLayout.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mSwipeRefreshLayout.setRefreshing(true);
+                                }
+                            });
 //                            Snackbar snackbar = Snackbar.make(getActivity().findViewById(android.R.id.content), "Marked as unsold", Snackbar.LENGTH_LONG);
 //                            snackbar.show();
                         }

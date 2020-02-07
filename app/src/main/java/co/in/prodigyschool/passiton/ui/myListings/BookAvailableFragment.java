@@ -238,7 +238,12 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
                             loadingPB.setVisibility(View.VISIBLE);
                             nothingIV.setVisibility(View.INVISIBLE);
                             markAsSold(snapshot);
-
+                            mSwipeRefreshLayout.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mSwipeRefreshLayout.setRefreshing(true);
+                                }
+                            });
 //                            Snackbar snackbar = Snackbar.make(getActivity().findViewById(android.R.id.content), "Marked as Sold", Snackbar.LENGTH_LONG);
 //                            snackbar.show();
                         }
