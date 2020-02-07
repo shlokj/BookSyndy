@@ -1,9 +1,5 @@
 package co.in.prodigyschool.passiton;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.location.Address;
@@ -28,6 +24,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
+
 import com.bumptech.glide.Glide;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.Continuation;
@@ -44,8 +44,6 @@ import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -113,7 +111,8 @@ public class EditListingActivity extends AppCompatActivity {
         yearField = findViewById(R.id.bookYearField_e);
         free = findViewById(R.id.freeOrNot_e);
         mBookImage = findViewById(R.id.book_image_e);
-
+        gradeLL = findViewById(R.id.gradeLL_e);
+        boardLL = findViewById(R.id.boardLL_e);
 
         getSupportActionBar().setTitle("Edit listing");
 
@@ -191,8 +190,8 @@ public class EditListingActivity extends AppCompatActivity {
             boardSpinner.setEnabled(false);
             boardSpinner.setFocusable(false);
             boardSpinner.setFocusableInTouchMode(false);
-            gradeSpinner.setVisibility(View.INVISIBLE);
-            boardSpinner.setVisibility(View.INVISIBLE);
+            gradeLL.setVisibility(View.INVISIBLE);
+            boardLL.setVisibility(View.INVISIBLE);
         }
 
         if (year>0) {
@@ -256,6 +255,14 @@ public class EditListingActivity extends AppCompatActivity {
                 boardSpinner.setEnabled(!isChecked);
                 boardSpinner.setFocusable(!isChecked);
                 boardSpinner.setFocusableInTouchMode(!isChecked);
+                if (isChecked) {
+                    gradeLL.setVisibility(View.INVISIBLE);
+                    boardLL.setVisibility(View.INVISIBLE);
+                }
+                else {
+                    gradeLL.setVisibility(View.VISIBLE);
+                    boardLL.setVisibility(View.VISIBLE);
+                }
             }
         });
         free.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

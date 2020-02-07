@@ -130,7 +130,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/gradeLL"
+            android:id="@+id/gradeLL_e"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
@@ -153,13 +153,13 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/boardLL"
+            android:id="@+id/boardLL_e"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/gradeLL">
+            app:layout_constraintTop_toBottomOf="@+id/gradeLL_e">
 
             <TextView
                 android:id="@+id/boardLabel_e"
@@ -184,8 +184,8 @@
             android:inputType="number"
             android:maxLength="1"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/boardLL"
-            app:layout_constraintStart_toEndOf="@+id/boardLL" />
+            app:layout_constraintBottom_toBottomOf="@+id/boardLL_e"
+            app:layout_constraintStart_toEndOf="@+id/boardLL_e" />
 
         <LinearLayout
             android:id="@+id/collegeDegreeAndYearLL"
@@ -195,7 +195,7 @@
             android:orientation="horizontal"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/gradeLL">
+            app:layout_constraintTop_toBottomOf="@+id/gradeLL_e">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -239,9 +239,9 @@
             android:layout_marginStart="24dp"
             android:text="@string/competitive_exams"
             android:layout_marginEnd="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/gradeLL"
+            app:layout_constraintBottom_toBottomOf="@+id/gradeLL_e"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/gradeLL" />
+            app:layout_constraintStart_toEndOf="@+id/gradeLL_e" />
 
         <LinearLayout
             android:id="@+id/locLL"
@@ -250,7 +250,7 @@
             android:layout_margin="16dp"
             android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/boardLL">
+            app:layout_constraintTop_toBottomOf="@+id/boardLL_e">
 
             <TextView
                 android:id="@+id/locLabel"
