@@ -28,11 +28,8 @@ public class HelpFragment extends Fragment {
     private List<String> questionsList,answersList;
     private HashMap<String,String> hashMap;
     private int cc = 1;
-    /*
 
-    private String[] questions = new String[]{"How does BookSyndy work?","question 2","question 3"};
-    private String[] answers = new String[]{"BookSyndy works like charm.","answer 2","answer 3"};
-*/
+
     private String[] questions;
     private String[] answers;
 
@@ -53,6 +50,7 @@ public class HelpFragment extends Fragment {
                 ImageView arrow = view.findViewById(R.id.dropdownDummyButton);
                 arrow.animate().rotation(cc*180).setDuration(100);
                 cc = cc+1;
+                // TODO: put this code in the right place
             }
         });
         return root;

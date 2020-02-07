@@ -13,7 +13,7 @@
         android:fontFamily="@font/roboto_light"
         android:paddingStart="24dp"
         android:paddingEnd="16dp"
-        android:text="works like charm."
+        android:autoLink="web"
         android:textColor="@color/colorTextBlack"
         android:textSize="16sp" />
 

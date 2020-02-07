@@ -61,6 +61,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
+
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private AppBarConfiguration mAppBarConfiguration;
@@ -128,6 +131,25 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
         }
+
+
+        ShowcaseConfig config = new ShowcaseConfig();
+        config.setDelay(500); // half second between each showcase view
+
+ /*       MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, "SEQ_HOME");
+
+        sequence.setConfig(config);
+
+        sequence.addSequenceItem(findViewById(R.id.fab_home),
+                "Click here to list a book.", "GOT IT");
+
+*//*        sequence.addSequenceItem(mButtonTwo,
+                "This is button two", "GOT IT");
+
+        sequence.addSequenceItem(mButtonThree,
+                "This is button three", "GOT IT");*//*
+
+        sequence.start();*/
 
         populateUserDetails();
         handleOtherIntent();

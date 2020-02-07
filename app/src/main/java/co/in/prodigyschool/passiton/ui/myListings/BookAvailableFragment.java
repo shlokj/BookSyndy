@@ -12,7 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -57,6 +59,8 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
     private AlertDialog dialog;
     private String book_id;
     private FirestoreRecyclerOptions<Book> options;
+    private ProgressBar loadingPB;
+    private ImageView nothingIV;
 
 
     public BookAvailableFragment() {
@@ -98,6 +102,8 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
         });
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
 
+        loadingPB = root.findViewById(R.id.progressBar1);
+        nothingIV = root.findViewById(R.id.bookPicture);
 
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -229,11 +235,12 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
                     mBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
+                            loadingPB.setVisibility(View.VISIBLE);
+                            nothingIV.setVisibility(View.INVISIBLE);
                             markAsSold(snapshot);
 
-
-                            Snackbar snackbar = Snackbar.make(getActivity().findViewById(android.R.id.content), "Marked as Sold", Snackbar.LENGTH_LONG);
-                            snackbar.show();
+//                            Snackbar snackbar = Snackbar.make(getActivity().findViewById(android.R.id.content), "Marked as Sold", Snackbar.LENGTH_LONG);
+//                            snackbar.show();
                         }
                     });
                     mBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -269,6 +276,8 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
 
         mAdapter.markAsSold(snapshot);
         mAdapter.updateOptions(options);
+        loadingPB.setVisibility(View.INVISIBLE);
+        nothingIV.setVisibility(View.VISIBLE);
 
     }
 

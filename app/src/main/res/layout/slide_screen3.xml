@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_slider_screen3">
@@ -17,7 +19,8 @@
             android:textSize="@dimen/slide_title"
             android:textAlignment="center"
             android:layout_marginBottom="@dimen/slide_title"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:autoSizeTextType="uniform"/>
         <ImageView
             android:layout_width="@dimen/img_width_height"
             android:layout_height="@dimen/img_width_height"

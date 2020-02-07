@@ -221,8 +221,8 @@ public class BookSoldFragment extends Fragment implements BookAdapter.OnBookSele
                             // markAsSold(false);
                             // mAdapter.markAsUnsold(snapshot);
                             markAsSold(snapshot);
-                            Snackbar snackbar = Snackbar.make(getActivity().findViewById(android.R.id.content), "Marked as unsold", Snackbar.LENGTH_LONG);
-                            snackbar.show();
+//                            Snackbar snackbar = Snackbar.make(getActivity().findViewById(android.R.id.content), "Marked as unsold", Snackbar.LENGTH_LONG);
+//                            snackbar.show();
                         }
                     });
                     mBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
