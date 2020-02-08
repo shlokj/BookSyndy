@@ -13,12 +13,16 @@ import android.widget.Toast;
 
 import co.in.prodigyschool.passiton.Data.User;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 public class GetJoinPurposeActivity extends AppCompatActivity {
 
@@ -112,6 +116,7 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
                 public void onSuccess(Void aVoid) {
 //                    Toast.makeText(getApplicationContext(), "User Registered Successfully " + phoneNumber, Toast.LENGTH_LONG).show();
                     // Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    saveToken(curFirebaseUser.getPhone());
                     startMain();
                 }
             }).addOnFailureListener(new OnFailureListener() {
@@ -126,6 +131,23 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "User Register Failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
+
+    private void saveToken(final String userId) {
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+                        FirebaseFirestore.getInstance().collection("users").document(userId).update("token",token);
+                    }
+                });
+    }
+
 
     private void startMain(){
         startMainActivity = new Intent(GetJoinPurposeActivity.this, MainActivity.class);
