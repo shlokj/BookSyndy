@@ -239,7 +239,7 @@ public class BookSoldFragment extends Fragment implements BookAdapter.OnBookSele
                             // mAdapter.markAsUnsold(snapshot);
                             markAsSold(snapshot);
                             if(parentFragment != null){
-                                parentFragment.refreshChild();
+                                parentFragment.refreshChild(1);
                             }
 //                            mSwipeRefreshLayout.post(new Runnable() {
 //                                @Override

@@ -262,7 +262,7 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
                             nothingIV.setVisibility(View.INVISIBLE);
                             markAsSold(snapshot);
                             if(parentFragment != null){
-                                parentFragment.refreshChild();
+                                parentFragment.refreshChild(0);
                             }
 //                            mSwipeRefreshLayout.post(new Runnable() {
 //                                @Override
