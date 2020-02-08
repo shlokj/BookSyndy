@@ -19,12 +19,18 @@ import com.google.android.material.snackbar.Snackbar;
 public class SignInActivity extends AppCompatActivity {
     String userPhoneNumber;
     private static final int INTERNET_PERMISSION_CODE = 101;
+    private boolean closeApp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
+        closeApp=getIntent().getBooleanExtra("CLOSE_APP",false);
+
+        if (closeApp) {
+            finishAndRemoveTask();
+        }
         final EditText phnofield = findViewById(R.id.phoneNumberField);
         FloatingActionButton next = findViewById(R.id.fab1);
         next.setOnClickListener(new View.OnClickListener() {

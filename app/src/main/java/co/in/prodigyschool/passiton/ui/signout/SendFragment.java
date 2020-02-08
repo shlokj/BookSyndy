@@ -75,6 +75,7 @@ public class SendFragment extends Fragment {
     public void signOut(){
 
         Intent signout = new Intent(getActivity(), SignInActivity.class);
+        signout.putExtra("CLOSE_APP",true);
         signout.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         FirebaseAuth.getInstance().signOut();
         startActivity(signout);
