@@ -414,7 +414,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     .setDelay(1000) // optional but starting animations immediately in onCreate can make them choppy
                     .singleUse("100") // provide a unique ID used to ensure it is only shown once
                     .show();*/
-            ShowcaseConfig config = new ShowcaseConfig();
+
+
+/*            ShowcaseConfig config = new ShowcaseConfig();
             config.setDelay(200); // half second between each showcase view
 
             MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, "Home showcase");
@@ -427,7 +429,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             sequence.addSequenceItem(findViewById(R.id.fab_home),
                     "Click here to post a listing", "GOT IT");
 
-            sequence.start();
+            sequence.start();*/
         }
 
         return super.onPrepareOptionsMenu(menu);

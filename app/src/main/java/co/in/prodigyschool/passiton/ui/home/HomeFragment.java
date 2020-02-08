@@ -298,9 +298,9 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                 List<Book> filteredList1 = new ArrayList<>();
                 if(newText == null || newText.trim().isEmpty())
                 {
-                    filteredList1.addAll(bookListFull);
+                    filteredList1.addAll(filteredList);
                     searchView.clearFocus();
-                    mAdapter.setBookList(filteredList1);
+                    mAdapter.setBookList(filteredList);
                     return true;
                 }
 
