@@ -54,6 +54,7 @@ public class BookSoldFragment extends Fragment implements BookAdapter.OnBookSele
     private AlertDialog dialog;
     private ArrayAdapter<String> optionsList;
     private FirestoreRecyclerOptions<Book> options;
+    private MyListingsFragment parentFragment;
 
 
     public BookSoldFragment() {
@@ -66,6 +67,8 @@ public class BookSoldFragment extends Fragment implements BookAdapter.OnBookSele
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_home, container, false);
+
+        parentFragment = (MyListingsFragment)getParentFragment();
 
         /* recycler view */
         recyclerView = root.findViewById(R.id.home_recycler_view);
@@ -222,7 +225,7 @@ public class BookSoldFragment extends Fragment implements BookAdapter.OnBookSele
         displayOptions();
         optionsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(final AdapterView<?> parent, View view, int position, long id) {
                 String opt = ((TextView) view).getText().toString();
                 if (opt.equals("Mark as unsold")) {
                     // move the selected book to completed
@@ -235,19 +238,22 @@ public class BookSoldFragment extends Fragment implements BookAdapter.OnBookSele
                             // markAsSold(false);
                             // mAdapter.markAsUnsold(snapshot);
                             markAsSold(snapshot);
-                            mSwipeRefreshLayout.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mSwipeRefreshLayout.setRefreshing(true);
-                                }
-                            });
-                            final Handler handler = new Handler();
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mSwipeRefreshLayout.setRefreshing(false);
-                                }
-                            }, 150);
+                            if(parentFragment != null){
+                                parentFragment.refreshChild();
+                            }
+//                            mSwipeRefreshLayout.post(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    mSwipeRefreshLayout.setRefreshing(true);
+//                                }
+//                            });
+//                            final Handler handler = new Handler();
+//                            handler.postDelayed(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    mSwipeRefreshLayout.setRefreshing(false);
+//                                }
+//                            }, 150);
 //                            Snackbar snackbar = Snackbar.make(getActivity().findViewById(android.R.id.content), "Marked as unsold", Snackbar.LENGTH_LONG);
 //                            snackbar.show();
                         }

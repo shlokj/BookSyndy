@@ -55,4 +55,14 @@ public class MyListingsFragment extends Fragment implements TabLayout.OnTabSelec
     public void onTabReselected(TabLayout.Tab tab) {
 
     }
+
+    public void refreshChild(){
+
+        mPageAdapter = new PageAdapter(getChildFragmentManager(),mTabLayout.getTabCount());
+        mViewPager.setAdapter(mPageAdapter);
+        mTabLayout.addOnTabSelectedListener(this);
+        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
+
+
+    }
 }

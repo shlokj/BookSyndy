@@ -62,6 +62,7 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
     private FirestoreRecyclerOptions<Book> options;
     private ProgressBar loadingPB;
     private ImageView nothingIV;
+    private MyListingsFragment parentFragment;
 
 
     public BookAvailableFragment() {
@@ -74,7 +75,7 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
                              Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-
+        parentFragment = (MyListingsFragment)getParentFragment();
         /* recycler view */
         recyclerView = root.findViewById(R.id.home_recycler_view);
         mEmptyView = root.findViewById(R.id.view_empty);
@@ -260,20 +261,23 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
                             loadingPB.setVisibility(View.VISIBLE);
                             nothingIV.setVisibility(View.INVISIBLE);
                             markAsSold(snapshot);
-                            mSwipeRefreshLayout.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mSwipeRefreshLayout.setRefreshing(true);
-                                }
-                            });
-                            final Handler handler = new Handler();
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-//                                    mSwipeRefreshLayout.setEnabled(false);
-                                    mSwipeRefreshLayout.setRefreshing(false);
-                                }
-                            }, 150);
+                            if(parentFragment != null){
+                                parentFragment.refreshChild();
+                            }
+//                            mSwipeRefreshLayout.post(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    mSwipeRefreshLayout.setRefreshing(true);
+//                                }
+//                            });
+//                            final Handler handler = new Handler();
+//                            handler.postDelayed(new Runnable() {
+//                                @Override
+//                                public void run() {
+////                                    mSwipeRefreshLayout.setEnabled(false);
+//                                    mSwipeRefreshLayout.setRefreshing(false);
+//                                }
+//                            }, 150);
 //                            Snackbar snackbar = Snackbar.make(getActivity().findViewById(android.R.id.content), "Marked as Sold", Snackbar.LENGTH_LONG);
 //                            snackbar.show();
                         }
