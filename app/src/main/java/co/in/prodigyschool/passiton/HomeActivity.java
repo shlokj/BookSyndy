@@ -260,9 +260,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private void getAddress() {
 
         if (!Geocoder.isPresent()) {
-            Toast.makeText(HomeActivity.this,
-                    "Can't find current address, ",
-                    Toast.LENGTH_SHORT).show();
+//            Toast.makeText(HomeActivity.this,
+//                    "Can't find current address, ",
+//                    Toast.LENGTH_SHORT).show();
+//
             return;
         }
 
@@ -288,17 +289,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 editor.apply();
 
             } else {
-                Toast.makeText(HomeActivity.this,
-                        "Address not found" ,
-                        Toast.LENGTH_SHORT).show();
+//                Toast.makeText(HomeActivity.this,
+//                        "Address not found" ,
+//                        Toast.LENGTH_SHORT).show();
                 return;
             }
 
         } catch (IOException e) {
             e.printStackTrace();
-            Toast.makeText(HomeActivity.this,
-                    "Address not found" ,
-                    Toast.LENGTH_SHORT).show();
+//            Toast.makeText(HomeActivity.this,
+//                    "Address not found" ,
+//                    Toast.LENGTH_SHORT).show();
             return;
         }
 

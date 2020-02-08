@@ -257,7 +257,6 @@ public class EnterOTPActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<InstanceIdResult> task) {
                         if (!task.isSuccessful()) {
-
                             return;
                         }
 

@@ -270,7 +270,7 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mSwipeRefreshLayout.setEnabled(false);
+//                                    mSwipeRefreshLayout.setEnabled(false);
                                     mSwipeRefreshLayout.setRefreshing(false);
                                 }
                             }, 150);

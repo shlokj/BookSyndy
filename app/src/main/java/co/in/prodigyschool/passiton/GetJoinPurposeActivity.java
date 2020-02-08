@@ -43,7 +43,6 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Sign up");
         reasonsQuestion = findViewById(R.id.reasonQuestionTV);
         reasons = findViewById(R.id.reasonsButtonList);
-        startMainActivity = new Intent(GetJoinPurposeActivity.this, MainActivity.class);
 
         registerUser();
 //        startMainActivity.putExtra("IS_PARENT", isParent);
@@ -113,9 +112,7 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
                 public void onSuccess(Void aVoid) {
 //                    Toast.makeText(getApplicationContext(), "User Registered Successfully " + phoneNumber, Toast.LENGTH_LONG).show();
                     // Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                    startMainActivity.putExtra("SNACKBAR_MSG","Hey there! Thanks for signing up!");
-                    startActivity(startMainActivity);
-                    finish();
+                    startMain();
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -128,5 +125,13 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "User Register Failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void startMain(){
+        startMainActivity = new Intent(GetJoinPurposeActivity.this, MainActivity.class);
+        startMainActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        startMainActivity.putExtra("SNACKBAR_MSG","Hey there! Thanks for signing up!");
+        startActivity(startMainActivity);
+        finish();
     }
 }

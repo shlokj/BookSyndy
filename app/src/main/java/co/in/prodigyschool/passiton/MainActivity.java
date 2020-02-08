@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         if (!checkConnection(getApplicationContext())) {
             Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_LONG).show();
-            return;
         }
     }
 
