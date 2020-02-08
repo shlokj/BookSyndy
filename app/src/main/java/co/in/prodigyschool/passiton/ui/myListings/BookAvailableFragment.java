@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -95,12 +96,32 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
                     mAdapter.updateOptions(options);
                 }
                 if (mSwipeRefreshLayout.isRefreshing()) {
-                    mSwipeRefreshLayout.setRefreshing(false);
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mSwipeRefreshLayout.setRefreshing(false);
+                        }
+                    }, 150);
                 }
             }
 
         });
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
+
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(true);
+            }
+        });
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        }, 150);
 
         loadingPB = root.findViewById(R.id.progressBar1);
         nothingIV = root.findViewById(R.id.bookPicture);
@@ -221,6 +242,7 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
 
 //        vibrator.vibrate(10);
 
+
         displayOptions();
         devicesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -244,6 +266,14 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
                                     mSwipeRefreshLayout.setRefreshing(true);
                                 }
                             });
+                            final Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mSwipeRefreshLayout.setEnabled(false);
+                                    mSwipeRefreshLayout.setRefreshing(false);
+                                }
+                            }, 150);
 //                            Snackbar snackbar = Snackbar.make(getActivity().findViewById(android.R.id.content), "Marked as Sold", Snackbar.LENGTH_LONG);
 //                            snackbar.show();
                         }

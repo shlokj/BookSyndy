@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -93,6 +94,19 @@ public class BookSoldFragment extends Fragment implements BookAdapter.OnBookSele
         });
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
 
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(true);
+            }
+        });
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        }, 150);
 
         /* use a linear layout manager */
         layoutManager = new LinearLayoutManager(getActivity());
@@ -227,6 +241,13 @@ public class BookSoldFragment extends Fragment implements BookAdapter.OnBookSele
                                     mSwipeRefreshLayout.setRefreshing(true);
                                 }
                             });
+                            final Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mSwipeRefreshLayout.setRefreshing(false);
+                                }
+                            }, 150);
 //                            Snackbar snackbar = Snackbar.make(getActivity().findViewById(android.R.id.content), "Marked as unsold", Snackbar.LENGTH_LONG);
 //                            snackbar.show();
                         }

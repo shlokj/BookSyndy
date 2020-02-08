@@ -18,6 +18,7 @@ import android.os.Handler;
 import android.os.ResultReceiver;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -62,6 +63,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -88,6 +90,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private static boolean showGPS = false;
     private String dynamicBookId;
     private NavController navController;
+    private Toolbar toolbar;
 
     //TODO: use showcase view to showcase fab and button to open navigation drawer
 
@@ -95,8 +98,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         userPref = this.getSharedPreferences(getString(R.string.UserPref),0);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -419,6 +423,35 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (toolbar != null && toolbar.getChildCount() > 1) {
+            final View view = toolbar.getChildAt(1);
+/*            new MaterialShowcaseView.Builder(this)
+                    .setTarget(view)
+                    .setDismissText("GOT IT")
+                    .setContentText("This is some amazing feature you should know about")
+                    .setDelay(1000) // optional but starting animations immediately in onCreate can make them choppy
+                    .singleUse("100") // provide a unique ID used to ensure it is only shown once
+                    .show();*/
+            ShowcaseConfig config = new ShowcaseConfig();
+            config.setDelay(500); // half second between each showcase view
+
+            MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, "Home showcase");
+
+            sequence.setConfig(config);
+
+            sequence.addSequenceItem(view,
+                    "Click here to open the menu", "GOT IT");
+
+            sequence.addSequenceItem(findViewById(R.id.fab_home),
+                    "Click here to post a listing", "GOT IT");
+
+            sequence.start();
+        }
+
+        return super.onPrepareOptionsMenu(menu);
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {

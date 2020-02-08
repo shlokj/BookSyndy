@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -86,6 +87,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     private int userGrade;
     private SimpleDateFormat dateFormat;
     private List<Book> filteredList;
+    private TextView nothingHereTV;
 
 
     @Override
@@ -110,6 +112,8 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         /* recycler view */
         recyclerView = root.findViewById(R.id.home_recycler_view);
         mEmptyView = root.findViewById(R.id.view_empty);
+        nothingHereTV = root.findViewById(R.id.nothinghereTV);
+        nothingHereTV.append(". Try searching or changing your filters.");
 
         preferGuidedMode = userPref.getBoolean(getString(R.string.preferGuidedMode),false);
         userLat = userPref.getFloat(getString(R.string.p_lat),0.0f);
