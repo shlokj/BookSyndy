@@ -63,6 +63,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -406,35 +407,38 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if (toolbar != null && toolbar.getChildCount() > 1) {
-            final View view = toolbar.getChildAt(1);
-/*            new MaterialShowcaseView.Builder(this)
-                    .setTarget(view)
-                    .setDismissText("GOT IT")
-                    .setContentText("This is some amazing feature you should know about")
-                    .setDelay(1000) // optional but starting animations immediately in onCreate can make them choppy
-                    .singleUse("100") // provide a unique ID used to ensure it is only shown once
-                    .show();*/
+        if (navigationView.getCheckedItem() != null && navigationView.getCheckedItem().getItemId() == R.id.nav_home) {
+            if (toolbar != null && toolbar.getChildCount() > 1) {
+                final View view = toolbar.getChildAt(1);
+                new MaterialShowcaseView.Builder(this)
+                        .setTarget(view)
+                        .setDismissText("GOT IT")
+                        .setContentText("This is some amazing feature you should know about")
+                        .setDelay(1000) // optional but starting animations immediately in onCreate can make them choppy
+                        .singleUse("100") // provide a unique ID used to ensure it is only shown once
+                        .show();
 
 
-/*            ShowcaseConfig config = new ShowcaseConfig();
-            config.setDelay(200); // half second between each showcase view
+                ShowcaseConfig config = new ShowcaseConfig();
+                config.setDelay(200); // half second between each showcase view
 
-            MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, "Home showcase");
+                MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, "Home showcase");
 
-            sequence.setConfig(config);
+                sequence.setConfig(config);
 
-            sequence.addSequenceItem(view,
-                    "Click here to open the menu", "GOT IT");
+                sequence.addSequenceItem(view,
+                        "Click here to open the menu", "GOT IT");
 
-            sequence.addSequenceItem(findViewById(R.id.fab_home),
-                    "Click here to post a listing", "GOT IT");
+                sequence.addSequenceItem(findViewById(R.id.fab_home),
+                        "Click here to post a listing", "GOT IT");
 
-            sequence.start();*/
+                sequence.start();
+            }
         }
 
-        return super.onPrepareOptionsMenu(menu);
-    }
+            return super.onPrepareOptionsMenu(menu);
+        }
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
