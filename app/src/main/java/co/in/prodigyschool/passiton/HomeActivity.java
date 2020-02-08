@@ -63,7 +63,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -136,25 +135,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
         }
-
-
-        ShowcaseConfig config = new ShowcaseConfig();
-        config.setDelay(500); // half second between each showcase view
-
- /*       MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, "SEQ_HOME");
-
-        sequence.setConfig(config);
-
-        sequence.addSequenceItem(findViewById(R.id.fab_home),
-                "Click here to list a book.", "GOT IT");
-
-*//*        sequence.addSequenceItem(mButtonTwo,
-                "This is button two", "GOT IT");
-
-        sequence.addSequenceItem(mButtonThree,
-                "This is button three", "GOT IT");*//*
-
-        sequence.start();*/
 
         populateUserDetails();
         handleOtherIntent();
@@ -309,7 +289,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
             } else {
                 Toast.makeText(HomeActivity.this,
-                        "Address not found, " ,
+                        "Address not found" ,
                         Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -317,7 +297,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(HomeActivity.this,
-                    "Address not found, " ,
+                    "Address not found" ,
                     Toast.LENGTH_SHORT).show();
             return;
         }
@@ -435,7 +415,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     .singleUse("100") // provide a unique ID used to ensure it is only shown once
                     .show();*/
             ShowcaseConfig config = new ShowcaseConfig();
-            config.setDelay(500); // half second between each showcase view
+            config.setDelay(200); // half second between each showcase view
 
             MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, "Home showcase");
 
@@ -491,7 +471,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
             if (resultCode == 1) {
                 Toast.makeText(HomeActivity.this,
-                        "Address not found, " ,
+                        "Address not found" ,
                         Toast.LENGTH_SHORT).show();
             return;
             }
