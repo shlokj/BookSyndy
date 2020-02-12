@@ -174,5 +174,6 @@
     <string name="no_sms_q">Didn\'t get an SMS? </string>
     <string name="other">Other</string>
     <string name="ChatPref">CHATPREFERENCE</string>
+    <string name="edit_profile">Edit profile</string>
 
 </resources>

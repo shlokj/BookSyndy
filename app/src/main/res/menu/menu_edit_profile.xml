@@ -1,11 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="co.in.prodigyschool.passiton.UserProfileActivity">
+    tools:context="com.booksyndy.academics.android.UserProfileActivity">
 
     <item
         android:id="@+id/edit_profile"
-        android:title="Edit profile"
+        android:title="@string/edit_profile"
         android:icon="@drawable/ic_edit_24px"
         app:showAsAction="always" />
 

@@ -15,10 +15,79 @@
       },
       "oauth_client": [
         {
+          "client_id": "619780025148-qr36dqg0t166bi96afnrkg6b06f3bod6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "co.in.prodigyschool.passiton",
+            "certificate_hash": "5737f0a54b8f4299e5db0972062316d5d41fd427"
+          }
+        },
+        {
+          "client_id": "619780025148-bo3cv32ngk0mrvnjkgq9vgt0rh3vdcbv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "co.in.prodigyschool.passiton",
+            "certificate_hash": "ee6f7d053291377b04fc908abdb42df6b16c9d20"
+          }
+        },
+        {
           "client_id": "619780025148-a2kcnnjk2es2311lt0vnrjor8e5r3ufh.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "co.in.prodigyschool.passiton",
+            "certificate_hash": "8f8a2c915da4edd98a77e54f13a402754ac2dd82"
+          }
+        },
+        {
+          "client_id": "619780025148-p7lk5ddbi16akimatg7g8mcjct2h6mdj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFv-Pb57N1LSzVR213kB2M5n8arDzX4Hs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "619780025148-p7lk5ddbi16akimatg7g8mcjct2h6mdj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:619780025148:android:99e927f1f06645e6258c39",
+        "android_client_info": {
+          "package_name": "com.booksyndy.academics.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "619780025148-2kl7h5nol4sb1e5ev120ao3992pvi7iq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.booksyndy.academics.android",
+            "certificate_hash": "5737f0a54b8f4299e5db0972062316d5d41fd427"
+          }
+        },
+        {
+          "client_id": "619780025148-np9kslqinnd3f2dsttd0o46ivns33lfl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.booksyndy.academics.android",
+            "certificate_hash": "ee6f7d053291377b04fc908abdb42df6b16c9d20"
+          }
+        },
+        {
+          "client_id": "619780025148-ogv98i5o17bfo463nf2iva0doodptsim.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.booksyndy.academics.android",
             "certificate_hash": "8f8a2c915da4edd98a77e54f13a402754ac2dd82"
           }
         },

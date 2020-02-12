@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="co.in.prodigyschool.passiton.BookDetailsActivity">
+    tools:context="com.booksyndy.academics.android.BookDetailsActivity">
 
     <item
         android:id="@+id/share"
