@@ -40,7 +40,7 @@ public class GetGradeActivity extends AppCompatActivity {
         username = getIntent().getStringExtra("USERNAME");
         gradeQuestion = (TextView) findViewById(R.id.gradeQuestionTV);
         if (isParent) {
-            gradeQuestion.setText("Which grade is your child studying booksyndy?");
+            gradeQuestion.setText(R.string.parent_grade_q);
         }
         grades = (RadioGroup) findViewById(R.id.gradesButtonList);
         getBoard = new Intent(GetGradeActivity.this, GetBoardActivity.class);

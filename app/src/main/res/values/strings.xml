@@ -175,5 +175,6 @@
     <string name="other">Other</string>
     <string name="ChatPref">CHATPREFERENCE</string>
     <string name="edit_profile">Edit profile</string>
+    <string name="parent_grade_q">Which grade is your child studying in?</string>
 
 </resources>

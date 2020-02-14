@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -103,7 +104,13 @@ public class EnterOTPActivity extends AppCompatActivity {
 
         }
         catch (Exception e) {
-            progressDialog.dismiss();
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    progressDialog.dismiss();
+                }
+            }, 100);
             progressDialog.setCancelable(true);
             View parentLayout = findViewById(android.R.id.content);
             Snackbar.make(parentLayout, getString(R.string.incorrect_code_t1), Snackbar.LENGTH_LONG)

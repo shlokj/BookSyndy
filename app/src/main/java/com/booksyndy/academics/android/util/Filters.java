@@ -117,7 +117,7 @@ public class Filters {
         }
 
         if (category != null && city != null) {
-            desc.append(" booksyndy ");
+            desc.append(" in ");
         }
 
         if (city != null) {

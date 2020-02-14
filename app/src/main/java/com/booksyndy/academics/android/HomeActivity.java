@@ -410,6 +410,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         if (navigationView.getCheckedItem() != null && navigationView.getCheckedItem().getItemId() == R.id.nav_home) {
             if (toolbar != null && toolbar.getChildCount() > 1) {
                 final View view = toolbar.getChildAt(1);
+                /*
                 new MaterialShowcaseView.Builder(this)
                         .setTarget(view)
                         .setDismissText("GOT IT")
@@ -418,7 +419,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         .singleUse("100") // provide a unique ID used to ensure it is only shown once
                         .show();
 
-
+*/
                 ShowcaseConfig config = new ShowcaseConfig();
                 config.setDelay(200); // half second between each showcase view
 
