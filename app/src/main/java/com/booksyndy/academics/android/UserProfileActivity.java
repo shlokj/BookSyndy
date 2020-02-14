@@ -460,7 +460,7 @@ public class UserProfileActivity extends AppCompatActivity {
         //show progress
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Uploading");
-        //progressDialog.show();
+        progressDialog.show();
 
         try {
             String timeStamp =

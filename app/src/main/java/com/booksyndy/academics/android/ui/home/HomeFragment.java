@@ -87,8 +87,9 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     private SimpleDateFormat dateFormat;
     private List<Book> filteredList;
     private TextView nothingHereTV;
+    private SearchView searchView;
 
-
+    // TODO: dismiss searchview on clicking back
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -184,6 +185,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
 
+        // TODO: save filters and don't set them to default every time
         setDefaultFilters();
 
         return root;
@@ -283,7 +285,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                 return true;
             }
         });
-        final SearchView searchView = (SearchView)searchItem.getActionView();
+        searchView = (SearchView)searchItem.getActionView();
         searchView.setQueryHint("Search");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
