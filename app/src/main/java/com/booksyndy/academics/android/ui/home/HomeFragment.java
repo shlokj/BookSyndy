@@ -18,6 +18,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -34,6 +35,7 @@ import com.booksyndy.academics.android.Data.Book;
 import com.booksyndy.academics.android.Data.OnFilterSelectionListener;
 import com.booksyndy.academics.android.Data.User;
 import com.booksyndy.academics.android.GetBookPictureActivity;
+import com.booksyndy.academics.android.HomeActivity;
 import com.booksyndy.academics.android.R;
 import com.booksyndy.academics.android.util.Filters;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -89,13 +91,26 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     private TextView nothingHereTV;
     private SearchView searchView;
 
-    // TODO: dismiss searchview on clicking back
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getUserDetails();
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         dateFormat =  new SimpleDateFormat("dd MM yyyy HH",Locale.getDefault());
+        requireActivity().getOnBackPressedDispatcher().addCallback(getActivity(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+
+                if (!searchView.isIconified()) {
+                    searchView.setIconified(true);
+//                  searchView.onActionViewCollapsed();
+                }
+                else {
+                    //todo: handle the back press as would be done normally
+                }
+
+            }
+        });
     }
 
 
