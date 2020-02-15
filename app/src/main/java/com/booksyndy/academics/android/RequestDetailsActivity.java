@@ -151,19 +151,19 @@ public class RequestDetailsActivity extends AppCompatActivity implements EventLi
             view_grade_and_board.setText("Competitive exams");
         } else {
             if (gradeNumber == 1) {
-                view_grade_and_board.setText("Grade 5 or below");
+                view_grade_and_board.setText(R.string.g5b);
             } else if (gradeNumber == 2) {
-                view_grade_and_board.setText("Grade 6 to 8");
+                view_grade_and_board.setText(R.string.g68);
             } else if (gradeNumber == 3) {
-                view_grade_and_board.setText("Grade 9");
+                view_grade_and_board.setText(R.string.g9);
             } else if (gradeNumber == 4) {
-                view_grade_and_board.setText("Grade 10");
+                view_grade_and_board.setText(R.string.g10);
             } else if (gradeNumber == 5) {
-                view_grade_and_board.setText("Grade 11");
+                view_grade_and_board.setText(R.string.g11);
             } else if (gradeNumber == 6) {
-                view_grade_and_board.setText("Grade 12");
+                view_grade_and_board.setText(R.string.g12);
             } else if (gradeNumber == 7) {
-                view_grade_and_board.setText("Undergraduate");
+                view_grade_and_board.setText(R.string.undergraduate);
 //                Toast.makeText(getApplicationContext(),"Grade number: 7\nBoard number: "+boardNumber,Toast.LENGTH_SHORT).show();
 
                 if (boardNumber == 7) {

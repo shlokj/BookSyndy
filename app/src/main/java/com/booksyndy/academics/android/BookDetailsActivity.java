@@ -180,19 +180,19 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 view_grade_and_board.append("Competitive exams");
             } else {
                 if (gradeNumber == 1) {
-                    view_grade_and_board.append("Grade 5 or below");
+                    view_grade_and_board.append(getString(R.string.g5b));
                 } else if (gradeNumber == 2) {
-                    view_grade_and_board.append("Grade 6 to 8");
+                    view_grade_and_board.append(getString(R.string.g68));
                 } else if (gradeNumber == 3) {
-                    view_grade_and_board.append("Grade 9");
+                    view_grade_and_board.append(getString(R.string.g9));
                 } else if (gradeNumber == 4) {
-                    view_grade_and_board.append("Grade 10");
+                    view_grade_and_board.append(getString(R.string.g10));
                 } else if (gradeNumber == 5) {
-                    view_grade_and_board.append("Grade 11");
+                    view_grade_and_board.append(getString(R.string.g11));
                 } else if (gradeNumber == 6) {
-                    view_grade_and_board.append("Grade 12");
+                    view_grade_and_board.append(getString(R.string.g12));
                 } else if (gradeNumber == 7) {
-                    view_grade_and_board.append("Undergraduate");
+                    view_grade_and_board.append(getString(R.string.undergraduate));
 //                Toast.makeText(getApplicationContext(),"Grade number: 7\nBoard number: "+boardNumber,Toast.LENGTH_SHORT).show();
 
                     if (boardNumber == 7) {
@@ -214,7 +214,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                     } else if (boardNumber == 15) {
                         view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " MBBS");
                     } else if (boardNumber == 16) {
-                        view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " other degree");
+                        view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " Other degree");
                     }
 
                     if (year != 0) {

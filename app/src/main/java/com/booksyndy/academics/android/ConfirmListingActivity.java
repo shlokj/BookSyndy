@@ -124,19 +124,19 @@ public class ConfirmListingActivity extends AppCompatActivity {
         }
         else {
             if (gradeNumber == 1) {
-                bookCategoryTV.setText("Grade 5 or below");
+                bookCategoryTV.setText(R.string.g5b);
             } else if (gradeNumber == 2) {
-                bookCategoryTV.setText("Grade 6 to 8");
+                bookCategoryTV.setText(R.string.g68);
             } else if (gradeNumber == 3) {
-                bookCategoryTV.setText("Grade 9");
+                bookCategoryTV.setText(R.string.g9);
             } else if (gradeNumber == 4) {
-                bookCategoryTV.setText("Grade 10");
+                bookCategoryTV.setText(R.string.g10);
             } else if (gradeNumber == 5) {
-                bookCategoryTV.setText("Grade 11");
+                bookCategoryTV.setText(R.string.g11);
             } else if (gradeNumber == 6) {
-                bookCategoryTV.setText("Grade 12");
+                bookCategoryTV.setText(R.string.g12);
             } else if (gradeNumber == 7) {
-                bookCategoryTV.setText("Undergraduate");
+                bookCategoryTV.setText(R.string.undergraduate);
 //                Toast.makeText(getApplicationContext(),"Grade number: 7\nBoard number: "+boardNumber,Toast.LENGTH_SHORT).show();
 
                 if (boardNumber == 7) {

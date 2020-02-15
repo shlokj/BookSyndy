@@ -245,8 +245,9 @@ public class ChatsFragment extends Fragment implements EventListener<QuerySnapsh
             @Override
             public boolean onQueryTextChange(String newText) {
                 List<Chat> filteredList = new ArrayList<>();
-                if (newText == null || newText.length() == 0) {
+                if (newText == null || newText.trim().length() == 0) {
                     filteredList = chatListFull;
+                    searchView.clearFocus();
                 } else {
                     String filterPattern = newText.toLowerCase().trim();
                     for (Chat chat : chatListFull) {
@@ -257,6 +258,15 @@ public class ChatsFragment extends Fragment implements EventListener<QuerySnapsh
                 }
                 mAdapter.setChatList(filteredList);
                 return false;
+            }
+        });
+
+        searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                searchView.onActionViewExpanded();
+                searchView.requestFocus();
+                return true;
             }
         });
 

@@ -176,5 +176,12 @@
     <string name="ChatPref">CHATPREFERENCE</string>
     <string name="edit_profile">Edit profile</string>
     <string name="parent_grade_q">Which grade is your child studying in?</string>
+    <string name="g5b">Grade 5 or below</string>
+    <string name="g68">Grade 6 to 8</string>
+    <string name="g9">Grade 9</string>
+    <string name="g10">Grade 10</string>
+    <string name="g12">Grade 12</string>
+    <string name="g11">Grade 11</string>
+    <string name="undergraduate">Undergraduate</string>
 
 </resources>

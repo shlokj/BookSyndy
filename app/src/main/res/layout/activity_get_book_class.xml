@@ -73,7 +73,7 @@
             android:id="@+id/universityBook"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Undergraduate"
+            android:text="@string/undergraduate"
             android:fontFamily="@font/roboto_light"
             android:textSize="20sp"
             android:layout_marginBottom="8dp"/>

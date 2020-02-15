@@ -67,7 +67,6 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     private ViewGroup mEmptyView;
     private HomeAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
-    private static final int LIMIT = 50;
     private FirebaseFirestore mFirestore;
     private Query mQuery;
     private User currentUser;
