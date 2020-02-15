@@ -18,7 +18,6 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -35,7 +34,6 @@ import com.booksyndy.academics.android.Data.Book;
 import com.booksyndy.academics.android.Data.OnFilterSelectionListener;
 import com.booksyndy.academics.android.Data.User;
 import com.booksyndy.academics.android.GetBookPictureActivity;
-import com.booksyndy.academics.android.HomeActivity;
 import com.booksyndy.academics.android.R;
 import com.booksyndy.academics.android.util.Filters;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -97,20 +95,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         getUserDetails();
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         dateFormat =  new SimpleDateFormat("dd MM yyyy HH",Locale.getDefault());
-        requireActivity().getOnBackPressedDispatcher().addCallback(getActivity(), new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
 
-                if (!searchView.isIconified()) {
-//                    searchView.setIconified(true);
-                  searchView.onActionViewCollapsed();
-                }
-                else {
-                    //todo: handle the back press as would be done normally
-                }
-
-            }
-        });
     }
 
 
@@ -293,13 +278,6 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         inflater.inflate(R.menu.home, menu);
         final MenuItem searchItem = menu.findItem(R.id.action_search);
         filterItem = menu.findItem(R.id.filter);
-        searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                filterItem.setVisible(false);
-                return true;
-            }
-        });
         searchView = (SearchView)searchItem.getActionView();
         searchView.setQueryHint("Search");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -393,6 +371,15 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                 mAdapter.setBookList(filteredList1);
 
                 return false;
+            }
+        });
+
+        searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                searchView.onActionViewExpanded();
+                searchView.requestFocus();
+                return true;
             }
         });
 

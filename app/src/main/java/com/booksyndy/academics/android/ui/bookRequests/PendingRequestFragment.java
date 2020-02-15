@@ -243,13 +243,7 @@ public class PendingRequestFragment extends Fragment implements View.OnClickList
         inflater.inflate(R.menu.home, menu);
         final MenuItem searchItem = menu.findItem(R.id.action_search);
         filterItem = menu.findItem(R.id.filter);
-        searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                filterItem.setVisible(false);
-                return true;
-            }
-        });
+
 
         filterItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -323,6 +317,16 @@ public class PendingRequestFragment extends Fragment implements View.OnClickList
                 return false;
             }
         });
+
+        searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                searchView.onActionViewExpanded();
+                searchView.requestFocus();
+                return true;
+            }
+        });
+
 
         super.onCreateOptionsMenu(menu, inflater);
     }
