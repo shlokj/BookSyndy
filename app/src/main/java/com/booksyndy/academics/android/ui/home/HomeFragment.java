@@ -102,8 +102,8 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             public void handleOnBackPressed() {
 
                 if (!searchView.isIconified()) {
-                    searchView.setIconified(true);
-//                  searchView.onActionViewCollapsed();
+//                    searchView.setIconified(true);
+                  searchView.onActionViewCollapsed();
                 }
                 else {
                     //todo: handle the back press as would be done normally
