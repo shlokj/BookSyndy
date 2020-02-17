@@ -20,7 +20,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_booksyndy_logo_hs"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/ic_booksyndy_logo_hs"
+        android:roundIcon="@drawable/ic_booksyndy_logo_circle"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
