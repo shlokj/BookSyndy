@@ -139,18 +139,21 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                             }
                         });
                     }
-                    sb.setActionTextColor(getResources().getColor(android.R.color.holo_red_light));
+                    sb.setActionTextColor(getResources().getColor(android.R.color.holo_blue_light));
                     sb.show();
                 }
                 else {
-                    Snackbar.make(parentLayout, snackbarMessage, Snackbar.LENGTH_SHORT)
-                            .setAction("OKAY", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
+                    Snackbar sb = Snackbar.make(parentLayout, snackbarMessage, Snackbar.LENGTH_SHORT);
+                    if (snackbarMessage.contains("Your listings")) {
+                        sb.setAction("GO THERE", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
 
-                                }
-                            })
-                            .setActionTextColor(getResources().getColor(android.R.color.holo_red_light)).show();
+                            }
+                        });
+                    }
+                    sb.setActionTextColor(getResources().getColor(android.R.color.holo_blue_light));
+                    sb.show();
                 }
             }
         }
