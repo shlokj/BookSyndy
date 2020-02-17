@@ -84,7 +84,7 @@
         android:layout_margin="16dp"
         android:inputType="textPersonName|textNoSuggestions|textVisiblePassword"
         android:hint="@string/username"
-        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"
+        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890_."
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/usernameQTV" />
 
