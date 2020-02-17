@@ -607,7 +607,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    //funciton to send image booksyndy chats
+    //funciton to send image in chats
     private void storeBookImage(Uri selectedImageUri) {
         //show progress
         final ProgressDialog progressDialog = new ProgressDialog(this);
@@ -657,7 +657,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                     //calculating progress percentage
                     double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
 
-                    //displaying percentage booksyndy progress dialog
+                    //displaying percentage in progress dialog
                     progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
                 }
             });

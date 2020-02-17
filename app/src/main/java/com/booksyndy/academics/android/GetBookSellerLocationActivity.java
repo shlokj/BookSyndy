@@ -153,7 +153,7 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
                                 Log.d(TAG, "no address found");
                             }
                         } else {
-                            Log.d(TAG, "No address found booksyndy firebase");
+                            Log.d(TAG, "No address found in firebase");
                             View parentLayout = findViewById(android.R.id.content);
                             Snackbar.make(parentLayout, "Failed to get address", Snackbar.LENGTH_SHORT)
                                     .setAction("OKAY", new View.OnClickListener() {

@@ -129,10 +129,28 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             if (snackbarMessage.length() > 0) {
                 View parentLayout = findViewById(android.R.id.content);
                 if (sbLong) {
-                    Snackbar.make(parentLayout, snackbarMessage, Snackbar.LENGTH_LONG).show();
+                    Snackbar sb = Snackbar.make(parentLayout, snackbarMessage, Snackbar.LENGTH_LONG);
+                    if (snackbarMessage.contains("Your listings")) {
+                        sb.setAction("GO THERE", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                // TODO: open the your listings fragment
+
+                            }
+                        });
+                    }
+                    sb.setActionTextColor(getResources().getColor(android.R.color.holo_red_light));
+                    sb.show();
                 }
                 else {
-                    Snackbar.make(parentLayout, snackbarMessage, Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(parentLayout, snackbarMessage, Snackbar.LENGTH_SHORT)
+                            .setAction("OKAY", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                }
+                            })
+                            .setActionTextColor(getResources().getColor(android.R.color.holo_red_light)).show();
                 }
             }
         }
@@ -361,7 +379,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                                 // Cast to a resolvable exception.
                                 ResolvableApiException resolvable = (ResolvableApiException) exception;
                                 // Show the dialog by calling startResolutionForResult(),
-                                // and check the result booksyndy onActivityResult().
+                                // and check the result in onActivityResult().
                                 resolvable.startResolutionForResult(
                                         HomeActivity.this,
                                         101);
@@ -415,7 +433,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         .setTarget(view)
                         .setDismissText("GOT IT")
                         .setContentText("This is some amazing feature you should know about")
-                        .setDelay(1000) // optional but starting animations immediately booksyndy onCreate can make them choppy
+                        .setDelay(1000) // optional but starting animations immediately in onCreate can make them choppy
                         .singleUse("100") // provide a unique ID used to ensure it is only shown once
                         .show();
 

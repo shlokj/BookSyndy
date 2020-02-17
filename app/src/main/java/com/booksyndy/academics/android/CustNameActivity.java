@@ -73,7 +73,7 @@ public class CustNameActivity extends AppCompatActivity {
                 isValidUsername = (username != null) && username.matches("[A-Za-z0-9_]+");
                 isAvailableUsername = checkUserName(username);
                 if (firstName.length()==0 || lastName.length()==0) {
-                    Snackbar.make(parentLayout, "Please fill booksyndy both name fields", Snackbar.LENGTH_SHORT)
+                    Snackbar.make(parentLayout, "Please fill in both name fields", Snackbar.LENGTH_SHORT)
                             .setAction("OKAY", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {

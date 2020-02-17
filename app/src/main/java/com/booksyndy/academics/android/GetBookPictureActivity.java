@@ -282,7 +282,7 @@ public class GetBookPictureActivity extends AppCompatActivity {
                     //calculating progress percentage
                     double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
 
-                    //displaying percentage booksyndy progress dialog
+                    //displaying percentage in progress dialog
                     progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
                 }
             });

@@ -62,7 +62,7 @@ import java.util.Locale;
 
 public class EditListingActivity extends AppCompatActivity {
 
-    //TODO: save button booksyndy action bar
+    //TODO: save button in action bar
 
     private static String TAG = "EDITLISTING";
     private static final int AUTOCOMPLETE_REQUEST_CODE = 108;
@@ -636,7 +636,7 @@ public class EditListingActivity extends AppCompatActivity {
                                 book_lng,
                                 1);
                     } catch (Exception ioException) {
-                        Log.e("", "Error booksyndy getting address for the location");
+                        Log.e("", "Error in getting address for the location");
                     }
 
                     if (addresses == null || addresses.size()  == 0) {
@@ -756,7 +756,7 @@ public class EditListingActivity extends AppCompatActivity {
                     //calculating progress percentage
                     double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
 
-                    //displaying percentage booksyndy progress dialog
+                    //displaying percentage in progress dialog
                     progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
                 }
             });

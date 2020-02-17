@@ -241,7 +241,7 @@ public class ConfirmListingActivity extends AppCompatActivity {
                     //calculating progress percentage
                     double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
 
-                    //displaying percentage booksyndy progress dialog
+                    //displaying percentage in progress dialog
                     progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
                 }
             });
@@ -279,10 +279,10 @@ public class ConfirmListingActivity extends AppCompatActivity {
                         Intent homeIntent = new Intent(ConfirmListingActivity.this,HomeActivity.class);
                         homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                         if (isTextbook) {
-                            homeIntent.putExtra("SNACKBAR_MSG", "Your book has been listed! You can find it booksyndy the \'Your listings\' section of the app.");
+                            homeIntent.putExtra("SNACKBAR_MSG", "Your book has been listed! You can find it in the \'Your listings\' section of the app.");
                         }
                         else {
-                            homeIntent.putExtra("SNACKBAR_MSG", "Your material has been listed! You can find it booksyndy the \'Your listings\' section of the app.");
+                            homeIntent.putExtra("SNACKBAR_MSG", "Your material has been listed! You can find it in the \'Your listings\' section of the app.");
                         }
                         startActivity(homeIntent);
                     }

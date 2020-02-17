@@ -504,7 +504,7 @@ public class UserProfileActivity extends AppCompatActivity {
                     //calculating progress percentage
                     double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
 
-                    //displaying percentage booksyndy progress dialog
+                    //displaying percentage in progress dialog
                     progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
                 }
             });
@@ -711,7 +711,7 @@ public class UserProfileActivity extends AppCompatActivity {
                     progressDialog.dismiss();
 
                 View parentLayout = findViewById(android.R.id.content);
-                Snackbar.make(parentLayout, "Please fill booksyndy all fields", Snackbar.LENGTH_SHORT)
+                Snackbar.make(parentLayout, "Please fill in all fields", Snackbar.LENGTH_SHORT)
                         .setAction("OKAY", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {

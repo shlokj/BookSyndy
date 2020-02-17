@@ -448,7 +448,7 @@ public class RequestBookActivity extends AppCompatActivity {
                             bookLng,
                             1);
                 } catch (Exception ioException) {
-                    Log.e("", "Error booksyndy getting address for the location");
+                    Log.e("", "Error in getting address for the location");
                 }
 
                 if (addresses == null || addresses.size()  == 0) {

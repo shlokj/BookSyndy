@@ -134,7 +134,7 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder>
 
     private void onDocumentModified(DocumentChange change) {
         if (change.getOldIndex() == change.getNewIndex()) {
-            // Item changed but remained booksyndy same position
+            // Item changed but remained in same position
             mSnapshots.set(change.getOldIndex(), change.getDocument());
             notifyItemChanged(change.getOldIndex());
         } else {

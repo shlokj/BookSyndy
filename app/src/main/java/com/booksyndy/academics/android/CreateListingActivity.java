@@ -416,10 +416,10 @@ public class CreateListingActivity extends AppCompatActivity {
                         Intent homeIntent = new Intent(CreateListingActivity.this,HomeActivity.class);
                         homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                         if (isTextbook) {
-                            homeIntent.putExtra("SNACKBAR_MSG", "Your book has been listed! You can find it booksyndy the \'Your listings\' section of the app.");
+                            homeIntent.putExtra("SNACKBAR_MSG", "Your book has been listed! You can find it in the \'Your listings\' section of the app.");
                         }
                         else {
-                            homeIntent.putExtra("SNACKBAR_MSG", "Your material has been listed! You can find it booksyndy the \'Your listings\' section of the app.");
+                            homeIntent.putExtra("SNACKBAR_MSG", "Your material has been listed! You can find it in the \'Your listings\' section of the app.");
                         }
                         homeIntent.putExtra("SB_LONG",true);
                         startActivity(homeIntent);
@@ -575,7 +575,7 @@ public class CreateListingActivity extends AppCompatActivity {
                                 book_lng,
                                 1);
                     } catch (Exception ioException) {
-                        Log.e("", "Error booksyndy getting address for the location");
+                        Log.e("", "Error in getting address for the location");
                     }
 
                     if (addresses == null || addresses.size()  == 0) {
@@ -694,7 +694,7 @@ public class CreateListingActivity extends AppCompatActivity {
                     //calculating progress percentage
                     double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
 
-                    //displaying percentage booksyndy progress dialog
+                    //displaying percentage in progress dialog
                     progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
                 }
             });

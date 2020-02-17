@@ -28,9 +28,9 @@ public class SignInActivity extends AppCompatActivity {
 
         closeApp=getIntent().getBooleanExtra("CLOSE_APP",false);
 
-        if (closeApp) {
+/*        if (closeApp) {
             finishAndRemoveTask();
-        }
+        }*/
         final EditText phnofield = findViewById(R.id.phoneNumberField);
         FloatingActionButton next = findViewById(R.id.fab1);
         next.setOnClickListener(new View.OnClickListener() {

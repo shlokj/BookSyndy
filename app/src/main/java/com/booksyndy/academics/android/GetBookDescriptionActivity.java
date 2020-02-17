@@ -17,7 +17,7 @@ public class GetBookDescriptionActivity extends AppCompatActivity {
     EditText bookDescField;
     private int gradeNumber,boardNumber, year;
 
-    //TODO: Save the description booksyndy the edittext booksyndy case the user goes back (don't make him type it again)
+    //TODO: Save the description in the edittext in case the user goes back (don't make him type it again)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

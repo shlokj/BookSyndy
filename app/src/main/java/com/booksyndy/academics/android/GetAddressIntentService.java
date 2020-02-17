@@ -79,7 +79,7 @@ public class GetAddressIntentService extends IntentService {
         }
     }
 
-    //to send results to receiver booksyndy the source activity
+    //to send results to receiver in the source activity
     private void sendResultsToReceiver(int resultCode, String Addr1,String Addr2,String Locality,String County,String State,String Country,String Post,double latt,double lngg) {
         Bundle bundle = new Bundle();
         bundle.putString("addr1", Addr1);

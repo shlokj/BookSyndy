@@ -54,7 +54,7 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // This is the last activity booksyndy which we ask the user for information.
+                // This is the last activity in which we ask the user for information.
                 // After this, on clicking the next button, the user account creation is completed and the user is taken
                 // to the main activity.
                 // Firebase implementation is required here.
