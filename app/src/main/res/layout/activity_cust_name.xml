@@ -25,6 +25,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:hint="@string/first"
+            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz- "
             android:inputType="textCapWords|textPersonName" />
 
         <EditText
@@ -34,6 +35,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:hint="@string/last"
+            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz- "
             android:inputType="textCapWords|textPersonName" />
     </LinearLayout>
 

@@ -69,6 +69,7 @@ public class CustNameActivity extends AppCompatActivity {
                 firstName = firstNameField.getText().toString().trim();
                 lastName = lastNameField.getText().toString().trim();
                 username = userIdField.getText().toString().trim().toLowerCase();
+                // todo: last char can't be a dot.
                 isValidUsername = false;
                 isValidUsername = (username != null) && username.matches("[A-Za-z0-9_]+");
                 isAvailableUsername = checkUserName(username);

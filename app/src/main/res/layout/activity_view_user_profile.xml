@@ -106,6 +106,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:layout_gravity="center"
         android:orientation="vertical"
         android:visibility="gone"
         tools:visibility="visible">
@@ -116,8 +117,8 @@
             android:layout_height="200dp"
             android:layout_margin="8dp"
             android:padding="8dp"
-            android:scaleType="centerCrop"
-            app:srcCompat="@drawable/ic_book_24px" />
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/ic_empty_list" />
 
         <TextView
             style="@style/AppTheme.Body1"
