@@ -63,13 +63,12 @@ import java.util.Locale;
 import java.util.Map;
 
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private AppBarConfiguration mAppBarConfiguration;
-    private static final String TAG = "HOMEACTIVITY" ;
+    private static final String TAG = "HOMEACTIVITY";
 
     /*location variables */
     private FusedLocationProviderClient fusedLocationClient;
@@ -80,13 +79,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private LocationManager locationManager;
     private NavigationView navigationView;
 
-    private TextView navUsername,navUserphone;
+    private TextView navUsername, navUserphone;
     private ImageView navUserPic;
     private FirebaseFirestore mFirestore;
     private String curUserId, snackbarMessage;
     private SharedPreferences userPref;
     private SharedPreferences.Editor editor;
-    private boolean  sbLong;
+    private boolean sbLong;
     private static boolean showGPS = false;
     private String dynamicBookId;
     private NavController navController;
@@ -102,14 +101,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
 
-        userPref = this.getSharedPreferences(getString(R.string.UserPref),0);
+        userPref = this.getSharedPreferences(getString(R.string.UserPref), 0);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_requests,R.id.nav_booklist, R.id.nav_chats,
+                R.id.nav_home, R.id.nav_requests, R.id.nav_booklist, R.id.nav_chats,
                 R.id.nav_starred, R.id.nav_help, R.id.nav_signout)
                 .setDrawerLayout(drawer)
                 .build();
@@ -117,15 +116,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
         View headerView = navigationView.getHeaderView(0);
-        navUsername =  headerView.findViewById(R.id.user_title);
+        navUsername = headerView.findViewById(R.id.user_title);
         navUserphone = headerView.findViewById(R.id.user_phone);
         navUserPic = headerView.findViewById(R.id.nav_profilePic);
         navUsername.setOnClickListener(this);
         navUserphone.setOnClickListener(this);
         dynamicBookId = getIntent().getStringExtra("dynamicBookId");
         snackbarMessage = getIntent().getStringExtra("SNACKBAR_MSG");
-        sbLong = getIntent().getBooleanExtra("SB_LONG",false);
-        if (snackbarMessage!=null) {
+        sbLong = getIntent().getBooleanExtra("SB_LONG", false);
+        if (snackbarMessage != null) {
             if (snackbarMessage.length() > 0) {
                 View parentLayout = findViewById(android.R.id.content);
                 if (sbLong) {
@@ -134,15 +133,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         sb.setAction("GO THERE", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                // TODO: open the your listings fragment
+
+                                navigationView.setCheckedItem(R.id.nav_booklist);
+                                navController.navigate(R.id.nav_booklist);
 
                             }
                         });
                     }
                     sb.setActionTextColor(getResources().getColor(android.R.color.holo_blue_light));
                     sb.show();
-                }
-                else {
+                } else {
                     Snackbar sb = Snackbar.make(parentLayout, snackbarMessage, Snackbar.LENGTH_SHORT);
                     if (snackbarMessage.contains("Your listings")) {
                         sb.setAction("GO THERE", new View.OnClickListener() {
@@ -179,8 +179,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     private void populateUserDetails() {
 
-        String userPhone = userPref.getString(getString(R.string.p_userphone),"");
-        String userId = userPref.getString(getString(R.string.p_userid),"");
+        String userPhone = userPref.getString(getString(R.string.p_userphone), "");
+        String userId = userPref.getString(getString(R.string.p_userid), "");
         String userPic = userPref.getString(getString(R.string.p_imageurl), "");
         if (!TextUtils.isEmpty(userPic)) {
             Glide.with(navUserPic.getContext())
@@ -206,11 +206,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }
         };
 
-        if(!showGPS) {
+        if (!showGPS) {
             startLocationUpdates();
             showGPS = true;
         }
-            //showGpsSettingDialog();
+        //showGpsSettingDialog();
 
 
     }
@@ -250,29 +250,28 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     LOCATION_PERMISSION_REQUEST_CODE);
-        }
-        else {
-                showGpsSettingDialog();
-                fusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        // GPS location can be null if GPS is switched off
-                        if (location != null) {
-                            currentLocation = location;
-                            getAddress();
-                        }
+        } else {
+            showGpsSettingDialog();
+            fusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    // GPS location can be null if GPS is switched off
+                    if (location != null) {
+                        currentLocation = location;
+                        getAddress();
                     }
-                })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.d("add_location", "Error trying to get last GPS location");
-                                Toast.makeText(HomeActivity.this,
-                                        "Error trying to get last GPS location",
-                                        Toast.LENGTH_SHORT).show();
-                                e.printStackTrace();
-                            }
-                        });
+                }
+            })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d("add_location", "Error trying to get last GPS location");
+                            Toast.makeText(HomeActivity.this,
+                                    "Error trying to get last GPS location",
+                                    Toast.LENGTH_SHORT).show();
+                            e.printStackTrace();
+                        }
+                    });
 
 
         }
@@ -302,12 +301,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 for (int i = 0; i < fetchedAddress.getMaxAddressLineIndex(); i++) {
                     strAddress.append(fetchedAddress.getAddressLine(i)).append(" ");
                 }
-                Log.d(TAG, "getAddress: "+strAddress);
+                Log.d(TAG, "getAddress: " + strAddress);
                 editor = userPref.edit();
-                editor.putFloat(getString(R.string.p_lat),(float)currentLocation.getLatitude());
-                editor.putFloat(getString(R.string.p_lng),(float)currentLocation.getLongitude());
-                editor.putString(getString(R.string.p_area),fetchedAddress.getSubLocality());
-                editor.putString(getString(R.string.p_city),fetchedAddress.getLocality());
+                editor.putFloat(getString(R.string.p_lat), (float) currentLocation.getLatitude());
+                editor.putFloat(getString(R.string.p_lng), (float) currentLocation.getLongitude());
+                editor.putString(getString(R.string.p_area), fetchedAddress.getSubLocality());
+                editor.putString(getString(R.string.p_city), fetchedAddress.getLocality());
                 editor.apply();
 
             } else {
@@ -340,7 +339,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             case LOCATION_PERMISSION_REQUEST_CODE: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        startLocationUpdates();
+                    startLocationUpdates();
                 } else {
                     Toast.makeText(this, "Location permission not granted, " +
                                     "restart the app if you want the feature",
@@ -362,7 +361,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 LocationSettingsRequest.Builder();
         builder.addLocationRequest(mLocationRequest);
 
-        Task<LocationSettingsResponse> task=LocationServices.getSettingsClient(this).checkLocationSettings(builder.build());
+        Task<LocationSettingsResponse> task = LocationServices.getSettingsClient(this).checkLocationSettings(builder.build());
 
         task.addOnCompleteListener(new OnCompleteListener<LocationSettingsResponse>() {
             @Override
@@ -406,7 +405,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode,resultCode,data);
+        super.onActivityResult(requestCode, resultCode, data);
         final LocationSettingsStates states = LocationSettingsStates.fromIntent(data);
         switch (requestCode) {
             case 101:
@@ -417,7 +416,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         break;
                     case Activity.RESULT_CANCELED:
                         // The user was asked to change settings, but chose not to
-                        Toast.makeText(HomeActivity.this,"GPS SERVICE DISABLED",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(HomeActivity.this, "GPS SERVICE DISABLED", Toast.LENGTH_SHORT).show();
                         break;
                     default:
                         break;
@@ -458,8 +457,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }
         }
 
-            return super.onPrepareOptionsMenu(menu);
-        }
+        return super.onPrepareOptionsMenu(menu);
+    }
 
 
     @Override
@@ -473,8 +472,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onClick(View v) {
-        Intent profileIntent = new Intent(HomeActivity.this,UserProfileActivity.class);
-        profileIntent.putExtra("userid",curUserId);
+        Intent profileIntent = new Intent(HomeActivity.this, UserProfileActivity.class);
+        profileIntent.putExtra("userid", curUserId);
         startActivity(profileIntent);
 
     }
@@ -500,9 +499,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
             if (resultCode == 1) {
                 Toast.makeText(HomeActivity.this,
-                        "Address not found" ,
+                        "Address not found",
                         Toast.LENGTH_SHORT).show();
-            return;
+                return;
             }
 
             //String currentAdd = resultData.getString("address_result");
@@ -515,15 +514,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             address.put("state", resultData.getString("state"));
             address.put("country", resultData.getString("country"));
             address.put("post", resultData.getString("post"));
-            address.put("lat",resultData.getDouble("lat"));
-            address.put("lng",resultData.getDouble("lng"));
+            address.put("lat", resultData.getDouble("lat"));
+            address.put("lng", resultData.getDouble("lng"));
             editor = userPref.edit();
-            editor.putFloat(getString(R.string.p_lat),(float)resultData.getDouble("lat"));
-            editor.putFloat(getString(R.string.p_lng),(float)resultData.getDouble("lng"));
-            editor.putString(getString(R.string.p_area),resultData.getString("addr2"));
-            editor.putString(getString(R.string.p_city),resultData.getString("locality"));
+            editor.putFloat(getString(R.string.p_lat), (float) resultData.getDouble("lat"));
+            editor.putFloat(getString(R.string.p_lng), (float) resultData.getDouble("lng"));
+            editor.putString(getString(R.string.p_area), resultData.getString("addr2"));
+            editor.putString(getString(R.string.p_city), resultData.getString("locality"));
             editor.apply();
-           // showResults(address);
+            // showResults(address);
         }
     }
 

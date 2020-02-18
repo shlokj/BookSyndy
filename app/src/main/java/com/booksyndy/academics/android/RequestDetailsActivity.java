@@ -294,7 +294,7 @@ public class RequestDetailsActivity extends AppCompatActivity implements EventLi
                     public void onClick(DialogInterface dialogInterface, int i) {
 //                        reportRequest();
                         Toast.makeText(getApplicationContext(), "Reported", Toast.LENGTH_SHORT).show();
-                        // todo: remove the listing from the recyclerview on going back
+
                         reportListing();
                         onBackPressed();
                     }
