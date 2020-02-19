@@ -11,6 +11,8 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -81,8 +83,8 @@ public class EditListingActivity extends AppCompatActivity {
     private CheckBox competitiveExam, free;
     private ArrayAdapter<String> gradeAdapter, boardAdapter, degreeAdapter, typeAdapter;
     private PlacesClient placesClient;
-    List<Place.Field> placeFields = Arrays.asList(Place.Field.ID,Place.Field.NAME,Place.Field.ADDRESS);
-    AutocompleteSupportFragment places_fragment;
+//    List<Place.Field> placeFields = Arrays.asList(Place.Field.ID,Place.Field.NAME,Place.Field.ADDRESS);
+//    AutocompleteSupportFragment places_fragment;
     private ImageView mBookImage;
     private String imageFilePath;
     private Uri selectedImageUri;
@@ -90,6 +92,8 @@ public class EditListingActivity extends AppCompatActivity {
     private StorageReference bookPhotosStorageReference;
     private String documentId;
     private LinearLayout gradeLL, boardLL;
+    private Menu menu;
+
 
 
     @Override
@@ -321,137 +325,7 @@ public class EditListingActivity extends AppCompatActivity {
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bookName = nameField.getText().toString().trim();
-                bookDescription = descField.getText().toString().trim();
-                bookAddress = locField.getText().toString().trim();
-                isTextbook = typeSpinner.getSelectedItemPosition()==0;
-                gradeNumber = gradeSpinner.getSelectedItemPosition()+1;
-                forCompExam = competitiveExam.isChecked();
-
-                if (forCompExam) {
-                    gradeNumber=0;
-                    boardNumber=20;
-                }
-                else {
-                    if (gradeNumber >= 7) {
-                        boardNumber = boardSpinner.getSelectedItemPosition() + 7;
-                    } else {
-                        boardNumber = boardSpinner.getSelectedItemPosition() + 1;
-                    }
-                }
-                String bps = priceField.getText().toString().trim();
-                String bys;
-
-                if (bookName.length()<10) {
-                    showSnackbar("Please enter at least 10 characters for your book's name");
-                }
-                else if (bookDescription.length()<10) {
-                    showSnackbar("Please enter at least 10 characters for the description");
-                }
-                else if (gradeNumber>=7 && yearField.getText().toString().length()==0) {
-                    showSnackbar("Please enter a year for your book");
-                }
-                else if (bookAddress.length()==0) {
-                    showSnackbar("Couldn't get your location. Please enter it manually.");
-                }
-                else if (bps.length()==0) {
-                    showSnackbar("Please enter a price or give it for free");
-                }
-                else if (book_photo_url==null || book_photo_url.length()==0) {
-                    showSnackbar("Please take a picture of your book");
-                }
-                else {
-                    boolean validYear = true;
-                    bookPrice = Integer.parseInt(bps);
-                    if (gradeNumber>=7) {
-//                        Toast.makeText(getApplicationContext(),"Undergrad",Toast.LENGTH_SHORT).show();
-//                        Toast.makeText(getApplicationContext(),"Board number: "+boardNumber,Toast.LENGTH_SHORT).show();
-
-                        bys = yearField.getText().toString().trim();
-                        if (bys.length()==0) {
-                            showSnackbar("Please enter a year for your book");
-                        }
-                        else {
-                            year = Integer.parseInt(bys);
-
-                            if (boardNumber == 7) {
-
-                                if (year > 4 || year == 0) {
-                                    validYear = false;
-                                    displaySnackbarYears(4);
-                                }
-                            } else if (boardNumber == 8) {
-                                if (year > 4 || year == 0) {
-                                    validYear = false;
-                                    displaySnackbarYears(4);
-                                }
-                            } else if (boardNumber == 9) {
-                                if (year > 4 || year == 0) {
-                                    validYear = false;
-                                    displaySnackbarYears(4);
-                                }
-                            } else if (boardNumber == 10) {
-                                if (year > 4 || year == 0) {
-                                    validYear = false;
-                                    displaySnackbarYears(4);
-                                }
-                            } else if (boardNumber == 11) {
-                                if (year > 4 || year == 0) {
-                                    validYear = false;
-                                    displaySnackbarYears(4);
-                                }
-                            } else if (boardNumber == 12) {
-                                if (year > 4 || year == 0) {
-                                    validYear = false;
-                                    displaySnackbarYears(4);
-                                }
-                            } else if (boardNumber == 13) {
-                                if (year > 4 || year == 0) {
-                                    validYear = false;
-                                    displaySnackbarYears(4);
-                                }
-                            } else if (boardNumber == 14) {
-                                if (year > 5 || year == 0) {
-                                    validYear = false;
-                                    displaySnackbarYears(5);
-                                }
-                            } else if (boardNumber == 15) {
-//                                Toast.makeText(getApplicationContext(),"MBBS",Toast.LENGTH_LONG).show();
-                                if (year > 6 || year == 0) {
-                                    validYear = false;
-                                    displaySnackbarYears(6);
-                                }
-                            } else if (boardNumber == 16) {
-                                if (year == 0) {
-                                    validYear = false;
-                                    View parentLayout = findViewById(android.R.id.content);
-                                    Snackbar.make(parentLayout, "Your year can't be 0", Snackbar.LENGTH_SHORT)
-                                            .setAction("OKAY", new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View view) {
-
-                                                }
-                                            })
-                                            .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
-                                            .show();
-                                }
-                            }
-                        }
-                        if (bys.length()==0) {
-                            showSnackbar("Please enter a year for your book");
-                        }
-                        else {
-                            year=Integer.parseInt(bys);
-                        }
-                    }
-                    else {
-                        year=0;
-                    }
-                    if (validYear) {
-//                        Toast.makeText(getApplicationContext(),"Valid, start upload",Toast.LENGTH_SHORT).show();
-                        uploadBook();
-                    }
-                }
+                saveChangesAndExit();
             }
         });
 
@@ -767,6 +641,21 @@ public class EditListingActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_edit_listing, menu);
+        this.menu = menu;
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.save_listing) {
+            saveChangesAndExit();
+        }
+        return true;
+    }
+
     public void displaySnackbarYears(int year) {
         String yearNum = Integer.valueOf(year).toString();
         View parentLayout = findViewById(android.R.id.content);
@@ -779,6 +668,140 @@ public class EditListingActivity extends AppCompatActivity {
                 })
                 .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
                 .show();
+    }
+    public void saveChangesAndExit() {
+
+        bookName = nameField.getText().toString().trim();
+        bookDescription = descField.getText().toString().trim();
+        bookAddress = locField.getText().toString().trim();
+        isTextbook = typeSpinner.getSelectedItemPosition()==0;
+        gradeNumber = gradeSpinner.getSelectedItemPosition()+1;
+        forCompExam = competitiveExam.isChecked();
+
+        if (forCompExam) {
+            gradeNumber=0;
+            boardNumber=20;
+        }
+        else {
+            if (gradeNumber >= 7) {
+                boardNumber = boardSpinner.getSelectedItemPosition() + 7;
+            } else {
+                boardNumber = boardSpinner.getSelectedItemPosition() + 1;
+            }
+        }
+        String bps = priceField.getText().toString().trim();
+        String bys;
+
+        if (bookName.length()<10) {
+            showSnackbar("Please enter at least 10 characters for your book's name");
+        }
+        else if (bookDescription.length()<10) {
+            showSnackbar("Please enter at least 10 characters for the description");
+        }
+        else if (gradeNumber>=7 && yearField.getText().toString().length()==0) {
+            showSnackbar("Please enter a year for your book");
+        }
+        else if (bookAddress.length()==0) {
+            showSnackbar("Couldn't get your location. Please enter it manually.");
+        }
+        else if (bps.length()==0) {
+            showSnackbar("Please enter a price or give it for free");
+        }
+        else if (book_photo_url==null || book_photo_url.length()==0) {
+            showSnackbar("Please take a picture of your book");
+        }
+        else {
+            boolean validYear = true;
+            bookPrice = Integer.parseInt(bps);
+            if (gradeNumber>=7) {
+//                        Toast.makeText(getApplicationContext(),"Undergrad",Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(),"Board number: "+boardNumber,Toast.LENGTH_SHORT).show();
+
+                bys = yearField.getText().toString().trim();
+                if (bys.length()==0) {
+                    showSnackbar("Please enter a year for your book");
+                }
+                else {
+                    year = Integer.parseInt(bys);
+
+                    if (boardNumber == 7) {
+
+                        if (year > 4 || year == 0) {
+                            validYear = false;
+                            displaySnackbarYears(4);
+                        }
+                    } else if (boardNumber == 8) {
+                        if (year > 4 || year == 0) {
+                            validYear = false;
+                            displaySnackbarYears(4);
+                        }
+                    } else if (boardNumber == 9) {
+                        if (year > 4 || year == 0) {
+                            validYear = false;
+                            displaySnackbarYears(4);
+                        }
+                    } else if (boardNumber == 10) {
+                        if (year > 4 || year == 0) {
+                            validYear = false;
+                            displaySnackbarYears(4);
+                        }
+                    } else if (boardNumber == 11) {
+                        if (year > 4 || year == 0) {
+                            validYear = false;
+                            displaySnackbarYears(4);
+                        }
+                    } else if (boardNumber == 12) {
+                        if (year > 4 || year == 0) {
+                            validYear = false;
+                            displaySnackbarYears(4);
+                        }
+                    } else if (boardNumber == 13) {
+                        if (year > 4 || year == 0) {
+                            validYear = false;
+                            displaySnackbarYears(4);
+                        }
+                    } else if (boardNumber == 14) {
+                        if (year > 5 || year == 0) {
+                            validYear = false;
+                            displaySnackbarYears(5);
+                        }
+                    } else if (boardNumber == 15) {
+//                                Toast.makeText(getApplicationContext(),"MBBS",Toast.LENGTH_LONG).show();
+                        if (year > 6 || year == 0) {
+                            validYear = false;
+                            displaySnackbarYears(6);
+                        }
+                    } else if (boardNumber == 16) {
+                        if (year == 0) {
+                            validYear = false;
+                            View parentLayout = findViewById(android.R.id.content);
+                            Snackbar.make(parentLayout, "Your year can't be 0", Snackbar.LENGTH_SHORT)
+                                    .setAction("OKAY", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+
+                                        }
+                                    })
+                                    .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                                    .show();
+                        }
+                    }
+                }
+                if (bys.length()==0) {
+                    showSnackbar("Please enter a year for your book");
+                }
+                else {
+                    year=Integer.parseInt(bys);
+                }
+            }
+            else {
+                year=0;
+            }
+            if (validYear) {
+//                        Toast.makeText(getApplicationContext(),"Valid, start upload",Toast.LENGTH_SHORT).show();
+                uploadBook();
+            }
+        }
     }
 
 }

@@ -59,7 +59,7 @@ public class MyRequestFragment extends Fragment implements EventListener<QuerySn
                              Bundle savedInstanceState) {
         View rootView =  inflater.inflate(R.layout.fragment_pending_request, container, false);
         userPref = getContext().getSharedPreferences(getContext().getString(R.string.UserPref),0);
-//        rootView.findViewById(R.id.fab_request).setVisibility(View.GONE);
+        rootView.findViewById(R.id.fab_request).setVisibility(View.GONE);
         recyclerView = rootView.findViewById(R.id.request_recycler_view);
         mEmptyView = rootView.findViewById(R.id.view_empty_r);
         bookRequests = new ArrayList<>();

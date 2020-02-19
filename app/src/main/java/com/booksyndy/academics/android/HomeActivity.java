@@ -127,34 +127,33 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         if (snackbarMessage != null) {
             if (snackbarMessage.length() > 0) {
                 View parentLayout = findViewById(android.R.id.content);
+                int l = 0;
                 if (sbLong) {
-                    Snackbar sb = Snackbar.make(parentLayout, snackbarMessage, Snackbar.LENGTH_LONG);
-                    if (snackbarMessage.contains("Your listings")) {
-                        sb.setAction("GO THERE", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-
-                                navigationView.setCheckedItem(R.id.nav_booklist);
-                                navController.navigate(R.id.nav_booklist);
-
-                            }
-                        });
-                    }
-                    sb.setActionTextColor(getResources().getColor(android.R.color.holo_blue_light));
-                    sb.show();
-                } else {
-                    Snackbar sb = Snackbar.make(parentLayout, snackbarMessage, Snackbar.LENGTH_SHORT);
-                    if (snackbarMessage.contains("Your listings")) {
-                        sb.setAction("GO THERE", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-
-                            }
-                        });
-                    }
-                    sb.setActionTextColor(getResources().getColor(android.R.color.holo_blue_light));
-                    sb.show();
+                    l = Snackbar.LENGTH_LONG;
                 }
+                else {
+                    l = Snackbar.LENGTH_SHORT;
+                }
+                    Snackbar sb = Snackbar.make(parentLayout, snackbarMessage, l);
+                if (snackbarMessage.contains("Your listings")) {
+                    sb.setAction("GO THERE", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            navigationView.setCheckedItem(R.id.nav_booklist);
+                            navController.navigate(R.id.nav_booklist);
+
+                        }
+                    });
+                }
+                else if (snackbarMessage.contains("Your edits")) {
+                    navigationView.setCheckedItem(R.id.nav_booklist);
+                    navController.navigate(R.id.nav_booklist);
+                }
+
+                sb.setActionTextColor(getResources().getColor(android.R.color.holo_blue_light));
+                sb.show();
+
             }
         }
 
