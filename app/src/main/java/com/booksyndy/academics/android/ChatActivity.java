@@ -1,6 +1,8 @@
 package com.booksyndy.academics.android;
 
 import android.app.ProgressDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -713,6 +715,14 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void OnMessagesLongSelected(Messages message) {
-        Toast.makeText(getApplicationContext(), "long clicked", Toast.LENGTH_SHORT).show();
+        if (message.getType().equals("text")) {
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("message", message.getMessage());
+            if (clipboard != null) {
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(getApplicationContext(), "copied to clip board", Toast.LENGTH_SHORT).show();
+            }
+        }
+
     }
 }
