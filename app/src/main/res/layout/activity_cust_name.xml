@@ -25,7 +25,6 @@
             android:layout_weight="1"
             android:ems="10"
             android:hint="@string/first"
-            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz- "
             android:inputType="textCapWords|textPersonName" />
 
         <EditText
@@ -35,7 +34,6 @@
             android:layout_weight="1"
             android:ems="10"
             android:hint="@string/last"
-            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz- "
             android:inputType="textCapWords|textPersonName" />
     </LinearLayout>
 
@@ -64,7 +62,6 @@
         android:text="Create a unique username."
         android:textColor="@color/colorTextBlack"
         android:textSize="24sp"
-
         app:layout_constraintTop_toBottomOf="@id/nameETLL"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
