@@ -670,7 +670,7 @@ public class UserProfileActivity extends AppCompatActivity {
                     editor.putBoolean(getString(R.string.preferGuidedMode), preferGuidedMode.isChecked());
                     editor.putString(getString(R.string.p_firstname), fName.getText().toString().trim());
                     editor.putString(getString(R.string.p_lastname), lName.getText().toString().trim());
-                    editor.putString(getString(R.string.p_userid), uName.getText().toString().trim());
+                    editor.putString(getString(R.string.p_userid), uName.getText().toString().toLowerCase().trim());
                     editor.putString(getString(R.string.p_imageurl), book_photo_url);
                     editor.putInt(getString(R.string.p_grade), gradeSpinner.getSelectedItemPosition() + 1);
                     editor.putInt(getString(R.string.p_board), board);
