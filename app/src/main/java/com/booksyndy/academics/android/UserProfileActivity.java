@@ -169,7 +169,7 @@ public class UserProfileActivity extends AppCompatActivity {
         fetchUserNameList();
         getUserPreference();
         populateUserDetails();
-        iUsername = uName.getText().toString().trim();
+        iUsername = uName.getText().toString().toLowerCase().trim();
         fName.addTextChangedListener(checkChange);
         lName.addTextChangedListener(checkChange);
         uName.addTextChangedListener(checkChange);
@@ -617,8 +617,8 @@ public class UserProfileActivity extends AppCompatActivity {
             }
 
 
-            if (!(fName.getText().toString().length() == 0 || lName.getText().toString().length() == 0 || uName.getText().toString().length() == 0 /*|| year.getText().toString().length()==0*/)) {
-                boolean isAvailableUsername = checkUserName(uName.getText().toString().trim());
+            if (!(fName.getText().toString().length() == 0 || lName.getText().toString().length() == 0 || uName.getText().toString().toLowerCase().length() == 0 /*|| year.getText().toString().length()==0*/)) {
+                boolean isAvailableUsername = checkUserName(uName.getText().toString().toLowerCase().trim());
 
                 if (!isAvailableUsername) {
                     showSnackbar("This username is not available. Please try another");
@@ -684,7 +684,7 @@ public class UserProfileActivity extends AppCompatActivity {
                             "lastName", lName.getText().toString(),
                             "gradeNumber", gradeSpinner.getSelectedItemPosition() + 1,
                             "boardNumber", board,
-                            "userId", uName.getText().toString(),
+                            "userId", uName.getText().toString().toLowerCase(),
                             "imageUrl", book_photo_url).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
