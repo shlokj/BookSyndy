@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -90,6 +91,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private String dynamicBookId;
     private NavController navController;
     private Toolbar toolbar;
+    private ImageButton nav_btn_share;
 
     //TODO: use showcase view to showcase fab and button to open navigation drawer
 
@@ -119,8 +121,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navUsername = headerView.findViewById(R.id.user_title);
         navUserphone = headerView.findViewById(R.id.user_phone);
         navUserPic = headerView.findViewById(R.id.nav_profilePic);
+        nav_btn_share = headerView.findViewById(R.id.nav_btn_share);
         navUsername.setOnClickListener(this);
         navUserphone.setOnClickListener(this);
+        nav_btn_share.setOnClickListener(this);
         dynamicBookId = getIntent().getStringExtra("dynamicBookId");
         snackbarMessage = getIntent().getStringExtra("SNACKBAR_MSG");
         sbLong = getIntent().getBooleanExtra("SB_LONG", false);
@@ -163,7 +167,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void handleOtherIntent() {
-        if (dynamicBookId != null) {
+        if (dynamicBookId != null && !dynamicBookId.equalsIgnoreCase("/details?id=com.booksyndy.academics.android")) {
             Intent bookDetails = new Intent(HomeActivity.this, BookDetailsActivity.class);
             bookDetails.putExtra("bookid", dynamicBookId);
             bookDetails.putExtra("isHome", true);
@@ -242,7 +246,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     @SuppressWarnings("MissingPermission")
     private void startLocationUpdates() {
-        Log.d(TAG, "startLocationUpdates: entered");
+
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -300,7 +304,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 for (int i = 0; i < fetchedAddress.getMaxAddressLineIndex(); i++) {
                     strAddress.append(fetchedAddress.getAddressLine(i)).append(" ");
                 }
-                Log.d(TAG, "getAddress: " + strAddress);
+
                 editor = userPref.edit();
                 editor.putFloat(getString(R.string.p_lat), (float) currentLocation.getLatitude());
                 editor.putFloat(getString(R.string.p_lng), (float) currentLocation.getLongitude());
@@ -471,10 +475,18 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onClick(View v) {
-        Intent profileIntent = new Intent(HomeActivity.this, UserProfileActivity.class);
-        profileIntent.putExtra("userid", curUserId);
-        startActivity(profileIntent);
+        if (v != null && v.equals(nav_btn_share)) {
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "https://booksyndy.com/download");
+            shareIntent.setType("text/plain");
+            startActivity(shareIntent);
+        } else {
+            Intent profileIntent = new Intent(HomeActivity.this, UserProfileActivity.class);
+            profileIntent.putExtra("userid", curUserId);
+            startActivity(profileIntent);
 
+        }
     }
 
     private class LocationAddressResultReceiver extends ResultReceiver {
