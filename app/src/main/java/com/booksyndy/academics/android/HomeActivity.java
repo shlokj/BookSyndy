@@ -451,11 +451,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 sequence.setConfig(config);
 
                 sequence.addSequenceItem(view,
-                        "Click here to open the menu", "GOT IT");
+                        "Here's the menu", "GOT IT");
 
                 sequence.addSequenceItem(findViewById(R.id.fab_home),
-                        "Click here to post a listing", "GOT IT");
+                        "Get started by posting a listing", "GOT IT");
 
+                sequence.addSequenceItem(toolbar.getChildAt(2),"Or, search for material you need","GOT IT");
                 sequence.start();
             }
         }
