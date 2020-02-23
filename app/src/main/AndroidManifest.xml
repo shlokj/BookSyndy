@@ -23,118 +23,117 @@
         android:roundIcon="@drawable/ic_booksyndy_circle_transparent"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".AuthActivity"></activity>
         <activity
-            android:name="com.booksyndy.academics.android.RequestDetailsActivity"
+            android:name=".RequestDetailsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.booksyndy.academics.android.EditListingActivity"
+            android:name=".EditListingActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.booksyndy.academics.android.WelcomeActivity"
+            android:name=".WelcomeActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.booksyndy.academics.android.RequestBookActivity"
+            android:name=".RequestBookActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.booksyndy.academics.android.SendFeedbackActivity"
+            android:name=".SendFeedbackActivity"
             android:screenOrientation="portrait" />
-        <activity android:name="com.booksyndy.academics.android.util.GalleryUtil" />
+        <activity android:name=".util.GalleryUtil" />
         <activity
-            android:name="com.booksyndy.academics.android.ViewUserProfileActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.booksyndy.academics.android.CreateListingActivity"
-            android:screenOrientation="portrait" />
-        <activity android:name="com.booksyndy.academics.android.ViewPictureActivity" />
-        <activity
-            android:name="com.booksyndy.academics.android.CollegeFilterActivity"
+            android:name=".ViewUserProfileActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.booksyndy.academics.android.ConfirmListingActivity"
+            android:name=".CreateListingActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ViewPictureActivity" />
+        <activity
+            android:name=".CollegeFilterActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.booksyndy.academics.android.GetCollegeBranchActivity"
+            android:name=".ConfirmListingActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.booksyndy.academics.android.FilterActivity"
+            android:name=".GetCollegeBranchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".FilterActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
         <activity
-            android:name="com.booksyndy.academics.android.ChatActivity"
+            android:name=".ChatActivity"
             android:label="@string/title_activity_chat"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.booksyndy.academics.android.BookDetailsActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
-        <activity android:name="com.booksyndy.academics.android.GetFeedbackActivity" />
-        <activity android:name="com.booksyndy.academics.android.EnterLocationManuallyActivity" />
+            android:name=".BookDetailsActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".GetFeedbackActivity" />
+        <activity android:name=".EnterLocationManuallyActivity" />
         <activity
-            android:name="com.booksyndy.academics.android.UserProfileActivity"
+            android:name=".UserProfileActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.booksyndy.academics.android.GetBookSellerLocationActivity"
+            android:name=".GetBookSellerLocationActivity"
             android:screenOrientation="portrait" />
 
         <service
-            android:name="com.booksyndy.academics.android.GetAddressIntentService"
+            android:name=".GetAddressIntentService"
             android:exported="false" />
 
-        <activity android:name="com.booksyndy.academics.android.GetBookPictureActivity" />
+        <activity android:name=".GetBookPictureActivity" />
         <activity
-            android:name="com.booksyndy.academics.android.GetBookPriceActivity"
+            android:name=".GetBookPriceActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.booksyndy.academics.android.GetBookDegreeActivity"
+            android:name=".GetBookDegreeActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.booksyndy.academics.android.GetBookBoardActivity"
+            android:name=".GetBookBoardActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.booksyndy.academics.android.GetBookDescriptionActivity"
+            android:name=".GetBookDescriptionActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.booksyndy.academics.android.GetBookClassActivity"
+            android:name=".GetBookClassActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.booksyndy.academics.android.GetBookNameActivity"
+            android:name=".GetBookNameActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.booksyndy.academics.android.GetBookMaterialTypeActivity"
+            android:name=".GetBookMaterialTypeActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.booksyndy.academics.android.HomeActivity"
+            android:name=".HomeActivity"
             android:label="@string/title_activity_home"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.booksyndy.academics.android.GetCollegeSpecificsActivity"
+            android:name=".GetCollegeSpecificsActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.booksyndy.academics.android.GetJoinPurposeActivity"
+            android:name=".GetJoinPurposeActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.booksyndy.academics.android.GetBoardActivity"
+            android:name=".GetBoardActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.booksyndy.academics.android.GetGradeActivity"
+            android:name=".GetGradeActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.booksyndy.academics.android.CustNameActivity"
+            android:name=".CustNameActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name="com.booksyndy.academics.android.ParOrStudActivity" />
+        <activity android:name=".ParOrStudActivity" />
         <activity
-            android:name="com.booksyndy.academics.android.EnterOTPActivity"
+            android:name=".EnterOTPActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.booksyndy.academics.android.SignInActivity"
+            android:name=".SignInActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -142,11 +141,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.booksyndy.academics.android.MainActivity"
+            android:name=".MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
@@ -162,7 +162,7 @@
         </activity>
 
         <service
-            android:name="com.booksyndy.academics.android.notification.MyFirebaseMessagingService"
+            android:name=".notification.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -182,7 +182,6 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_notification_icon" />
-
         <!--
  Set color used with incoming notification messages. This is used when no color is set for the incoming
              notification message. See README(https://goo.gl/6BKBk7) for more.
@@ -197,8 +196,6 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
-
     </application>
 
 </manifest>
