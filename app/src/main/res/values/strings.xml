@@ -183,5 +183,7 @@
     <string name="g12">Grade 12</string>
     <string name="g11">Grade 11</string>
     <string name="undergraduate">Undergraduate</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
 
 </resources>

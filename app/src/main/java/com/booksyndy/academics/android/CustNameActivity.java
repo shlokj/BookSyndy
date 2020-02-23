@@ -25,9 +25,9 @@ import java.util.List;
 
 public class CustNameActivity extends AppCompatActivity {
 
-    boolean isParent, isValidUsername, isAvailableUsername=true;
-    EditText firstNameField, lastNameField, userIdField;
-    String firstName, lastName, username;
+    private boolean isParent, isValidUsername, isAvailableUsername=true, isValidPassword, passwordsMatch;
+    private EditText firstNameField, lastNameField, userIdField, passwordField, confirmPasswordField;
+    String firstName, lastName, username, password, cPassword;
 
     private static String TAG = "CUSTNAMEACTIVITY";
     private FirebaseFirestore mFireStore;
@@ -44,6 +44,10 @@ public class CustNameActivity extends AppCompatActivity {
         userIdField = (EditText) findViewById(R.id.usernameField);
         firstNameField = (EditText) findViewById(R.id.firstName);
         lastNameField = (EditText) findViewById(R.id.lastName);
+        passwordField = findViewById(R.id.passwordField);
+        confirmPasswordField = findViewById(R.id.confirmPasswordField);
+//        userIdField.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD|InputType.TYPE_TEXT_VARIATION_PERSON_NAME|InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+
         firstNameField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
@@ -60,6 +64,16 @@ public class CustNameActivity extends AppCompatActivity {
                 return false;
             }
         });
+        passwordField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    passwordField.requestFocus();
+                }
+                return false;
+            }
+        });
+
         FloatingActionButton next = (FloatingActionButton) findViewById(R.id.fab4);
         userNamesList = new ArrayList<>();
         initFireStore();
@@ -69,45 +83,34 @@ public class CustNameActivity extends AppCompatActivity {
                 firstName = firstNameField.getText().toString().trim();
                 lastName = lastNameField.getText().toString().trim();
                 username = userIdField.getText().toString().trim().toLowerCase();
+                password = passwordField.getText().toString();
+                cPassword = confirmPasswordField.getText().toString();
+                passwordsMatch = password.equals(cPassword);
                 // todo: last char can't be a dot.
                 isValidUsername = false;
-                isValidUsername = (username != null) && username.matches("[A-Za-z0-9_]+");
+                isValidUsername = (username != null) && username.matches("[A-Za-z0-9_.]+");
                 isAvailableUsername = checkUserName(username);
                 if (firstName.length()==0 || lastName.length()==0) {
-                    Snackbar.make(parentLayout, "Please fill in both name fields", Snackbar.LENGTH_SHORT)
-                            .setAction("OKAY", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-
-                                }
-                            })
-                            .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
-                            .show();
+                    showSnackbar("Please fill in both name fields");
                 }
                 else if (!(isValidUsername && isAvailableUsername)) {
 //                    userIdField.getBackground().setColorFilter("#EE0000", PorterDuff.Mode.SRC_IN);
                     if (!isValidUsername) {
-                        Snackbar.make(parentLayout, "The username you entered is not valid."/* A valid username has only letters (a-z) and numbers (0-9) and is at least 5 characters long.*/ , Snackbar.LENGTH_SHORT)
-                                .setAction("OKAY", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-
-                                    }
-                                })
-                                .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
-                                .show();
+                        showSnackbar("The username you entered is not valid.");
                     }
                     else if (!isAvailableUsername) {
-                        Snackbar.make(parentLayout, "This username is taken. Please try another.", Snackbar.LENGTH_SHORT)
-                                .setAction("OKAY", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-
-                                    }
-                                })
-                                .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
-                                .show();
+                        showSnackbar("This username is taken. Please try another.");
                     }
+
+                }
+                else if(!passwordsMatch) {
+                    showSnackbar("The entered passwords don't match.");
+                }
+                else if (password.length()==0) {
+                    showSnackbar("Please enter a password");
+                }
+                else if (password.length()<6) {
+                    showSnackbar("Your password must be at least 6 characters long.");
                 }
                 else {
                     Intent getGrade = new Intent(CustNameActivity.this, GetGradeActivity.class);
@@ -115,6 +118,7 @@ public class CustNameActivity extends AppCompatActivity {
                     getGrade.putExtra("FIRST_NAME",firstName);
                     getGrade.putExtra("LAST_NAME",lastName);
                     getGrade.putExtra("USERNAME",username);
+                    getGrade.putExtra("PASSWORD",password);
                     startActivity(getGrade);
                 }
             }
@@ -149,5 +153,17 @@ public class CustNameActivity extends AppCompatActivity {
 
             }
         });
+    }
+    public void showSnackbar(String message) {
+        View parentLayout = findViewById(android.R.id.content);
+        Snackbar.make(parentLayout, message, Snackbar.LENGTH_SHORT)
+                .setAction("OKAY", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                })
+                .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                .show();
     }
 }

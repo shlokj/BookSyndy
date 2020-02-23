@@ -76,15 +76,12 @@ public class UserProfileActivity extends AppCompatActivity {
     private FloatingActionButton saveChanges;
     private TextWatcher checkChange;
     private Menu menu;
-    private final int GALLERY_ACTIVITY_CODE = 200;
-    private int clickCount, gradeNumber, boardNumber, yearNumber;
+    private int gradeNumber, boardNumber, yearNumber;
     private CheckBox compExams, preferGuidedMode;
     private TextView boardLabel;
     private LinearLayout yearLL;
-    private boolean detailsChanged = false, newUNameOK = true, tempCE, editing;
+    private boolean detailsChanged = false, tempCE, editing;
     private FirebaseFirestore mFirestore;
-    private User curUser;
-    private Uri selectedImage;
     private ArrayAdapter<String> boardAdapter, degreeAdapter, gradeAdapter;
     private SharedPreferences userPref;
     private SharedPreferences.Editor editor;
@@ -95,7 +92,6 @@ public class UserProfileActivity extends AppCompatActivity {
     private FirebaseStorage mFirebaseStorage;
     private List<String> userNamesList;
     private String book_photo_url = "https://firebasestorage.googleapis.com/v0/b/booksyndy-e8ef6.appspot.com/o/default_photos%2Fdefault_user_dp.png?alt=media&token=23b43df7-8143-4ad7-bb87-51e49da095c6";
-    private final int RESULT_CROP = 400;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

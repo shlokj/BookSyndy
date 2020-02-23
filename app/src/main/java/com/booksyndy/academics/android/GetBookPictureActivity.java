@@ -297,7 +297,7 @@ public class GetBookPictureActivity extends AppCompatActivity {
         try {
             CropImage.activity(picUri)
 //                    .setAspectRatio(1,1)
-                    .setRequestedSize(500,500)
+                    .setRequestedSize(800,800)
                     .start(this);
         } catch (ActivityNotFoundException e) {
             Toast.makeText(this, "Your device doesn't support the crop action!", Toast.LENGTH_SHORT).show();
