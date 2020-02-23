@@ -61,7 +61,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_weight="1"
-                    android:text="Last Name" />
+                    android:text="@string/last_name" />
 
                 <EditText
                     android:id="@+id/lastNameProfile"
@@ -162,6 +162,37 @@
                     android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890_."
                     android:inputType="textNoSuggestions|textPersonName|textVisiblePassword" />
             </LinearLayout>
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:id="@+id/passwordLL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/userNameLL">
+
+            <TextView
+                android:id="@+id/passwordLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Password" />
+
+
+            <EditText
+                android:id="@+id/passwordField_u"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/password"
+                android:maxLength="63"
+                android:enabled="false"
+                android:inputType="textPassword" />
 
         </LinearLayout>
 
@@ -306,7 +337,7 @@
             android:layout_margin="16dp"
             android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/userNameLL">
+            app:layout_constraintTop_toBottomOf="@id/passwordLL">
 
             <TextView
                 android:id="@+id/phoneNumberLabel"
@@ -373,6 +404,16 @@
             android:text="@string/use_guided_mode"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/boardLL" />
+
+        <Button
+            android:id="@+id/resetPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reset"
+            android:visibility="gone"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/passwordLL"
+            app:layout_constraintStart_toEndOf="@+id/passwordLL" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

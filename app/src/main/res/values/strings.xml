@@ -185,5 +185,7 @@
     <string name="undergraduate">Undergraduate</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm password</string>
+    <string name="last_name">Last Name</string>
+    <string name="reset">Reset</string>
 
 </resources>

@@ -83,16 +83,7 @@ public class EnterOTPActivity extends AppCompatActivity {
                     if(!progressDialog.isShowing())
                     progressDialog.show();
                 } else {
-                    View parentLayout = findViewById(android.R.id.content);
-                    Snackbar.make(parentLayout, "A valid verification code has 6 digits", Snackbar.LENGTH_SHORT)
-                            .setAction("OKAY", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-
-                                }
-                            })
-                            .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
-                            .show();
+                    showSnackbar("A valid verification code has 6 digits");
                 }
             }
         });
@@ -114,16 +105,8 @@ public class EnterOTPActivity extends AppCompatActivity {
                 }
             }, 100);
             progressDialog.setCancelable(true);
+            showSnackbar(getString(R.string.incorrect_code_t1));
             View parentLayout = findViewById(android.R.id.content);
-            Snackbar.make(parentLayout, getString(R.string.incorrect_code_t1), Snackbar.LENGTH_LONG)
-                    .setAction("OKAY", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-                        }
-                    })
-                    .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
-                    .show();
             if(progressDialog.isShowing())
             progressDialog.dismiss();
         }
@@ -137,20 +120,13 @@ public class EnterOTPActivity extends AppCompatActivity {
                     isRegisteredUser();
                 }
                 else {
-                    if(progressDialog.isShowing())
-                    progressDialog.dismiss();
-                    View parentLayout = findViewById(android.R.id.content);
-                    Snackbar.make(parentLayout, "Incorrect verification code", Snackbar.LENGTH_SHORT)
-                            .setAction("OKAY", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-
-                                }
-                            })
-                            .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
-                            .show();
-                    if(progressDialog.isShowing())
-                    progressDialog.dismiss();
+                    if(progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                    }
+                    showSnackbar("Incorrect verification code");
+                    if(progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                    }
 
                 }
             }
@@ -228,29 +204,11 @@ public class EnterOTPActivity extends AppCompatActivity {
                             finish();
 
                         } else {
-                            View parentLayout = findViewById(android.R.id.content);
-                            Snackbar.make(parentLayout, "Database error: please try again", Snackbar.LENGTH_SHORT)
-                                    .setAction("OKAY", new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-
-                                        }
-                                    })
-                                    .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
-                                    .show();
+                            showSnackbar("Database error: please try again");
                         }
                     }
                         catch(Exception e){
-                            View parentLayout = findViewById(android.R.id.content);
-                            Snackbar.make(parentLayout, "Database error: please try again", Snackbar.LENGTH_SHORT)
-                                    .setAction("OKAY", new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-
-                                        }
-                                    })
-                                    .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
-                                    .show();
+                            showSnackbar("Database error: please try again");
                         }
                     }
 
@@ -328,5 +286,19 @@ public class EnterOTPActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {   }
         });
         builder.show();
+    }
+
+
+    public void showSnackbar(String message) {
+        View parentLayout = findViewById(android.R.id.content);
+        Snackbar.make(parentLayout, message, Snackbar.LENGTH_SHORT)
+                .setAction("OKAY", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                })
+                .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                .show();
     }
 }

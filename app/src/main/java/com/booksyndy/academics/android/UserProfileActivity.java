@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -71,7 +72,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private static final String TAG = "USERPROFILEACTIVITY";
 
     private ImageView profilePic;
-    private EditText fName, lName, year, phoneNo, uName;
+    private EditText fName, lName, year, phoneNo, uName, passwordField;
     private Spinner gradeSpinner, boardSpinner, degreeSpinner;
     private FloatingActionButton saveChanges;
     private TextWatcher checkChange;
@@ -92,6 +93,8 @@ public class UserProfileActivity extends AppCompatActivity {
     private FirebaseStorage mFirebaseStorage;
     private List<String> userNamesList;
     private String book_photo_url = "https://firebasestorage.googleapis.com/v0/b/booksyndy-e8ef6.appspot.com/o/default_photos%2Fdefault_user_dp.png?alt=media&token=23b43df7-8143-4ad7-bb87-51e49da095c6";
+    private Button resetPassword;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +122,9 @@ public class UserProfileActivity extends AppCompatActivity {
         uName = findViewById(R.id.usernameField);
         year = findViewById(R.id.profileYearField);
         phoneNo = findViewById(R.id.profilePhoneNumberField);
+        passwordField = findViewById(R.id.passwordField_u);
+
+        resetPassword = findViewById(R.id.resetPassword);
 
         gradeSpinner = findViewById(R.id.gradeSpinner);
         boardSpinner = findViewById(R.id.profileBoardSpinner);
@@ -183,6 +189,7 @@ public class UserProfileActivity extends AppCompatActivity {
         degreeSpinner.setEnabled(false);
         preferGuidedMode.setEnabled(false);
         profilePic.setEnabled(false);
+        resetPassword.setVisibility(View.GONE);
 
         profilePic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -244,6 +251,15 @@ public class UserProfileActivity extends AppCompatActivity {
 
             }
 
+        });
+
+        resetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent resetPW = new Intent(UserProfileActivity.this, ResetPasswordActivity.class);
+                startActivity(resetPW);
+            }
         });
 
     }
@@ -595,6 +611,7 @@ public class UserProfileActivity extends AppCompatActivity {
             degreeSpinner.setEnabled(true);
             preferGuidedMode.setEnabled(true);
             profilePic.setEnabled(true);
+            resetPassword.setVisibility(View.VISIBLE);
             // phoneNumber.setEnabled(true);
             menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_check_24px))
                     .setTitle("Save changes");

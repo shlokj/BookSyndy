@@ -19,14 +19,13 @@ import com.google.android.material.snackbar.Snackbar;
 public class SignInActivity extends AppCompatActivity {
     String userPhoneNumber;
     private static final int INTERNET_PERMISSION_CODE = 101;
-    private boolean closeApp;
+    private boolean newUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
-        closeApp=getIntent().getBooleanExtra("CLOSE_APP",false);
 
 /*        if (closeApp) {
             finishAndRemoveTask();
@@ -49,9 +48,16 @@ public class SignInActivity extends AppCompatActivity {
                     builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent takeOTP = new Intent(SignInActivity.this, EnterOTPActivity.class);
-                            takeOTP.putExtra("USER_MOB", userPhoneNumber);
-                            startActivity(takeOTP);
+                            if (newUser) { //TODO: check if the user is new or returning
+                                Intent takeOTP = new Intent(SignInActivity.this, EnterOTPActivity.class);
+                                takeOTP.putExtra("USER_MOB", userPhoneNumber);
+                                startActivity(takeOTP);
+                            }
+                            else {
+                                Intent login = new Intent(SignInActivity.this, AuthActivity.class);
+                                login.putExtra("USER_MOB", userPhoneNumber);
+                                startActivity(login);
+                            }
                         }
                     });
                     builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
