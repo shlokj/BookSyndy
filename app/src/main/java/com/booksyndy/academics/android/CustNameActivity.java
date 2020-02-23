@@ -27,7 +27,7 @@ public class CustNameActivity extends AppCompatActivity {
 
     private boolean isParent, isValidUsername, isAvailableUsername=true, isValidPassword, passwordsMatch;
     private EditText firstNameField, lastNameField, userIdField, passwordField, confirmPasswordField;
-    String firstName, lastName, username, password, cPassword;
+    private String firstName, lastName, username, password, cPassword;
 
     private static String TAG = "CUSTNAMEACTIVITY";
     private FirebaseFirestore mFireStore;
@@ -144,7 +144,7 @@ public class CustNameActivity extends AppCompatActivity {
                 if(e != null){
                     Log.e(TAG, "onEvent: usernames fetch error",e );
                 }
-                if(!queryDocumentSnapshots.isEmpty()){
+                if(queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()){
                     for (User user:queryDocumentSnapshots.toObjects(User.class)){
                         userNamesList.add(user.getUserId());
                     }
