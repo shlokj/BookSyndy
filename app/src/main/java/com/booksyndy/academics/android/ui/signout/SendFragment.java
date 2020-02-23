@@ -16,6 +16,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.booksyndy.academics.android.R;
+import com.booksyndy.academics.android.SignIn2Activity;
 import com.booksyndy.academics.android.SignInActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -73,7 +74,7 @@ public class SendFragment extends Fragment {
     }
     public void signOut(){
 
-        Intent signout = new Intent(getActivity(), SignInActivity.class);
+        Intent signout = new Intent(getActivity(), SignIn2Activity.class);
         signout.putExtra("CLOSE_APP",true);
         signout.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         FirebaseAuth.getInstance().signOut();

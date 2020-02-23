@@ -23,11 +23,13 @@
         android:roundIcon="@drawable/ic_booksyndy_circle_transparent"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ResetPasswordActivity"
-            android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".SignIn2Activity"></activity>
+        <activity
+            android:name=".ResetPasswordActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".AuthActivity"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".RequestDetailsActivity"
             android:screenOrientation="portrait" />

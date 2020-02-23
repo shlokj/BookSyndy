@@ -7,15 +7,15 @@
     tools:context=".SignInActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/phoneNumberQ"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:gravity="center|start"
         android:layout_margin="16dp"
         android:fontFamily="@font/roboto_light"
-        android:text="Welcome to the Book Syndicate!\n\nEnter your mobile number to log in or sign up."
+        android:text="Thanks for signing up!\n\nWe need your phone number for authenticity purposes. We promise not to spam or share it with anyone.\n\nPlease enter your phone number below."
         android:textColor="#242424"
-        android:textSize="26sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,7 +61,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/ic_navigate_next_24px"/>
 

@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
             }
         } else {
             //new user or session expired
-            Intent signInIntent = new Intent(MainActivity.this, SignInActivity.class);
+            Intent signInIntent = new Intent(MainActivity.this, SignIn2Activity.class);
             startActivity(signInIntent);
             finish();
         }

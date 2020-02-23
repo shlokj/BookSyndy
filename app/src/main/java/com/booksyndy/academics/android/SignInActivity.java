@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -20,12 +22,14 @@ public class SignInActivity extends AppCompatActivity {
     String userPhoneNumber;
     private static final int INTERNET_PERMISSION_CODE = 101;
     private boolean newUser;
-
+    private TextView phoneNumberQuestion;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
+        phoneNumberQuestion = findViewById(R.id.phoneNumberQ);
+        phoneNumberQuestion.setMovementMethod(new ScrollingMovementMethod());
 
 /*        if (closeApp) {
             finishAndRemoveTask();
