@@ -127,8 +127,8 @@ public class User {
         this.password=password;
     }
 
-    public String getPassword (String password) {
-        return password;
+    public String getPassword () {
+        return this.password;
     }
 
 }
