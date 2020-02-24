@@ -17,7 +17,6 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.booksyndy.academics.android.R;
 import com.booksyndy.academics.android.SignIn2Activity;
-import com.booksyndy.academics.android.SignInActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class SendFragment extends Fragment {
