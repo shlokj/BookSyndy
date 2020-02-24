@@ -2,7 +2,7 @@ package com.booksyndy.academics.android.Data;
 
 public class User {
 
-    private String firstName,lastName,phone,userId,imageUrl,password;
+    private String firstName,lastName,phone,userId,imageUrl;
     private boolean isParent,toSell,competitiveExam;
     private int gradeNumber,boardNumber,year;
 
@@ -121,14 +121,6 @@ public class User {
 
     public void setCompetitiveExam(boolean competitiveExam) {
         this.competitiveExam = competitiveExam;
-    }
-
-    public void setPassword(String password) {
-        this.password=password;
-    }
-
-    public String getPassword () {
-        return this.password;
     }
 
 }

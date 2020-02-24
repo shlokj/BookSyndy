@@ -25,9 +25,9 @@ import java.util.List;
 
 public class CustNameActivity extends AppCompatActivity {
 
-    private boolean isParent, isValidUsername, isAvailableUsername=true, isValidPassword, passwordsMatch;
-    private EditText firstNameField, lastNameField, userIdField, passwordField, confirmPasswordField;
-    private String firstName, lastName, username, password, cPassword;
+    private boolean isParent, isValidUsername, isAvailableUsername=true;
+    private EditText firstNameField, lastNameField, userIdField;
+    private String firstName, lastName, username;
 
     private static String TAG = "CUSTNAMEACTIVITY";
     private FirebaseFirestore mFireStore;
@@ -44,8 +44,6 @@ public class CustNameActivity extends AppCompatActivity {
         userIdField = (EditText) findViewById(R.id.usernameField);
         firstNameField = (EditText) findViewById(R.id.firstName);
         lastNameField = (EditText) findViewById(R.id.lastName);
-        passwordField = findViewById(R.id.passwordField);
-        confirmPasswordField = findViewById(R.id.confirmPasswordField);
 //        userIdField.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD|InputType.TYPE_TEXT_VARIATION_PERSON_NAME|InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
 
         firstNameField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -64,15 +62,6 @@ public class CustNameActivity extends AppCompatActivity {
                 return false;
             }
         });
-        passwordField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
-                    passwordField.requestFocus();
-                }
-                return false;
-            }
-        });
 
         FloatingActionButton next = (FloatingActionButton) findViewById(R.id.fab4);
         userNamesList = new ArrayList<>();
@@ -83,9 +72,6 @@ public class CustNameActivity extends AppCompatActivity {
                 firstName = firstNameField.getText().toString().trim();
                 lastName = lastNameField.getText().toString().trim();
                 username = userIdField.getText().toString().trim().toLowerCase();
-                password = passwordField.getText().toString();
-                cPassword = confirmPasswordField.getText().toString();
-                passwordsMatch = password.equals(cPassword);
                 // todo: last char can't be a dot.
                 isValidUsername = false;
                 isValidUsername = (username != null) && username.matches("[A-Za-z0-9_.]+");
@@ -93,6 +79,7 @@ public class CustNameActivity extends AppCompatActivity {
                 if (firstName.length()==0 || lastName.length()==0) {
                     showSnackbar("Please fill in both name fields");
                 }
+
                 else if (!(isValidUsername && isAvailableUsername)) {
 //                    userIdField.getBackground().setColorFilter("#EE0000", PorterDuff.Mode.SRC_IN);
                     if (!isValidUsername) {
@@ -101,9 +88,12 @@ public class CustNameActivity extends AppCompatActivity {
                     else if (!isAvailableUsername) {
                         showSnackbar("This username is taken. Please try another.");
                     }
-
                 }
-                else if(!passwordsMatch) {
+
+                else if (username.length()<4) {
+                    showSnackbar("This username is too short.");
+                }
+/*                else if(!passwordsMatch) {
                     showSnackbar("The entered passwords don't match.");
                 }
                 else if (password.length()==0) {
@@ -111,14 +101,13 @@ public class CustNameActivity extends AppCompatActivity {
                 }
                 else if (password.length()<6) {
                     showSnackbar("Your password must be at least 6 characters long.");
-                }
+                }*/
                 else {
                     Intent getGrade = new Intent(CustNameActivity.this, GetGradeActivity.class);
                     getGrade.putExtra("IS_PARENT", isParent);
                     getGrade.putExtra("FIRST_NAME",firstName);
                     getGrade.putExtra("LAST_NAME",lastName);
                     getGrade.putExtra("USERNAME",username);
-                    getGrade.putExtra("PASSWORD",password);
                     startActivity(getGrade);
                 }
             }

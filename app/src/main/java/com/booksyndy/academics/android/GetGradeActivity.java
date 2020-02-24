@@ -15,7 +15,7 @@ public class GetGradeActivity extends AppCompatActivity {
     boolean isParent;
     TextView gradeQuestion;
     RadioGroup grades;
-    String firstName, lastName, username, password;
+    String firstName, lastName, username;
     int grade;
     int gradeNumber;
 //     Grade numbers:
@@ -38,7 +38,7 @@ public class GetGradeActivity extends AppCompatActivity {
         firstName = getIntent().getStringExtra("FIRST_NAME");
         lastName = getIntent().getStringExtra("LAST_NAME");
         username = getIntent().getStringExtra("USERNAME");
-        password = getIntent().getStringExtra("PASSWORD");
+//        password = getIntent().getStringExtra("PASSWORD");
         gradeQuestion = (TextView) findViewById(R.id.gradeQuestionTV);
         if (isParent) {
             gradeQuestion.setText(R.string.parent_grade_q);
@@ -49,7 +49,7 @@ public class GetGradeActivity extends AppCompatActivity {
         getBoard.putExtra("FIRST_NAME",firstName);
         getBoard.putExtra("LAST_NAME",lastName);
         getBoard.putExtra("USERNAME",username);
-        getBoard.putExtra("PASSWORD",password);
+//        getBoard.putExtra("PASSWORD",password);
         FloatingActionButton next = (FloatingActionButton) findViewById(R.id.fab5);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +93,7 @@ public class GetGradeActivity extends AppCompatActivity {
                     getDegree.putExtra("LAST_NAME",lastName);
                     getDegree.putExtra("GRADE_NUMBER",gradeNumber);
                     getDegree.putExtra("USERNAME",username);
-                    getDegree.putExtra("PASSWORD",password);
+//                    getDegree.putExtra("PASSWORD",password);
                     startActivity(getDegree);
                     tmp = false;
                 }

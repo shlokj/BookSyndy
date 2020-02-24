@@ -28,7 +28,7 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
     boolean isParent, toSell, competitiveExam;
     TextView reasonsQuestion;
     RadioGroup reasons;
-    String firstName, lastName, username, phoneNumber, password;
+    String firstName, lastName, username, phoneNumber;
     int gradeNumber, reason, boardNumber, yearNumber;
     Intent startMainActivity;
     User curFirebaseUser;
@@ -97,15 +97,12 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
             boardNumber = getIntent().getIntExtra("DEGREE_NUMBER", boardNumber);
             yearNumber = getIntent().getIntExtra("YEAR_NUMBER", 0);
             username = getIntent().getStringExtra("USERNAME");
-            password = getIntent().getStringExtra("PASSWORD");
             if (gradeNumber<3 || gradeNumber>6) {
                 competitiveExam=false;
             }
             phoneNumber = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
             curFirebaseUser = new User(firstName, lastName, phoneNumber, isParent, gradeNumber, boardNumber,competitiveExam, username, default_pic_url);
             curFirebaseUser.setYear(yearNumber);
-            curFirebaseUser.setPassword(password);
-            //TODO: password to firebase
             db = FirebaseFirestore.getInstance();
 
             // Add a new document with a generated ID
