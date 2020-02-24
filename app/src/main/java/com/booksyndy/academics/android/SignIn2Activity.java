@@ -5,15 +5,14 @@ import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,7 +39,7 @@ public class SignIn2Activity extends AppCompatActivity {
 
         welcomeTV.setMovementMethod(new ScrollingMovementMethod());
 
-        SignInButton signInButton = findViewById(R.id.signInButton);
+        Button signInButton = findViewById(R.id.signInButton);
 
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +92,7 @@ public class SignIn2Activity extends AppCompatActivity {
                 // ...
 
                 Log.d(TAG, "onActivityResult: Error Signing in");
-                Toast.makeText(getApplicationContext(), "Error Signing In", Toast.LENGTH_LONG).show();
+//                Toast.makeText(getApplicationContext(), "Error Signing In", Toast.LENGTH_LONG).show();
 
             }
         }

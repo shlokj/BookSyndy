@@ -15,7 +15,7 @@
         android:layout_marginTop="16dp"
         android:fontFamily="@font/roboto_light"
         android:gravity="center|start"
-        android:text="Welcome to the Book Syndicate, a library of all things academic!\n\nSigning up should take no more than 2 minutes."
+        android:text="Welcome to the Book Syndicate, a library of all things academic!"
         android:textColor="#242424"
         android:textSize="24sp"
         android:scrollbars="vertical"
@@ -24,11 +24,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.gms.common.SignInButton
+    <Button
         android:id="@+id/signInButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+        android:background="@drawable/signinbuttongradient"
+        android:text="LOG IN / SIGN UP"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
