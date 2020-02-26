@@ -22,6 +22,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,6 +41,7 @@ import com.booksyndy.academics.android.util.Filters;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -87,6 +90,8 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     private List<Book> filteredList;
     private TextView nothingHereTV;
     private SearchView searchView;
+    private NavController navController;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -186,6 +191,8 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 
         // TODO: save filters and don't set them to default every time
         setDefaultFilters();
+
+        navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
 
         return root;
     }
@@ -400,7 +407,9 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         }
 
         else if (id == R.id.open_chats) {
-            // TODO: navigate to the chats fragment
+
+            navController.navigate(R.id.nav_chats);
+            // navigate to the chats fragment
         }
         return true;
     }

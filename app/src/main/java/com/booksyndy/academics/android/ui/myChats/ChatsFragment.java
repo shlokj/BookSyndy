@@ -232,6 +232,7 @@ public class ChatsFragment extends Fragment implements EventListener<QuerySnapsh
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.home, menu);
         menu.findItem(R.id.filter).setVisible(false);
+        menu.findItem(R.id.open_chats).setVisible(false);
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) searchItem.getActionView();
