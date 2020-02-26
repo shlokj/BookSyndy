@@ -598,7 +598,8 @@ public class UserProfileActivity extends AppCompatActivity {
             preferGuidedMode.setEnabled(true);
             profilePic.setEnabled(true);
             // phoneNumber.setEnabled(true);
-            menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_check_24px))
+//            menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_check_24px)).setTitle("Save changes");
+            menu.findItem(R.id.edit_profile).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_check_24px))
                     .setTitle("Save changes");
             editing = true;
 
@@ -649,7 +650,9 @@ public class UserProfileActivity extends AppCompatActivity {
                     } else {
                         board = boardSpinner.getSelectedItemPosition() + 1;
                     }
-                    menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_edit_24px))
+//                    menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_edit_24px))
+//                            .setTitle("Edit profile");
+                    menu.findItem(R.id.edit_profile).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_edit_24px))
                             .setTitle("Edit profile");
                     fName.setEnabled(false);
                     lName.setEnabled(false);

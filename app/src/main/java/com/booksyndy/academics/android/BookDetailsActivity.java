@@ -414,7 +414,8 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                     menu.add(0, MENU_DELETE, Menu.NONE, "Mark as unsold").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
                 }
                 menu.add(1, MENU_SHARE, Menu.NONE, "Share").setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-                menu.getItem(1).setIcon(R.drawable.ic_share_white_24px);
+//                menu.getItem(1).setIcon(R.drawable.ic_share_white_24px);
+                menu.findItem(R.id.share).setIcon(R.drawable.ic_share_white_24px);
             }
         }
         return super.onPrepareOptionsMenu(menu);

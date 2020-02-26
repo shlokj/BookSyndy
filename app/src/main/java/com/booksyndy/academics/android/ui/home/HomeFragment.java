@@ -80,7 +80,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private View parentLayout;
     private SharedPreferences userPref;
-    private MenuItem filterItem;
+    private MenuItem filterItem, chatItem;
     private double userLat,userLng;
     private int userGrade;
     private SimpleDateFormat dateFormat;
@@ -277,6 +277,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         inflater.inflate(R.menu.home, menu);
         final MenuItem searchItem = menu.findItem(R.id.action_search);
         filterItem = menu.findItem(R.id.filter);
+        chatItem = menu.findItem(R.id.open_chats);
         searchView = (SearchView)searchItem.getActionView();
         searchView.setQueryHint("Search");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -397,7 +398,11 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         else if (id == R.id.action_search) {
             filterItem.setVisible(false);
         }
-        return super.onOptionsItemSelected(item);
+
+        else if (id == R.id.open_chats) {
+            // TODO: navigate to the chats fragment
+        }
+        return true;
     }
     public void onFilterClicked() {
         // Show the dialog containing filter options
