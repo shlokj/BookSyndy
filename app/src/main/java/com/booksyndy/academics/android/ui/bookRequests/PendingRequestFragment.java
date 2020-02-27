@@ -243,6 +243,7 @@ public class PendingRequestFragment extends Fragment implements View.OnClickList
         inflater.inflate(R.menu.home, menu);
         final MenuItem searchItem = menu.findItem(R.id.action_search);
         filterItem = menu.findItem(R.id.filter);
+//        menu.findItem(R.id.open_chats).setVisible(false);
 
 
         filterItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {

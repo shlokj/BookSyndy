@@ -720,7 +720,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             ClipData clip = ClipData.newPlainText("message", message.getMessage());
             if (clipboard != null) {
                 clipboard.setPrimaryClip(clip);
-                Toast.makeText(getApplicationContext(), "copied to clip board", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Message copied!", Toast.LENGTH_SHORT).show();
             }
         }
 

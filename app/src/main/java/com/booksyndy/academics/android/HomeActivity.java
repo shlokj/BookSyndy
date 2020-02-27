@@ -456,7 +456,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 sequence.addSequenceItem(findViewById(R.id.fab_home),
                         "Get started by posting a listing", "GOT IT");
 
-                sequence.addSequenceItem(toolbar.getChildAt(2),"Or, search for material you need","GOT IT");
+                sequence.addSequenceItem(toolbar.getChildAt(2),"Or, search for material you need and chat with other users.","GOT IT");
                 sequence.start();
             }
         }

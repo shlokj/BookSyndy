@@ -41,7 +41,6 @@ import com.booksyndy.academics.android.util.Filters;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -83,7 +82,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private View parentLayout;
     private SharedPreferences userPref;
-    private MenuItem filterItem, chatItem;
+    private MenuItem filterItem;
     private double userLat,userLng;
     private int userGrade;
     private SimpleDateFormat dateFormat;
@@ -91,6 +90,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     private TextView nothingHereTV;
     private SearchView searchView;
     private NavController navController;
+    private final int MENU_CHAT = 789;
 
 
     @Override
@@ -122,6 +122,9 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         preferGuidedMode = userPref.getBoolean(getString(R.string.preferGuidedMode),false);
         userLat = userPref.getFloat(getString(R.string.p_lat),0.0f);
         userLng = userPref.getFloat(getString(R.string.p_lng),0.0f);
+
+        navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+
 
         FloatingActionButton fab = root.findViewById(R.id.fab_home);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -191,8 +194,6 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 
         // TODO: save filters and don't set them to default every time
         setDefaultFilters();
-
-        navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
 
         return root;
     }
@@ -283,8 +284,11 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.home, menu);
         final MenuItem searchItem = menu.findItem(R.id.action_search);
+
+        menu.add(0, MENU_CHAT, Menu.FIRST, "Chats").setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        menu.getItem(0).setIcon(R.drawable.ic_chat_white_24px);
+
         filterItem = menu.findItem(R.id.filter);
-        chatItem = menu.findItem(R.id.open_chats);
         searchView = (SearchView)searchItem.getActionView();
         searchView.setQueryHint("Search");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -405,13 +409,10 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         else if (id == R.id.action_search) {
             filterItem.setVisible(false);
         }
-
-        else if (id == R.id.open_chats) {
-
+        else if (id == MENU_CHAT) {
             navController.navigate(R.id.nav_chats);
-            // navigate to the chats fragment
         }
-        return true;
+        return super.onOptionsItemSelected(item);
     }
     public void onFilterClicked() {
         // Show the dialog containing filter options
