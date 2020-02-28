@@ -1,12 +1,17 @@
 package com.booksyndy.academics.android;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,24 +32,31 @@ import java.util.List;
 public class SignIn2Activity extends AppCompatActivity {
 
     private TextView welcomeTV;
+    private Button signInButton;
+    private LinearLayout logo_view;
     private static final int RC_SIGN_IN = 123;
     private static String TAG = "SIGNIN2";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in2);
-
         welcomeTV = findViewById(R.id.welcomeTV);
 
         welcomeTV.setMovementMethod(new ScrollingMovementMethod());
-
-        Button signInButton = findViewById(R.id.signInButton);
+        logo_view = findViewById(R.id.view_booksyndy);
+        signInButton = findViewById(R.id.signInButton);
 
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // temporary
+                if (!checkConnection(getApplicationContext())) {
+                    Toast.makeText(getApplicationContext(), "No Network Connection", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                showView();
                 createSignInIntent();
             }
         });
@@ -90,7 +102,7 @@ public class SignIn2Activity extends AppCompatActivity {
                 // sign-in flow using the back button. Otherwise check
                 // response.getError().getErrorCode() and handle the error.
                 // ...
-
+                hideView();
                 Log.d(TAG, "onActivityResult: Error Signing in");
 //                Toast.makeText(getApplicationContext(), "Error Signing In", Toast.LENGTH_LONG).show();
 
@@ -121,5 +133,38 @@ public class SignIn2Activity extends AppCompatActivity {
 
     }
     //[ END save TOKEN]
+
+
+    public static boolean checkConnection(Context context) {
+        final ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (connMgr != null) {
+            NetworkInfo activeNetworkInfo = connMgr.getActiveNetworkInfo();
+
+            if (activeNetworkInfo != null) { // connected to the internet
+                // connected to the mobile provider's data plan
+                if (activeNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+                    // connected to wifi
+                    return true;
+                } else return activeNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE;
+            }
+        }
+        return false;
+    }
+
+
+    private void showView() {
+        signInButton.setVisibility(View.GONE);
+        welcomeTV.setVisibility(View.GONE);
+        logo_view.setVisibility(View.VISIBLE);
+
+    }
+
+    private void hideView() {
+        signInButton.setVisibility(View.VISIBLE);
+        welcomeTV.setVisibility(View.VISIBLE);
+        logo_view.setVisibility(View.GONE);
+
+    }
 
 }
