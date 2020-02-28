@@ -36,6 +36,7 @@ import com.booksyndy.academics.android.Data.Book;
 import com.booksyndy.academics.android.Data.OnFilterSelectionListener;
 import com.booksyndy.academics.android.Data.User;
 import com.booksyndy.academics.android.GetBookPictureActivity;
+import com.booksyndy.academics.android.HomeActivity;
 import com.booksyndy.academics.android.R;
 import com.booksyndy.academics.android.util.Filters;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -550,7 +551,12 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                 noFilter = false;
             }
             else {
-                showSnackbar("Error Fetching User Location");
+                HomeActivity homeActivity = (HomeActivity) getActivity();
+                if (homeActivity != null) {
+                    homeActivity.startLocationUpdates();
+                    //showSnackbar("Please Enable GPS");
+                }
+
                 filters.setBookDistance(-1);
             }
         }

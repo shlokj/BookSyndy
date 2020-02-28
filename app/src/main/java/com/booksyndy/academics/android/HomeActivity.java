@@ -245,7 +245,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     /* location classes */
 
     @SuppressWarnings("MissingPermission")
-    private void startLocationUpdates() {
+    public void startLocationUpdates() {
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -269,9 +269,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             Log.d("add_location", "Error trying to get last GPS location");
-                            Toast.makeText(HomeActivity.this,
-                                    "Error trying to get last GPS location",
-                                    Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(HomeActivity.this,
+//                                    "Error trying to get last GPS location",
+//                                    Toast.LENGTH_SHORT).show();
                             e.printStackTrace();
                         }
                     });
@@ -281,7 +281,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @SuppressWarnings("MissingPermission")
-    private void getAddress() {
+    public void getAddress() {
 
         if (!Geocoder.isPresent()) {
 //            Toast.makeText(HomeActivity.this,
