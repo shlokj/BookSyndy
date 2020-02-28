@@ -588,7 +588,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         bookMarkRef.document(curAppUser).collection("books").document(bookid).set(currentBook).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                showSnackbar("Bookmarked!");
+//                showSnackbar("Bookmarked!");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

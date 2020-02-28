@@ -53,7 +53,7 @@ public class SignIn2Activity extends AppCompatActivity {
             public void onClick(View v) {
                 // temporary
                 if (!checkConnection(getApplicationContext())) {
-                    Toast.makeText(getApplicationContext(), "No Network Connection", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "No internet connection", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 showView();
@@ -157,6 +157,7 @@ public class SignIn2Activity extends AppCompatActivity {
         signInButton.setVisibility(View.GONE);
         welcomeTV.setVisibility(View.GONE);
         logo_view.setVisibility(View.VISIBLE);
+        getSupportActionBar().hide();
 
     }
 
@@ -164,7 +165,7 @@ public class SignIn2Activity extends AppCompatActivity {
         signInButton.setVisibility(View.VISIBLE);
         welcomeTV.setVisibility(View.VISIBLE);
         logo_view.setVisibility(View.GONE);
-
+        getSupportActionBar().show();
     }
 
 }

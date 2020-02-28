@@ -216,7 +216,7 @@ public class RequestBookActivity extends AppCompatActivity {
                 isCompetitive = competitiveExam.isChecked();
 
                 if (bookTitle.length()<10) {
-                    showSnackbar("Please enter at least 10 characters for your book's name");
+                    showSnackbar("Please enter at least 10 characters for the name");
                 }
                 else if (bookDesc.length()<10) {
                     showSnackbar("Please enter at least 10 characters for the description");

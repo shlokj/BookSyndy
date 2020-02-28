@@ -187,5 +187,6 @@
     <string name="last_name">Last Name</string>
     <string name="reset">Reset</string>
     <string name="chats">Chats</string>
+    <string name="phone_number">Phone number</string>
 
 </resources>

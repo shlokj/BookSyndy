@@ -530,7 +530,7 @@ public class CreateListingActivity extends AppCompatActivity {
                         selectedImageUri = FileProvider.getUriForFile(CreateListingActivity.this, BuildConfig.APPLICATION_ID + ".provider", f);
                         CropImage(selectedImageUri);
                     } catch (Exception e) {
-                        showSnackbar("File Error: Try Again");
+                        showSnackbar("File error: please try again");
                     }
 
                 }
