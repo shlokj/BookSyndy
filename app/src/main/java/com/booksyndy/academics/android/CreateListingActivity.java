@@ -525,9 +525,13 @@ public class CreateListingActivity extends AppCompatActivity {
         switch (requestCode) {
             case 0:// camera intent
                 if (resultCode == RESULT_OK ) {
-                    File f = new File(imageFilePath);
-                    selectedImageUri = FileProvider.getUriForFile(CreateListingActivity.this, BuildConfig.APPLICATION_ID + ".provider",f);
-                    CropImage(selectedImageUri);
+                    try {
+                        File f = new File(imageFilePath);
+                        selectedImageUri = FileProvider.getUriForFile(CreateListingActivity.this, BuildConfig.APPLICATION_ID + ".provider", f);
+                        CropImage(selectedImageUri);
+                    } catch (Exception e) {
+                        showSnackbar("File Error: Try Again");
+                    }
 
                 }
                 break;
