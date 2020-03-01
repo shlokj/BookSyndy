@@ -213,7 +213,11 @@ public class RequestBookActivity extends AppCompatActivity {
                 }
 
                 String bys;
-                isCompetitive = competitiveExam.isChecked();
+
+                if (competitiveExam.isChecked()) {
+                    gradeNumber = 0;
+                    boardNumber = 20;
+                }
 
                 if (bookTitle.length()<10) {
                     showSnackbar("Please enter at least 10 characters for the name");

@@ -64,6 +64,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -92,8 +93,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private NavController navController;
     private Toolbar toolbar;
     private ImageButton nav_btn_share;
-
-    //TODO: use showcase view to showcase fab and button to open navigation drawer
+    private int dismissCount=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -433,16 +433,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         if (navigationView.getCheckedItem() != null && navigationView.getCheckedItem().getItemId() == R.id.nav_home) {
             if (toolbar != null && toolbar.getChildCount() > 1) {
                 final View view = toolbar.getChildAt(1);
-                /*
-                new MaterialShowcaseView.Builder(this)
-                        .setTarget(view)
-                        .setDismissText("GOT IT")
-                        .setContentText("This is some amazing feature you should know about")
-                        .setDelay(1000) // optional but starting animations immediately in onCreate can make them choppy
-                        .singleUse("100") // provide a unique ID used to ensure it is only shown once
-                        .show();
 
-*/
                 ShowcaseConfig config = new ShowcaseConfig();
                 config.setDelay(200); // half second between each showcase view
 
@@ -453,11 +444,30 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 sequence.addSequenceItem(view,
                         "Here's the menu", "GOT IT");
 
-                sequence.addSequenceItem(findViewById(R.id.fab_home),
-                        "Get started by posting a listing", "GOT IT");
+                sequence.addSequenceItem(toolbar.getChildAt(2),"Search for material you need and chat with other users here.","GOT IT");
 
-                sequence.addSequenceItem(toolbar.getChildAt(2),"Or, search for material you need and chat with other users.","GOT IT");
                 sequence.start();
+
+                final Activity temp = this;
+
+                sequence.setOnItemDismissedListener(new MaterialShowcaseSequence.OnSequenceItemDismissedListener() {
+                    @Override
+                    public void onDismiss(MaterialShowcaseView itemView, int position) {
+                        dismissCount = dismissCount + 1;
+                        if (dismissCount>=2) {
+                            new MaterialShowcaseView.Builder(temp)
+                                    .setTarget(findViewById(R.id.fab_home))
+                                    .setDismissText("DO LATER")
+                                    .setContentText("Get started by posting a listing!")
+                                    .setDismissOnTargetTouch(true)
+                                    .setDelay(200) // optional but starting animations immediately in onCreate can make them choppy
+                                    .singleUse("100011") // provide a unique ID used to ensure it is only shown once
+                                    .show();
+                        }
+                    }
+                });
+
+
             }
         }
 
