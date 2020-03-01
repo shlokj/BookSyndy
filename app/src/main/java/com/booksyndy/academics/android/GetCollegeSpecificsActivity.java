@@ -21,6 +21,7 @@ public class GetCollegeSpecificsActivity extends AppCompatActivity {
     int gradeNumber, degree, degreeNumber, yearNumber; // degree number is same as board number
     Intent getFinalAnswer;
     EditText yearField;
+    private int userType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +35,8 @@ public class GetCollegeSpecificsActivity extends AppCompatActivity {
         lastName = getIntent().getStringExtra("LAST_NAME");
         gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
         username = getIntent().getStringExtra("USERNAME");
+        userType = getIntent().getIntExtra("USER_TYPE",1);
+
 //        password = getIntent().getStringExtra("PASSWORD");
         degreeQuestion = (TextView) findViewById(R.id.degreeQuestionTV);
         degrees = (RadioGroup) findViewById(R.id.degreesButtonList);
@@ -44,7 +47,12 @@ public class GetCollegeSpecificsActivity extends AppCompatActivity {
         getFinalAnswer.putExtra("LAST_NAME",lastName);
         getFinalAnswer.putExtra("GRADE_NUMBER",gradeNumber);
         getFinalAnswer.putExtra("USERNAME",username);
+        getFinalAnswer.putExtra("USER_TYPE",userType);
 //        getFinalAnswer.putExtra("PASSWORD",password);
+
+        if (userType==3) {
+            degreeQuestion.setText("Which degree do you teach for?");
+        }
         degrees.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {

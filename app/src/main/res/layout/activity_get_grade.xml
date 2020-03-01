@@ -108,7 +108,7 @@
         app:srcCompat="@drawable/ic_navigate_next_24px"/>
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/settingGradeInstructions"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/grade_choosing_instructions"

@@ -47,7 +47,7 @@
     </string-array>
 
     <string-array name="sorts">
-        <item>Relevance</item>
+        <item>Name (Z-A)</item>
         <item>Date listed</item>
         <item>Distance</item>
     </string-array>

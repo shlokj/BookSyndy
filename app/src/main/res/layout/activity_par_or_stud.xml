@@ -49,6 +49,35 @@
             android:textSize="22sp"
             android:fontFamily="@font/roboto_light"/>
 
+        <RadioButton
+            android:id="@+id/teacherOption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_weight="1"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="@string/teacher"
+            android:textSize="22sp"
+            android:fontFamily="@font/roboto_light"/>
+
+
+        <RadioButton
+            android:id="@+id/vendorOption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_weight="1"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="@string/vendor"
+            android:textSize="22sp"
+            android:fontFamily="@font/roboto_light"/>
+
     </RadioGroup>
 
     <TextView

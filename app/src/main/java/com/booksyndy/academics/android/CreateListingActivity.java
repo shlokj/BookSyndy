@@ -80,7 +80,7 @@ public class CreateListingActivity extends AppCompatActivity {
     private double book_lat,book_lng;
     private boolean isTextbook, forCompExam, detailsChanged = false;
     private String curUserId, bookName, bookDescription, phoneNumber, userId, bookAddress, bookImageUrl, selectedImage,book_photo_url;
-    private int gradeNumber, boardNumber, year;
+    private int gradeNumber, boardNumber, year, userType;
     private int bookPrice;
     private FirebaseAuth mAuth;
     private FirebaseFirestore mFireStore;
@@ -121,6 +121,8 @@ public class CreateListingActivity extends AppCompatActivity {
         userPref = this.getSharedPreferences(getString(R.string.UserPref),0);
 
         year = getIntent().getIntExtra("YEAR_NUMBER",0);
+        userType = getIntent().getIntExtra("USER_TYPE",1);
+        phoneNumber  = getIntent().getStringExtra("PHONE_NUMBER");
 
         if (year!=0) {
             yearField.setText(year+"");
@@ -406,6 +408,14 @@ public class CreateListingActivity extends AppCompatActivity {
                 book.setBookPhoto(book_photo_url);
             }
 
+            if (userType==4) {
+                // if the user is a vendor, update his grade and board numbers based on the last book he listed
+                DocumentReference userReference = mFireStore.collection("users").document(phoneNumber);
+                userReference.update("gradeNumber", gradeNumber, "boardNumber", boardNumber, "year", year);
+
+            }
+
+
             CollectionReference books = mFireStore.collection("books");
             books.add(book).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                 @Override
@@ -422,6 +432,8 @@ public class CreateListingActivity extends AppCompatActivity {
                             homeIntent.putExtra("SNACKBAR_MSG", "Your material has been listed! You can find it in the \'Your listings\' section of the app.");
                         }
                         homeIntent.putExtra("SB_LONG",true);
+                        homeIntent.putExtra("GRADE_NUMBER",gradeNumber);
+                        homeIntent.putExtra("BOARD_NUMBER",boardNumber);
                         startActivity(homeIntent);
                     }
                     else{

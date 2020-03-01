@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,6 +16,12 @@ public class ParOrStudActivity extends AppCompatActivity {
     boolean isParent = false;
     int studOrPar;
     RadioGroup studOrParButtons;
+    private int type;
+
+//    Student: 1
+//    Parent: 2
+//    Teacher: 3
+//    Vendor: 4
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +35,7 @@ public class ParOrStudActivity extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent getName = new Intent(ParOrStudActivity.this, CustNameActivity.class);
                 studOrPar = studOrParButtons.getCheckedRadioButtonId();
                 if (studOrPar==-1) {
                     View parentLayout = findViewById(android.R.id.content);
@@ -43,16 +51,24 @@ public class ParOrStudActivity extends AppCompatActivity {
                 }
                 else if (studOrPar==R.id.studentoption) {
                     isParent=false;
-                    Intent getName = new Intent(ParOrStudActivity.this, CustNameActivity.class);
+                    type = 1;
                     getName.putExtra("IS_PARENT", isParent);
-                    startActivity(getName);
                 }
-                else {
+                else if (studOrPar==R.id.parentoption){
                     isParent=true;
-                    Intent getName = new Intent(ParOrStudActivity.this, CustNameActivity.class);
+                    type = 2;
                     getName.putExtra("IS_PARENT", isParent);
-                    startActivity(getName);
                 }
+                else if (studOrPar==R.id.teacherOption){
+                    type = 3;
+                }
+                else if (studOrPar==R.id.vendorOption){
+                    type = 4;
+                }
+                getName.putExtra("USER_TYPE",type);
+//                Toast.makeText(getApplicationContext(),"Type: "+type,Toast.LENGTH_SHORT).show();
+
+                startActivity(getName);
             }
         });
 

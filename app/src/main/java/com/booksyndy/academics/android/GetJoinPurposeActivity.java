@@ -34,6 +34,7 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
     User curFirebaseUser;
     FirebaseFirestore db;
     private ProgressDialog progressDialog;
+    private int userType;
 
 
     @Override
@@ -97,12 +98,15 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
             boardNumber = getIntent().getIntExtra("DEGREE_NUMBER", boardNumber);
             yearNumber = getIntent().getIntExtra("YEAR_NUMBER", 0);
             username = getIntent().getStringExtra("USERNAME");
+            userType = getIntent().getIntExtra("USER_TYPE",1);
+
             if (gradeNumber<3 || gradeNumber>6) {
                 competitiveExam=false;
             }
             phoneNumber = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
             curFirebaseUser = new User(firstName, lastName, phoneNumber, isParent, gradeNumber, boardNumber,competitiveExam, username, default_pic_url);
             curFirebaseUser.setYear(yearNumber);
+            curFirebaseUser.setUserType(userType);
             db = FirebaseFirestore.getInstance();
 
             // Add a new document with a generated ID

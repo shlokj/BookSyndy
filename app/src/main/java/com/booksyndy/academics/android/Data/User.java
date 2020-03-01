@@ -4,7 +4,7 @@ public class User {
 
     private String firstName,lastName,phone,userId,imageUrl;
     private boolean isParent,toSell,competitiveExam;
-    private int gradeNumber,boardNumber,year;
+    private int userType,gradeNumber,boardNumber,year;
 
     public User() {
 
@@ -121,6 +121,14 @@ public class User {
 
     public void setCompetitiveExam(boolean competitiveExam) {
         this.competitiveExam = competitiveExam;
+    }
+
+    public void setUserType(int type) {
+        this.userType = type;
+    }
+
+    public int getUserType() {
+        return userType;
     }
 
 }

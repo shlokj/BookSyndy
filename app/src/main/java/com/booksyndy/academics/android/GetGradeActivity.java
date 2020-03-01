@@ -13,7 +13,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 public class GetGradeActivity extends AppCompatActivity {
     boolean isParent;
-    TextView gradeQuestion;
+    TextView gradeQuestion, gradeInstructions;
     RadioGroup grades;
     String firstName, lastName, username;
     int grade;
@@ -28,6 +28,8 @@ public class GetGradeActivity extends AppCompatActivity {
 
     boolean tmp=true;
     Intent getBoard;
+    private int userType;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,10 +40,15 @@ public class GetGradeActivity extends AppCompatActivity {
         firstName = getIntent().getStringExtra("FIRST_NAME");
         lastName = getIntent().getStringExtra("LAST_NAME");
         username = getIntent().getStringExtra("USERNAME");
+        userType = getIntent().getIntExtra("USER_TYPE",1);
+
 //        password = getIntent().getStringExtra("PASSWORD");
         gradeQuestion = (TextView) findViewById(R.id.gradeQuestionTV);
-        if (isParent) {
+        if (userType==2) {
             gradeQuestion.setText(R.string.parent_grade_q);
+        }
+        else if (userType==3) {
+            gradeQuestion.setText(R.string.which_grade_teacher);
         }
         grades = (RadioGroup) findViewById(R.id.gradesButtonList);
         getBoard = new Intent(GetGradeActivity.this, GetBoardActivity.class);
@@ -49,7 +56,13 @@ public class GetGradeActivity extends AppCompatActivity {
         getBoard.putExtra("FIRST_NAME",firstName);
         getBoard.putExtra("LAST_NAME",lastName);
         getBoard.putExtra("USERNAME",username);
+        getBoard.putExtra("USER_TYPE",userType);
+
+        gradeInstructions = findViewById(R.id.settingGradeInstructions);
 //        getBoard.putExtra("PASSWORD",password);
+        if (userType!=1) {
+            gradeInstructions.setVisibility(View.INVISIBLE);
+        }
         FloatingActionButton next = (FloatingActionButton) findViewById(R.id.fab5);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +106,7 @@ public class GetGradeActivity extends AppCompatActivity {
                     getDegree.putExtra("LAST_NAME",lastName);
                     getDegree.putExtra("GRADE_NUMBER",gradeNumber);
                     getDegree.putExtra("USERNAME",username);
+                    getDegree.putExtra("USER_TYPE",userType);
 //                    getDegree.putExtra("PASSWORD",password);
                     startActivity(getDegree);
                     tmp = false;

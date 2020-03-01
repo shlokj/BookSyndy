@@ -74,7 +74,7 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
         android:fontFamily="@font/roboto_light"
-        android:text="Create a unique username."
+        android:text="Create a username."
         android:textColor="@color/colorTextBlack"
         android:textSize="24sp"
         app:layout_constraintTop_toBottomOf="@id/nameETLL"/>

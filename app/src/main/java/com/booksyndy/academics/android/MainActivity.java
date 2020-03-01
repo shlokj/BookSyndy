@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
                                     editor.putInt(getString(R.string.p_board), user.getBoardNumber());
                                     editor.putInt(getString(R.string.p_year), user.getYear());
                                     editor.putBoolean(getString(R.string.p_competitive), user.isCompetitiveExam());
+                                    editor.putInt(getString(R.string.p_usertype),user.getUserType());
                                     editor.apply();
 
                                     homeActivity.putExtra("username", user.getFirstName() + " " + user.getLastName());

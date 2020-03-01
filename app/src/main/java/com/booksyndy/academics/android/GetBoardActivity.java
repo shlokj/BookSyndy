@@ -22,6 +22,8 @@ public class GetBoardActivity extends AppCompatActivity {
     int gradeNumber, board, boardNumber;
     Intent getFinalAnswer;
     CheckBox competitiveExam;
+    private int userType;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +35,15 @@ public class GetBoardActivity extends AppCompatActivity {
         lastName = getIntent().getStringExtra("LAST_NAME");
         gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
         username = getIntent().getStringExtra("USERNAME");
+        userType = getIntent().getIntExtra("USER_TYPE",1);
+
 //        password = getIntent().getStringExtra("PASSWORD");
         boardQuestion =  findViewById(R.id.boardQuestionTV);
-        if (isParent) {
+        if (userType==2) {
             boardQuestion.setText("Which board is your child studying under?");
+        }
+        else if (userType==3) {
+            boardQuestion.setText("Which board do you teach for?");
         }
         boards = findViewById(R.id.boardsButtonList);
         getFinalAnswer = new Intent(GetBoardActivity.this, GetJoinPurposeActivity.class);
@@ -45,6 +52,7 @@ public class GetBoardActivity extends AppCompatActivity {
         getFinalAnswer.putExtra("LAST_NAME",lastName);
         getFinalAnswer.putExtra("GRADE_NUMBER",gradeNumber);
         getFinalAnswer.putExtra("USERNAME",username);
+        getFinalAnswer.putExtra("USER_TYPE",userType);
 //        getFinalAnswer.putExtra("PASSWORD",password);
         competitiveExam =  findViewById(R.id.competitiveExam);
         competitiveExam.setTypeface(ResourcesCompat.getFont(getApplicationContext(), R.font.roboto_light));

@@ -2,12 +2,15 @@ package com.booksyndy.academics.android;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.booksyndy.academics.android.Data.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -27,11 +31,15 @@ public class CustNameActivity extends AppCompatActivity {
 
     private boolean isParent, isValidUsername, isAvailableUsername=true;
     private EditText firstNameField, lastNameField, userIdField;
+    private TextInputLayout fnf,lnf,uif;
     private String firstName, lastName, username;
+    private int userType;
+    private TextWatcher pUsername;
 
     private static String TAG = "CUSTNAMEACTIVITY";
     private FirebaseFirestore mFireStore;
     private List<String> userNamesList;
+    private View parentLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +47,50 @@ public class CustNameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cust_name);
         getSupportActionBar().setTitle("Sign up");
 
-        final View parentLayout = findViewById(android.R.id.content);
+        parentLayout = findViewById(android.R.id.content);
         isParent = getIntent().getBooleanExtra("IS_PARENT",false);
+        userType = getIntent().getIntExtra("USER_TYPE",1);
+
         userIdField = (EditText) findViewById(R.id.usernameField);
         firstNameField = (EditText) findViewById(R.id.firstName);
         lastNameField = (EditText) findViewById(R.id.lastName);
+        uif = findViewById(R.id.usernameTIL);
 //        userIdField.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD|InputType.TYPE_TEXT_VARIATION_PERSON_NAME|InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
 
+        pUsername = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                userIdField.setText(firstNameField.getText().toString().toLowerCase()+lastNameField.getText().toString().toLowerCase());
+                userIdField.setError(null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        };
+
+        userIdField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                userIdField.setError(null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         firstNameField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
@@ -63,12 +108,17 @@ public class CustNameActivity extends AppCompatActivity {
             }
         });
 
+        firstNameField.addTextChangedListener(pUsername);
+        lastNameField.addTextChangedListener(pUsername);
+
         FloatingActionButton next = (FloatingActionButton) findViewById(R.id.fab4);
         userNamesList = new ArrayList<>();
         initFireStore();
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                Toast.makeText(getApplicationContext(),"Type: "+userType,Toast.LENGTH_SHORT).show();
+
                 firstName = firstNameField.getText().toString().trim();
                 lastName = lastNameField.getText().toString().trim();
                 username = userIdField.getText().toString().trim().toLowerCase();
@@ -83,15 +133,18 @@ public class CustNameActivity extends AppCompatActivity {
                 else if (!(isValidUsername && isAvailableUsername)) {
 //                    userIdField.getBackground().setColorFilter("#EE0000", PorterDuff.Mode.SRC_IN);
                     if (!isValidUsername) {
-                        showSnackbar("The username you entered is not valid.");
+                        uif.setError("The username you entered is not valid.");
+//                        showSnackbar("The username you entered is not valid.");
                     }
                     else if (!isAvailableUsername) {
-                        showSnackbar("This username is taken. Please try another.");
+                        uif.setError("This username is taken. Please try another.");
+//                        showSnackbar("This username is taken. Please try another.");
                     }
                 }
 
                 else if (username.length()<4) {
-                    showSnackbar("This username is too short.");
+                    uif.setError("This username is too short.");
+//                    showSnackbar("This username is too short.");
                 }
 /*                else if(!passwordsMatch) {
                     showSnackbar("The entered passwords don't match.");
@@ -103,12 +156,28 @@ public class CustNameActivity extends AppCompatActivity {
                     showSnackbar("Your password must be at least 6 characters long.");
                 }*/
                 else {
-                    Intent getGrade = new Intent(CustNameActivity.this, GetGradeActivity.class);
-                    getGrade.putExtra("IS_PARENT", isParent);
-                    getGrade.putExtra("FIRST_NAME",firstName);
-                    getGrade.putExtra("LAST_NAME",lastName);
-                    getGrade.putExtra("USERNAME",username);
-                    startActivity(getGrade);
+                    if (userType==4) {
+
+                        Intent completeSignUp = new Intent(CustNameActivity.this, GetJoinPurposeActivity.class);
+                        completeSignUp.putExtra("IS_PARENT", isParent);
+                        completeSignUp.putExtra("FIRST_NAME", firstName);
+                        completeSignUp.putExtra("LAST_NAME", lastName);
+                        completeSignUp.putExtra("USERNAME", username);
+                        completeSignUp.putExtra("USER_TYPE", userType);
+                        completeSignUp.putExtra("GRADE_NUMBER",4);
+                        completeSignUp.putExtra("BOARD_NUMBER",1);
+
+                        startActivity(completeSignUp);
+                    }
+                    else {
+                        Intent getGrade = new Intent(CustNameActivity.this, GetGradeActivity.class);
+                        getGrade.putExtra("IS_PARENT", isParent);
+                        getGrade.putExtra("FIRST_NAME", firstName);
+                        getGrade.putExtra("LAST_NAME", lastName);
+                        getGrade.putExtra("USERNAME", username);
+                        getGrade.putExtra("USER_TYPE", userType);
+                        startActivity(getGrade);
+                    }
                 }
             }
         });
@@ -144,7 +213,6 @@ public class CustNameActivity extends AppCompatActivity {
         });
     }
     public void showSnackbar(String message) {
-        View parentLayout = findViewById(android.R.id.content);
         Snackbar.make(parentLayout, message, Snackbar.LENGTH_SHORT)
                 .setAction("OKAY", new View.OnClickListener() {
                     @Override

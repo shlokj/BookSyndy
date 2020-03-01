@@ -77,10 +77,10 @@ public class UserProfileActivity extends AppCompatActivity {
     private FloatingActionButton saveChanges;
     private TextWatcher checkChange;
     private Menu menu;
-    private int gradeNumber, boardNumber, yearNumber;
+    private int gradeNumber, boardNumber, yearNumber, userType;
     private CheckBox compExams, preferGuidedMode;
     private TextView boardLabel;
-    private LinearLayout yearLL;
+    private LinearLayout gradeLL,boardLL,yearLL;
     private boolean detailsChanged = false, tempCE, editing;
     private FirebaseFirestore mFirestore;
     private ArrayAdapter<String> boardAdapter, degreeAdapter, gradeAdapter;
@@ -128,6 +128,8 @@ public class UserProfileActivity extends AppCompatActivity {
 
         boardLabel = findViewById(R.id.boardLabel);
 
+        gradeLL = findViewById(R.id.gradeLL);
+        boardLL = findViewById(R.id.boardLL);
         yearLL = findViewById(R.id.profileYearLL);
 
         saveChanges = findViewById(R.id.fab_save);
@@ -325,6 +327,8 @@ public class UserProfileActivity extends AppCompatActivity {
             firstName = userPref.getString(getString(R.string.p_firstname), "");
             lastName = userPref.getString(getString(R.string.p_lastname), "");
             userId = userPref.getString(getString(R.string.p_userid), "");
+            userType = userPref.getInt(getString(R.string.p_usertype),1);
+
 
             gradeSpinner.setAdapter(gradeAdapter);
             gradeSpinner.setSelection(gradeNumber - 1);
@@ -359,6 +363,13 @@ public class UserProfileActivity extends AppCompatActivity {
                 year.setText(yearNumber + "");
             }
 
+            if (userType==4) {
+                boardLL.setVisibility(View.GONE);
+                gradeLL.setVisibility(View.GONE);
+                compExams.setVisibility(View.GONE);
+                year.setVisibility(View.GONE);
+                getSupportActionBar().setTitle("Profile (vendor)");
+            }
             fName.setText(firstName);
             lName.setText(lastName);
             uName.setText(userId);

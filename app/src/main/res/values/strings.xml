@@ -188,5 +188,10 @@
     <string name="reset">Reset</string>
     <string name="chats">Chats</string>
     <string name="phone_number">Phone number</string>
+    <string name="teacher">Teacher</string>
+    <string name="vendor_b_l">Vendor / bookstore / library</string>
+    <string name="vendor">Vendor</string>
+    <string name="which_grade_teacher">Which grade do you teach? Select one.</string>
+    <string name="p_usertype">USERTYPE</string>
 
 </resources>

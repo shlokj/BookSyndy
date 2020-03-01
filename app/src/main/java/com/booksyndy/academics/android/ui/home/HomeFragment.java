@@ -74,7 +74,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     private Query mQuery;
     private User currentUser;
     private String curUserId;
-    private int gradeNumber, boardNumber, year;
+    private int gradeNumber, boardNumber, year, userType;
     private boolean preferGuidedMode;
     private FilterDialogFragment mFilterDialog;
     private List<Book> bookList;
@@ -142,6 +142,8 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                 startBookPub.putExtra("GRADE_NUMBER", gradeNumber);
                 startBookPub.putExtra("BOARD_NUMBER", boardNumber);
                 startBookPub.putExtra("YEAR_NUMBER", year);
+                startBookPub.putExtra("USER_TYPE",userType);
+                startBookPub.putExtra("PHONE_NUMBER",currentUser.getPhone());
                 startActivity(startBookPub);
             }
         });
@@ -214,6 +216,8 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         if (mAdapter != null) {
             mAdapter.onDataChanged();
         }
+//        gradeNumber = getActivity().getIntent().getIntExtra("GRADE_NUMBER",4);
+//        boardNumber = getActivity().getIntent().getIntExtra("BOARD_NUMBER",1);
     }
 
     @Override
@@ -747,7 +751,9 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                         currentUser = user;
                         gradeNumber=user.getGradeNumber();
                         boardNumber=user.getBoardNumber();
+                        userType=user.getUserType();
                         year=user.getYear();
+
                     }
 
                 }
