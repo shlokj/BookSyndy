@@ -131,6 +131,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                getUserDetails();
                 Intent startBookPub;
                 if (preferGuidedMode) {
                     startBookPub = new Intent(getActivity(), GetBookPictureActivity.class);

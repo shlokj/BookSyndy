@@ -79,7 +79,7 @@ public class CreateListingActivity extends AppCompatActivity {
     private Spinner typeSpinner,gradeSpinner,boardSpinner;
     private double book_lat,book_lng;
     private boolean isTextbook, forCompExam, detailsChanged = false;
-    private String curUserId, bookName, bookDescription, phoneNumber, userId, bookAddress, bookImageUrl, selectedImage,book_photo_url;
+    private String curUserId, bookName, bookDescription, phoneNumber, userId, bookAddress,book_photo_url;
     private int gradeNumber, boardNumber, year, userType;
     private int bookPrice;
     private FirebaseAuth mAuth;
@@ -266,7 +266,9 @@ public class CreateListingActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 if (position<6) {
                     boardDegreeLabel.setText("Board");
-                    boardSpinner.setAdapter(boardAdapter);
+                    if (boardSpinner.getAdapter()!=boardAdapter) {
+                        boardSpinner.setAdapter(boardAdapter);
+                    }
 /*                    for (int i=0; i<10;i++) {
                         boardSpinner.setSelection(boardNumber - 1);
                     }*/
@@ -280,7 +282,9 @@ public class CreateListingActivity extends AppCompatActivity {
                 }
                 else {
                     boardDegreeLabel.setText("Degree / course");
-                    boardSpinner.setAdapter(degreeAdapter);
+                    if (boardSpinner.getAdapter()!=degreeAdapter) {
+                        boardSpinner.setAdapter(degreeAdapter);
+                    }
  //                   boardSpinner.setSelection(boardNumber-7);
                     yearField.setVisibility(View.VISIBLE);
                     competitiveExam.setVisibility(View.GONE);
@@ -411,7 +415,9 @@ public class CreateListingActivity extends AppCompatActivity {
             if (userType==4) {
                 // if the user is a vendor, update his grade and board numbers based on the last book he listed
                 DocumentReference userReference = mFireStore.collection("users").document(phoneNumber);
-                userReference.update("gradeNumber", gradeNumber, "boardNumber", boardNumber, "year", year);
+                if (gradeNumber!=0) {
+                    userReference.update("gradeNumber", gradeNumber, "boardNumber", boardNumber, "year", year);
+                }
 
             }
 
@@ -505,7 +511,6 @@ public class CreateListingActivity extends AppCompatActivity {
         catch (NullPointerException e){
             Log.e(TAG, "initFireBase: getCurrentUser error", e);
         }
-
     }
 
     private void populateUserLocation() {
