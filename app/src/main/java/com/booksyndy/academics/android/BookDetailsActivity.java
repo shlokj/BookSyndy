@@ -23,7 +23,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
 import com.booksyndy.academics.android.Data.Book;
@@ -57,7 +56,7 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 public class BookDetailsActivity extends AppCompatActivity implements View.OnClickListener, EventListener<DocumentSnapshot> {
 
     private String bookid;
-    private boolean isHome, saved, isBookmarks, isUserProfile, sameOwnerAndViewer;
+    private boolean isHome, saved, isBookmarks, isUserProfile;
     private FirebaseFirestore mFirestore;
     private Book currentBook;
     private User bookOwner;
@@ -73,8 +72,6 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     private String curAppUser, shareableLink = "";
     private double latA, lngA;
     private SharedPreferences userPref;
-    private SharedPreferences.Editor editor;
-    private Toolbar toolbar;
 
     private static final String TAG = "BOOK_DETAILS";
 
@@ -347,7 +344,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
             chatIntent.putExtra("visit_image", bookOwner.getImageUrl());
             startActivity(chatIntent);
         } catch (Exception e) {
-            showSnackbar("Please try again");
+            showSnackbar("Couldn't message the user. The account may have been deleted.");
         }
     }
 

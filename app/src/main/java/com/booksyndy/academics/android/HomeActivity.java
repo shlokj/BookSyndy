@@ -94,6 +94,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private Toolbar toolbar;
     private ImageButton nav_btn_share;
     private int dismissCount=0;
+    private View parentLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,7 +131,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         sbLong = getIntent().getBooleanExtra("SB_LONG", false);
         if (snackbarMessage != null) {
             if (snackbarMessage.length() > 0) {
-                View parentLayout = findViewById(android.R.id.content);
+                parentLayout = findViewById(android.R.id.content);
                 int l = 0;
                 if (sbLong) {
                     l = Snackbar.LENGTH_LONG;
@@ -409,22 +410,25 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        final LocationSettingsStates states = LocationSettingsStates.fromIntent(data);
-        switch (requestCode) {
-            case 101:
-                switch (resultCode) {
-                    case Activity.RESULT_OK:
-                        // All required changes were successfully made
-                        //Toast.makeText(HomeActivity.this,states.isLocationPresent()+"",Toast.LENGTH_SHORT).show();
-                        break;
-                    case Activity.RESULT_CANCELED:
-                        // The user was asked to change settings, but chose not to
-                        Toast.makeText(HomeActivity.this, "GPS SERVICE DISABLED", Toast.LENGTH_SHORT).show();
-                        break;
-                    default:
-                        break;
-                }
-                break;
+/*        try {
+            final LocationSettingsStates states = LocationSettingsStates.fromIntent(data);
+        }
+        catch (Exception e) {
+            Snackbar.make(parentLayout, "Ran into an error", Snackbar.LENGTH_SHORT);
+        }*/
+        if (requestCode == 101) {
+            switch (resultCode) {
+                case Activity.RESULT_OK:
+                    // All required changes were successfully made
+                    //Toast.makeText(HomeActivity.this,states.isLocationPresent()+"",Toast.LENGTH_SHORT).show();
+                    break;
+                case Activity.RESULT_CANCELED:
+                    // The user was asked to change settings, but chose not to
+                    Toast.makeText(HomeActivity.this, "GPS SERVICE DISABLED", Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -562,7 +566,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         super.onPause();
         fusedLocationClient.removeLocationUpdates(locationCallback);
     }
-
+/*
     public static boolean checkConnection(Context context) {
         final ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -578,6 +582,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             }
         }
         return false;
-    }
+    }*/
 
 }
