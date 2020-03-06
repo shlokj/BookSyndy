@@ -23,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
 import com.booksyndy.academics.android.Data.Book;
@@ -50,6 +51,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 
 public class BookDetailsActivity extends AppCompatActivity implements View.OnClickListener, EventListener<DocumentSnapshot> {
@@ -72,6 +74,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     private double latA, lngA;
     private SharedPreferences userPref;
     private SharedPreferences.Editor editor;
+    private Toolbar toolbar;
 
     private static final String TAG = "BOOK_DETAILS";
 
@@ -127,6 +130,15 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
+/*        new MaterialShowcaseView.Builder(this)
+                .setTarget(findViewById(R.id.fab_chat))
+                .setDismissText("GOT IT")
+                .setContentText("Tap here to message the seller")
+                .setDismissOnTargetTouch(true)
+                .setDelay(200)
+                .singleUse("10111")
+                .show();*/
+
 
     }
 
@@ -164,6 +176,14 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
             }
             bookUserRef = mFirestore.collection("users").document(currentBook.getUserId());
             view_bookname.setText(currentBook.getBookName());
+            if (currentBook.isBookSold()) {
+                if (currentBook.getBookPrice()==0) {
+                    view_bookname.append(" (given)");
+                }
+                else {
+                    view_bookname.append(" (sold)");
+                }
+            }
             view_description.setText(currentBook.getBookDescription());
             view_address.setText(currentBook.getBookAddress());
             int gradeNumber = currentBook.getGradeNumber();
@@ -377,7 +397,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         if (snapshot != null && snapshot.exists())
             populateBookDetails(snapshot.toObject(Book.class));
         else {
-            Toast.makeText(getApplicationContext(), "Book Not Available", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Book sold or unavailable", Toast.LENGTH_SHORT).show();
             onBackPressed();
         }
     }

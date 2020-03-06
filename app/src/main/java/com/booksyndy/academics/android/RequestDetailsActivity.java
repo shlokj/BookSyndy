@@ -392,7 +392,7 @@ public class RequestDetailsActivity extends AppCompatActivity implements EventLi
         if (snapshot != null && snapshot.exists())
             populateReqDetails(snapshot.toObject(User.class));
         else {
-            Toast.makeText(getApplicationContext(), "Book Not Available", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Book sold or unavailable", Toast.LENGTH_SHORT).show();
             onBackPressed();
         }
     }
