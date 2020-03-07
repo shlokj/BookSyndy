@@ -89,7 +89,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private FirebaseStorage mFirebaseStorage;
     private DocumentReference messageSenderRef;
     private CircleImageView visitor_profile_picture;
-    private String receiver_user_id,visit_user_name,visit_image,message_sender_id,curUserName;
+    private String receiver_user_id,visit_user_name,visit_image,message_sender_id,curUserName,defaultMessage;
     private TextView visitor_name,userLastSeen;
     private ImageView mPhotoPickerButton;
     private EditText mMessageEditText;
@@ -203,6 +203,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         visit_image = getIntent().getStringExtra("visit_image");
         receiver_user_id = getIntent().getStringExtra("visit_user_id");
         visit_user_name = getIntent().getStringExtra("visit_user_name");
+        defaultMessage = getIntent().getStringExtra("default_message");
         Glide.with(getApplicationContext()).load(visit_image).into(visitor_profile_picture);
         visitor_name.setText(visit_user_name);
         message_sender_id = Objects.requireNonNull(mAuth.getCurrentUser()).getPhoneNumber();
@@ -248,6 +249,11 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
         SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm a");
         saveCurrentTime = currentTime.format(calendar.getTime());
+
+        if (defaultMessage!=null && defaultMessage.length()!=0) {
+            mMessageEditText.setText(defaultMessage);
+            mMessageEditText.setSelectAllOnFocus(true);
+        }
 
     }
 

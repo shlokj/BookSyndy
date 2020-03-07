@@ -342,6 +342,12 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
             chatIntent.putExtra("visit_user_id", currentBook.getUserId()); // phone number
             chatIntent.putExtra("visit_user_name", bookOwner.getUserId()); // unique user id
             chatIntent.putExtra("visit_image", bookOwner.getImageUrl());
+            if (currentBook.isTextbook()) {
+                chatIntent.putExtra("default_message", "Hi, I'm interested in your book " + currentBook.getBookName() + ".");
+            }
+            else {
+                chatIntent.putExtra("default_message", "Hi, I'm interested in your material " + currentBook.getBookName() + ".");
+            }
             startActivity(chatIntent);
         } catch (Exception e) {
             showSnackbar("Couldn't message the user. The account may have been deleted.");
