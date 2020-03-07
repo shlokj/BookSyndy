@@ -60,7 +60,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     private FirebaseFirestore mFirestore;
     private Book currentBook;
     private User bookOwner;
-    private final int MENU_DELETE = 123, MENU_SHARE = 234;
+    private final int MENU_DELETE = 123, MENU_SHARE = 234, MENU_EDIT = 345;
     private ImageView view_bookimage;
     private CircleImageView sellerDp;
     private TextView view_bookname, view_address, view_price, view_description, view_grade_and_board, sellerName;
@@ -436,8 +436,9 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 } else {
                     menu.add(0, MENU_DELETE, Menu.NONE, "Mark as unsold").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
                 }
-                menu.add(1, MENU_SHARE, Menu.NONE, "Share").setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-                menu.getItem(1).setIcon(R.drawable.ic_share_white_24px);
+                menu.add(2, MENU_EDIT, Menu.NONE, "Edit").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+                menu.add(2, MENU_SHARE, Menu.NONE, "Share").setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+                menu.getItem(2).setIcon(R.drawable.ic_share_white_24px);
 //                menu.findItem(R.id.share).setIcon(R.drawable.ic_share_white_24px);
             }
         }
@@ -545,6 +546,23 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
             case MENU_DELETE:
                 markAsSold(!isBookSold());
                 onBackPressed();
+                break;
+
+            case MENU_EDIT:
+                Intent edit = new Intent(getApplicationContext(), EditListingActivity.class);
+                edit.putExtra("BOOK_NAME",currentBook.getBookName());
+                edit.putExtra("BOOK_PHOTO",currentBook.getBookPhoto());
+                edit.putExtra("BOOK_TYPE",currentBook.isTextbook());
+                edit.putExtra("GRADE_NUMBER",currentBook.getGradeNumber());
+                edit.putExtra("BOARD_NUMBER",currentBook.getBoardNumber());
+                edit.putExtra("BOOK_ADDRESS",currentBook.getBookAddress());
+                edit.putExtra("BOOK_DESC",currentBook.getBookDescription());
+                edit.putExtra("BOOK_LNG",currentBook.getLng());
+                edit.putExtra("BOOK_LAT",currentBook.getLat());
+                edit.putExtra("BOOK_PRICE",currentBook.getBookPrice());
+                edit.putExtra("BOOK_YEAR",currentBook.getBookYear());
+                edit.putExtra("DOCUMENT_ID",currentBook.getDocumentId());
+                startActivity(edit);
                 break;
 
             case R.id.reportListing:
