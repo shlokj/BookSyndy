@@ -38,7 +38,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".SendFeedbackActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".util.GalleryUtil" />
         <activity
             android:name=".ViewUserProfileActivity"
@@ -69,7 +70,6 @@
         <activity
             android:name=".BookDetailsActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".GetFeedbackActivity" />
         <activity android:name=".EnterLocationManuallyActivity" />
         <activity
             android:name=".UserProfileActivity"

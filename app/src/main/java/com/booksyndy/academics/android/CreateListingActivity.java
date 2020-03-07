@@ -506,7 +506,7 @@ public class CreateListingActivity extends AppCompatActivity {
             if (!Places.isInitialized()) {
                 Places.initialize(getApplicationContext(), getString(R.string.places_api_key));
             }
-            PlacesClient placesClient = Places.createClient(this);
+//            PlacesClient placesClient = Places.createClient(this);
         }
         catch (NullPointerException e){
             Log.e(TAG, "initFireBase: getCurrentUser error", e);

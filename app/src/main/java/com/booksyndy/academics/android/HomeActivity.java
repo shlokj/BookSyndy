@@ -83,7 +83,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     private TextView navUsername, navUserphone;
     private ImageView navUserPic;
-    private FirebaseFirestore mFirestore;
     private String curUserId, snackbarMessage;
     private SharedPreferences userPref;
     private SharedPreferences.Editor editor;
@@ -499,6 +498,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         } else {
             Intent profileIntent = new Intent(HomeActivity.this, UserProfileActivity.class);
             profileIntent.putExtra("userid", curUserId);
+            //TODO: curuserid is never assigned?
             startActivity(profileIntent);
 
         }
