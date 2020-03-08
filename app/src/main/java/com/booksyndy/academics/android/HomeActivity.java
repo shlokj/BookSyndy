@@ -94,6 +94,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private ImageButton nav_btn_share;
     private int dismissCount=0;
     private View parentLayout;
+    public static boolean showDefaultFilters = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

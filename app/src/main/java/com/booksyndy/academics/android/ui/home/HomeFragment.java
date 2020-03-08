@@ -196,8 +196,11 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
 
-        // TODO: save filters and don't set them to default every time
-        setDefaultFilters();
+
+        if(!HomeActivity.showDefaultFilters){
+            HomeActivity.showDefaultFilters = true;
+            setDefaultFilters();
+        }
 
         return root;
     }
