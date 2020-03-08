@@ -124,7 +124,7 @@ public class GetBookSellerLocationActivity extends AppCompatActivity implements 
     }
 
     private void initPlaces() {
-        Places.initialize(this,getString(R.string.places_api_key));
+        Places.initialize(this,BuildConfig.GOOGLE_API_KEY);
         placesClient = Places.createClient(this);
     }
 

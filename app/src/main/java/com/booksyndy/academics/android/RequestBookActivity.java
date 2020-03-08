@@ -358,9 +358,8 @@ public class RequestBookActivity extends AppCompatActivity {
             address = address + ", ";
         address  = address + userPref.getString(getString(R.string.p_city),"");
         locField.setText(address);
-        String apiKey = getString(R.string.places_api_key);
         if (!Places.isInitialized()) {
-            Places.initialize(getApplicationContext(), apiKey);
+            Places.initialize(getApplicationContext(), BuildConfig.GOOGLE_API_KEY);
         }
         PlacesClient placesClient = Places.createClient(this);
     }

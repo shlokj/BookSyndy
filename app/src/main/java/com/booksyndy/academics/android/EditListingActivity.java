@@ -379,7 +379,7 @@ public class EditListingActivity extends AppCompatActivity {
             mFirebaseStorage = FirebaseStorage.getInstance();
             bookPhotosStorageReference = mFirebaseStorage.getReference().child("book_photos");
             if (!Places.isInitialized()) {
-                Places.initialize(getApplicationContext(), getString(R.string.places_api_key));
+                Places.initialize(getApplicationContext(), BuildConfig.GOOGLE_API_KEY);
             }
             PlacesClient placesClient = Places.createClient(this);
         }
