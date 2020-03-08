@@ -223,7 +223,7 @@ public class FilterCollegeFragment extends Fragment implements View.OnClickListe
         filterDegreeMbbs.setChecked(false);
         filterDegreeOther.setChecked(false);
         distSpinner.setSelection(distAdapter.getCount() - 2);
-        sortBySpinner.setSelection(0);
+        sortBySpinner.setSelection(1);
     }
 
 

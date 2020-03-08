@@ -260,7 +260,7 @@ public class FilterSchoolFragment extends Fragment implements View.OnClickListen
         filterBoardState.setChecked(false);
 
         distSpinner.setSelection(distAdapter.getCount() - 2);
-        sortBySpinner.setSelection(0);
+        sortBySpinner.setSelection(1);
 
     }
 

@@ -678,8 +678,10 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                 if (currentUser.isCompetitiveExam()) {
                     boardsList.add(20);
                 }
+                defaultFilters.setSortBy("time");
                 defaultFilters.setBookBoard(boardsList);
                 defaultFilters.setIsText(true);
+                defaultFilters.setIsNotes(true);
                 defaultFilters.setBookDistance(-1);
                 homeViewModel.setFilters(defaultFilters);
                 onFilter(homeViewModel.getFilters());
