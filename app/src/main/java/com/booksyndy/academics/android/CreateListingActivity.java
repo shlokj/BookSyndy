@@ -934,10 +934,9 @@ public class CreateListingActivity extends AppCompatActivity {
             builder.show();
         }
         else {
-//            Intent homeActivity = new Intent(CreateListingActivity.this, HomeActivity.class);
-//            startActivity(homeActivity);
-            CreateListingActivity.this.finish();
-//            finish();
+            Intent homeActivity = new Intent(CreateListingActivity.this, HomeActivity.class);
+            startActivity(homeActivity);
+            finish();
         }
     }
 

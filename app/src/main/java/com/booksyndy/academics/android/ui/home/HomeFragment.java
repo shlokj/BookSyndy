@@ -197,10 +197,10 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         recyclerView.setAdapter(mAdapter);
 
 
-        if(!HomeActivity.showDefaultFilters){
-            HomeActivity.showDefaultFilters = true;
+//        if(!HomeActivity.showDefaultFilters){
+//            HomeActivity.showDefaultFilters = true;
             setDefaultFilters();
-        }
+//        }
 
         return root;
     }
