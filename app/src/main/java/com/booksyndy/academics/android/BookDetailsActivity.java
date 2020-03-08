@@ -349,9 +349,9 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         try {
             Intent chatIntent = new Intent(BookDetailsActivity.this, ChatActivity.class);
             chatIntent.putExtra("visit_user_id", currentBook.getUserId()); // phone number
-            chatIntent.putExtra("visit_user_name", bookOwner.getUserId()); // unique user id
+            chatIntent.putExtra("visit_user_name", bookOwner.getUserId()); // TODO: fix crash at this line...
             chatIntent.putExtra("visit_image", bookOwner.getImageUrl());
-//            chatIntent.putExtra("default_message",defaultMessage); TODO: fix this crash
+//            chatIntent.putExtra("default_message",defaultMessage); // TODO: ...when this line is uncommented
             startActivity(chatIntent);
         } catch (Exception e) {
             showSnackbar("Couldn't message the user. The account may have been deleted.");
