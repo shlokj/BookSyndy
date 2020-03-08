@@ -196,8 +196,11 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
 
-        // TODO: save filters and don't set them to default every time
-        setDefaultFilters();
+
+//        if(!HomeActivity.showDefaultFilters){
+//            HomeActivity.showDefaultFilters = true;
+            setDefaultFilters();
+//        }
 
         return root;
     }
@@ -678,8 +681,10 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                 if (currentUser.isCompetitiveExam()) {
                     boardsList.add(20);
                 }
+                defaultFilters.setSortBy("time");
                 defaultFilters.setBookBoard(boardsList);
                 defaultFilters.setIsText(true);
+                defaultFilters.setIsNotes(true);
                 defaultFilters.setBookDistance(-1);
                 homeViewModel.setFilters(defaultFilters);
                 onFilter(homeViewModel.getFilters());

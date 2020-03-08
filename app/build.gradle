@@ -1,5 +1,10 @@
 apply plugin: 'com.android.application'
 
+//define api keys here
+def GOOGLE_API_KEY = '"' + googlePlacesApiKey + '"' ?: '"Please Configure GOOGLE API key"'
+
+def STRING =  'String'
+
 android {
     signingConfigs {
         debug {
@@ -19,6 +24,13 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
+        each {type->
+            type.buildConfigField STRING, 'GOOGLE_API_KEY',GOOGLE_API_KEY
+        }
+       manifestPlaceholders = [
+               GEO_API_KEY : GOOGLE_API_KEY
+       ]
+
     }
     buildTypes {
         release {

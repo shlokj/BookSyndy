@@ -23,7 +23,10 @@
         android:roundIcon="@drawable/ic_booksyndy_circle_transparent"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SignIn2Activity"></activity>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="{$GEO_API_KEY}"/>
+        <activity android:name=".SignIn2Activity" />
         <activity
             android:name=".RequestDetailsActivity"
             android:screenOrientation="portrait" />
