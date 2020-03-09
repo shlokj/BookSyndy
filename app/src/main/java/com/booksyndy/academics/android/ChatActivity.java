@@ -532,12 +532,20 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                         reportRef.update("Report Count", FieldValue.increment(1));
                     }
                     else{
+                        userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot snapshot) {
+                            if(snapshot != null && snapshot.exists()){
+                                Map<String,Object> userDetails = new HashMap<>();
+                                userDetails.put("userRef",snapshot.toObject(User.class));
+                                userDetails.put("Reported By",message_sender_id);
+                                userDetails.put("Report Count", FieldValue.increment(1));
+                                reportRef.set(userDetails);
+                            }
+                            }
+                        });
                         //create
-                        Map<String,Object> userDetails = new HashMap<>();
-                        userDetails.put("userRef",userRef);
-                        userDetails.put("Reported By",message_sender_id);
-                        userDetails.put("Report Count", FieldValue.increment(1));
-                        reportRef.set(userDetails);
+
                     }
                 }
             });
