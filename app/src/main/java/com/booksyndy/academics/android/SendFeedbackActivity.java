@@ -113,7 +113,7 @@ public class SendFeedbackActivity extends AppCompatActivity {
             userId = mAuth.getCurrentUser().getPhoneNumber();
             mFirebaseStorage = FirebaseStorage.getInstance();
             if (!Places.isInitialized()) {
-                Places.initialize(getApplicationContext(), BuildConfig.GOOGLE_API_KEY);
+                Places.initialize(getApplicationContext(), getString(R.string.places_api_key));
             }
 //            PlacesClient placesClient = Places.createClient(this);
         }
