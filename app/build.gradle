@@ -16,8 +16,8 @@ android {
         applicationId "com.booksyndy.academics.android"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 28
-        versionName "1.2.4"
+        versionCode 29
+        versionName "1.2.5"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
