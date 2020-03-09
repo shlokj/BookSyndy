@@ -353,11 +353,20 @@ public class RequestDetailsActivity extends AppCompatActivity implements EventLi
                         //update here
                         reportRef.update("Report count", FieldValue.increment(1));
                     } else {
-                        Map<String, Object> bookDetails = new HashMap<>();
-                        bookDetails.put("bookRef", bookRef);
-                        bookDetails.put("Reported By", curAppUser);
-                        bookDetails.put("Report count", FieldValue.increment(1));
-                        reportRef.set(bookDetails);
+                        bookRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot snapshot) {
+                           if(snapshot != null && snapshot.exists()){
+                               Map<String, Object> bookDetails = new HashMap<>();
+                               bookDetails.put("bookRef", snapshot.toObject(BookRequest.class));
+                               bookDetails.put("Reported By", curAppUser);
+                               bookDetails.put("Report count", FieldValue.increment(1));
+                               reportRef.set(bookDetails);
+
+                           }
+                            }
+                        });
+
                     }
                 }
             });

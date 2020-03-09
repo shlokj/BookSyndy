@@ -586,7 +586,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         }
         if (currentBook != null && curAppUser != null) {
             final DocumentReference reportRef = mFirestore.collection("report_book").document(currentBook.getDocumentId());
-            final DocumentReference bookRef = mFirestore.collection("books").document(currentBook.getDocumentId());
+            //final DocumentReference bookRef = mFirestore.collection("books").document(currentBook.getDocumentId());
             reportRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot snapshot) {
@@ -596,7 +596,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                     } else {
                         //create here
                         Map<String, Object> bookDetails = new HashMap<>();
-                        bookDetails.put("bookRef", bookRef);
+                        bookDetails.put("bookRef", currentBook);
                         bookDetails.put("Reported By", curAppUser);
                         bookDetails.put("Report count", FieldValue.increment(1));
                         reportRef.set(bookDetails);

@@ -27,7 +27,9 @@ import com.booksyndy.academics.android.Data.Book;
 import com.booksyndy.academics.android.Data.User;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -218,12 +220,20 @@ public class ViewUserProfileActivity extends AppCompatActivity implements BookAd
                         reportRef.update("Report Count",FieldValue.increment(1));
                     }
                     else{
-                        //create
-                        Map<String,Object> userDetails = new HashMap<>();
-                        userDetails.put("userRef",userRef);
-                        userDetails.put("Reported By",curUserPhone);
-                        userDetails.put("Report Count", FieldValue.increment(1));
-                        reportRef.set(userDetails);
+                        userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot snapshot) {
+                                if(snapshot != null && snapshot.exists()) {
+                                    Map<String, Object> userDetails = new HashMap<>();
+                                    userDetails.put("userRef", snapshot.toObject(User.class));
+                                    userDetails.put("Reported By", curUserPhone);
+                                    userDetails.put("Report Count", FieldValue.increment(1));
+                                    reportRef.set(userDetails);
+                                }
+                            }
+                        });
+
+
                     }
                 }
             });
