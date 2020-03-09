@@ -20,21 +20,25 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class GetJoinPurposeActivity extends AppCompatActivity {
 
-    //public static final String default_pic_url = "https://firebasestorage.googleapis.com/v0/b/booksyndy-e8ef6.appspot.com/o/default_photos%2Fdefault_profile_image.png?alt=media&token=3dc5c2c2-2b7b-4ae7-8f50-23ea58874fb9";
     private static final String default_pic_url = "https://firebasestorage.googleapis.com/v0/b/booksyndy-e8ef6.appspot.com/o/default_photos%2Fdefault_user_dp.png?alt=media&token=23b43df7-8143-4ad7-bb87-51e49da095c6";
 
-    boolean isParent, toSell, competitiveExam;
-    TextView reasonsQuestion;
-    RadioGroup reasons;
-    String firstName, lastName, username, phoneNumber;
-    int gradeNumber, reason, boardNumber, yearNumber;
-    Intent startMainActivity;
-    User curFirebaseUser;
-    FirebaseFirestore db;
+    private boolean isParent, competitiveExam;
+    private TextView reasonsQuestion;
+    private RadioGroup reasons;
+    private String firstName, lastName, username, phoneNumber, date;
+    private int gradeNumber, boardNumber, yearNumber;
+    private Intent startMainActivity;
+    private User curFirebaseUser;
+    private FirebaseFirestore db;
     private ProgressDialog progressDialog;
     private int userType;
+    private Calendar calendar;
+    private SimpleDateFormat dateFormat;
 
 
     @Override
@@ -84,6 +88,11 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
 
     private void registerUser() {
         try {
+
+            calendar = Calendar.getInstance();
+            dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            date = dateFormat.format(calendar.getTime());
+
             progressDialog = new ProgressDialog(this);
             progressDialog.setMessage("Finishing up");
             progressDialog.setTitle("Just a sec...");
@@ -107,6 +116,7 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
             curFirebaseUser = new User(firstName, lastName, phoneNumber, isParent, gradeNumber, boardNumber,competitiveExam, username, default_pic_url);
             curFirebaseUser.setYear(yearNumber);
             curFirebaseUser.setUserType(userType);
+            curFirebaseUser.setCreationDate(date);
             db = FirebaseFirestore.getInstance();
 
             // Add a new document with a generated ID

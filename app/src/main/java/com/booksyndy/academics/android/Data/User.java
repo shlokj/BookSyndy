@@ -2,7 +2,7 @@ package com.booksyndy.academics.android.Data;
 
 public class User {
 
-    private String firstName,lastName,phone,userId,imageUrl;
+    private String firstName,lastName,phone,userId,imageUrl,creationDate;
     private boolean isParent,toSell,competitiveExam;
     private int userType,gradeNumber,boardNumber,year;
 
@@ -131,4 +131,11 @@ public class User {
         return userType;
     }
 
+    public void setCreationDate(String creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public String getCreationDate() {
+        return creationDate;
+    }
 }
