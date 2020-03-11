@@ -528,7 +528,9 @@ public class UserProfileActivity extends AppCompatActivity {
         try {
             CropImage.activity(picUri)
                     .setAspectRatio(1, 1)
-                    .setRequestedSize(320, 320)
+//                    .setMaxCropResultSize(512,512)
+                    .setRequestedSize(512, 512)
+
                     .start(this);
         } catch (ActivityNotFoundException e) {
             Toast.makeText(this, "Your device doesn't support the crop action!", Toast.LENGTH_SHORT).show();

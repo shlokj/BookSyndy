@@ -40,6 +40,7 @@ import androidx.core.content.FileProvider;
 
 import com.booksyndy.academics.android.Data.Book;
 import com.booksyndy.academics.android.util.BookUtil;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -567,7 +568,11 @@ public class CreateListingActivity extends AppCompatActivity {
                     Uri resultUri = result.getUri();
                     try {
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
-                        mBookImage.setImageBitmap(bitmap);
+//                        mBookImage.setImageBitmap(bitmap);
+                        Glide.with(mBookImage.getContext())
+                                .asBitmap()
+                                .load(bitmap)
+                                .into(mBookImage);
                         detailsChanged=true;
                         storeBookImage(bitmap);
                     } catch (IOException e) {
@@ -730,8 +735,10 @@ public class CreateListingActivity extends AppCompatActivity {
     protected void CropImage(Uri picUri) {
         try {
             CropImage.activity(picUri)
-//                    .setAspectRatio(1,1)
+                    .setInitialCropWindowPaddingRatio(0)
                     .setRequestedSize(1080,1080)
+//                    .setMaxCropResultSize(1080,1080)
+//                    .setMinCropResultSize(1000,1000)
                     .start(this);
         } catch (ActivityNotFoundException e) {
             Toast.makeText(this, "Your device doesn't support the crop action!", Toast.LENGTH_SHORT).show();

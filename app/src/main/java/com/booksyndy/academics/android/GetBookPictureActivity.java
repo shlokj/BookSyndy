@@ -297,6 +297,7 @@ public class GetBookPictureActivity extends AppCompatActivity {
         try {
             CropImage.activity(picUri)
 //                    .setAspectRatio(1,1)
+                    .setInitialCropWindowPaddingRatio(0)
                     .setRequestedSize(1080,1080)
                     .start(this);
         } catch (ActivityNotFoundException e) {
