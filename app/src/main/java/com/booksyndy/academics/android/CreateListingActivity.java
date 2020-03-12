@@ -753,8 +753,15 @@ public class CreateListingActivity extends AppCompatActivity {
         int ivWidth = 1080;
         int ivHeight = 1080;
 
-        int new_height = (int) Math.floor((double) bmHeight *( (double) ivWidth / (double) bmWidth));
-        Bitmap newbitMap = Bitmap.createScaledBitmap(bm, ivWidth, new_height, true);
+        Bitmap newbitMap;
+        if (bmWidth>ivWidth || bmHeight>ivHeight) {
+            int new_height = (int) Math.floor((double) bmHeight * ((double) ivWidth / (double) bmWidth));
+            newbitMap = Bitmap.createScaledBitmap(bm, ivWidth, new_height, true);
+        }
+        else {
+            int new_height = (int) Math.floor((double) bmHeight);
+            newbitMap = Bitmap.createScaledBitmap(bm, bmWidth, new_height, true);
+        }
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         newbitMap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
