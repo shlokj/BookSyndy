@@ -750,8 +750,8 @@ public class CreateListingActivity extends AppCompatActivity {
     {
         int bmWidth = bm.getWidth();
         int bmHeight = bm.getHeight();
-        int ivWidth = mBookImage.getWidth();
-        int ivHeight = mBookImage.getHeight();
+        int ivWidth = 1080;
+        int ivHeight = 1080;
 
         int new_height = (int) Math.floor((double) bmHeight *( (double) ivWidth / (double) bmWidth));
         Bitmap newbitMap = Bitmap.createScaledBitmap(bm, ivWidth, new_height, true);
