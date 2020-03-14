@@ -90,7 +90,7 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
         try {
 
             calendar = Calendar.getInstance();
-            dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             date = dateFormat.format(calendar.getTime());
 
             progressDialog = new ProgressDialog(this);

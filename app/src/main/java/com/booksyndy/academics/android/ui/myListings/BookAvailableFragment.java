@@ -62,6 +62,7 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
     private ImageView nothingIV;
     private MyListingsFragment parentFragment;
 
+    //TODO: sort listings with newest on top
 
     public BookAvailableFragment() {
         // Required empty public constructor
