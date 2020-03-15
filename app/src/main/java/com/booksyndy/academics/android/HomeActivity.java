@@ -83,7 +83,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     private TextView navUsername, navUserphone;
     private ImageView navUserPic;
-    private String curUserId, snackbarMessage;
+    private String snackbarMessage;
     private SharedPreferences userPref;
     private SharedPreferences.Editor editor;
     private boolean sbLong;
@@ -498,8 +498,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             startActivity(shareIntent);
         } else {
             Intent profileIntent = new Intent(HomeActivity.this, UserProfileActivity.class);
-            profileIntent.putExtra("userid", curUserId);
-            //TODO: curuserid is never assigned?
             startActivity(profileIntent);
 
         }
