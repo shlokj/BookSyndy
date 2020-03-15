@@ -167,6 +167,13 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 return;
             }
 
+            if (currentBook.isTextbook()) {
+                defaultMessage = "Hi, I'm interested in your book " + currentBook.getBookName() + ".";
+            }
+            else {
+                defaultMessage =  "Hi, I'm interested in your material " + currentBook.getBookName() + ".";
+            }
+
             if (curAppUser != null && curAppUser.equalsIgnoreCase(currentBook.getUserId())) {
                 sellerName.setEnabled(false);
                 sellerDp.setEnabled(false);
@@ -284,12 +291,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 }
             });
 
-            if (currentBook.isTextbook()) {
-                defaultMessage = "Hi, I'm interested in your book " + currentBook.getBookName() + ".";
-            }
-            else {
-                defaultMessage =  "Hi, I'm interested in your material " + currentBook.getBookName() + ".";
-            }
+
         }
 
         catch (Exception e) {
@@ -351,7 +353,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
             chatIntent.putExtra("visit_user_id", currentBook.getUserId()); // phone number
             chatIntent.putExtra("visit_user_name", bookOwner.getUserId()); // TODO: fix crash at this line...
             chatIntent.putExtra("visit_image", bookOwner.getImageUrl());
-//            chatIntent.putExtra("default_message",defaultMessage); // TODO: ...when this line is uncommented
+           chatIntent.putExtra("default_message",defaultMessage); // TODO: ...when this line is uncommented
             startActivity(chatIntent);
         } catch (Exception e) {
             showSnackbar("Couldn't message the user. The account may have been deleted.");
