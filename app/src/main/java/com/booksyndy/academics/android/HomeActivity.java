@@ -2,7 +2,6 @@ package com.booksyndy.academics.android;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
@@ -11,8 +10,6 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
@@ -47,7 +44,6 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -55,7 +51,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -78,7 +73,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private LocationAddressResultReceiver addressResultReceiver;
     private Location currentLocation;
     private LocationCallback locationCallback;
-    private LocationManager locationManager;
     private NavigationView navigationView;
 
     private TextView navUsername, navUserphone;
@@ -94,7 +88,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private ImageButton nav_btn_share;
     private int dismissCount=0;
     private View parentLayout;
-    public static boolean showDefaultFilters = false;
+//    public static boolean showDefaultFilters = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -567,22 +561,5 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         super.onPause();
         fusedLocationClient.removeLocationUpdates(locationCallback);
     }
-/*
-    public static boolean checkConnection(Context context) {
-        final ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        if (connMgr != null) {
-            NetworkInfo activeNetworkInfo = connMgr.getActiveNetworkInfo();
-
-            if (activeNetworkInfo != null) { // connected to the internet
-                // connected to the mobile provider's data plan
-                if (activeNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-                    // connected to wifi
-                    return true;
-                } else return activeNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE;
-            }
-        }
-        return false;
-    }*/
 
 }

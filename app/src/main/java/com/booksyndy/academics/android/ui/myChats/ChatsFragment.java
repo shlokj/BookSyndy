@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -90,7 +91,11 @@ public class ChatsFragment extends Fragment implements EventListener<QuerySnapsh
             }
         };
 
+/*        Toast.makeText(getActivity(), "Toast works", Toast.LENGTH_SHORT).show();
 
+        if (mAdapter.hasUnreadChat()) {
+            Toast.makeText(getActivity(), "User has an unread chat", Toast.LENGTH_SHORT).show();
+        }*/
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         //recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
@@ -274,6 +279,5 @@ public class ChatsFragment extends Fragment implements EventListener<QuerySnapsh
 
         super.onCreateOptionsMenu(menu, inflater);
     }
-
 
 }

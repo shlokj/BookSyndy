@@ -108,15 +108,15 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
 
 
     private void setLastMessage(String userId, final String userName, final TextView lastMessageView, final ChatsViewHolder holder){
-            lastMessage = "default";
+        lastMessage = "default";
         final String curTimeStamp = chatPref.getString(userName,null);
         lastMsgTime = null;
-       DatabaseReference messageRef = FirebaseDatabase.getInstance().getReference().child("Messages").child(curUserPhone).child(userId);
+        DatabaseReference messageRef = FirebaseDatabase.getInstance().getReference().child("Messages").child(curUserPhone).child(userId);
 
-       messageRef.addValueEventListener(new ValueEventListener() {
-           @Override
-           public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-               boolean fromMe=false;
+        messageRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                boolean fromMe=false;
                 for(DataSnapshot snapshot:dataSnapshot.getChildren()){
                     Messages message = snapshot.getValue(Messages.class);
 
@@ -134,54 +134,49 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
                     case "default":
                         lastMessageView.setText("");
                         break;
-                        default:
-                            if (fromMe) {
-                                lastMessageView.setText("You: "+lastMessage);
-                            }
-                            else {
-                                lastMessageView.setText(lastMessage);
-                                if(curTimeStamp != null && lastMsgTime != null){
-                                    try {
+                    default:
+                        if (fromMe) {
+                            lastMessageView.setText("You: "+lastMessage);
+                        }
+                        else {
+                            lastMessageView.setText(lastMessage);
+                            if(curTimeStamp != null && lastMsgTime != null){
+                                try {
 //                                        Log.d(TAG, "showUnreadChats: userid"+userName+" lastSeen: "+curTimeStamp+" lastMessage: "+lastMsgTime);
-                                        Date lastSeen = dateFormat.parse(curTimeStamp);
-                                        Date lastMsg = dateFormat.parse(lastMsgTime);
+                                    Date lastSeen = dateFormat.parse(curTimeStamp);
+                                    Date lastMsg = dateFormat.parse(lastMsgTime);
 
-                                        if(lastSeen.before(lastMsg)){
-                                            holder.userName.setTypeface(holder.userName.getTypeface(), Typeface.BOLD);
-                                            holder.userStatus.setTypeface(holder.userStatus.getTypeface(), Typeface.BOLD);
-                                            holder.userName.setTypeface(Typeface.DEFAULT_BOLD);
-                                            holder.userStatus.setTypeface(Typeface.DEFAULT_BOLD);
-//                               holder.userName.setTextColor(context.getResources().getColor(R.color.green));
-                                            holder.unread_icon.setVisibility(View.VISIBLE);
-                                        }
-                                        else{
-                                            holder.userName.setTypeface(holder.userName.getTypeface(), Typeface.NORMAL);
-                                            holder.userStatus.setTypeface(holder.userName.getTypeface(), Typeface.NORMAL);
-                                            holder.userName.setTypeface(Typeface.DEFAULT);
-                                            holder.userStatus.setTypeface(Typeface.DEFAULT);
-//                               holder.userName.setTextColor(context.getResources().getColor(R.color.colorTextBlack));
-                                            holder.unread_icon.setVisibility(View.GONE);
-                                        }
+                                    if(lastSeen.before(lastMsg)){
+                                        holder.userName.setTypeface(holder.userName.getTypeface(), Typeface.BOLD);
+                                        holder.userStatus.setTypeface(holder.userStatus.getTypeface(), Typeface.BOLD);
+                                        holder.userName.setTypeface(Typeface.DEFAULT_BOLD);
+                                        holder.userStatus.setTypeface(Typeface.DEFAULT_BOLD);
+                                        holder.unread_icon.setVisibility(View.VISIBLE);
+                                    }
+                                    else{
+                                        holder.userName.setTypeface(holder.userName.getTypeface(), Typeface.NORMAL);
+                                        holder.userStatus.setTypeface(holder.userName.getTypeface(), Typeface.NORMAL);
+                                        holder.userName.setTypeface(Typeface.DEFAULT);
+                                        holder.userStatus.setTypeface(Typeface.DEFAULT);
+                                        holder.unread_icon.setVisibility(View.GONE);
+                                    }
 
-                                    }
-                                    catch (Exception exception){
-                                        Log.d("CHATSADAPTER", "showUnreadChats: error",exception);
-                                    }
                                 }
-
-
+                                catch (Exception exception){
+                                    Log.d("CHATSADAPTER", "showUnreadChats: error",exception);
+                                }
                             }
+                        }
                 }
-
                 lastMessage = "default";
                 lastMsgTime = null;
-           }
+            }
 
-           @Override
-           public void onCancelled(@NonNull DatabaseError databaseError) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-           }
-       });
+            }
+        });
 
 
 
@@ -196,7 +191,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
 
     }
 
-    public static class  ChatsViewHolder extends RecyclerView.ViewHolder
+    public static class ChatsViewHolder extends RecyclerView.ViewHolder
     {
         CircleImageView profileImage;
         TextView userStatus, userName;
@@ -230,7 +225,6 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatsViewHol
         notifyDataSetChanged();
         onDataChanged();
     }
-
 
 
 }

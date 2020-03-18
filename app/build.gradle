@@ -16,7 +16,7 @@ android {
         applicationId "com.booksyndy.academics.android"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 35
+        versionCode 36
         versionName "1.2.9"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true

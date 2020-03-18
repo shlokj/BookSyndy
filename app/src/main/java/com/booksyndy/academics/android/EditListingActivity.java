@@ -64,8 +64,6 @@ import java.util.Locale;
 
 public class EditListingActivity extends AppCompatActivity {
 
-    //TODO: save button in action bar
-
     private static String TAG = "EDITLISTING";
     private static final int AUTOCOMPLETE_REQUEST_CODE = 108;
     private Spinner typeSpinner,gradeSpinner,boardSpinner;

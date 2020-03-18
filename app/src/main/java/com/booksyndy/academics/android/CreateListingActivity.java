@@ -1,11 +1,13 @@
 package com.booksyndy.academics.android;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
@@ -36,6 +38,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import com.booksyndy.academics.android.Data.Book;
@@ -101,6 +105,9 @@ public class CreateListingActivity extends AppCompatActivity {
     private StorageReference bookPhotosStorageReference;
     private SharedPreferences userPref;
     private TextWatcher checkChange;
+    private double progress;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 3;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -335,6 +342,13 @@ public class CreateListingActivity extends AppCompatActivity {
             }
         }, 150); // the value of this delay is what makes the board spinner selection work - has to be considerably big. 100 ms was inconsistent, but 150 works well
 
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    LOCATION_PERMISSION_REQUEST_CODE);
+        }
     }
 
 
@@ -719,7 +733,7 @@ public class CreateListingActivity extends AppCompatActivity {
                 @Override
                 public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
                     //calculating progress percentage
-                    double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                    progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
 
                     //displaying percentage in progress dialog
                     progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
@@ -808,6 +822,9 @@ public class CreateListingActivity extends AppCompatActivity {
 
         if (selectedImageUri==null) {
             showSnackbar("Please take or select a picture of your book");
+        }
+        else if (progress<99.9) {
+            showSnackbar("Please wait while we upload the picture...");
         }
         else if (bookName.length()<10) {
             showSnackbar("Please enter at least 10 characters for your book's name");
