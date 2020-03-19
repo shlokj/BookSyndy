@@ -143,7 +143,14 @@ public class BookMarkAdapter extends FirestoreRecyclerAdapter<Book,BookMarkAdapt
                     .into(imageView);
 
             nameView.setText(book.getBookName());
-            cityView.setText(book.getBookAddress());
+            String address = book.getBookAddress();
+            if (address.length()>50) {
+                cityView.setText(address.substring(0,48)+"...");
+            }
+            else {
+                cityView.setText(address);
+            }
+//            cityView.setText(book.getBookAddress());
             addBookTime(book.getBookTime());
             if(!userId.equalsIgnoreCase(book.getUserId()))
                 addDistance(book.getLat(),book.getLng());

@@ -601,7 +601,8 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 
                 }
                 catch (Exception e) {
-                    Toast.makeText(getActivity(),"Ran into an issue while filtering/sorting. Please contact the developer, or provide details in the feedback section.",Toast.LENGTH_LONG).show();
+                    // don't tell the user anything as the app is still usable
+//                    Toast.makeText(getActivity(),"Ran into an issue while filtering/sorting. Please contact the developer, or provide details in the feedback section.",Toast.LENGTH_LONG).show();
                 }
             }
             else{

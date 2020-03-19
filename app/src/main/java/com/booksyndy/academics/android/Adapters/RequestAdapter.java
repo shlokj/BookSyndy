@@ -81,7 +81,14 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
         final BookRequest requestItem = requestList.get(position);
 
         holder.nameView.setText(requestItem.getTitle());
-        holder.cityView.setText(requestItem.getBookAddress());
+        String address = requestItem.getBookAddress();
+        if (address.length()>50) {
+            holder.cityView.setText(address.substring(0,48)+"...");
+        }
+        else {
+            holder.cityView.setText(address);
+        }
+//        holder.cityView.setText(requestItem.getBookAddress());
         holder.timeSinceView.setText(addBookTime(requestItem.getTime()));
         //Log.d(TAG, "onBindViewHolder: "+addDistance(requestItem.getLat(),requestItem.getLng()));
         //Log.d(TAG, "onBindViewHolder: "+latA+" "+lngA);

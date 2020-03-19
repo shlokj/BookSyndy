@@ -189,7 +189,13 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 }
             }
             view_description.setText(currentBook.getBookDescription());
-            view_address.setText(currentBook.getBookAddress());
+            String address = currentBook.getBookAddress();
+            if (address.length() > 40) {
+                view_address.setText(address.substring(0,38)+"...");
+            }
+            else {
+                view_address.setText(address);
+            }
             int gradeNumber = currentBook.getGradeNumber();
             int boardNumber = currentBook.getBoardNumber();
             int year = currentBook.getBookYear();
@@ -489,7 +495,12 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
             case R.id.bookmark:
                 if (!saved) {
                     //add to bookmarks
-                    addToBookMark();
+                    try {
+                        addToBookMark();
+                    }
+                    catch (Exception e) {
+                        Toast.makeText(this, "Listing not loaded completely", Toast.LENGTH_SHORT).show();
+                    }
                     menu.findItem(R.id.bookmark).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_bookmark_filled_24px));
                     saved = true;
                 } else {
