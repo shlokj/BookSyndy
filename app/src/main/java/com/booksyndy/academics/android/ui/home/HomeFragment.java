@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.androidadvance.topsnackbar.TSnackbar;
 import com.booksyndy.academics.android.Adapters.HomeAdapter;
 import com.booksyndy.academics.android.BookDetailsActivity;
 import com.booksyndy.academics.android.CreateListingActivity;
@@ -73,7 +74,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     private FirebaseFirestore mFirestore;
     private Query mQuery;
     private User currentUser;
-    private String curUserId;
+    private String curUserId, grades = "", boards = "";
     private int gradeNumber, boardNumber, year, userType;
     private boolean preferGuidedMode;
     private FilterDialogFragment mFilterDialog;
@@ -91,6 +92,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     private TextView nothingHereTV;
     private SearchView searchView;
     private NavController navController;
+    private Snackbar sb;
     private final int MENU_CHAT = 789;
 
 
@@ -125,7 +127,6 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         userLng = userPref.getFloat(getString(R.string.p_lng),0.0f);
 
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
-
 
         FloatingActionButton fab = root.findViewById(R.id.fab_home);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -201,6 +202,13 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 //            HomeActivity.showDefaultFilters = true;
             setDefaultFilters();
 //        }
+
+/*        requireActivity().getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                sb.dismiss();
+            }
+        });*/
 
         return root;
     }
@@ -309,11 +317,19 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 
             @Override
             public boolean onQueryTextChange(String newText) {
+
+                if (sb!=null && newText.length()==0 && sb.isShown()) {
+                    sb.dismiss();
+                }
                 List<Book> filteredList1 = new ArrayList<>();
                 if(newText == null || newText.trim().isEmpty())
                 {
                     filteredList1.addAll(filteredList);
                     searchView.clearFocus();
+
+                    if (sb!=null && newText.length()==0 && sb.isShown()) {
+                        sb.dismiss();
+                    }
                     mAdapter.setBookList(filteredList);
                     return true;
                 }
@@ -329,64 +345,10 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                                 if (!filteredList1.contains(book)) {
                                     filteredList1.add(book);
                                 }
-//                                break;
-                            }
-                        }
-                    }
-//                        Toast.makeText(getActivity(),"Found at "+foundIndex,Toast.LENGTH_SHORT).show();
-                    /*if (book.getBookName().toLowerCase().contains(filterPattern)) {
-                        if (foundIndex != -1) {
-                            continue;
-                        }
-                        if (foundIndex == 0) {
-                            filteredList1.add(book);
-                            continue;
-                        }
-                        if ((book.getBookName().toLowerCase().substring(foundIndex - 1, foundIndex).equals(" ")) && !filteredList1.contains(book)) {
-                            filteredList1.add(book);
-                        }
-                    }*/
-                }
-/*                    for (Book book : filteredList1) {
-                        for (String s:strgs) {
-                            int foundIndex = book.getBookName().toLowerCase().indexOf(s);
-//                        Toast.makeText(getActivity(),"Found at "+foundIndex,Toast.LENGTH_SHORT).show();
-                            if (book.getBookName().toLowerCase().contains(s)) {
-                                if (foundIndex != -1 && (foundIndex == 0 || book.getBookName().substring(foundIndex - 1, foundIndex).equals(" ")) && !filteredList1.contains(book)) {
-                                    filteredList1.add(book);
-                                }
-                            }
-                        }
-                    }*/
-                for (Book book : bookListFull) {
-                    /*int foundIndex = book.getBookName().toLowerCase().indexOf(filterPattern);
-                    if (book.getBookName().toLowerCase().contains(filterPattern)) {
-                        if (foundIndex != -1 && (foundIndex == 0 || book.getBookName().toLowerCase().substring(foundIndex - 1, foundIndex).equals(" ")) &&  !filteredList1.contains(book)) {
-                            filteredList1.add(book);
-                        }
-                    }*/
-                    String[] tags = book.getBookName().toLowerCase().split(" ");
-                    for (String tag : tags) {
-                        for (String qw : qws) {
-                            if (tag.indexOf(qw)==0) {
-                                if (!filteredList1.contains(book)) {
-                                    filteredList1.add(book);
-                                }
-                                break;
                             }
                         }
                     }
                 }
-/*                    for (String s:strgs) {
-                        for (Book book : bookListFull) {
-                            int foundIndex = book.getBookName().toLowerCase().indexOf(s);
-                            if (book.getBookName().toLowerCase().contains(s)) {
-                                if (foundIndex != -1 && (foundIndex == 0 || book.getBookName().substring(foundIndex - 1, foundIndex).equals(" ")) &&  !filteredList1.contains(book)) {
-                                    filteredList1.add(book);
-                                }
-                            }
-                        }
-                    }*/
 
                 mAdapter.setBookList(filteredList1);
 
@@ -399,6 +361,8 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             public boolean onMenuItemClick(MenuItem item) {
                 searchView.onActionViewExpanded();
                 searchView.requestFocus();
+                sb = Snackbar.make(parentLayout,"Searching in "+grades+" and "+boards,Snackbar.LENGTH_LONG);
+                sb.show();
                 return true;
             }
         });
@@ -437,6 +401,111 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         List<Book> toBeRemoved = new ArrayList<>();
 
         boolean noFilter = true;
+
+        if (filters.hasBookGrade()) {
+            grades = "grades: ";
+            List<Integer> fGrades = filters.getBookGrade();
+            if (fGrades.size()==1) {
+                if (fGrades.contains(1)) {
+                    grades = grades + "5-";
+                }
+                else if (fGrades.contains(2)) {
+                    grades = grades + "6-8";
+                }
+                else if (fGrades.contains(3)) {
+                    grades = grades + "9";
+                }
+                else if (fGrades.contains(4)) {
+                    grades = grades + "10";
+                }
+                else if (fGrades.contains(5)) {
+                    grades = grades + "11";
+                }
+                else if (fGrades.contains(6)) {
+                    grades = grades + "12";
+                }
+            }
+            else if (fGrades.size()>=2) {
+                if (fGrades.contains(1)) {
+                    grades = grades + "5-, ";
+                }
+                if (fGrades.contains(2)) {
+                    grades = grades + "6-8, ";
+                }
+                if (fGrades.contains(3)) {
+                    grades = grades + "9, ";
+                }
+                if (fGrades.contains(4)) {
+                    grades = grades + "10, ";
+                }
+                if (fGrades.contains(5)) {
+                    grades = grades + "11, ";
+                }
+                if (fGrades.contains(6)) {
+                    grades = grades + "12, ";
+                }
+            }
+            if (grades.substring(grades.length()-2).equals(", ")) {
+                grades = grades.substring(0,grades.length()-2);
+            }
+        }
+        else {
+            grades = "all grades";
+        }
+
+        if (filters.hasBookBoard()) {
+            boards = "boards: ";
+            List<Integer> fBoards = filters.getBookBoard();
+            if (fBoards.size()==1) {
+                if (fBoards.contains(1)) {
+                    boards = boards + "CBSE";
+                }
+                else if (fBoards.contains(2)) {
+                    boards = boards + "ICSE/ISC";
+                }
+                else if (fBoards.contains(3)) {
+                    boards = boards + "IB";
+                }
+                else if (fBoards.contains(4)) {
+                    boards = boards + "IGCSE/CAIE";
+                }
+                else if (fBoards.contains(5)) {
+                    boards = boards + "State board";
+                }
+                else if (fBoards.contains(6)) {
+                    boards = boards + "other board";
+                }
+            }
+            else if (fBoards.size()>=2) {
+                if (fBoards.contains(1)) {
+                    boards = boards + "CBSE, ";
+                }
+                if (fBoards.contains(2)) {
+                    boards = boards + "ICSE/ISC, ";
+                }
+                if (fBoards.contains(3)) {
+                    boards = boards + "IB, ";
+                }
+                if (fBoards.contains(4)) {
+                    boards = boards + "IGCSE/CAIE, ";
+                }
+                if (fBoards.contains(5)) {
+                    boards = boards + "State board, ";
+                }
+                if (fBoards.contains(6)) {
+                    boards = boards + "other board, ";
+                }
+                if (fBoards.contains(20)) {
+                    boards = boards + "including competitive exams";
+                }
+            }
+            if (boards.substring(boards.length()-2).equals(", ")) {
+                boards = boards.substring(0,boards.length()-2);
+            }
+        }
+        else {
+            boards = "all boards";
+        }
 
         // add all books to filtered list to start with
         filteredList.addAll(bookListFull);
