@@ -578,28 +578,31 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 
         if(filters.hasSortBy()){
 
-            if(filters.getSortBy().equalsIgnoreCase("time")){
+            if(filters.getSortBy().equalsIgnoreCase("time")) {
                 //sort by book duration
-                Collections.sort(filteredList, new Comparator<Book>() {
-                    @Override
-                    public int compare(Book o1, Book o2) {
-                        try {
-                            Date d1 = dateFormat.parse(o1.getBookTime());
-                            Date d2 = dateFormat.parse(o2.getBookTime());
-                            if(d1.before(d2)){
-                                return 1;
-                            }
-                            else{
-                                return -1;
-                            }
+                try {
+                    Collections.sort(filteredList, new Comparator<Book>() {
+                        @Override
+                        public int compare(Book o1, Book o2) {
+                            try {
+                                Date d1 = dateFormat.parse(o1.getBookTime());
+                                Date d2 = dateFormat.parse(o2.getBookTime());
+                                if (d1.before(d2)) {
+                                    return 1;
+                                } else {
+                                    return -1;
+                                }
 
+                            } catch (Exception e) {
+                                return 0;
+                            }
                         }
-                        catch (Exception e){
-                            return 0;
-                        }
-                    }
-                });
+                    });
 
+                }
+                catch (Exception e) {
+                    Toast.makeText(getActivity(),"Ran into an issue while filtering/sorting. Please contact the developer, or provide details in the feedback section.",Toast.LENGTH_LONG).show();
+                }
             }
             else{
                 //sort by book distance
