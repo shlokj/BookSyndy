@@ -499,7 +499,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                         addToBookMark();
                     }
                     catch (Exception e) {
-                        Toast.makeText(this, "Listing not loaded completely", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Listing not loaded completely, please try again", Toast.LENGTH_SHORT).show();
                     }
                     menu.findItem(R.id.bookmark).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_bookmark_filled_24px));
                     saved = true;
