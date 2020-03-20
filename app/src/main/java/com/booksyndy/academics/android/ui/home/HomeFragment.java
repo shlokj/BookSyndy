@@ -509,7 +509,21 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         }
 
         // add all books to filtered list to start with
-        filteredList.addAll(bookListFull);
+//        filteredList.addAll(bookListFull);
+
+
+        int bn=1;
+        for (Integer x:filters.getBookBoard()) {
+            bn = x;
+        } // because filters.getBookBoard().get(0) doesn't work, oddly
+
+        for(Book book:bookListFull) {
+            if (book.getBoardNumber()==bn) {
+                filteredList.add(book);
+            }
+        }
+
+//        Toast.makeText(getActivity(), filters.getBookBoard().get(0)+" is the bn", Toast.LENGTH_SHORT).show();
 
         // then, remove books that don't satisfy the provided criteria
 
@@ -543,7 +557,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             noFilter = false;
         }
 
-
+/*
         for (Book b:toBeRemoved) {
             filteredList.remove(b);
         }
@@ -554,7 +568,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 
         if (filters.hasBookBoard()) {
 
-
+//            Toast.makeText(getActivity(), filters.getBookBoard().size()+"", Toast.LENGTH_SHORT).show();
             for (int i = 1; i <= 16; i++) {
                 if (!filters.getBookBoard().contains(i)) {
                     unrequiredBoards.add(i);
@@ -589,7 +603,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             filteredList.remove(b);
         }
 
-        toBeRemoved.clear();
+        toBeRemoved.clear();*/
 
         if (filters.hasBookGrade()) {
 
@@ -706,7 +720,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                     });
                 }
                 else {
-                    showSnackbar("Error Fetching User Location");
+                    showSnackbar("Error fetching location");
                     filters.setSortBy("Relevance");
                 }
 
