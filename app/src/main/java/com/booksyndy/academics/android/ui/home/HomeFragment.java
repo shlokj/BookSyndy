@@ -29,7 +29,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.androidadvance.topsnackbar.TSnackbar;
 import com.booksyndy.academics.android.Adapters.HomeAdapter;
 import com.booksyndy.academics.android.BookDetailsActivity;
 import com.booksyndy.academics.android.CreateListingActivity;
@@ -120,7 +119,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         recyclerView = root.findViewById(R.id.home_recycler_view);
         mEmptyView = root.findViewById(R.id.view_empty);
         nothingHereTV = root.findViewById(R.id.nothinghereTV);
-        nothingHereTV.append(". Try searching or changing your filters.");
+        nothingHereTV.append(". Try changing your filters.");
 
         preferGuidedMode = userPref.getBoolean(getString(R.string.preferGuidedMode),false);
         userLat = userPref.getFloat(getString(R.string.p_lat),0.0f);
@@ -149,6 +148,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                 startActivity(startBookPub);
             }
         });
+
         initFireStore();
         bookList = new ArrayList<>();
         bookListFull = new ArrayList<>();
@@ -256,6 +256,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         if(mSwipeRefreshLayout != null && !mSwipeRefreshLayout.isRefreshing())
             mSwipeRefreshLayout.setRefreshing(true);
 
+        Filters tFilters = homeViewModel.getFilters();
         /* firestore */
         mFirestore = FirebaseFirestore.getInstance();
         curUserId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();

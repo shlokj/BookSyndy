@@ -83,14 +83,21 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            final Book bookItem = bookList.get(position);
+        final Book bookItem = bookList.get(position);
 
         Glide.with(holder.imageView.getContext())
                 .load(bookItem.getBookPhoto())
                 .into(holder.imageView);
 
         holder.nameView.setText(bookItem.getBookName());
-        holder.cityView.setText(bookItem.getBookAddress());
+        String address = bookItem.getBookAddress();
+        if (address.length()>50) {
+            holder.cityView.setText(address.substring(0,48)+"...");
+        }
+        else {
+            holder.cityView.setText(address);
+        }
+//        holder.cityView.setText(bookItem.getBookAddress());
         holder.timeSinceView.setText(addBookTime(bookItem.getBookTime()));
         holder.cityView.append("  "+addDistance(bookItem.getLat(),bookItem.getLng()));
         if(bookItem.getBookPrice() == 0){
