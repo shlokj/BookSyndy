@@ -110,9 +110,177 @@ public class FilterSchoolFragment extends Fragment implements View.OnClickListen
 
         setFilterView(homeViewModel.getFilters());
         setFilterOptionsFontToRobotoLight();
+/*
+        filterBoardCbse.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                filterBoardCompetitiveExams.setChecked(false);
+                filterBoardCbse.setChecked(true);
+                filterBoardIb.setChecked(false);
+                filterBoardIcse.setChecked(false);
+                filterBoardOther.setChecked(false);
+                filterBoardIgcse.setChecked(false);
+                filterBoardState.setChecked(false);
+            }
+        });
+
+        filterBoardIcse.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                filterBoardCompetitiveExams.setChecked(false);
+                filterBoardCbse.setChecked(false);
+                filterBoardIb.setChecked(false);
+                filterBoardIcse.setChecked(true);
+                filterBoardOther.setChecked(false);
+                filterBoardIgcse.setChecked(false);
+                filterBoardState.setChecked(false);
+            }
+        });
+
+        filterBoardIb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                filterBoardCompetitiveExams.setChecked(false);
+                filterBoardCbse.setChecked(false);
+                filterBoardIb.setChecked(true);
+                filterBoardIcse.setChecked(false);
+                filterBoardOther.setChecked(false);
+                filterBoardIgcse.setChecked(false);
+                filterBoardState.setChecked(false);
+            }
+        });
+
+        filterBoardIgcse.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                filterBoardCompetitiveExams.setChecked(false);
+                filterBoardCbse.setChecked(false);
+                filterBoardIb.setChecked(false);
+                filterBoardIcse.setChecked(false);
+                filterBoardOther.setChecked(false);
+                filterBoardIgcse.setChecked(true);
+                filterBoardState.setChecked(false);
+            }
+        });
+
+        filterBoardState.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                filterBoardCompetitiveExams.setChecked(false);
+                filterBoardCbse.setChecked(false);
+                filterBoardIb.setChecked(false);
+                filterBoardIcse.setChecked(false);
+                filterBoardOther.setChecked(false);
+                filterBoardIgcse.setChecked(false);
+                filterBoardState.setChecked(true);
+            }
+        });
+
+        filterBoardOther.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                filterBoardCompetitiveExams.setChecked(false);
+                filterBoardCbse.setChecked(false);
+                filterBoardIb.setChecked(false);
+                filterBoardIcse.setChecked(false);
+                filterBoardOther.setChecked(true);
+                filterBoardIgcse.setChecked(false);
+                filterBoardState.setChecked(false);
+            }
+        });
+        */
+        filterBoardCbse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterBoardCompetitiveExams.setChecked(false);
+                filterBoardCbse.setChecked(true);
+                filterBoardIb.setChecked(false);
+                filterBoardIcse.setChecked(false);
+                filterBoardOther.setChecked(false);
+                filterBoardIgcse.setChecked(false);
+                filterBoardState.setChecked(false);
+            }
+        });
+
+        filterBoardIcse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterBoardCompetitiveExams.setChecked(false);
+                filterBoardCbse.setChecked(false);
+                filterBoardIb.setChecked(false);
+                filterBoardIcse.setChecked(true);
+                filterBoardOther.setChecked(false);
+                filterBoardIgcse.setChecked(false);
+                filterBoardState.setChecked(false);
+            }
+        });
+
+        filterBoardIb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterBoardCompetitiveExams.setChecked(false);
+                filterBoardCbse.setChecked(false);
+                filterBoardIb.setChecked(true);
+                filterBoardIcse.setChecked(false);
+                filterBoardOther.setChecked(false);
+                filterBoardIgcse.setChecked(false);
+                filterBoardState.setChecked(false);
+            }
+        });
+
+        filterBoardIgcse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterBoardCompetitiveExams.setChecked(false);
+                filterBoardCbse.setChecked(false);
+                filterBoardIb.setChecked(false);
+                filterBoardIcse.setChecked(false);
+                filterBoardOther.setChecked(false);
+                filterBoardIgcse.setChecked(true);
+                filterBoardState.setChecked(false);
+            }
+        });
+
+        filterBoardState.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterBoardCompetitiveExams.setChecked(false);
+                filterBoardCbse.setChecked(false);
+                filterBoardIb.setChecked(false);
+                filterBoardIcse.setChecked(false);
+                filterBoardOther.setChecked(false);
+                filterBoardIgcse.setChecked(false);
+                filterBoardState.setChecked(true);
+            }
+        });
+
+        filterBoardOther.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterBoardCompetitiveExams.setChecked(false);
+                filterBoardCbse.setChecked(false);
+                filterBoardIb.setChecked(false);
+                filterBoardIcse.setChecked(false);
+                filterBoardOther.setChecked(true);
+                filterBoardIgcse.setChecked(false);
+                filterBoardState.setChecked(false);
+            }
+        });
+
+        filterBoardCompetitiveExams.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterBoardCompetitiveExams.setChecked(true);
+                filterBoardCbse.setChecked(false);
+                filterBoardIb.setChecked(false);
+                filterBoardIcse.setChecked(false);
+                filterBoardOther.setChecked(false);
+                filterBoardIgcse.setChecked(false);
+                filterBoardState.setChecked(false);
+            }
+        });
 
         return mRootView;
-
 
     }
 
@@ -251,13 +419,13 @@ public class FilterSchoolFragment extends Fragment implements View.OnClickListen
         filterGrade11.setChecked(false);
         filterGrade12.setChecked(false);
 
-        filterBoardCompetitiveExams.setChecked(false);
-        filterBoardCbse.setChecked(false);
-        filterBoardIb.setChecked(false);
-        filterBoardIcse.setChecked(false);
-        filterBoardOther.setChecked(false);
-        filterBoardIgcse.setChecked(false);
-        filterBoardState.setChecked(false);
+//        filterBoardCompetitiveExams.setChecked(false);
+//        filterBoardCbse.setChecked(false);
+//        filterBoardIb.setChecked(false);
+//        filterBoardIcse.setChecked(false);
+//        filterBoardOther.setChecked(false);
+//        filterBoardIgcse.setChecked(false);
+//        filterBoardState.setChecked(false);
 
         distSpinner.setSelection(distAdapter.getCount() - 2);
         sortBySpinner.setSelection(1);
