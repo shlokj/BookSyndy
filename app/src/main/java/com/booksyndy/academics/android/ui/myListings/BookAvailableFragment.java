@@ -62,8 +62,6 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
     private ImageView nothingIV;
     private MyListingsFragment parentFragment;
 
-    //TODO: sort listings with newest on top
-
     public BookAvailableFragment() {
         // Required empty public constructor
     }
@@ -165,7 +163,7 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
             /* firestore */
             mFirestore = FirebaseFirestore.getInstance();
             String userId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
-            mQuery = mFirestore.collection("books").whereEqualTo("userId", userId).whereEqualTo("bookSold",false);
+            mQuery = mFirestore.collection("books").whereEqualTo("userId", userId).whereEqualTo("bookSold",false).orderBy("bookTime", Query.Direction.DESCENDING);
             populateBookAdapter();
 
         } catch (Exception e) {
