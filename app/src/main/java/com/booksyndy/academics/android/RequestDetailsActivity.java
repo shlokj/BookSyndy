@@ -194,7 +194,7 @@ public class RequestDetailsActivity extends AppCompatActivity implements EventLi
             if (boardNumber == 1) {
                 view_grade_and_board.append(", CBSE");
             } else if (boardNumber == 2) {
-                view_grade_and_board.append(", ICSE//ISC");
+                view_grade_and_board.append(", ICSE/ISC");
             } else if (boardNumber == 3) {
                 view_grade_and_board.append(", IB");
             } else if (boardNumber == 4) {

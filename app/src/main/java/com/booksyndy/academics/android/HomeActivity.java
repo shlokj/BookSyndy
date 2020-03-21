@@ -497,12 +497,37 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         }
                     }
                 });
-
-
             }
         }
+        else if (navigationView.getCheckedItem() != null && navigationView.getCheckedItem().getItemId() == R.id.nav_requests) {
+//            if (toolbar != null && toolbar.getChildCount() > 1) {
 
-        return super.onPrepareOptionsMenu(menu);
+            if (findViewById(R.id.fab_request)!=null) {
+                new MaterialShowcaseView.Builder(this)
+                        .setTarget(findViewById(R.id.fab_request))
+                        .setDismissText("GOT IT")
+                        .setContentText("Welcome to the requests section.\n\nUse this section to post a request if you aren't able to find what you need. Hit the plus button to post.")
+                        .setDismissOnTargetTouch(true)
+                        .setDelay(200)
+                        .singleUse("100611")
+                        .show();
+            }
+//            }
+        }
+
+        else if (navigationView.getCheckedItem() != null && navigationView.getCheckedItem().getItemId() == R.id.nav_starred) {
+            new MaterialShowcaseView.Builder(this)
+                    .setTarget(findViewById(R.id.tempviewbm))
+                    .setDismissText("GOT IT")
+                    .setContentText("This is the bookmarks section. Listings you save will appear here. To remove a listing, simple swipe right on it.")
+                    .setDismissOnTargetTouch(true)
+                    .setDelay(200)
+                    .singleUse("100511")
+                    .show();
+        }
+
+
+            return super.onPrepareOptionsMenu(menu);
     }
 
 

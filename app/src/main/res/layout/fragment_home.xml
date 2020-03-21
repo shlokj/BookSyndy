@@ -68,6 +68,13 @@
 
     </LinearLayout>
 
+    <View
+        android:id="@+id/tempviewbm"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"/>
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_home"

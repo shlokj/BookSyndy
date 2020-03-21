@@ -167,7 +167,7 @@ public class ConfirmListingActivity extends AppCompatActivity {
             if (boardNumber == 1) {
                 bookCategoryTV.append(", CBSE");
             } else if (boardNumber == 2) {
-                bookCategoryTV.append(", ICSE//ISC");
+                bookCategoryTV.append(", ICSE/ISC");
             } else if (boardNumber == 3) {
                 bookCategoryTV.append(", IB");
             } else if (boardNumber == 4) {
