@@ -50,7 +50,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 
 public class BookDetailsActivity extends AppCompatActivity implements View.OnClickListener, EventListener<DocumentSnapshot> {
@@ -72,6 +71,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     private String curAppUser, shareableLink = "";
     private double latA, lngA;
     private SharedPreferences userPref;
+    private ProgressDialog progressDialog;
 
     private static final String TAG = "BOOK_DETAILS";
 
@@ -354,14 +354,44 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void startChatActivity() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading Chat...");
+        progressDialog.setTitle("Please wait");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         try {
-            Intent chatIntent = new Intent(BookDetailsActivity.this, ChatActivity.class);
-            chatIntent.putExtra("visit_user_id", currentBook.getUserId()); // phone number
-            chatIntent.putExtra("visit_user_name", bookOwner.getUserId()); // TODO: fix crash at this line...
-            chatIntent.putExtra("visit_image", bookOwner.getImageUrl());
-           chatIntent.putExtra("default_message",defaultMessage); // TODO: ...when this line is uncommented
-            startActivity(chatIntent);
+            mFirestore.collection("users").document(currentBook.getUserId())
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            if(documentSnapshot != null && documentSnapshot.exists()){
+                                User bookOwner = documentSnapshot.toObject(User.class);
+                            Intent chatIntent = new Intent(BookDetailsActivity.this, ChatActivity.class);
+                            chatIntent.putExtra("visit_user_id", bookOwner.getPhone()); // phone number
+                            chatIntent.putExtra("visit_user_name", bookOwner.getUserId());
+                            chatIntent.putExtra("visit_image", bookOwner.getImageUrl());
+                            chatIntent.putExtra("default_message",defaultMessage);
+                            if(progressDialog.isShowing()){
+                                progressDialog.dismiss();
+                            }
+                            startActivity(chatIntent);
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    if(progressDialog.isShowing()){
+                        progressDialog.dismiss();
+                    }
+                    showSnackbar("Couldn't find the user. The account may have been deleted.");
+                }
+            });
+
         } catch (Exception e) {
+            if(progressDialog.isShowing()){
+                progressDialog.dismiss();
+            }
             showSnackbar("Couldn't message the user. The account may have been deleted.");
         }
     }
