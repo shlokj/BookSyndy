@@ -3,7 +3,7 @@ package com.booksyndy.academics.android.Data;
 public class User {
 
     private String firstName,lastName,phone,userId,imageUrl,creationDate;
-    private boolean isParent,toSell,competitiveExam;
+    private boolean isParent,toSell,competitiveExam,phoneNumberPublic;
     private int userType,gradeNumber,boardNumber,year;
 
     public User() {
@@ -137,5 +137,13 @@ public class User {
 
     public String getCreationDate() {
         return creationDate;
+    }
+
+    public void setPhoneNumberPublic(boolean phoneNumberPublic) {
+        this.phoneNumberPublic = phoneNumberPublic;
+    }
+
+    public boolean isPhoneNumberPublic() {
+        return phoneNumberPublic;
     }
 }
