@@ -355,7 +355,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
 
     private void startChatActivity() {
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Loading Chat...");
+        progressDialog.setMessage("Loading chat...");
         progressDialog.setTitle("Please wait");
         progressDialog.setCancelable(false);
         progressDialog.show();
@@ -726,7 +726,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         });
     }
 
-    public void showSnackbar(String message) {
+    private void showSnackbar(String message) {
         View parentLayout = findViewById(android.R.id.content);
         Snackbar.make(parentLayout, message, Snackbar.LENGTH_SHORT)
                 .setAction("OKAY", new View.OnClickListener() {

@@ -875,7 +875,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 
     }
 
-    public void showSnackbar(String message) {
+    private void showSnackbar(String message) {
         Snackbar.make(parentLayout, message, Snackbar.LENGTH_SHORT)
                 .setAction("OKAY", new View.OnClickListener() {
                     @Override

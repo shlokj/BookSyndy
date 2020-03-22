@@ -11,7 +11,6 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -516,14 +515,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
 
         else if (navigationView.getCheckedItem() != null && navigationView.getCheckedItem().getItemId() == R.id.nav_starred) {
-            new MaterialShowcaseView.Builder(this)
-                    .setTarget(findViewById(R.id.tempviewbm))
-                    .setDismissText("GOT IT")
-                    .setContentText("This is the bookmarks section. Listings you save will appear here. To remove a listing, simple swipe right on it.")
-                    .setDismissOnTargetTouch(true)
-                    .setDelay(200)
-                    .singleUse("100511")
-                    .show();
+            if (findViewById(R.id.fab_request)!=null) {
+
+                new MaterialShowcaseView.Builder(this)
+                        .setTarget(findViewById(R.id.tempviewbm))
+                        .setDismissText("GOT IT")
+                        .setContentText("This is the bookmarks section. Listings you save will appear here. To remove a listing, simply swipe right on it.")
+//                        .setDismissOnTargetTouch(true)
+                        .setDelay(200)
+                        .singleUse("100511")
+                        .show();
+            }
         }
 
 

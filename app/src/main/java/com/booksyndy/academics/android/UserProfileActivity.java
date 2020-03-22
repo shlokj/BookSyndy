@@ -584,7 +584,7 @@ public class UserProfileActivity extends AppCompatActivity {
         return true;
     }
 
-    public void showSnackbar(String message) {
+    private void showSnackbar(String message) {
         View parentLayout = findViewById(android.R.id.content);
         Snackbar.make(parentLayout, message, Snackbar.LENGTH_SHORT)
                 .setAction("OKAY", new View.OnClickListener() {

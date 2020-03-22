@@ -1,5 +1,6 @@
 package com.booksyndy.academics.android;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,6 +27,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -42,7 +44,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class RequestDetailsActivity extends AppCompatActivity implements EventListener<DocumentSnapshot> {
 
     private boolean isTextbook;
-    private BookRequest currentBook;
     private User bookOwner;
     private TextView view_bookname, view_address, view_description, view_grade_and_board, view_type, sellerName;
     private FirebaseFirestore mFirestore;
@@ -52,10 +53,11 @@ public class RequestDetailsActivity extends AppCompatActivity implements EventLi
     private CircleImageView sellerDp;
     private Menu menu;
     private static final String TAG = "REQUEST_DETAILS";
-    private String curAppUser, bookOwnerPhone, shareableLink = "", bookid;
+    private String curAppUser, bookOwnerPhone, shareableLink = "", bookid, defaultMessage = "";
     private double latA, lngA, bookLat, bookLng;
     private boolean byme;
     private FloatingActionButton chat;
+    private ProgressDialog progressDialog;
 
     private int gradeNumber, boardNumber, yearNumber;
     private String bookName, bookDescription, phoneNumber, userId, bookAddress;
@@ -98,6 +100,9 @@ public class RequestDetailsActivity extends AppCompatActivity implements EventLi
         lngA = userPref.getFloat(getString(R.string.p_lng), 0.0f);
         initFireStore();
 
+        defaultMessage = "Hi, I saw your request titled " + bookName + ".";
+
+
         if (bookOwnerPhone != null && bookOwnerPhone.equalsIgnoreCase(curAppUser)) {
             chat.hide();
             sellerName.setEnabled(false);
@@ -108,11 +113,7 @@ public class RequestDetailsActivity extends AppCompatActivity implements EventLi
                 public void onClick(View v) {
 
                     if (bookOwner != null) {
-                        Intent chatIntent = new Intent(RequestDetailsActivity.this, ChatActivity.class);
-                        chatIntent.putExtra("visit_user_id", bookOwnerPhone); // phone number
-                        chatIntent.putExtra("visit_user_name", bookOwner.getUserId()); // unique user id
-                        chatIntent.putExtra("visit_image", bookOwner.getImageUrl());
-                        startActivity(chatIntent);
+                        startChatActivity();
                     }
                 }
             });
@@ -345,7 +346,6 @@ public class RequestDetailsActivity extends AppCompatActivity implements EventLi
         }
         if (curAppUser != null) {
             final DocumentReference reportRef = mFirestore.collection("report_request").document(bookid);
-//            final DocumentReference bookRef = mFirestore.collection("bookRequest").document(currentBook.getDocumentId());
             reportRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot snapshot) {
@@ -404,5 +404,59 @@ public class RequestDetailsActivity extends AppCompatActivity implements EventLi
             Toast.makeText(getApplicationContext(), "Book sold or unavailable", Toast.LENGTH_SHORT).show();
             onBackPressed();
         }
+    }
+    private void startChatActivity() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading chat...");
+        progressDialog.setTitle("Please wait");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        try {
+            mFirestore.collection("users").document(bookOwner.getPhone())
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            if(documentSnapshot != null && documentSnapshot.exists()){
+                                User bookOwner = documentSnapshot.toObject(User.class);
+                                Intent chatIntent = new Intent(RequestDetailsActivity.this, ChatActivity.class);
+                                chatIntent.putExtra("visit_user_id", bookOwner.getPhone()); // phone number
+                                chatIntent.putExtra("visit_user_name", bookOwner.getUserId());
+                                chatIntent.putExtra("visit_image", bookOwner.getImageUrl());
+                                chatIntent.putExtra("default_message",defaultMessage);
+                                if(progressDialog.isShowing()){
+                                    progressDialog.dismiss();
+                                }
+                                startActivity(chatIntent);
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    if(progressDialog.isShowing()){
+                        progressDialog.dismiss();
+                    }
+                    showSnackbar("Couldn't find the user. The account may have been deleted.");
+                }
+            });
+
+        } catch (Exception e) {
+            if(progressDialog.isShowing()){
+                progressDialog.dismiss();
+            }
+            showSnackbar("Couldn't message the user. The account may have been deleted.");
+        }
+    }
+    private void showSnackbar(String message) {
+        View parentLayout = findViewById(android.R.id.content);
+        Snackbar.make(parentLayout, message, Snackbar.LENGTH_SHORT)
+                .setAction("OKAY", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                })
+                .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                .show();
     }
 }
