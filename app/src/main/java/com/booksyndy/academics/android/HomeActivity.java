@@ -354,11 +354,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             return;
         }
 
-
-//        Intent intent = new Intent(this, GetAddressIntentService.class);
-//        intent.putExtra("add_receiver", addressResultReceiver);
-//        intent.putExtra("add_location", currentLocation);
-//        startService(intent);
     }
 
 

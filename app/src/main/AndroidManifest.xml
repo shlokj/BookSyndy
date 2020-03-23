@@ -77,10 +77,6 @@
             android:name=".GetBookSellerLocationActivity"
             android:screenOrientation="portrait" />
 
-        <service
-            android:name=".GetAddressIntentService"
-            android:exported="false" />
-
         <activity android:name=".GetBookPictureActivity" />
         <activity
             android:name=".GetBookPriceActivity"

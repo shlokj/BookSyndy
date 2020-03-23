@@ -362,8 +362,10 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             public boolean onMenuItemClick(MenuItem item) {
                 searchView.onActionViewExpanded();
                 searchView.requestFocus();
-                sb = Snackbar.make(parentLayout,"Searching in "+grades+" and "+boards,Snackbar.LENGTH_LONG);
-                sb.show();
+                if (gradeNumber<=6) {
+                    sb = Snackbar.make(parentLayout, "Searching in " + grades + " and " + boards, Snackbar.LENGTH_LONG);
+                    sb.show();
+                }
                 return true;
             }
         });
@@ -773,7 +775,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                 defaultFilters.setBookBoard(boardsList);
                 defaultFilters.setIsText(true);
                 defaultFilters.setIsNotes(true);
-                defaultFilters.setBookDistance(-1);
+                defaultFilters.setBookDistance(10);
                 homeViewModel.setFilters(defaultFilters);
                 onFilter(homeViewModel.getFilters());
             }
