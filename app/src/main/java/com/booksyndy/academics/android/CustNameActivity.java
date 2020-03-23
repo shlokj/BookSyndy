@@ -131,7 +131,7 @@ public class CustNameActivity extends AppCompatActivity {
                 lastName = lastNameField.getText().toString().trim();
                 username = userIdField.getText().toString().trim().toLowerCase();
                 phoneNumberPublic = pnpcb.isChecked();
-//                Toast.makeText(CustNameActivity.this, phoneNumberPublic+"", Toast.LENGTH_SHORT).show();
+
                 // todo: last char can't be a dot.
                 isValidUsername = false;
                 isValidUsername = (username != null) && username.matches("[A-Za-z0-9_.]+");

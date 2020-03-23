@@ -22,7 +22,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -78,10 +77,10 @@ public class UserProfileActivity extends AppCompatActivity {
     private TextWatcher checkChange;
     private Menu menu;
     private int gradeNumber, boardNumber, yearNumber, userType;
-    private CheckBox compExams, preferGuidedMode;
+    private CheckBox compExams, preferGuidedMode, pnpcb;
     private TextView boardLabel;
     private LinearLayout gradeLL,boardLL,yearLL;
-    private boolean detailsChanged = false, tempCE, editing;
+    private boolean detailsChanged = false, tempCE, editing, phoneNumberPublic;
     private FirebaseFirestore mFirestore;
     private ArrayAdapter<String> boardAdapter, degreeAdapter, gradeAdapter;
     private SharedPreferences userPref;
@@ -114,6 +113,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
         profilePic = findViewById(R.id.profilePic);
         preferGuidedMode = findViewById(R.id.preferGuidedMode);
+        pnpcb = findViewById(R.id.phoneNumberPublic_p);
         userPref = this.getSharedPreferences(getString(R.string.UserPref), 0);
 
         fName = findViewById(R.id.firstNameProfile);
@@ -187,6 +187,7 @@ public class UserProfileActivity extends AppCompatActivity {
         degreeSpinner.setEnabled(false);
         preferGuidedMode.setEnabled(false);
         profilePic.setEnabled(false);
+        pnpcb.setEnabled(false);
 
         profilePic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -328,8 +329,9 @@ public class UserProfileActivity extends AppCompatActivity {
             lastName = userPref.getString(getString(R.string.p_lastname), "");
             userId = userPref.getString(getString(R.string.p_userid), "");
             userType = userPref.getInt(getString(R.string.p_usertype),1);
+            phoneNumberPublic = userPref.getBoolean(getString(R.string.phoneNumberPublic),false);
 
-
+            pnpcb.setChecked(phoneNumberPublic);
             gradeSpinner.setAdapter(gradeAdapter);
             gradeSpinner.setSelection(gradeNumber - 1);
 
@@ -610,6 +612,7 @@ public class UserProfileActivity extends AppCompatActivity {
             degreeSpinner.setEnabled(true);
             preferGuidedMode.setEnabled(true);
             profilePic.setEnabled(true);
+            pnpcb.setEnabled(true);
             // phoneNumber.setEnabled(true);
 //            menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_check_24px)).setTitle("Save changes");
             menu.findItem(R.id.edit_profile).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_check_24px))
@@ -690,16 +693,19 @@ public class UserProfileActivity extends AppCompatActivity {
                     editor.putInt(getString(R.string.p_board), board);
                     editor.putInt(getString(R.string.p_year), yearNumber);
                     editor.putBoolean(getString(R.string.p_competitive), compExams.isChecked());
+                    editor.putBoolean(getString(R.string.phoneNumberPublic),pnpcb.isChecked());
                     editor.apply();
                     DocumentReference userReference = mFirestore.collection("users").document(phoneNumber);
                     userReference.update("competitiveExam", compExams.isChecked(),
                             "year", yearNumber,
-                            "firstName", fName.getText().toString(),
-                            "lastName", lName.getText().toString(),
+                            "firstName", fName.getText().toString().trim(),
+                            "lastName", lName.getText().toString().trim(),
                             "gradeNumber", gradeSpinner.getSelectedItemPosition() + 1,
                             "boardNumber", board,
-                            "userId", uName.getText().toString().toLowerCase(),
-                            "imageUrl", book_photo_url).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            "userId", uName.getText().toString().toLowerCase().trim(),
+                            "imageUrl", book_photo_url,
+                            "phoneNumberPublic",pnpcb.isChecked())
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             if (progressDialog.isShowing())

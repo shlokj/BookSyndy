@@ -317,6 +317,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/boardLL" />
 
+        <CheckBox
+            android:id="@+id/phoneNumberPublic_p"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:enabled="false"
+            android:text="@string/show_on_profile"
+            app:layout_constraintBottom_toBottomOf="@+id/phoneNumberLL"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/phoneNumberLL" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
