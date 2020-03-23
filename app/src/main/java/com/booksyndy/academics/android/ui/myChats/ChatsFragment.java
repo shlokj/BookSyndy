@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -143,39 +142,6 @@ public class ChatsFragment extends Fragment implements EventListener<QuerySnapsh
             chatListFull = new ArrayList<>(chatList);
             mAdapter.onDataChanged();
         }
-
-/*        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
-                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-               final int position = viewHolder.getAdapterPosition();
-               final Chat chat = mAdapter.getChatList().get(position);
-                mAdapter.deleteChat(viewHolder.getAdapterPosition());
-                ChatsRef.document(chat.getUserId()).delete();
-                snackbar = Snackbar
-                        .make(getView(),  " Book Mark Removed", Snackbar.LENGTH_LONG);
-                snackbar.setAction("UNDO", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        // undo is selected, restore the deleted item
-                        mAdapter.restoreChat(position,chat);
-                        ChatsRef.document(chat.getUserId()).set(chat);
-                    }
-                });
-                snackbar.setActionTextColor(Color.YELLOW);
-                snackbar.show();
-
-            }
-
-
-        }).attachToRecyclerView(recyclerView);*/
-
     }
 
     @Override

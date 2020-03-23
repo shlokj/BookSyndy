@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -27,9 +28,7 @@ import com.booksyndy.academics.android.Data.Book;
 import com.booksyndy.academics.android.Data.User;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -51,7 +50,7 @@ public class ViewUserProfileActivity extends AppCompatActivity implements BookAd
     public static String TAG = "VIEWUSERPROFILE";
 
     private CircleImageView user_photo;
-    private TextView mUserName,mUserId;
+    private TextView mUserName,mUserId,mUserPhone;
     private String fullName,userID,imageUrl,phone,curUserPhone;
     private List<Book> userBookList;
     private FirebaseFirestore mFireStore;
@@ -59,10 +58,9 @@ public class ViewUserProfileActivity extends AppCompatActivity implements BookAd
     private BookAdapter mAdapter;
     private View mEmptyView;
     private Query mQuery;
-    private RecyclerView.LayoutManager layoutManager;
     private Menu menu;
-    private LinearLayout sendMessageLL;
-
+    private boolean pnp;
+    private LinearLayout phoneLL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,11 +73,25 @@ public class ViewUserProfileActivity extends AppCompatActivity implements BookAd
         user_photo = findViewById(R.id.others_profile_image);
         mUserName = findViewById(R.id.view_fullname);
         mUserId = findViewById(R.id.usernameMsg);
-        sendMessageLL = findViewById(R.id.sendMessageLL);
+        mUserPhone = findViewById(R.id.phoneNumber_optional);
+        LinearLayout sendMessageLL = findViewById(R.id.sendMessageLL);
         fullName  = getIntent().getStringExtra("USER_NAME");
         userID = getIntent().getStringExtra("USER_ID");
         imageUrl = getIntent().getStringExtra("USER_PHOTO");
         phone = getIntent().getStringExtra("USER_PHONE");
+        pnp = getIntent().getBooleanExtra("PUBLIC_PHONE",false);
+        phoneLL = findViewById(R.id.phoneLL);
+        if (pnp) {
+            phoneLL.setVisibility(View.VISIBLE);
+            mUserPhone.setText(phone);
+            phoneLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent dial = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone,null));
+                    startActivity(dial);
+                }
+            });
+        }
         userBookList = new ArrayList<>();
         recyclerView = findViewById(R.id.other_recyclerView);
         mEmptyView = findViewById(R.id.other_view_empty);
@@ -93,7 +105,7 @@ public class ViewUserProfileActivity extends AppCompatActivity implements BookAd
             }
         });
 
-        layoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mAdapter);
         mAdapter.startListening();
@@ -150,6 +162,9 @@ public class ViewUserProfileActivity extends AppCompatActivity implements BookAd
                 .load(imageUrl)
                 .into(user_photo);
         mUserName.setText(fullName);
+        if (userID.contains("<moderator>")) {
+            mUserId.setText(userID.substring(0,userID.indexOf("<moderator>")-1));
+        }
         mUserId.setText(userID);
 
     }
@@ -258,6 +273,7 @@ public class ViewUserProfileActivity extends AppCompatActivity implements BookAd
             chatIntent.putExtra("visit_user_id", phone); // phone number
             chatIntent.putExtra("visit_user_name",userID); // unique user id
             chatIntent.putExtra("visit_image", imageUrl);
+            chatIntent.putExtra("PUBLIC_PHONE",pnp);
             startActivity(chatIntent);
         }
         catch(Exception e){

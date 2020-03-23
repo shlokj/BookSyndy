@@ -128,6 +128,7 @@ public class RequestDetailsActivity extends AppCompatActivity implements EventLi
                 viewProfile.putExtra("USER_NAME", bookOwner.getFirstName() + " " + bookOwner.getLastName());
                 viewProfile.putExtra("USER_ID", bookOwner.getUserId());
                 viewProfile.putExtra("USER_PHOTO", bookOwner.getImageUrl());
+                viewProfile.putExtra("PUBLIC_PHONE",bookOwner.isPhoneNumberPublic());
                 startActivity(viewProfile);
             }
         };
@@ -424,6 +425,7 @@ public class RequestDetailsActivity extends AppCompatActivity implements EventLi
                                 chatIntent.putExtra("visit_user_name", bookOwner.getUserId());
                                 chatIntent.putExtra("visit_image", bookOwner.getImageUrl());
                                 chatIntent.putExtra("default_message",defaultMessage);
+                                chatIntent.putExtra("PUBLIC_PHONE",bookOwner.isPhoneNumberPublic());
                                 if(progressDialog.isShowing()){
                                     progressDialog.dismiss();
                                 }

@@ -109,7 +109,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private User user = null;
     private ListenerRegistration  messageSenderRegistration;
 
-    private boolean firstOpen=true;
+    private boolean firstOpen=true,phoneNumberPublic;
 
 
     @Override
@@ -204,6 +204,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         receiver_user_id = getIntent().getStringExtra("visit_user_id");
         visit_user_name = getIntent().getStringExtra("visit_user_name");
         defaultMessage = getIntent().getStringExtra("default_message");
+        phoneNumberPublic = getIntent().getBooleanExtra("PUBLIC_PHONE",false);
         Glide.with(getApplicationContext()).load(visit_image).into(visitor_profile_picture);
         visitor_name.setText(visit_user_name);
         message_sender_id = Objects.requireNonNull(mAuth.getCurrentUser()).getPhoneNumber();
@@ -347,6 +348,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 viewProfile.putExtra("USER_NAME", "");
                 viewProfile.putExtra("USER_ID", visit_user_name);
                 viewProfile.putExtra("USER_PHOTO", visit_image);
+                viewProfile.putExtra("PUBLIC_PHONE",phoneNumberPublic);
                 startActivity(viewProfile);
                 break;
                 default:
