@@ -115,5 +115,23 @@
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/ic_navigate_next_24px"/>
 
+    <CheckBox
+        android:id="@+id/publicPhoneCB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show my phone number on my profile"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/usernameTIL"
+        app:layout_constraintTop_toBottomOf="@+id/usernameTIL" />
+
+    <TextView
+        android:id="@+id/tcbcatv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(This can be changed anytime)"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="@+id/publicPhoneCB"
+        app:layout_constraintTop_toBottomOf="@+id/publicPhoneCB" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -15,7 +15,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 public class GetBoardActivity extends AppCompatActivity {
 
-    boolean isParent;
+    boolean isParent, phoneNumberPublic;
     TextView boardQuestion;
     RadioGroup boards;
     String firstName, lastName, username;
@@ -36,6 +36,8 @@ public class GetBoardActivity extends AppCompatActivity {
         gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
         username = getIntent().getStringExtra("USERNAME");
         userType = getIntent().getIntExtra("USER_TYPE",1);
+        phoneNumberPublic = getIntent().getBooleanExtra("PUBLIC_PHONE",true);
+
 
 //        password = getIntent().getStringExtra("PASSWORD");
         boardQuestion =  findViewById(R.id.boardQuestionTV);
@@ -53,6 +55,8 @@ public class GetBoardActivity extends AppCompatActivity {
         getFinalAnswer.putExtra("GRADE_NUMBER",gradeNumber);
         getFinalAnswer.putExtra("USERNAME",username);
         getFinalAnswer.putExtra("USER_TYPE",userType);
+        getFinalAnswer.putExtra("PUBLIC_PHONE",phoneNumberPublic);
+
 //        getFinalAnswer.putExtra("PASSWORD",password);
         competitiveExam =  findViewById(R.id.competitiveExam);
         competitiveExam.setTypeface(ResourcesCompat.getFont(getApplicationContext(), R.font.roboto_light));

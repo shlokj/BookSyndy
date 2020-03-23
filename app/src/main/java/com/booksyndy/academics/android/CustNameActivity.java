@@ -8,9 +8,10 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,7 +30,7 @@ import java.util.List;
 
 public class CustNameActivity extends AppCompatActivity {
 
-    private boolean isParent, isValidUsername, isAvailableUsername=true;
+    private boolean isParent, isValidUsername, isAvailableUsername=true, phoneNumberPublic;
     private EditText firstNameField, lastNameField, userIdField;
     private TextInputLayout fnf,lnf,uif;
     private String firstName, lastName, username;
@@ -40,6 +41,7 @@ public class CustNameActivity extends AppCompatActivity {
     private FirebaseFirestore mFireStore;
     private List<String> userNamesList;
     private View parentLayout;
+    private CheckBox pnpcb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +57,14 @@ public class CustNameActivity extends AppCompatActivity {
         firstNameField = (EditText) findViewById(R.id.firstName);
         lastNameField = (EditText) findViewById(R.id.lastName);
         uif = findViewById(R.id.usernameTIL);
-//        userIdField.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD|InputType.TYPE_TEXT_VARIATION_PERSON_NAME|InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+        pnpcb = findViewById(R.id.publicPhoneCB);
 
+        pnpcb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                phoneNumberPublic = isChecked;
+            }
+        });
         pUsername = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -122,6 +130,8 @@ public class CustNameActivity extends AppCompatActivity {
                 firstName = firstNameField.getText().toString().trim();
                 lastName = lastNameField.getText().toString().trim();
                 username = userIdField.getText().toString().trim().toLowerCase();
+                phoneNumberPublic = pnpcb.isChecked();
+//                Toast.makeText(CustNameActivity.this, phoneNumberPublic+"", Toast.LENGTH_SHORT).show();
                 // todo: last char can't be a dot.
                 isValidUsername = false;
                 isValidUsername = (username != null) && username.matches("[A-Za-z0-9_.]+");
@@ -166,7 +176,7 @@ public class CustNameActivity extends AppCompatActivity {
                         completeSignUp.putExtra("USER_TYPE", userType);
                         completeSignUp.putExtra("GRADE_NUMBER",4);
                         completeSignUp.putExtra("BOARD_NUMBER",1);
-
+                        completeSignUp.putExtra("PUBLIC_PHONE",phoneNumberPublic);
                         startActivity(completeSignUp);
                     }
                     else {
@@ -176,6 +186,7 @@ public class CustNameActivity extends AppCompatActivity {
                         getGrade.putExtra("LAST_NAME", lastName);
                         getGrade.putExtra("USERNAME", username);
                         getGrade.putExtra("USER_TYPE", userType);
+                        getGrade.putExtra("PUBLIC_PHONE",phoneNumberPublic);
                         startActivity(getGrade);
                     }
                 }

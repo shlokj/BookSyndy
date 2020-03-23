@@ -12,7 +12,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 public class GetGradeActivity extends AppCompatActivity {
-    boolean isParent;
+    boolean isParent, phoneNumberPublic;
     TextView gradeQuestion, gradeInstructions;
     RadioGroup grades;
     String firstName, lastName, username;
@@ -41,6 +41,7 @@ public class GetGradeActivity extends AppCompatActivity {
         lastName = getIntent().getStringExtra("LAST_NAME");
         username = getIntent().getStringExtra("USERNAME");
         userType = getIntent().getIntExtra("USER_TYPE",1);
+        phoneNumberPublic = getIntent().getBooleanExtra("PUBLIC_PHONE",true);
 
 //        password = getIntent().getStringExtra("PASSWORD");
         gradeQuestion = (TextView) findViewById(R.id.gradeQuestionTV);
@@ -57,6 +58,7 @@ public class GetGradeActivity extends AppCompatActivity {
         getBoard.putExtra("LAST_NAME",lastName);
         getBoard.putExtra("USERNAME",username);
         getBoard.putExtra("USER_TYPE",userType);
+        getBoard.putExtra("PUBLIC_PHONE",phoneNumberPublic);
 
         gradeInstructions = findViewById(R.id.settingGradeInstructions);
 //        getBoard.putExtra("PASSWORD",password);
@@ -107,6 +109,7 @@ public class GetGradeActivity extends AppCompatActivity {
                     getDegree.putExtra("GRADE_NUMBER",gradeNumber);
                     getDegree.putExtra("USERNAME",username);
                     getDegree.putExtra("USER_TYPE",userType);
+                    getDegree.putExtra("PUBLIC_PHONE",phoneNumberPublic);
 //                    getDegree.putExtra("PASSWORD",password);
                     startActivity(getDegree);
                     tmp = false;

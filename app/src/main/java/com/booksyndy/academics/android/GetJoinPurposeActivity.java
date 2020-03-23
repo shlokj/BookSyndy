@@ -27,7 +27,7 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
 
     private static final String default_pic_url = "https://firebasestorage.googleapis.com/v0/b/booksyndy-e8ef6.appspot.com/o/default_photos%2Fdefault_user_dp.png?alt=media&token=23b43df7-8143-4ad7-bb87-51e49da095c6";
 
-    private boolean isParent, competitiveExam;
+    private boolean isParent, competitiveExam, phoneNumberPublic;
     private TextView reasonsQuestion;
     private RadioGroup reasons;
     private String firstName, lastName, username, phoneNumber, date;
@@ -50,40 +50,6 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
         reasons = findViewById(R.id.reasonsButtonList);
 
         registerUser();
-//        startMainActivity.putExtra("IS_PARENT", isParent);
-//        startMainActivity.putExtra("FIRST_NAME",firstName);
-//        startMainActivity.putExtra("LAST_NAME",lastName);
-//        startMainActivity.putExtra("GRADE_NUMBER",gradeNumber);
-/*        FloatingActionButton next = (FloatingActionButton) findViewById(R.id.fab7);
-
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // This is the last activity in which we ask the user for information.
-                // After this, on clicking the next button, the user account creation is completed and the user is taken
-                // to the main activity.
-                // Firebase implementation is required here.
-                reason = reasons.getCheckedRadioButtonId();
-                if (reason == -1) {
-                    View parentLayout = findViewById(android.R.id.content);
-                    Snackbar.make(parentLayout, "Please select an option", Snackbar.LENGTH_SHORT)
-                            .setAction("OKAY", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-
-                                }
-                            })
-                            .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
-                            .show();
-                } else if (reason == R.id.toSell) {
-                    toSell = true;
-                } else if (reason == R.id.toBuy) {
-                    toSell = false;
-                }
-//                 put firebase-related code here
-                registerUser();
-            }
-        });*/
     }
 
     private void registerUser() {
@@ -108,6 +74,7 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
             yearNumber = getIntent().getIntExtra("YEAR_NUMBER", 0);
             username = getIntent().getStringExtra("USERNAME");
             userType = getIntent().getIntExtra("USER_TYPE",1);
+            phoneNumberPublic = getIntent().getBooleanExtra("PUBLIC_PHONE",true);
 
             if (gradeNumber<3 || gradeNumber>6) {
                 competitiveExam=false;
@@ -117,6 +84,7 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
             curFirebaseUser.setYear(yearNumber);
             curFirebaseUser.setUserType(userType);
             curFirebaseUser.setCreationDate(date);
+            curFirebaseUser.setPhoneNumberPublic(phoneNumberPublic);
             db = FirebaseFirestore.getInstance();
 
             // Add a new document with a generated ID
