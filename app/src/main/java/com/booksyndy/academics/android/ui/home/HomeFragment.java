@@ -338,7 +338,6 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                 String filterPattern = newText.toLowerCase().trim();
                 String[] qws = filterPattern.split("\\W+");
                 for (Book book : filteredList) {
-//                    int foundIndex = book.getBookName().toLowerCase().indexOf(filterPattern);
                     String[] tags = book.getBookName().toLowerCase().split("\\W+");
                     for (String tag : tags) {
                         for (String qw : qws) {
@@ -775,7 +774,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                 defaultFilters.setBookBoard(boardsList);
                 defaultFilters.setIsText(true);
                 defaultFilters.setIsNotes(true);
-                defaultFilters.setBookDistance(10);
+                defaultFilters.setBookDistance(20);
                 homeViewModel.setFilters(defaultFilters);
                 onFilter(homeViewModel.getFilters());
             }

@@ -1,10 +1,7 @@
 package com.booksyndy.academics.android;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,27 +24,14 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
 
     private static final String default_pic_url = "https://firebasestorage.googleapis.com/v0/b/booksyndy-e8ef6.appspot.com/o/default_photos%2Fdefault_user_dp.png?alt=media&token=23b43df7-8143-4ad7-bb87-51e49da095c6";
 
-    private boolean isParent, competitiveExam, phoneNumberPublic;
-    private TextView reasonsQuestion;
-    private RadioGroup reasons;
-    private String firstName, lastName, username, phoneNumber, date;
-    private int gradeNumber, boardNumber, yearNumber;
-    private Intent startMainActivity;
     private User curFirebaseUser;
-    private FirebaseFirestore db;
-    private ProgressDialog progressDialog;
-    private int userType;
-    private Calendar calendar;
-    private SimpleDateFormat dateFormat;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_join_purpose);
         getSupportActionBar().setTitle("Sign up");
-        reasonsQuestion = findViewById(R.id.reasonQuestionTV);
-        reasons = findViewById(R.id.reasonsButtonList);
+        getSupportActionBar().hide();
 
         registerUser();
     }
@@ -55,37 +39,32 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
     private void registerUser() {
         try {
 
-            calendar = Calendar.getInstance();
-            dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-            date = dateFormat.format(calendar.getTime());
+            Calendar calendar = Calendar.getInstance();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            String date = dateFormat.format(calendar.getTime());
 
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setMessage("Finishing up");
-            progressDialog.setTitle("Just a sec...");
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-            competitiveExam = getIntent().getBooleanExtra("COMPETITIVE_EXAM", false);
-            isParent = getIntent().getBooleanExtra("IS_PARENT", false);
-            firstName = getIntent().getStringExtra("FIRST_NAME");
-            lastName = getIntent().getStringExtra("LAST_NAME");
-            gradeNumber = getIntent().getIntExtra("GRADE_NUMBER", 4);
-            boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 6);
+            boolean competitiveExam = getIntent().getBooleanExtra("COMPETITIVE_EXAM", false);
+            boolean isParent = getIntent().getBooleanExtra("IS_PARENT", false);
+            String firstName = getIntent().getStringExtra("FIRST_NAME");
+            String lastName = getIntent().getStringExtra("LAST_NAME");
+            int gradeNumber = getIntent().getIntExtra("GRADE_NUMBER", 4);
+            int boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 6);
             boardNumber = getIntent().getIntExtra("DEGREE_NUMBER", boardNumber);
-            yearNumber = getIntent().getIntExtra("YEAR_NUMBER", 0);
-            username = getIntent().getStringExtra("USERNAME");
-            userType = getIntent().getIntExtra("USER_TYPE",1);
-            phoneNumberPublic = getIntent().getBooleanExtra("PUBLIC_PHONE",true);
+            int yearNumber = getIntent().getIntExtra("YEAR_NUMBER", 0);
+            String username = getIntent().getStringExtra("USERNAME");
+            int userType = getIntent().getIntExtra("USER_TYPE", 1);
+            boolean phoneNumberPublic = getIntent().getBooleanExtra("PUBLIC_PHONE", true);
 
-            if (gradeNumber<3 || gradeNumber>6) {
-                competitiveExam=false;
+            if (gradeNumber <3 || gradeNumber >6) {
+                competitiveExam =false;
             }
-            phoneNumber = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
-            curFirebaseUser = new User(firstName, lastName, phoneNumber, isParent, gradeNumber, boardNumber,competitiveExam, username, default_pic_url);
+            String phoneNumber = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
+            curFirebaseUser = new User(firstName, lastName, phoneNumber, isParent, gradeNumber, boardNumber, competitiveExam, username, default_pic_url);
             curFirebaseUser.setYear(yearNumber);
             curFirebaseUser.setUserType(userType);
             curFirebaseUser.setCreationDate(date);
             curFirebaseUser.setPhoneNumberPublic(phoneNumberPublic);
-            db = FirebaseFirestore.getInstance();
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
 
             // Add a new document with a generated ID
             db.collection("users").document(phoneNumber)
@@ -128,9 +107,9 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
 
 
     private void startMain(){
-        startMainActivity = new Intent(GetJoinPurposeActivity.this, MainActivity.class);
+        Intent startMainActivity = new Intent(GetJoinPurposeActivity.this, MainActivity.class);
         startMainActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-        startMainActivity.putExtra("SNACKBAR_MSG","Hey there! Thanks for signing up!");
+//        startMainActivity.putExtra("SNACKBAR_MSG","Hey there! Thanks for signing up!");
         startActivity(startMainActivity);
         finish();
     }

@@ -251,7 +251,7 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
 
                     AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
                     mBuilder.setTitle("Mark as sold?");
-                    mBuilder.setMessage("Your listing will no longer be visible to others and will be moved to the 'Completed' tab.");
+                    mBuilder.setMessage("Your listing will no longer be visible to others and will be moved to the 'Completed' tab. It may be deleted in the future.");
                     mBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
