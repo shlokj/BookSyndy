@@ -509,17 +509,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
 
         else if (navigationView.getCheckedItem() != null && navigationView.getCheckedItem().getItemId() == R.id.nav_starred) {
-            if (findViewById(R.id.fab_request)!=null) {
 
-                new MaterialShowcaseView.Builder(this)
-                        .setTarget(findViewById(R.id.tempviewbm))
-                        .setDismissText("GOT IT")
-                        .setContentText("This is the bookmarks section. Listings you save will appear here. To remove a listing, simply swipe right on it.")
+            new MaterialShowcaseView.Builder(this)
+                    .setTarget(findViewById(R.id.tempviewbm))
+                    .setDismissText("GOT IT")
+                    .setContentText("This is the bookmarks section. Listings you save will appear here. To remove a listing, simply swipe right on it.")
 //                        .setDismissOnTargetTouch(true)
-                        .setDelay(200)
-                        .singleUse("100511")
-                        .show();
-            }
+                    .setDelay(200)
+                    .singleUse("100511")
+                    .show();
+
         }
 
 

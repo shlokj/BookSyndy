@@ -625,6 +625,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         //show progress
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Uploading");
+//        progressDialog.setCancelable(false);
         progressDialog.show();
         try {
             String timeStamp =
