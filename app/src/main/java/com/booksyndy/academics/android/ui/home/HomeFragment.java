@@ -69,7 +69,6 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     private RecyclerView recyclerView;
     private ViewGroup mEmptyView;
     private HomeAdapter mAdapter;
-    private RecyclerView.LayoutManager layoutManager;
     private FirebaseFirestore mFirestore;
     private Query mQuery;
     private User currentUser;
@@ -82,13 +81,10 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     private ListenerRegistration booksRegistration;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private View parentLayout;
-    private SharedPreferences userPref;
     private MenuItem filterItem;
     private double userLat,userLng;
-    private int userGrade;
     private SimpleDateFormat dateFormat;
     private List<Book> filteredList;
-    private TextView nothingHereTV;
     private SearchView searchView;
     private NavController navController;
     private Snackbar sb;
@@ -111,14 +107,14 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         //        ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         parentLayout = root;
-        userPref = getActivity().getSharedPreferences(getString(R.string.UserPref),0);
-        userGrade = userPref.getInt(getString(R.string.p_grade),4);
+        SharedPreferences userPref = getActivity().getSharedPreferences(getString(R.string.UserPref), 0);
+//        int userGrade = userPref.getInt(getString(R.string.p_grade), 4);
         mFilterDialog = new FilterDialogFragment(userPref.getInt(getString(R.string.p_grade),4));
         setHasOptionsMenu(true);
         /* recycler view */
         recyclerView = root.findViewById(R.id.home_recycler_view);
         mEmptyView = root.findViewById(R.id.view_empty);
-        nothingHereTV = root.findViewById(R.id.nothinghereTV);
+        TextView nothingHereTV = root.findViewById(R.id.nothinghereTV);
         nothingHereTV.append(". Try changing your filters.");
 
         preferGuidedMode = userPref.getBoolean(getString(R.string.preferGuidedMode),false);
@@ -169,7 +165,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             }
         };
 
-        layoutManager = new LinearLayoutManager(getActivity());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.swiperefreshhome);
 
@@ -338,14 +334,20 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                 String filterPattern = newText.toLowerCase().trim();
                 String[] qws = filterPattern.split("\\W+");
                 for (Book book : filteredList) {
+                    boolean bookFound = false;
                     String[] tags = book.getBookName().toLowerCase().split("\\W+");
                     for (String tag : tags) {
                         for (String qw : qws) {
                             if (tag.indexOf(qw)==0) {
                                 if (!filteredList1.contains(book)) {
                                     filteredList1.add(book);
+                                    bookFound = true;
+                                    break;
                                 }
                             }
+                        }
+                        if (bookFound) {
+                            break;
                         }
                     }
                 }
@@ -376,8 +378,6 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.filter) {
-            //Intent openFilters = new Intent(HomeActivity.this,FilterActivity.class);
-            //startActivity(openFilters);
             //open filter activity to apply and change filters
             onFilterClicked();
         }
@@ -389,7 +389,8 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         }
         return super.onOptionsItemSelected(item);
     }
-    public void onFilterClicked() {
+
+    private void onFilterClicked() {
         // Show the dialog containing filter options
 
         if(!mFilterDialog.isAdded())

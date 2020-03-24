@@ -40,19 +40,13 @@ import java.util.List;
 public class ChatsFragment extends Fragment implements EventListener<QuerySnapshot>, ChatsAdapter.OnChatSelectedListener {
 
     private static final String TAG = "CHAT_FRAGMENT";
-    private SlideshowViewModel slideshowViewModel;
-    private View PrivateChatsView;
     private RecyclerView recyclerView;
     private ViewGroup mEmptyView;
-    private CollectionReference ChatsRef, UsersRef;
-    private FirebaseAuth mAuth;
-    private FirebaseFirestore mFireStore;
-    private String currentUserID = "";
+    private CollectionReference ChatsRef;
     private ChatsAdapter mAdapter;
     private List<Chat> chatList;
     private List<Chat> chatListFull;
     private ListenerRegistration chatsRegistration;
-    private Snackbar snackbar;
 
 
     public ChatsFragment() {
@@ -61,12 +55,11 @@ public class ChatsFragment extends Fragment implements EventListener<QuerySnapsh
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        slideshowViewModel =
-                ViewModelProviders.of(this).get(SlideshowViewModel.class);
-        PrivateChatsView = inflater.inflate(R.layout.fragment_chats, container, false);
+        SlideshowViewModel slideshowViewModel = ViewModelProviders.of(this).get(SlideshowViewModel.class);
+        View privateChatsView = inflater.inflate(R.layout.fragment_chats, container, false);
         setHasOptionsMenu(true);
-        recyclerView = PrivateChatsView.findViewById(R.id.chat_recycler_view);
-        mEmptyView = PrivateChatsView.findViewById(R.id.chat_view_empty);
+        recyclerView = privateChatsView.findViewById(R.id.chat_recycler_view);
+        mEmptyView = privateChatsView.findViewById(R.id.chat_view_empty);
         initFireStore();
 
         chatList = new ArrayList<>();
@@ -100,15 +93,15 @@ public class ChatsFragment extends Fragment implements EventListener<QuerySnapsh
         //recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(mAdapter);
 
-        return PrivateChatsView;
+        return privateChatsView;
     }
 
     private void initFireStore() {
         try {
             /* firestore */
-            mFireStore = FirebaseFirestore.getInstance();
-            mAuth = FirebaseAuth.getInstance();
-            currentUserID = mAuth.getCurrentUser().getPhoneNumber();
+            FirebaseFirestore mFireStore = FirebaseFirestore.getInstance();
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            String currentUserID = mAuth.getCurrentUser().getPhoneNumber();
             ChatsRef = mFireStore.collection("chats").document(currentUserID).collection("receiver_chats");
             chatsRegistration = ChatsRef.addSnapshotListener(this);
 

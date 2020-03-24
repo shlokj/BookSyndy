@@ -39,11 +39,9 @@ public class ConfirmListingActivity extends AppCompatActivity {
     public static final String TAG = "CONFIRM LISTING";
 
     private boolean isTextbook;
-    private String bookName, bookDescription, phoneNumber, userId, bookAddress, bookImageUrl, selectedImage,book_photo_url;
-    private int gradeNumber, boardNumber, yearNumber;
+    private String bookName, bookDescription, userId, bookAddress, selectedImage,book_photo_url;
+    private int gradeNumber, boardNumber;
     private int bookPrice;
-    private TextView bookNameTV, bookDescriptionTV, bookTypeTV, bookCategoryTV, bookPriceTV, bookLocTV;
-    private Button confirmAndPost;
     private double book_lat,book_lng;
     private StorageReference bookPhotosStorageReference;
     private FirebaseStorage mFirebaseStorage;
@@ -69,14 +67,13 @@ public class ConfirmListingActivity extends AppCompatActivity {
         mFirebaseStorage = FirebaseStorage.getInstance();
         bookPhotosStorageReference = mFirebaseStorage.getReference().child("book_photos");
         selectedImage = getIntent().getStringExtra("BOOK_IMAGE_URI");
-        yearNumber = getIntent().getIntExtra("YEAR_NUMBER",0);
+        int yearNumber = getIntent().getIntExtra("YEAR_NUMBER", 0);
         isTextbook = getIntent().getBooleanExtra("IS_TEXTBOOK", true);
         bookName = getIntent().getStringExtra("BOOK_NAME");
         bookDescription = getIntent().getStringExtra("BOOK_DESCRIPTION");
         gradeNumber = getIntent().getIntExtra("GRADE_NUMBER", 4);
         boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 6);
         bookPrice = getIntent().getIntExtra("BOOK_PRICE", 0);
-        bookImageUrl = getIntent().getStringExtra("BOOK_IMAGE_URL");
         bookAddress = getIntent().getStringExtra("BOOK_LOCATION");
         if(getIntent().getStringExtra("LATITUDE") != null && getIntent().getStringExtra("LONGITUDE") != null) {
             book_lat = Double.parseDouble(getIntent().getStringExtra("LATITUDE"));
@@ -88,13 +85,13 @@ public class ConfirmListingActivity extends AppCompatActivity {
         }
 
         bookPicFinal = findViewById(R.id.bookPicFinal);
-        bookNameTV = findViewById(R.id.bookTitleFinal);
-        bookDescriptionTV = findViewById(R.id.bookDescriptionFinal);
-        bookTypeTV = findViewById(R.id.bookTypeFinal);
-        bookCategoryTV = findViewById(R.id.bookCategoryFinal);
-        bookPriceTV = findViewById(R.id.bookPriceFinal);
-        bookLocTV = findViewById(R.id.bookLocFinal);
-        confirmAndPost = findViewById(R.id.confirmAndPost);
+        TextView bookNameTV = findViewById(R.id.bookTitleFinal);
+        TextView bookDescriptionTV = findViewById(R.id.bookDescriptionFinal);
+        TextView bookTypeTV = findViewById(R.id.bookTypeFinal);
+        TextView bookCategoryTV = findViewById(R.id.bookCategoryFinal);
+        TextView bookPriceTV = findViewById(R.id.bookPriceFinal);
+        TextView bookLocTV = findViewById(R.id.bookLocFinal);
+        Button confirmAndPost = findViewById(R.id.confirmAndPost);
         confirmAndPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -196,6 +193,7 @@ public class ConfirmListingActivity extends AppCompatActivity {
         //show progress
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Uploading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
         try {
             String timeStamp =
@@ -302,10 +300,7 @@ public class ConfirmListingActivity extends AppCompatActivity {
     }
     public static String ordinal(int i) {
         String[] suffixes = new String[] { "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th" };
-        switch (i % 100) {
-            default:
-                return i + suffixes[i % 10];
+        return i + suffixes[i % 10];
 
-        }
     }
 }

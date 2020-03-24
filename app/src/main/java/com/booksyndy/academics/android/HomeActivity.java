@@ -91,8 +91,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private Toolbar toolbar;
     private ImageButton nav_btn_share;
     private int dismissCount=0;
-    private View parentLayout;
-//    public static boolean showDefaultFilters = false;
+    //    public static boolean showDefaultFilters = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,7 +128,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         sbLong = getIntent().getBooleanExtra("SB_LONG", false);
         if (snackbarMessage != null) {
             if (snackbarMessage.length() > 0) {
-                parentLayout = findViewById(android.R.id.content);
+                View parentLayout = findViewById(android.R.id.content);
                 int l = 0;
                 if (sbLong) {
                     l = Snackbar.LENGTH_LONG;

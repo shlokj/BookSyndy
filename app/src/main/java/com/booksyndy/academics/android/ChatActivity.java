@@ -439,15 +439,10 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-//    @Override
-//    protected void onPause(){
-//        super.onPause();
-//        messagesList.clear();
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        this.menu = menu;
+//        this.menu = menu;
         getMenuInflater().inflate(R.menu.menu_indiv_chat, menu);
 
         return true;

@@ -247,14 +247,9 @@ public class ViewUserProfileActivity extends AppCompatActivity implements BookAd
                                 }
                             }
                         });
-
-
                     }
                 }
             });
-
-
-
         }
 
     }

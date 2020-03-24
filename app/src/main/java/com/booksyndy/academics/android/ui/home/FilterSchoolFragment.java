@@ -27,6 +27,16 @@ import java.util.List;
  */
 public class FilterSchoolFragment extends Fragment implements View.OnClickListener {
 
+    /*How default filters are to be set:
+     * For grade - check two boxes: the grade registered with AND the grade above it. For example, check 10 and 11 if the user is regd with 10
+     * If the user has regd with 12, check only 12 here, and we'll add an option to view college book filters. Else college filters are all unchecked.
+     * For board - check only the board the user has chosen during registration, and check competitive exams only if the user has checked it during registration
+     * i.e., upto two board checks by default
+     * For free/not - leave unchecked by default. Do not save prefs.
+     * For textbook/notes - textbook by default. minimum one and maximum one selection. Logic will be added
+     * For sort - relevance by default; don't save prefs
+     * */
+
     private static String TAG = "FILTER_SCHOOL";
     private View mRootView;
     private CheckBox filterGrade5orBelow, filterGrade6to8, filterGrade9, filterGrade10, filterGrade11, filterGrade12;
