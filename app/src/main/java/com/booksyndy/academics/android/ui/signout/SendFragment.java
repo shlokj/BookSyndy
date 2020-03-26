@@ -52,13 +52,6 @@ public class SendFragment extends Fragment {
                 getActivity().finish();
             }
         });
-/*        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                startActivity(getActivity().getIntent());
-                getActivity().finish();
-            }
-        });*/
         builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {

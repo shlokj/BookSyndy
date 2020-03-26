@@ -42,6 +42,12 @@
         tools:layout="@layout/fragment_share" />
 
     <fragment
+        android:id="@+id/nav_share"
+        android:name="com.booksyndy.academics.android.ui.shareApp.ShareAppFragment"
+        android:label="@string/menu_share_app"
+        tools:layout="@layout/fragment_shareapp" />
+
+    <fragment
         android:id="@+id/nav_signout"
         android:name="com.booksyndy.academics.android.ui.signout.SendFragment"
         android:label="@string/menu_send"

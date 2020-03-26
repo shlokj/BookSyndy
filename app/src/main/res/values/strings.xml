@@ -36,6 +36,7 @@
     <string name="menu_slideshow">Chats</string>
     <string name="menu_tools">Bookmarks</string>
     <string name="menu_share">Help and FAQs</string>
+    <string name="menu_share_app">Share</string>
     <string name="menu_send">Sign Out</string>
     <string name="action_signOut">Sign out</string>
     <string name="main_activity">This is Main Activity</string>
