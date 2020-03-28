@@ -478,6 +478,10 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                 else if (fBoards.contains(6)) {
                     boards = boards + "other board";
                 }
+                else if (fBoards.contains(20)) {
+                    grades = "";
+                    boards = "competitive exams";
+                }
             }
             else if (fBoards.size()>=2) {
                 if (fBoards.contains(1)) {

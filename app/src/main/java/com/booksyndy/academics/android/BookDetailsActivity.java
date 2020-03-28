@@ -652,7 +652,6 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         }
         if (currentBook != null && curAppUser != null) {
             final DocumentReference reportRef = mFirestore.collection("report_book").document(currentBook.getDocumentId());
-            //final DocumentReference bookRef = mFirestore.collection("books").document(currentBook.getDocumentId());
             reportRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot snapshot) {
