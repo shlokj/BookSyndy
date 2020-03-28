@@ -121,6 +121,9 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         nothingHereTV = root.findViewById(R.id.nothinghereTV);
         nothingHereTV.append(". Try changing your filters.");
 
+        recyclerView.setVerticalScrollBarEnabled(false);
+//        recyclerView.setHorizontalScrollBarEnabled(false);
+
         preferGuidedMode = userPref.getBoolean(getString(R.string.preferGuidedMode), false);
         userLat = userPref.getFloat(getString(R.string.p_lat), 0.0f);
         userLng = userPref.getFloat(getString(R.string.p_lng), 0.0f);
@@ -305,7 +308,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             mQuery = mQuery.whereEqualTo("gradeNumber", grade);
         }
         if(board != -1)
-        mQuery = mQuery.whereEqualTo("boardNumber", board);
+            mQuery = mQuery.whereEqualTo("boardNumber", board);
 
         mQuery = mQuery.orderBy("bookTime", Query.Direction.DESCENDING);
         booksRegistration = mQuery.limit(10).addSnapshotListener(this);
@@ -720,7 +723,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 
     }
 
-    public void showSnackbar(String message) {
+    private void showSnackbar(String message) {
         Snackbar.make(parentLayout, message, Snackbar.LENGTH_SHORT)
                 .setAction("OKAY", new View.OnClickListener() {
                     @Override
