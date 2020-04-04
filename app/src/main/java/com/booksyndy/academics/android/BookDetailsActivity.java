@@ -619,7 +619,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
 
             case R.id.reportListing:
                 AlertDialog.Builder rBuilder = new AlertDialog.Builder(BookDetailsActivity.this);
-                rBuilder.setTitle("Report listing");
+                rBuilder.setTitle(R.string.report_listing);
                 rBuilder.setIcon(R.drawable.ic_report_24px_outlined);
                 rBuilder.setMessage("Are you sure you want to report this listing?");
                 rBuilder.setPositiveButton("Report", new DialogInterface.OnClickListener() {

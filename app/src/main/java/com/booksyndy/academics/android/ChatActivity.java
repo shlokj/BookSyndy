@@ -481,7 +481,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.reportUserChat:
                 AlertDialog.Builder rBuilder = new AlertDialog.Builder(ChatActivity.this);
-                rBuilder.setTitle("Report listing");
+                rBuilder.setTitle("Report user");
                 rBuilder.setIcon(R.drawable.ic_report_24px_outlined);
                 rBuilder.setMessage(Html.fromHtml("Are you sure you want to report <b>"+visit_user_name+"</b>?"));
                 rBuilder.setPositiveButton("Report", new DialogInterface.OnClickListener() {
