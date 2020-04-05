@@ -36,7 +36,6 @@ import com.booksyndy.academics.android.Data.Book;
 import com.booksyndy.academics.android.Data.OnFilterSelectionListener;
 import com.booksyndy.academics.android.Data.User;
 import com.booksyndy.academics.android.GetBookPictureActivity;
-import com.booksyndy.academics.android.HomeActivity;
 import com.booksyndy.academics.android.R;
 import com.booksyndy.academics.android.util.Filters;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -51,24 +50,25 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelectedListener, OnFilterSelectionListener,EventListener<QuerySnapshot> {
+public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelectedListener, OnFilterSelectionListener, EventListener<QuerySnapshot> {
 
     private static String TAG = "HOME_FRAGMENT";
     private HomeViewModel homeViewModel;
     private RecyclerView recyclerView;
     private ViewGroup mEmptyView;
     private HomeAdapter mAdapter;
+    private LinearLayoutManager layoutManager;
     private FirebaseFirestore mFirestore;
     private Query mQuery;
     private User currentUser;
@@ -81,14 +81,18 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     private ListenerRegistration booksRegistration;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private View parentLayout;
+    private SharedPreferences userPref;
     private MenuItem filterItem;
-    private double userLat,userLng;
+    private double userLat, userLng;
+    private int userGrade;
     private SimpleDateFormat dateFormat;
     private List<Book> filteredList;
+    private TextView nothingHereTV;
     private SearchView searchView;
     private NavController navController;
     private Snackbar sb;
     private final int MENU_CHAT = 789;
+    private DocumentSnapshot lastVisibleItem;
 
 
     @Override
@@ -96,7 +100,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         super.onCreate(savedInstanceState);
         getUserDetails();
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
-        dateFormat =  new SimpleDateFormat("dd MM yyyy HH",Locale.getDefault());
+        dateFormat = new SimpleDateFormat("dd MM yyyy HH", Locale.getDefault());
 
     }
 
@@ -107,19 +111,22 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         //        ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         parentLayout = root;
-        SharedPreferences userPref = getActivity().getSharedPreferences(getString(R.string.UserPref), 0);
-//        int userGrade = userPref.getInt(getString(R.string.p_grade), 4);
-        mFilterDialog = new FilterDialogFragment(userPref.getInt(getString(R.string.p_grade),4));
+        userPref = getActivity().getSharedPreferences(getString(R.string.UserPref), 0);
+        userGrade = userPref.getInt(getString(R.string.p_grade), 4);
+        mFilterDialog = new FilterDialogFragment(userPref.getInt(getString(R.string.p_grade), 4));
         setHasOptionsMenu(true);
         /* recycler view */
         recyclerView = root.findViewById(R.id.home_recycler_view);
         mEmptyView = root.findViewById(R.id.view_empty);
-        TextView nothingHereTV = root.findViewById(R.id.nothinghereTV);
+        nothingHereTV = root.findViewById(R.id.nothinghereTV);
         nothingHereTV.append(". Try changing your filters.");
 
-        preferGuidedMode = userPref.getBoolean(getString(R.string.preferGuidedMode),false);
-        userLat = userPref.getFloat(getString(R.string.p_lat),0.0f);
-        userLng = userPref.getFloat(getString(R.string.p_lng),0.0f);
+        recyclerView.setVerticalScrollBarEnabled(false);
+//        recyclerView.setHorizontalScrollBarEnabled(false);
+
+        preferGuidedMode = userPref.getBoolean(getString(R.string.preferGuidedMode), false);
+        userLat = userPref.getFloat(getString(R.string.p_lat), 0.0f);
+        userLng = userPref.getFloat(getString(R.string.p_lng), 0.0f);
 
         navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
 
@@ -131,16 +138,15 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                 Intent startBookPub;
                 if (preferGuidedMode) {
                     startBookPub = new Intent(getActivity(), GetBookPictureActivity.class);
-                }
-                else {
+                } else {
                     startBookPub = new Intent(getActivity(), CreateListingActivity.class);
                 }
                 startBookPub.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startBookPub.putExtra("GRADE_NUMBER", gradeNumber);
                 startBookPub.putExtra("BOARD_NUMBER", boardNumber);
                 startBookPub.putExtra("YEAR_NUMBER", year);
-                startBookPub.putExtra("USER_TYPE",userType);
-                startBookPub.putExtra("PHONE_NUMBER",currentUser.getPhone());
+                startBookPub.putExtra("USER_TYPE", userType);
+                startBookPub.putExtra("PHONE_NUMBER", currentUser.getPhone());
                 startActivity(startBookPub);
             }
         });
@@ -149,7 +155,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         bookList = new ArrayList<>();
         bookListFull = new ArrayList<>();
         // specify an adapter
-        mAdapter = new HomeAdapter(getContext(),bookList, this) {
+        mAdapter = new HomeAdapter(getContext(), bookList, this) {
 
             @Override
             public void onDataChanged() {
@@ -165,8 +171,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             }
         };
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-
+        layoutManager = new LinearLayoutManager(getContext());
         mSwipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.swiperefreshhome);
 
 
@@ -174,12 +179,15 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             @Override
             public void onRefresh() {
                 //code to reload with new books
-                if(checkConnection(getContext())) {
-                    refreshHome();
-                }
-                else{
+                if (checkConnection(getContext())) {
+                    if (mSwipeRefreshLayout.isRefreshing()) {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+//                    refreshHome();
+//                    sortBooks(homeViewModel.getFilters());
+                } else {
                     showSnackbar("Check your internet!");
-                    if(mSwipeRefreshLayout.isRefreshing()){
+                    if (mSwipeRefreshLayout.isRefreshing()) {
                         mSwipeRefreshLayout.setRefreshing(false);
                     }
                 }
@@ -187,36 +195,59 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         });
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
 
-
         /* use a linear layout manager */
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
-
-
-//        if(!HomeActivity.showDefaultFilters){
-//            HomeActivity.showDefaultFilters = true;
-            setDefaultFilters();
-//        }
-
-/*        requireActivity().getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+        //add list scroll listeners
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void handleOnBackPressed() {
-                sb.dismiss();
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int lastItemPos = layoutManager.findLastCompletelyVisibleItemPosition();
+                if (lastItemPos >= bookList.size() - 1) {
+                    loadMoreBooks();
+                }
             }
-        });*/
+        });
+
+
 
         return root;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (booksRegistration == null) {
-            booksRegistration = mQuery.addSnapshotListener(this);
-        }
-    }
+    private void loadMoreBooks() {
+        Log.d(TAG, "loadMoreBooks: called");
+        mQuery = mQuery.startAfter(lastVisibleItem).limit(5);
+        mQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.d(TAG, "onEvent: Books error", e);
+                    return;
+                }
+                if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                    lastVisibleItem = queryDocumentSnapshots.getDocuments()
+                            .get(queryDocumentSnapshots.size() - 1);
+                    bookList.addAll(queryDocumentSnapshots.toObjects(Book.class));
+                    bookListFull.addAll(queryDocumentSnapshots.toObjects(Book.class));
+                    mAdapter.setBookList(bookList);
+                    sortBooks(homeViewModel.getFilters());
+                }
 
+            }
+        });
+    }
+//
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        if (booksRegistration == null) {
+//            booksRegistration = mQuery.addSnapshotListener(this);
+//        }
+//    }
+//
+//
 
     @Override
     public void onResume() {
@@ -224,19 +255,27 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         if (mAdapter != null) {
             mAdapter.onDataChanged();
         }
-//        gradeNumber = getActivity().getIntent().getIntExtra("GRADE_NUMBER",4);
-//        boardNumber = getActivity().getIntent().getIntExtra("BOARD_NUMBER",1);
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (booksRegistration != null) {
-            booksRegistration.remove();
-            booksRegistration = null;
-            mAdapter.onDataChanged();
-        }
-    }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        if (mAdapter != null) {
+//            mAdapter.onDataChanged();
+//        }
+////        gradeNumber = getActivity().getIntent().getIntExtra("GRADE_NUMBER",4);
+////        boardNumber = getActivity().getIntent().getIntExtra("BOARD_NUMBER",1);
+//    }
+//
+//    @Override
+//    public void onStop() {
+//        super.onStop();
+//        if (booksRegistration != null) {
+//            booksRegistration.remove();
+//            booksRegistration = null;
+//            mAdapter.onDataChanged();
+//        }
+//    }
 
     private void refreshHome() {
         if (booksRegistration != null) {
@@ -249,24 +288,31 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 
 
     private void initFireStore() {
-        if(mSwipeRefreshLayout != null && !mSwipeRefreshLayout.isRefreshing())
+        Log.d(TAG, "initFireStore: entered");
+        if (mSwipeRefreshLayout != null && !mSwipeRefreshLayout.isRefreshing())
             mSwipeRefreshLayout.setRefreshing(true);
 
         Filters tFilters = homeViewModel.getFilters();
         /* firestore */
         mFirestore = FirebaseFirestore.getInstance();
         curUserId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
-        mQuery = mFirestore.collection("books")
-                .whereEqualTo("bookSold",false)
-                .orderBy("createdAt", Query.Direction.DESCENDING);
-//        if(userGrade <= 5){
-//           mQuery = mQuery.whereLessThan("gradeNumber",7);
-//        }
-//        else{
-//            mQuery = mQuery.whereGreaterThan("gradeNumber",5);
-//        }
-        booksRegistration = mQuery.addSnapshotListener(this);
-        //removeUserBooks(mQuery);
+        mQuery = mFirestore.collection("books").whereEqualTo("bookSold", false);
+        //default filters
+
+        int grade = userPref.getInt(getString(R.string.p_grade), -1);
+        int board = userPref.getInt(getString(R.string.p_board), -1);
+        Log.d(TAG, "initFireStore: userGrade: " + grade);
+        if (grade != -1 && grade <= 5) {
+            mQuery = mQuery.whereIn("gradeNumber", Arrays.asList(grade, grade + 1));
+        } else if (grade != -1) {
+            mQuery = mQuery.whereEqualTo("gradeNumber", grade);
+        }
+        if(board != -1)
+            mQuery = mQuery.whereEqualTo("boardNumber", board);
+
+        mQuery = mQuery.orderBy("createdAt", Query.Direction.DESCENDING);
+        booksRegistration = mQuery.limit(10).addSnapshotListener(this);
+        setDefaultFilters(grade,board);
     }
 
 
@@ -275,23 +321,19 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         if (mQuery == null) {
             Log.w(TAG, "No query, not initializing RecyclerView");
         }
-        if(!queryDocumentSnapshots.isEmpty()) {
+        if (!queryDocumentSnapshots.isEmpty()) {
+            lastVisibleItem = queryDocumentSnapshots.getDocuments()
+                    .get(queryDocumentSnapshots.size() - 1);
+            Log.d(TAG, "populateBookAdapter: snap count: " + queryDocumentSnapshots.size());
             bookList.clear();
-            for(QueryDocumentSnapshot snapshot:queryDocumentSnapshots){
-                Book book = snapshot.toObject(Book.class);
-                if(!book.getUserId().equalsIgnoreCase(curUserId)){
-                    bookList.add(book);
-                }
-            }
-            //bookList.addAll(queryDocumentSnapshots.toObjects(Book.class));
-            mAdapter.setBookList(bookList);
+            bookList.addAll(queryDocumentSnapshots.toObjects(Book.class));
+            Log.d(TAG, "populateBookAdapter: books count: " + bookList.size());
+            sortBooks(homeViewModel.getFilters());
             bookListFull = new ArrayList<>(bookList);
-
-            mAdapter.onDataChanged();
         }
 
-        onFilter(homeViewModel.getFilters());
-        if(mSwipeRefreshLayout.isRefreshing()){
+        // onFilter(homeViewModel.getFilters());
+        if (mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);
         }
     }
@@ -305,7 +347,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         menu.getItem(0).setIcon(R.drawable.ic_chat_white_24px);
 
         filterItem = menu.findItem(R.id.filter);
-        searchView = (SearchView)searchItem.getActionView();
+        searchView = (SearchView) searchItem.getActionView();
         searchView.setQueryHint("Search");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -317,45 +359,51 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             @Override
             public boolean onQueryTextChange(String newText) {
 
-                if (sb!=null && newText.length()==0 && sb.isShown()) {
+                if (sb != null && newText.length() == 0 && sb.isShown()) {
                     sb.dismiss();
                 }
-                List<Book> filteredList1 = new ArrayList<>();
-                if(newText == null || newText.trim().isEmpty())
-                {
-                    filteredList1.addAll(filteredList);
+
+                if (newText == null || newText.trim().isEmpty()) {
+
                     searchView.clearFocus();
 
-                    if (sb!=null && newText.length()==0 && sb.isShown()) {
+                    if (sb != null && newText.length() == 0 && sb.isShown()) {
                         sb.dismiss();
                     }
-                    mAdapter.setBookList(filteredList);
+                    mAdapter.setBookList(bookList);
                     return true;
                 }
 
                 String filterPattern = newText.toLowerCase().trim();
-                String[] qws = filterPattern.split("\\W+");
-                for (Book book : filteredList) {
-                    boolean bookFound = false;
-                    String[] tags = book.getBookName().toLowerCase().split("\\W+");
-                    for (String tag : tags) {
-                        for (String qw : qws) {
-                            if (tag.indexOf(qw)==0) {
-                                if (!filteredList1.contains(book)) {
-                                    filteredList1.add(book);
-                                    bookFound = true;
-                                    break;
+                final String[] qws = filterPattern.split("\\W+");
+
+                mQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+
+                        if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                            bookListFull.clear();
+                            bookListFull.addAll(queryDocumentSnapshots.toObjects(Book.class));
+                        }
+                        List<Book> filteredList1 = new ArrayList<>();
+                        for (Book book : bookListFull) {
+//                    int foundIndex = book.getBookName().toLowerCase().indexOf(filterPattern);
+                            String[] tags = book.getBookName().toLowerCase().split("\\W+");
+                            for (String tag : tags) {
+                                for (String qw : qws) {
+                                    if (tag.indexOf(qw) == 0) {
+                                        if (!filteredList1.contains(book)) {
+                                            filteredList1.add(book);
+                                        }
+                                    }
                                 }
                             }
                         }
-                        if (bookFound) {
-                            break;
-                        }
+
+                        mAdapter.setBookList(filteredList1);
+
                     }
-                }
-
-                mAdapter.setBookList(filteredList1);
-
+                });
                 return false;
             }
         });
@@ -365,10 +413,8 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             public boolean onMenuItemClick(MenuItem item) {
                 searchView.onActionViewExpanded();
                 searchView.requestFocus();
-                if (gradeNumber<=6) {
-                    sb = Snackbar.make(parentLayout, "Searching in " + grades + " and " + boards, Snackbar.LENGTH_LONG);
-                    sb.show();
-                }
+                sb = Snackbar.make(parentLayout, "Searching in " + grades + " and " + boards, Snackbar.LENGTH_LONG);
+                sb.show();
                 return true;
             }
         });
@@ -380,291 +426,117 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.filter) {
+            //Intent openFilters = new Intent(HomeActivity.this,FilterActivity.class);
+            //startActivity(openFilters);
             //open filter activity to apply and change filters
             onFilterClicked();
-        }
-        else if (id == R.id.action_search) {
+        } else if (id == R.id.action_search) {
             filterItem.setVisible(false);
-        }
-        else if (id == MENU_CHAT) {
+        } else if (id == MENU_CHAT) {
             navController.navigate(R.id.nav_chats);
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void onFilterClicked() {
+    public void onFilterClicked() {
         // Show the dialog containing filter options
 
-        if(!mFilterDialog.isAdded())
+        if (!mFilterDialog.isAdded())
             mFilterDialog.show(getChildFragmentManager(), FilterDialogFragment.TAG);
     }
 
     @Override
-    public void onFilter(Filters filters) {
-        filteredList = new ArrayList<>();
-        List<Book> toBeRemoved = new ArrayList<>();
+    public void onFilter(final Filters filters) {
 
+        Query fQuery = mFirestore.collection("books").whereEqualTo("bookSold", false);
         boolean noFilter = true;
-
-        if (filters.hasBookGrade()) {
-            grades = "grades: ";
-            List<Integer> fGrades = filters.getBookGrade();
-            if (fGrades.size()==1) {
-                if (fGrades.contains(1)) {
-                    grades = grades + "5-";
-                }
-                else if (fGrades.contains(2)) {
-                    grades = grades + "6-8";
-                }
-                else if (fGrades.contains(3)) {
-                    grades = grades + "9";
-                }
-                else if (fGrades.contains(4)) {
-                    grades = grades + "10";
-                }
-                else if (fGrades.contains(5)) {
-                    grades = grades + "11";
-                }
-                else if (fGrades.contains(6)) {
-                    grades = grades + "12";
-                }
-            }
-            else if (fGrades.size()>=2) {
-                if (fGrades.contains(1)) {
-                    grades = grades + "5-, ";
-                }
-                if (fGrades.contains(2)) {
-                    grades = grades + "6-8, ";
-                }
-                if (fGrades.contains(3)) {
-                    grades = grades + "9, ";
-                }
-                if (fGrades.contains(4)) {
-                    grades = grades + "10, ";
-                }
-                if (fGrades.contains(5)) {
-                    grades = grades + "11, ";
-                }
-                if (fGrades.contains(6)) {
-                    grades = grades + "12, ";
-                }
-            }
-            if (grades.substring(grades.length()-2).equals(", ")) {
-                grades = grades.substring(0,grades.length()-2);
-            }
-        }
-        else {
-            grades = "all grades";
-        }
-
+        //board
         if (filters.hasBookBoard()) {
-            boards = "boards: ";
-            List<Integer> fBoards = filters.getBookBoard();
-            if (fBoards.size()==1) {
-                if (fBoards.contains(1)) {
-                    boards = boards + "CBSE";
-                }
-                else if (fBoards.contains(2)) {
-                    boards = boards + "ICSE/ISC";
-                }
-                else if (fBoards.contains(3)) {
-                    boards = boards + "IB";
-                }
-                else if (fBoards.contains(4)) {
-                    boards = boards + "IGCSE/CAIE";
-                }
-                else if (fBoards.contains(5)) {
-                    boards = boards + "State board";
-                }
-                else if (fBoards.contains(6)) {
-                    boards = boards + "other board";
-                }
-                else if (fBoards.contains(20)) {
-                    grades = "";
-                    boards = "competitive exams";
-                }
-            }
-            else if (fBoards.size()>=2) {
-                if (fBoards.contains(1)) {
-                    boards = boards + "CBSE, ";
-                }
-                if (fBoards.contains(2)) {
-                    boards = boards + "ICSE/ISC, ";
-                }
-                if (fBoards.contains(3)) {
-                    boards = boards + "IB, ";
-                }
-                if (fBoards.contains(4)) {
-                    boards = boards + "IGCSE/CAIE, ";
-                }
-                if (fBoards.contains(5)) {
-                    boards = boards + "State board, ";
-                }
-                if (fBoards.contains(6)) {
-                    boards = boards + "other board, ";
-                }
-                if (fBoards.contains(20)) {
-                    boards = boards + "including competitive exams";
-                }
-            }
-            if (boards.substring(boards.length()-2).equals(", ")) {
-                boards = boards.substring(0,boards.length()-2);
-            }
-        }
-        else {
-            boards = "all boards";
-        }
-
-        // add all books to filtered list to start with
-//        filteredList.addAll(bookListFull);
-
-
-        int bn=1;
-        for (Integer x:filters.getBookBoard()) {
-            bn = x;
-        } // because filters.getBookBoard().get(0) doesn't work, oddly
-
-        for(Book book:bookListFull) {
-            if (book.getBoardNumber()==bn) {
-                filteredList.add(book);
-            }
-        }
-
-//        Toast.makeText(getActivity(), filters.getBookBoard().get(0)+" is the bn", Toast.LENGTH_SHORT).show();
-
-        // then, remove books that don't satisfy the provided criteria
-
-        if(filters.hasPrice()){
-            for(Book book:filteredList){
-                if(book.getBookPrice() != 0)
-                    toBeRemoved.add(book);
-            }
+            //filters are applied
             noFilter = false;
+
+            fQuery = fQuery.whereEqualTo("boardNumber", filters.getBookBoard().get(0));
         }
 
-        for (Book b:toBeRemoved) {
-            filteredList.remove(b);
-        }
+        //grade
+        if (filters.hasBookGrade()) {
+            noFilter = false;
 
-        toBeRemoved.clear();
+            fQuery = fQuery.whereIn("gradeNumber", filters.getBookGrade());
+        }
 
         if (!(filters.IsText() && filters.IsNotes())) {
+            noFilter = false;
+
             if (filters.IsText()) {
-                for (Book book : filteredList) {
-                    if (!book.isTextbook())
-                        toBeRemoved.add(book);
-                }
+                fQuery = fQuery.whereEqualTo("textbook", true);
+            } else if (filters.IsNotes()) {
+                fQuery = fQuery.whereEqualTo("textbook", false);
             }
-            else if (filters.IsNotes()){
-                for (Book book : filteredList) {
-                    if (book.isTextbook())
-                        toBeRemoved.add(book);
-                }
-            }
+
+        }
+
+        //price
+        if (filters.hasPrice()) {
             noFilter = false;
+
+            fQuery = fQuery.whereEqualTo("bookPrice", 0);
         }
 
-/*
-        for (Book b:toBeRemoved) {
-            filteredList.remove(b);
-        }
+        fQuery = fQuery.orderBy("createdAt", Query.Direction.DESCENDING);
 
-        toBeRemoved.clear();
+        if (noFilter) {
+            homeViewModel.setFilters(filters);
+            refreshHome();
+            sortBooks(filters);
+        } else {
+            homeViewModel.setFilters(filters);
 
-        List<Integer> unrequiredBoards = new ArrayList<>();
-
-        if (filters.hasBookBoard()) {
-
-//            Toast.makeText(getActivity(), filters.getBookBoard().size()+"", Toast.LENGTH_SHORT).show();
-            for (int i = 1; i <= 16; i++) {
-                if (!filters.getBookBoard().contains(i)) {
-                    unrequiredBoards.add(i);
-                }
-            }
-
-            if (!filters.getBookBoard().contains(20)) {
-                unrequiredBoards.add(20);
-            }
-            for (int a = 0; a < filteredList.size(); a++) {
-                for (Integer i : unrequiredBoards) {
-                    if (filteredList.get(a).getBoardNumber() == i) {
-                        toBeRemoved.add(filteredList.get(a));
+            mQuery = fQuery;
+            mQuery.limit(10).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                    if (e != null) {
+                        Log.d(TAG, "onEvent: Books error", e);
+                        return;
                     }
-                }
-            }
-            noFilter = false;
-        }
-
-        else {
-
-            // remove competitive exam books from the list as we don't want them by default
-            for (int a = 0; a < filteredList.size(); a++) {
-                if (filteredList.get(a).getBoardNumber() == 20) {
-                    toBeRemoved.add(filteredList.get(a));
-                }
-            }
-        }
-
-
-        for (Book b:toBeRemoved) {
-            filteredList.remove(b);
-        }
-
-        toBeRemoved.clear();*/
-
-        if (filters.hasBookGrade()) {
-
-            List<Integer> unrequiredGrades = new ArrayList<>();
-
-            for (int i = 1; i <= 7; i++) {
-                if (!filters.getBookGrade().contains(i)) {
-                    unrequiredGrades.add(i);
-                }
-            }
-
-
-            for (int a = 0; a < filteredList.size(); a++) {
-                for (Integer i : unrequiredGrades) {
-                    if (filteredList.get(a).getGradeNumber() == i) {
-                        toBeRemoved.add(filteredList.get(a));
+                    if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                        bookList.clear();
+                        lastVisibleItem = queryDocumentSnapshots.getDocuments()
+                                .get(queryDocumentSnapshots.size() - 1);
+                        bookList.addAll(queryDocumentSnapshots.toObjects(Book.class));
+                        bookListFull.addAll(queryDocumentSnapshots.toObjects(Book.class));
+                        mAdapter.setBookList(bookList);
+                        sortBooks(filters);
                     }
+                    else if (queryDocumentSnapshots.isEmpty()){
+                        Toast.makeText(getActivity(), "No listings match your filters. Showing listings that match your previous filters, if any.", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
-            }
-            noFilter = false;
+            });
         }
 
-        for (Book b:toBeRemoved) {
-            filteredList.remove(b);
-        }
-
-        toBeRemoved.clear();
+    }
 
 
-        if(filters.hasBookDistance()){
-            if(userLat != 0.0 && userLng != 0.0) {
-                for (Book b : filteredList) {
+    private void sortBooks(Filters filters) {
+        List<Book> filterList = new ArrayList<>(bookList);
+        boolean hasFilter = false;
+        if (filters.hasBookDistance()) {
+            if (userLat != 0.0 && userLng != 0.0) {
+                for (Book b : bookList) {
                     if (!getBookUnderDistance(b, filters.getBookDistance(), userLat, userLng)) {
-                        toBeRemoved.add(b);
+                        filterList.remove(b);
                     }
                 }
-                noFilter = false;
+                bookList = filterList;
+                bookListFull.clear();
+                bookListFull.addAll(bookList);
+//                mAdapter.setBookList(filterList);
             }
-            else {
-                HomeActivity homeActivity = (HomeActivity) getActivity();
-                if (homeActivity != null) {
-                    homeActivity.startLocationUpdates();
-                    //showSnackbar("Please Enable GPS");
-                }
 
-                filters.setBookDistance(-1);
-            }
         }
-
-        for (Book b:toBeRemoved) {
-            filteredList.remove(b);
-        }
-
-        toBeRemoved.clear();
 
 
         if(filters.hasSortBy()){
@@ -672,7 +544,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             if(filters.getSortBy().equalsIgnoreCase("time")) {
                 //sort by book duration
                 try {
-                    Collections.sort(filteredList, new Comparator<Book>() {
+                    Collections.sort(bookList, new Comparator<Book>() {
                         @Override
                         public int compare(Book o1, Book o2) {
                             try {
@@ -701,7 +573,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 
                 if(userLat != 0.0 && userLng != 0.0) {
 
-                    Collections.sort(filteredList, new Comparator<Book>() {
+                    Collections.sort(bookList, new Comparator<Book>() {
                         @Override
                         public int compare(Book o1, Book o2) {
                             Location userLocation = new Location("point A");
@@ -735,56 +607,29 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 
         }
 
-
-        if(filteredList == null || filteredList.isEmpty()){
-            if(noFilter){
-                Log.d(TAG, "onFilter: is empty");
-                filteredList.addAll(bookList);
-                bookListFull.clear();
-                bookListFull.addAll(bookList);
-            }
-            else{
-                bookListFull.clear();
-                bookListFull.addAll(bookList);
-            }
-        }
-        mAdapter.setBookList(filteredList);
-        homeViewModel.setFilters(filters);
+        mAdapter.setBookList(bookList);
+        Log.d(TAG, "sortBooks: " + filters.getSortBy());
     }
 
 
-    private void setDefaultFilters() {
-        final String curUserId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
-        mFirestore.collection("users").document(curUserId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
-                if(e != null){
-                    Log.e(TAG, "onEvent: listener error",e );
-                    return;
-                }
-                currentUser = snapshot.toObject(User.class);
+    private void setDefaultFilters(int grade,int board) {
 
-                Filters defaultFilters = new Filters();
-                List<Integer> gradesList = new ArrayList<Integer>();
-                gradesList.add(currentUser.getGradeNumber());
-                if (currentUser.getGradeNumber()<=5) {
-                    gradesList.add(currentUser.getGradeNumber() + 1);
-                }
-                List<Integer> boardsList = new ArrayList<Integer>();
-                boardsList.add(currentUser.getBoardNumber());
-                defaultFilters.setBookGrade(gradesList);
-                if (currentUser.isCompetitiveExam()) {
-                    boardsList.add(20);
-                }
-                defaultFilters.setSortBy("time");
-                defaultFilters.setBookBoard(boardsList);
-                defaultFilters.setIsText(true);
-                defaultFilters.setIsNotes(true);
-                defaultFilters.setBookDistance(20);
-                homeViewModel.setFilters(defaultFilters);
-                onFilter(homeViewModel.getFilters());
-            }
-        });
+        Filters defaultFilters = new Filters();
+        List<Integer> gradesList = new ArrayList<Integer>();
+        gradesList.add(grade);
+        if (grade <= 5) {
+            gradesList.add(grade + 1);
+        }
+        List<Integer> boardsList = new ArrayList<Integer>();
+        boardsList.add(board);
+        defaultFilters.setBookGrade(gradesList);
+        defaultFilters.setSortBy("time");
+        defaultFilters.setBookBoard(boardsList);
+        defaultFilters.setIsText(true);
+        defaultFilters.setIsNotes(true);
+        defaultFilters.setBookDistance(-1);
+        homeViewModel.setFilters(defaultFilters);
+
     }
 
 
@@ -793,13 +638,13 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         String book_id = book.getDocumentId();
         Intent bookDetails = new Intent(getActivity(), BookDetailsActivity.class);
         bookDetails.putExtra("bookid", book_id);
-        bookDetails.putExtra("isHome",true);
+        bookDetails.putExtra("isHome", true);
         startActivity(bookDetails);
     }
 
-    public  boolean getBookUnderDistance(Book book,int distance, double latitude, double longitude){
+    public boolean getBookUnderDistance(Book book, int distance, double latitude, double longitude) {
         float res;
-        if(book.getLat() != 0.0 && book.getLng() != 0.0 ) {
+        if (book.getLat() != 0.0 && book.getLng() != 0.0) {
             Location locationA = new Location("point A");
             Location locationB = new Location("point B");
 
@@ -808,6 +653,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             locationB.setLatitude(latitude);
             locationB.setLongitude(longitude);
             res = (locationA.distanceTo(locationB) / 1000);
+
             return (res <= distance);
         }
 
@@ -835,24 +681,24 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 
     private void getUserDetails() {
         if (!checkConnection(getActivity())) {
-            Toast.makeText(getActivity(),"Internet Required",Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Internet Required", Toast.LENGTH_LONG).show();
             return;
         }
-        if(mFirestore == null)
+        if (mFirestore == null)
             mFirestore = FirebaseFirestore.getInstance();
-        try{
+        try {
             curUserId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
-            DocumentReference userReference =  mFirestore.collection("users").document(curUserId);
+            DocumentReference userReference = mFirestore.collection("users").document(curUserId);
             userReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot snapshot) {
                     User user = snapshot.toObject(User.class);
-                    if(user != null) {
+                    if (user != null) {
                         currentUser = user;
-                        gradeNumber=user.getGradeNumber();
-                        boardNumber=user.getBoardNumber();
-                        userType=user.getUserType();
-                        year=user.getYear();
+                        gradeNumber = user.getGradeNumber();
+                        boardNumber = user.getBoardNumber();
+                        userType = user.getUserType();
+                        year = user.getYear();
 
                     }
 
@@ -860,13 +706,12 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Log.e(TAG, "onFailure: ",e );
+                    Log.e(TAG, "onFailure: ", e);
                 }
             });
 
-        }
-        catch(Exception e){
-            Log.e(TAG, "PopulateUserDetails method failed with  ",e);
+        } catch (Exception e) {
+            Log.e(TAG, "PopulateUserDetails method failed with  ", e);
         }
     }
 

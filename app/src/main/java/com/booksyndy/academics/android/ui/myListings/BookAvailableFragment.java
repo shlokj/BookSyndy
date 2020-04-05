@@ -163,7 +163,7 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
             /* firestore */
             mFirestore = FirebaseFirestore.getInstance();
             String userId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
-            mQuery = mFirestore.collection("books").whereEqualTo("userId", userId).whereEqualTo("bookSold",false).orderBy("bookTime", Query.Direction.DESCENDING);
+            mQuery = mFirestore.collection("books").whereEqualTo("userId", userId).whereEqualTo("bookSold",false).orderBy("createdAt", Query.Direction.DESCENDING);
             populateBookAdapter();
 
         } catch (Exception e) {
@@ -177,7 +177,7 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
         if (mQuery == null) {
             Log.w(TAG, "No query, not initializing RecyclerView");
         }
-        mQuery = mQuery.orderBy("bookTime", Query.Direction.DESCENDING);
+        mQuery = mQuery.orderBy("createdAt", Query.Direction.DESCENDING);
 
         options = new FirestoreRecyclerOptions.Builder<Book>()
                 .setQuery(mQuery, Book.class)

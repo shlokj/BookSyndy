@@ -162,7 +162,7 @@ public class BookSoldFragment extends Fragment implements BookAdapter.OnBookSele
         if (mQuery == null) {
             Log.w(TAG, "No query, not initializing RecyclerView");
         }
-        mQuery = mQuery.orderBy("bookTime", Query.Direction.DESCENDING);
+        mQuery = mQuery.orderBy("createdAt", Query.Direction.DESCENDING);
         options = new FirestoreRecyclerOptions.Builder<Book>()
                 .setQuery(mQuery, Book.class)
                 .build();
