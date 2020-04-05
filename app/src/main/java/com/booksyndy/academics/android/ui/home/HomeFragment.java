@@ -413,7 +413,10 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             public boolean onMenuItemClick(MenuItem item) {
                 searchView.onActionViewExpanded();
                 searchView.requestFocus();
-                sb = Snackbar.make(parentLayout, "Searching in " + grades + " and " + boards, Snackbar.LENGTH_LONG);
+                if ((grades!=null && grades.trim()!="") && (boards!=null && boards.trim()!=""))
+                    sb = Snackbar.make(parentLayout, "Searching in " + grades + " and " + boards, Snackbar.LENGTH_LONG);
+                else
+                    sb = Snackbar.make(parentLayout, "Searching in your filters" + boards, Snackbar.LENGTH_LONG);
                 sb.show();
                 return true;
             }
@@ -450,19 +453,91 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 
         Query fQuery = mFirestore.collection("books").whereEqualTo("bookSold", false);
         boolean noFilter = true;
-        //board
+
         if (filters.hasBookBoard()) {
             //filters are applied
             noFilter = false;
 
-            fQuery = fQuery.whereEqualTo("boardNumber", filters.getBookBoard().get(0));
+            List<Integer> fBoards = filters.getBookBoard();
+
+            fQuery = fQuery.whereEqualTo("boardNumber", fBoards.get(0));
+
+            boards = "board: ";
+            if (fBoards.contains(1)) {
+                boards = boards + "CBSE";
+            }
+            else if (fBoards.contains(2)) {
+                boards = boards + "ICSE/ISC";
+            }
+            else if (fBoards.contains(3)) {
+                boards = boards + "IB";
+            }
+            else if (fBoards.contains(4)) {
+                boards = boards + "IGCSE/CAIE";
+            }
+            else if (fBoards.contains(5)) {
+                boards = boards + "State board";
+            }
+            else if (fBoards.contains(6)) {
+                boards = boards + "other board";
+            }
+            else if (fBoards.contains(20)) {
+                grades = "";
+                boards = "competitive exams";
+            }
+
         }
 
         //grade
         if (filters.hasBookGrade()) {
             noFilter = false;
 
-            fQuery = fQuery.whereIn("gradeNumber", filters.getBookGrade());
+            List<Integer> fGrades = filters.getBookGrade();
+
+
+            fQuery = fQuery.whereIn("gradeNumber", fGrades);
+
+            grades = "grades: ";
+            if (fGrades.size() == 1) {
+                if (fGrades.contains(1)) {
+                    grades = grades + "5-";
+                } else if (fGrades.contains(2)) {
+                    grades = grades + "6-8";
+                } else if (fGrades.contains(3)) {
+                    grades = grades + "9";
+                } else if (fGrades.contains(4)) {
+                    grades = grades + "10";
+                } else if (fGrades.contains(5)) {
+                    grades = grades + "11";
+                } else if (fGrades.contains(6)) {
+                    grades = grades + "12";
+                }
+            } else if (fGrades.size() >= 2) {
+                if (fGrades.contains(1)) {
+                    grades = grades + "5-, ";
+                }
+                if (fGrades.contains(2)) {
+                    grades = grades + "6-8, ";
+                }
+                if (fGrades.contains(3)) {
+                    grades = grades + "9, ";
+                }
+                if (fGrades.contains(4)) {
+                    grades = grades + "10, ";
+                }
+                if (fGrades.contains(5)) {
+                    grades = grades + "11, ";
+                }
+                if (fGrades.contains(6)) {
+                    grades = grades + "12, ";
+                }
+            }
+            if (grades.substring(grades.length() - 2).equals(", ")) {
+                grades = grades.substring(0, grades.length() - 2);
+            }
+        }
+        else {
+            grades = "all grades";
         }
 
         if (!(filters.IsText() && filters.IsNotes())) {
