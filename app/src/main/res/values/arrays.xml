@@ -36,6 +36,12 @@
         <item>Textbook</item>
         <item>Notes / other material</item>
     </string-array>
+
+    <string-array name="general_types">
+        <item>Fiction</item>
+        <item>Non-fiction</item>
+    </string-array>
+
     <string-array name="distancesBy5">
         <item>5 km</item>
         <item>10 km</item>

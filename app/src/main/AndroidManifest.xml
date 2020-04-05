@@ -23,6 +23,7 @@
         android:roundIcon="@drawable/ic_booksyndy_circle_transparent"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".CreateGeneralListingActivity"></activity>
         <activity android:name=".SignIn2Activity" />
         <activity
             android:name=".RequestDetailsActivity"
@@ -39,7 +40,7 @@
         <activity
             android:name=".SendFeedbackActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ViewUserProfileActivity"
             android:screenOrientation="portrait" />
@@ -72,7 +73,6 @@
         <activity
             android:name=".GetBookSellerLocationActivity"
             android:screenOrientation="portrait" />
-
         <activity android:name=".GetBookPictureActivity" />
         <activity
             android:name=".GetBookPriceActivity"

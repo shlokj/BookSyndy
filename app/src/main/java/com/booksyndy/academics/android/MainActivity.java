@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
                                     editor.putBoolean(getString(R.string.p_competitive), user.isCompetitiveExam());
                                     editor.putInt(getString(R.string.p_usertype),user.getUserType());
                                     editor.putBoolean(getString(R.string.phoneNumberPublic),user.isPhoneNumberPublic());
+                                    editor.putBoolean(getString(R.string.preferGeneral),user.isPreferGeneral());
                                     editor.apply();
 
                                     homeActivity.putExtra("username", user.getFirstName() + " " + user.getLastName());

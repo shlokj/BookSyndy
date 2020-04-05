@@ -16,7 +16,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -24,7 +23,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -32,7 +30,6 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -76,25 +73,23 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class CreateListingActivity extends AppCompatActivity {
+public class CreateGeneralListingActivity extends AppCompatActivity {
 
     private static final int CROP_IMAGE = 2;
     private static final int AUTOCOMPLETE_REQUEST_CODE = 108;
-    private static String TAG = "CREATELISTINGFULL";
-    private Spinner typeSpinner,gradeSpinner,boardSpinner;
+    private static String TAG = "CREATELISTINGFULLGEN";
+    private Spinner typeSpinner;
     private double book_lat,book_lng;
-    private boolean isTextbook, forCompExam, detailsChanged = false;
+    private boolean isTextbook, detailsChanged = false;
     private String curUserId, bookName, bookDescription, phoneNumber, userId, bookAddress,book_photo_url;
-    private int gradeNumber, boardNumber, year, userType;
     private int bookPrice;
     private FirebaseAuth mAuth;
     private FirebaseFirestore mFireStore;
-    private TextView boardDegreeLabel;
     private Button postButton;
     private ProgressDialog progressDialog;
-    private EditText nameField, descField, priceField, locField, yearField;
-    private CheckBox competitiveExam, free;
-    private ArrayAdapter<String> gradeAdapter, boardAdapter, degreeAdapter, typeAdapter;
+    private EditText nameField, descField, priceField, locField;
+    private CheckBox free;
+    private ArrayAdapter<String> typeAdapter;
     private PlacesClient placesClient;
     List<Place.Field> placeFields = Arrays.asList(Place.Field.ID,Place.Field.NAME,Place.Field.ADDRESS);
     AutocompleteSupportFragment places_fragment;
@@ -108,33 +103,23 @@ public class CreateListingActivity extends AppCompatActivity {
     private double progress;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 3;
 
-
+// TODO: type implementaion (fiction/nonfiction)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_listing);
-        typeSpinner = findViewById(R.id.bookTypeSpinner);
-        gradeSpinner = findViewById(R.id.gradeSpinner);
-        boardSpinner = findViewById(R.id.boardSpinner1);
-        boardDegreeLabel = findViewById(R.id.boardLabel);
-        postButton = findViewById(R.id.postButton);
-        competitiveExam = findViewById(R.id.forCompetitiveExams);
-        nameField = findViewById(R.id.bookNameField);
-        descField = findViewById(R.id.bookDescField2);
-        locField = findViewById(R.id.locField2);
-        priceField = findViewById(R.id.priceField);
-        yearField = findViewById(R.id.bookYearField1);
-        free = findViewById(R.id.freeOrNot);
-        mBookImage = findViewById(R.id.book_image);
+        setContentView(R.layout.activity_create_general_listing);
+        typeSpinner = findViewById(R.id.bookTypeSpinner_g);
+        postButton = findViewById(R.id.postButton_g);
+        nameField = findViewById(R.id.bookNameField_g);
+        descField = findViewById(R.id.bookDescField2_g);
+        locField = findViewById(R.id.locField2_g);
+        priceField = findViewById(R.id.priceField_g);
+        free = findViewById(R.id.freeOrNot_g);
+        mBookImage = findViewById(R.id.book_image_g);
         userPref = this.getSharedPreferences(getString(R.string.UserPref),0);
 
-        year = getIntent().getIntExtra("YEAR_NUMBER",0);
-        userType = getIntent().getIntExtra("USER_TYPE",1);
         phoneNumber  = getIntent().getStringExtra("PHONE_NUMBER");
 
-        if (year!=0) {
-            yearField.setText(year+"");
-        }
         getSupportActionBar().setTitle("Create a listing");
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -159,48 +144,32 @@ public class CreateListingActivity extends AppCompatActivity {
         nameField.addTextChangedListener(checkChange);
         descField.addTextChangedListener(checkChange);
         priceField.addTextChangedListener(checkChange);
-        yearField.addTextChangedListener(checkChange);
 
 
         initFireBase();
         populateUserLocation();
 //        locField.setEnabled(false);
-        findViewById(R.id.btn_search_listing).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.btn_search_listing_g).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onSearchCalled();
             }
         });
-        gradeAdapter = new ArrayAdapter<String>(CreateListingActivity.this,
-                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.grades));
-        gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        gradeSpinner.setAdapter(gradeAdapter);
 
-        boardAdapter = new ArrayAdapter<String>(CreateListingActivity.this,
-                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.boards));
-        boardAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        boardSpinner.setAdapter(boardAdapter);
+        typeAdapter = new ArrayAdapter<String>(CreateGeneralListingActivity.this,
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.general_types));
 
-        degreeAdapter = new ArrayAdapter<String>(CreateListingActivity.this,
-                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.degrees));
-        degreeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        typeAdapter = new ArrayAdapter<String>(CreateListingActivity.this,
-                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.types));
-        degreeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         typeSpinner.setAdapter(typeAdapter);
 
         mAuth = FirebaseAuth.getInstance();
 
-//        gradeNumber = getIntent().getIntExtra("GRADE_NUMBER",4);
-//        boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 6);
 
         mBookImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final CharSequence[] options = {"Take Photo", "Choose from Gallery"};
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(CreateListingActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(CreateGeneralListingActivity.this);
 //                builder.setTitle("Select Pic Using...");
                 builder.setItems(options, new DialogInterface.OnClickListener() {
 
@@ -239,17 +208,6 @@ public class CreateListingActivity extends AppCompatActivity {
             }
         });
 
-        competitiveExam.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                gradeSpinner.setEnabled(!isChecked);
-                gradeSpinner.setFocusable(!isChecked);
-                gradeSpinner.setFocusableInTouchMode(!isChecked);
-                boardSpinner.setEnabled(!isChecked);
-                boardSpinner.setFocusable(!isChecked);
-                boardSpinner.setFocusableInTouchMode(!isChecked);
-            }
-        });
         free.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -269,51 +227,6 @@ public class CreateListingActivity extends AppCompatActivity {
             }
         });
 
-        gradeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                if (position<6) {
-                    boardDegreeLabel.setText("Board");
-                    if (boardSpinner.getAdapter()!=boardAdapter) {
-                        boardSpinner.setAdapter(boardAdapter);
-                    }
-/*                    for (int i=0; i<10;i++) {
-                        boardSpinner.setSelection(boardNumber - 1);
-                    }*/
-                    yearField.setVisibility(View.GONE);
-                    if (position==4 || position==5) {
-                        competitiveExam.setVisibility(View.VISIBLE);
-                    }
-                    else {
-                        competitiveExam.setVisibility(View.GONE);
-                    }
-                }
-                else {
-                    boardDegreeLabel.setText("Degree / course");
-                    if (boardSpinner.getAdapter()!=degreeAdapter) {
-                        boardSpinner.setAdapter(degreeAdapter);
-                    }
- //                   boardSpinner.setSelection(boardNumber-7);
-                    yearField.setVisibility(View.VISIBLE);
-                    competitiveExam.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-                int bn1 = getIntent().getIntExtra("BOARD_NUMBER",1);
-                int gn1 = getIntent().getIntExtra("GRADE_NUMBER",4);
-                if (gn1<=6) {
-                    boardSpinner.setSelection(bn1 - 1, true);
-                }
-                else {
-                    boardSpinner.setSelection(bn1 - 7, true);
-                }
-            }
-
-        });
-
-        autoFillGradeAndBoard();
 
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -321,26 +234,6 @@ public class CreateListingActivity extends AppCompatActivity {
                 checkAndUploadBook();
             }
         });
-
-        int bn1 = getIntent().getIntExtra("BOARD_NUMBER",1);
-        int gn1 = getIntent().getIntExtra("GRADE_NUMBER",4);
-
-        if (gn1<=6) {
-            boardSpinner.setSelection(bn1 - 1, true);
-
-        }
-        else {
-            boardSpinner.setSelection(bn1 - 7, true);
-        }
-
-        // as normal selection wasn't working
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                autofillBoardTemp();
-            }
-        }, 150); // the value of this delay is what makes the board spinner selection work - has to be considerably big. 100 ms was inconsistent, but 150 works well
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -370,44 +263,6 @@ public class CreateListingActivity extends AppCompatActivity {
     }
 
 
-    private void autoFillGradeAndBoard() {
-        if (!checkConnection(getApplicationContext())) {
-            Toast.makeText(getApplicationContext(),"Internet Required",Toast.LENGTH_LONG).show();
-        }
-        try {
-
-            gradeNumber = userPref.getInt(getString(R.string.p_grade),2);
-            boardNumber = userPref.getInt(getString(R.string.p_board),2);
-            year = userPref.getInt(getString(R.string.p_year),0);
-
-            gradeSpinner.setAdapter(gradeAdapter);
-            gradeSpinner.setSelection(gradeNumber-1, true);
-
-//                        Toast.makeText(getApplicationContext(),"Grade number: "+gradeNumber,Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "autoFillGradeAndBoard: "+boardNumber);
-            if (gradeNumber < 7) {
-
-//                            Toast.makeText(getApplicationContext(),"School",Toast.LENGTH_LONG).show();
-
-                boardDegreeLabel.setText("Board");
-                findViewById(R.id.collegeDegreeAndYearLL_c).setVisibility(View.GONE);
-
-                boardSpinner.setAdapter(boardAdapter);
-                boardSpinner.setSelection(boardNumber-1, true);
-
-            }
-            else {
-                boardSpinner.setAdapter(degreeAdapter);
-                boardDegreeLabel.setText("Degree / course");
-                boardSpinner.setSelection(boardNumber - 7,true);
-
-            }
-        }
-        catch(Exception e){
-            Log.e(TAG, "PopulateUserDetails method failed with  ",e);
-        }
-    }
-
 
     private void uploadBook() {
         progressDialog = new ProgressDialog(this);
@@ -420,21 +275,11 @@ public class CreateListingActivity extends AppCompatActivity {
             if(userId == null){
                 userId = mAuth.getCurrentUser().getPhoneNumber();
             }
-            Book book = BookUtil.addBook(userId,isTextbook,bookName,bookDescription,gradeNumber,boardNumber,bookPrice,bookAddress,book_lat,book_lng);
-            book.setBookYear(year);
-            book.setGeneral(false);
+            Book book = BookUtil.addBook(userId,isTextbook,bookName,bookDescription,0,0,bookPrice,bookAddress,book_lat,book_lng);
+            book.setGeneral(true);
             if(book_photo_url != null && !book_photo_url.isEmpty()){
                 // book.setBookPhoto();
                 book.setBookPhoto(book_photo_url);
-            }
-
-            if (userType==4) {
-                // if the user is a vendor, update his grade and board numbers based on the last book he listed
-                DocumentReference userReference = mFireStore.collection("users").document(phoneNumber);
-                if (gradeNumber!=0) {
-                    userReference.update("gradeNumber", gradeNumber, "boardNumber", boardNumber, "year", year);
-                }
-
             }
 
 
@@ -445,7 +290,7 @@ public class CreateListingActivity extends AppCompatActivity {
                     if(task.isSuccessful()){
                         Log.d("Add Book","onComplete: Book added successfully");
                         progressDialog.dismiss();
-                        Intent homeIntent = new Intent(CreateListingActivity.this,HomeActivity.class);
+                        Intent homeIntent = new Intent(CreateGeneralListingActivity.this,HomeActivity.class);
                         homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                         if (isTextbook) {
                             homeIntent.putExtra("SNACKBAR_MSG", "Your book has been listed! You can find it in the \'Your listings\' section of the app.");
@@ -454,8 +299,6 @@ public class CreateListingActivity extends AppCompatActivity {
                             homeIntent.putExtra("SNACKBAR_MSG", "Your material has been listed! You can find it in the \'Your listings\' section of the app.");
                         }
                         homeIntent.putExtra("SB_LONG",true);
-                        homeIntent.putExtra("GRADE_NUMBER",gradeNumber);
-                        homeIntent.putExtra("BOARD_NUMBER",boardNumber);
                         startActivity(homeIntent);
                     }
                     else{
@@ -496,20 +339,6 @@ public class CreateListingActivity extends AppCompatActivity {
     public void onBackPressed() {
         showSaveDialog();
 
-    }
-
-    public void displaySnackbarYears(int year) {
-        String yearNum = Integer.valueOf(year).toString();
-        View parentLayout = findViewById(android.R.id.content);
-        Snackbar.make(parentLayout, "Please enter a valid year " + yearNum + " or below, and not 0", Snackbar.LENGTH_SHORT)
-                .setAction("OKAY", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                    }
-                })
-                .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
-                .show();
     }
 
     private void initFireBase() {
@@ -554,14 +383,13 @@ public class CreateListingActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
 
-//        autofillBoardTemp();
 
         switch (requestCode) {
             case 0:// camera intent
                 if (resultCode == RESULT_OK ) {
                     try {
                         File f = new File(imageFilePath);
-                        selectedImageUri = FileProvider.getUriForFile(CreateListingActivity.this, BuildConfig.APPLICATION_ID + ".provider", f);
+                        selectedImageUri = FileProvider.getUriForFile(CreateGeneralListingActivity.this, BuildConfig.APPLICATION_ID + ".provider", f);
                         CropImage(selectedImageUri);
                     } catch (Exception e) {
                         showSnackbar("File error: please try again");
@@ -576,7 +404,7 @@ public class CreateListingActivity extends AppCompatActivity {
                     CropImage(selectedImageUri);
                 }
                 break;
-                //new crop image
+            //new crop image
             case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
                 CropImage.ActivityResult result = CropImage.getActivityResult(imageReturnedIntent);
                 if (resultCode == RESULT_OK) {
@@ -604,7 +432,7 @@ public class CreateListingActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
                     Place place = Autocomplete.getPlaceFromIntent(imageReturnedIntent);
                     //Log.i(TAG, "Place: " + place.getName() + ", " + place.getId() + ", " + place.getAddress());
-                    //Toast.makeText(CreateListingActivity.this, "ID: " + place.getId() + "address:" + place.getAddress() + "Name:" + place.getName() + " latlong: " + place.getLatLng(), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(CreateGeneralListingActivity.this, "ID: " + place.getId() + "address:" + place.getAddress() + "Name:" + place.getName() + " latlong: " + place.getLatLng(), Toast.LENGTH_LONG).show();
 
                     book_lat = place.getLatLng().latitude;
                     book_lng = place.getLatLng().longitude;
@@ -636,11 +464,11 @@ public class CreateListingActivity extends AppCompatActivity {
                         if(address.getLocality() != null){
                             locField.append(address.getLocality());
                         }
-                        }
+                    }
 
                 } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                     Status status = Autocomplete.getStatusFromIntent(imageReturnedIntent);
-                    Toast.makeText(CreateListingActivity.this, "Error: " + status.getStatusMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(CreateGeneralListingActivity.this, "Error: " + status.getStatusMessage(), Toast.LENGTH_LONG).show();
                     Log.i(TAG, status.getStatusMessage());
                 } else if (resultCode == RESULT_CANCELED) {
                     // The user canceled the operation.
@@ -687,7 +515,7 @@ public class CreateListingActivity extends AppCompatActivity {
 
     private void storeBookImage(Bitmap bmp) {
 
-       byte[] compressedImage = CompressResizeImage(bmp);
+        byte[] compressedImage = CompressResizeImage(bmp);
 
         //show progress
         final ProgressDialog progressDialog = new ProgressDialog(this);
@@ -784,42 +612,13 @@ public class CreateListingActivity extends AppCompatActivity {
         return b;
     }
 
-    public void autofillBoardTemp(){
-        if (boardSpinner.getSelectedItemPosition()==0) {
-
-            int gradeNumber1 = userPref.getInt(getString(R.string.p_grade), 2);
-            int boardNumber1 = userPref.getInt(getString(R.string.p_board), 2);
-
-            if (gradeNumber1 <= 6) {
-                boardSpinner.setSelection(boardNumber1 - 1,true);
-            } else {
-                boardSpinner.setSelection(boardNumber1 - 7,true);
-            }
-
-        }
-    }
-
     public void checkAndUploadBook() {
         bookName = nameField.getText().toString().trim();
         bookDescription = descField.getText().toString().trim();
         bookAddress = locField.getText().toString().trim();
         isTextbook = typeSpinner.getSelectedItemPosition()==0;
-        gradeNumber = gradeSpinner.getSelectedItemPosition()+1;
-        forCompExam = competitiveExam.isChecked();
-        if (forCompExam) {
-            gradeNumber=0;
-            boardNumber=20;
-        }
-        else {
-            if (gradeNumber >= 7) {
-                boardNumber = boardSpinner.getSelectedItemPosition() + 7;
-            } else {
-                boardNumber = boardSpinner.getSelectedItemPosition() + 1;
-            }
-        }
         String bps = priceField.getText().toString().trim();
         String bys;
-        forCompExam = competitiveExam.isChecked();
 
         if (selectedImageUri==null) {
             showSnackbar("Please take or select a picture of your book");
@@ -833,11 +632,8 @@ public class CreateListingActivity extends AppCompatActivity {
         else if (bookDescription.length()<10) {
             showSnackbar("Please enter at least 10 characters for the description");
         }
-        else if (gradeNumber>=7 && yearField.getText().toString().length()==0) {
-            showSnackbar("Please enter a year for your book");
-        }
         else if (bookAddress.length()==0) {
-            showSnackbar("Couldn't get your location. Please enter it manually.");
+            showSnackbar("Couldn't get your location. Please try searching.");
         }
         else if (bps.length()==0) {
             showSnackbar("Please enter a price or give it for free");
@@ -846,103 +642,16 @@ public class CreateListingActivity extends AppCompatActivity {
                     showSnackbar("Please take a picture of your book");
                 }*/
         else {
-            boolean validYear = true;
             bookPrice = Integer.parseInt(bps);
-            if (gradeNumber>=7) {
-//                        Toast.makeText(getApplicationContext(),"Undergrad",Toast.LENGTH_SHORT).show();
-//                        Toast.makeText(getApplicationContext(),"Board number: "+boardNumber,Toast.LENGTH_SHORT).show();
+            uploadBook();
 
-                bys = yearField.getText().toString().trim();
-                if (bys.length()==0) {
-                    showSnackbar("Please enter a year for your book");
-                }
-                else {
-                    year = Integer.parseInt(bys);
-
-                    if (boardNumber == 7) {
-                        if (year > 4 || year == 0) {
-                            validYear = false;
-                            displaySnackbarYears(4);
-                        }
-                    } else if (boardNumber == 8) {
-                        if (year > 4 || year == 0) {
-                            validYear = false;
-                            displaySnackbarYears(4);
-                        }
-                    } else if (boardNumber == 9) {
-                        if (year > 4 || year == 0) {
-                            validYear = false;
-                            displaySnackbarYears(4);
-                        }
-                    } else if (boardNumber == 10) {
-                        if (year > 4 || year == 0) {
-                            validYear = false;
-                            displaySnackbarYears(4);
-                        }
-                    } else if (boardNumber == 11) {
-                        if (year > 4 || year == 0) {
-                            validYear = false;
-                            displaySnackbarYears(4);
-                        }
-                    } else if (boardNumber == 12) {
-                        if (year > 4 || year == 0) {
-                            validYear = false;
-                            displaySnackbarYears(4);
-                        }
-                    } else if (boardNumber == 13) {
-                        if (year > 4 || year == 0) {
-                            validYear = false;
-                            displaySnackbarYears(4);
-                        }
-                    } else if (boardNumber == 14) {
-                        if (year > 5 || year == 0) {
-                            validYear = false;
-                            displaySnackbarYears(5);
-                        }
-                    } else if (boardNumber == 15) {
-                        //boardNumber = 15;
-//                                Toast.makeText(getApplicationContext(),"MBBS",Toast.LENGTH_LONG).show();
-                        if (year > 6 || year == 0) {
-                            validYear = false;
-                            displaySnackbarYears(6);
-                        }
-                    } else if (boardNumber == 16) {
-                        if (year == 0) {
-                            validYear = false;
-                            View parentLayout = findViewById(android.R.id.content);
-                            Snackbar.make(parentLayout, "Your year can't be 0", Snackbar.LENGTH_SHORT)
-                                    .setAction("OKAY", new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-
-                                        }
-                                    })
-                                    .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
-                                    .show();
-                        }
-                    }
-                }
-                if (bys.length()==0) {
-                    showSnackbar("Please enter a year for your book");
-                }
-                else {
-                    year=Integer.parseInt(bys);
-                }
-            }
-            else {
-                year=0;
-            }
-            if (validYear) {
-//                        Toast.makeText(getApplicationContext(),"Valid, start upload",Toast.LENGTH_SHORT).show();
-                uploadBook();
-            }
         }
     }
 
     public void showSaveDialog() {
 
         if (detailsChanged) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(CreateListingActivity.this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(CreateGeneralListingActivity.this);
             builder.setTitle("Save your changes?");
             builder.setMessage("You have unsaved changes. Would you like to stay or discard them?");
             builder.setPositiveButton("Stay", new DialogInterface.OnClickListener() {
@@ -958,7 +667,7 @@ public class CreateListingActivity extends AppCompatActivity {
             builder.setNegativeButton("Exit without saving", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    Intent homeActivity = new Intent(CreateListingActivity.this, HomeActivity.class);
+                    Intent homeActivity = new Intent(CreateGeneralListingActivity.this, HomeActivity.class);
                     startActivity(homeActivity);
                     finish();
                 }
@@ -966,7 +675,7 @@ public class CreateListingActivity extends AppCompatActivity {
             builder.show();
         }
         else {
-            Intent homeActivity = new Intent(CreateListingActivity.this, HomeActivity.class);
+            Intent homeActivity = new Intent(CreateGeneralListingActivity.this, HomeActivity.class);
             startActivity(homeActivity);
             finish();
         }

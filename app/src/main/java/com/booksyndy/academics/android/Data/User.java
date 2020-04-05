@@ -3,7 +3,7 @@ package com.booksyndy.academics.android.Data;
 public class User {
 
     private String firstName,lastName,phone,userId,imageUrl,creationDate;
-    private boolean isParent,toSell,competitiveExam,phoneNumberPublic;
+    private boolean isParent,toSell,competitiveExam,phoneNumberPublic,preferGeneral;
     private int userType,gradeNumber,boardNumber,year;
 
     public User() {
@@ -145,5 +145,14 @@ public class User {
 
     public boolean isPhoneNumberPublic() {
         return phoneNumberPublic;
+    }
+
+
+    public void setPreferGeneral(boolean preferGeneral) {
+        this.preferGeneral = preferGeneral;
+    }
+
+    public boolean isPreferGeneral() {
+        return preferGeneral;
     }
 }

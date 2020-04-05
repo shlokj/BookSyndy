@@ -59,7 +59,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="30dp"
         android:layout_marginBottom="24dp"
         android:fontFamily="@font/roboto_light"
         android:text="@string/name_question"

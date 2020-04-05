@@ -138,6 +138,7 @@
     <string name="p_lng">LNG</string>
     <string name="preferGuidedMode">preferGuidedMode</string>
     <string name="phoneNumberPublic">phoneNumberPublic</string>
+    <string name="preferGeneral">preferGeneral</string>
 
     <!--For walkthrough-->
     <string name="title_activity_welcome">Home Screen</string>
@@ -198,5 +199,7 @@
     <string name="about_feedback">We value your feedback. If you\'d like to tell us how we can improve our app, or where we\'re going wrong or simply what you think of the app, this is the place. Enter your feedback below. We\'ll get back to you if needed.</string>
     <string name="send_feedback">Send feedback</string>
     <string name="show_on_profile">Show on profile</string>
+    <string name="free">Free</string>
+    <string name="post">Post</string>
 
 </resources>

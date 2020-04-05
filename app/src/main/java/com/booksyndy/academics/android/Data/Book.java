@@ -15,7 +15,7 @@ public class Book {
     public static final String FIELD_PRICE = "price";
 
     private String bookName,bookDescription,bookAddress,bookPhoto;
-    boolean isTextbook,isBookSold;
+    boolean isTextbook,isBookSold,general;
     private int bookPrice,bookYear;
     private int gradeNumber,boardNumber;
     private String userId,bookTime;
@@ -172,5 +172,13 @@ public class Book {
 
     public void setBookPhoto(String bookPhoto) {
         this.bookPhoto = bookPhoto;
+    }
+
+    public boolean isGeneral() {
+        return general;
+    }
+
+    public void setGeneral(boolean general) {
+        this.general = general;
     }
 }

@@ -31,6 +31,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.booksyndy.academics.android.Adapters.HomeAdapter;
 import com.booksyndy.academics.android.BookDetailsActivity;
+import com.booksyndy.academics.android.CreateGeneralListingActivity;
 import com.booksyndy.academics.android.CreateListingActivity;
 import com.booksyndy.academics.android.Data.Book;
 import com.booksyndy.academics.android.Data.OnFilterSelectionListener;
@@ -74,7 +75,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     private User currentUser;
     private String curUserId, grades = "", boards = "";
     private int gradeNumber, boardNumber, year, userType;
-    private boolean preferGuidedMode;
+    private boolean preferGuidedMode, preferGeneral;
     private FilterDialogFragment mFilterDialog;
     private List<Book> bookList;
     private List<Book> bookListFull;
@@ -125,6 +126,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 //        recyclerView.setHorizontalScrollBarEnabled(false);
 
         preferGuidedMode = userPref.getBoolean(getString(R.string.preferGuidedMode), false);
+        preferGeneral = userPref.getBoolean(getString(R.string.preferGeneral),false);
         userLat = userPref.getFloat(getString(R.string.p_lat), 0.0f);
         userLng = userPref.getFloat(getString(R.string.p_lng), 0.0f);
 
@@ -136,17 +138,24 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             public void onClick(View view) {
                 getUserDetails();
                 Intent startBookPub;
-                if (preferGuidedMode) {
-                    startBookPub = new Intent(getActivity(), GetBookPictureActivity.class);
-                } else {
-                    startBookPub = new Intent(getActivity(), CreateListingActivity.class);
+                if (preferGeneral) {
+                    startBookPub = new Intent(getActivity(), CreateGeneralListingActivity.class);
+                    startBookPub.putExtra("USER_TYPE", userType);
+                    startBookPub.putExtra("PHONE_NUMBER", currentUser.getPhone());
                 }
-                startBookPub.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startBookPub.putExtra("GRADE_NUMBER", gradeNumber);
-                startBookPub.putExtra("BOARD_NUMBER", boardNumber);
-                startBookPub.putExtra("YEAR_NUMBER", year);
-                startBookPub.putExtra("USER_TYPE", userType);
-                startBookPub.putExtra("PHONE_NUMBER", currentUser.getPhone());
+                else {
+                    if (preferGuidedMode) {
+                        startBookPub = new Intent(getActivity(), GetBookPictureActivity.class);
+                    } else {
+                        startBookPub = new Intent(getActivity(), CreateListingActivity.class);
+                    }
+                    startBookPub.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startBookPub.putExtra("GRADE_NUMBER", gradeNumber);
+                    startBookPub.putExtra("BOARD_NUMBER", boardNumber);
+                    startBookPub.putExtra("YEAR_NUMBER", year);
+                    startBookPub.putExtra("USER_TYPE", userType);
+                    startBookPub.putExtra("PHONE_NUMBER", currentUser.getPhone());
+                }
                 startActivity(startBookPub);
             }
         });
