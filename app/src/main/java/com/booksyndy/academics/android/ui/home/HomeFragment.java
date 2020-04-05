@@ -256,7 +256,9 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         /* firestore */
         mFirestore = FirebaseFirestore.getInstance();
         curUserId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
-        mQuery = mFirestore.collection("books").whereEqualTo("bookSold",false);
+        mQuery = mFirestore.collection("books")
+                .whereEqualTo("bookSold",false)
+                .orderBy("createdAt", Query.Direction.DESCENDING);
 //        if(userGrade <= 5){
 //           mQuery = mQuery.whereLessThan("gradeNumber",7);
 //        }
@@ -399,7 +401,6 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 
     @Override
     public void onFilter(Filters filters) {
-        Log.d(TAG, "onFilter: entered :price"+filters.hasPrice());
         filteredList = new ArrayList<>();
         List<Book> toBeRemoved = new ArrayList<>();
 
@@ -762,7 +763,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                     return;
                 }
                 currentUser = snapshot.toObject(User.class);
-                Log.d(TAG, "setDefaultFilters: success");
+
                 Filters defaultFilters = new Filters();
                 List<Integer> gradesList = new ArrayList<Integer>();
                 gradesList.add(currentUser.getGradeNumber());
@@ -807,7 +808,6 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             locationB.setLatitude(latitude);
             locationB.setLongitude(longitude);
             res = (locationA.distanceTo(locationB) / 1000);
-            Log.d(TAG, "getBookUnderDistance: "+res);
             return (res <= distance);
         }
 

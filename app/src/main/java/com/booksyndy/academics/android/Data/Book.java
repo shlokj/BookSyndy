@@ -20,6 +20,7 @@ public class Book {
     private int gradeNumber,boardNumber;
     private String userId,bookTime;
     private double lat,lng;
+    private long createdAt;
     @DocumentId
     private String DocumentId;
 
@@ -43,6 +44,14 @@ public class Book {
         this.isBookSold = isBookSold;
         this.lat = lat;
         this.lng = lng;
+    }
+
+    public long getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(long createdAt) {
+        this.createdAt = createdAt;
     }
 
     public boolean isBookSold() {

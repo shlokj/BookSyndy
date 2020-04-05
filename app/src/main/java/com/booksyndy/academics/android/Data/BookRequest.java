@@ -2,6 +2,7 @@ package com.booksyndy.academics.android.Data;
 
 public class BookRequest {
     private String title,description,bookAddress, phone,userId,time;
+    private long createdAt;
     private int grade,board,bookYear;
 
     private boolean isCompetitive,isComplete,isText;
@@ -28,6 +29,14 @@ public class BookRequest {
         this.isCompetitive = isCompetitive;
         this.isComplete = isComplete;
         this.isText = isText;
+    }
+
+    public long getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(long createdAt) {
+        this.createdAt = createdAt;
     }
 
     public String getDocumentId() {

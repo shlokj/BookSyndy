@@ -168,7 +168,9 @@ public class PendingRequestFragment extends Fragment implements View.OnClickList
             /* firestore */
             mFirestore = FirebaseFirestore.getInstance();
             curUserId = userPref.getString(getString(R.string.p_userphone), "");
-            mQuery = mFirestore.collection("bookRequest").whereEqualTo("complete",false);
+            mQuery = mFirestore.collection("bookRequest")
+                    .whereEqualTo("complete",false)
+                    .orderBy("createdAt", Query.Direction.DESCENDING);
             requestRegistration = mQuery.addSnapshotListener(this);
         } catch (Exception e) {
             Log.e(TAG, "initFireStore: ", e);
@@ -182,7 +184,7 @@ public class PendingRequestFragment extends Fragment implements View.OnClickList
             bookRequests.clear();
             for(QueryDocumentSnapshot snapshot:queryDocumentSnapshots){
                 BookRequest bookRequest = snapshot.toObject(BookRequest.class);
-                Log.d(TAG, "populateRequestAdapter: "+bookRequest.getTitle());
+                Log.d(TAG, "populateRequestAdapter: "+bookRequest.getCreatedAt());
                 if (bookRequest.getUserId() != null && !bookRequest.getPhone().equalsIgnoreCase(curUserId)) {
                     bookRequests.add(bookRequest);
                 }
@@ -335,7 +337,7 @@ public class PendingRequestFragment extends Fragment implements View.OnClickList
 
     @Override
     public void onFilter(Filters filters) {
-        Log.d(TAG, "onFilter: entered :price"+filters.hasPrice());
+
         List<BookRequest> filteredList = new ArrayList<>();
         List<BookRequest> toBeRemoved = new ArrayList<>();
 
@@ -554,7 +556,6 @@ public class PendingRequestFragment extends Fragment implements View.OnClickList
             locationB.setLatitude(latitude);
             locationB.setLongitude(longitude);
             res = (locationA.distanceTo(locationB) / 1000);
-            Log.d(TAG, "getBookUnderDistance: "+res);
             return (res <= distance);
         }
 
