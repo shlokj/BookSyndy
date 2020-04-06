@@ -140,6 +140,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                 Intent startBookPub;
                 if (preferGeneral) {
                     startBookPub = new Intent(getActivity(), CreateGeneralListingActivity.class);
+                    startBookPub.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startBookPub.putExtra("USER_TYPE", userType);
                     startBookPub.putExtra("PHONE_NUMBER", currentUser.getPhone());
                 }

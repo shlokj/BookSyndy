@@ -109,7 +109,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_requests, R.id.nav_booklist, R.id.nav_chats,
-                R.id.nav_starred, R.id.nav_help, R.id.nav_share, R.id.nav_signout)
+                R.id.nav_starred, R.id.nav_switchmode, R.id.nav_help, R.id.nav_share, R.id.nav_signout)
                 .setDrawerLayout(drawer)
                 .build();
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -466,7 +466,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 sequence.setConfig(config);
 
                 sequence.addSequenceItem(view,
-                        "Here's the menu", "GOT IT");
+                        "Here's the menu", "GOT IT"); // TODO: change this string after gen mode is complete
 
                 sequence.addSequenceItem(toolbar.getChildAt(2),"Search for material you need and chat with other users here.","GOT IT");
 

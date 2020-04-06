@@ -15,7 +15,7 @@ public class Book {
     public static final String FIELD_PRICE = "price";
 
     private String bookName,bookDescription,bookAddress,bookPhoto;
-    boolean isTextbook,isBookSold,general;
+    boolean isTextbook,isBookSold,general,forExchange;
     private int bookPrice,bookYear;
     private int gradeNumber,boardNumber;
     private String userId,bookTime;
@@ -180,5 +180,13 @@ public class Book {
 
     public void setGeneral(boolean general) {
         this.general = general;
+    }
+
+    public void setForExchange(boolean forExchange) {
+        this.forExchange = forExchange;
+    }
+
+    public boolean isForExchange() {
+        return forExchange;
     }
 }

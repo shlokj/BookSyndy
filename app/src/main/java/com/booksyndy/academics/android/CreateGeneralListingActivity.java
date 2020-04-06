@@ -3,7 +3,6 @@ package com.booksyndy.academics.android;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,8 +10,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -82,13 +79,13 @@ public class CreateGeneralListingActivity extends AppCompatActivity {
     private double book_lat,book_lng;
     private boolean isTextbook, detailsChanged = false;
     private String curUserId, bookName, bookDescription, phoneNumber, userId, bookAddress,book_photo_url;
-    private int bookPrice;
+    private int bookPrice, genType;
     private FirebaseAuth mAuth;
     private FirebaseFirestore mFireStore;
     private Button postButton;
     private ProgressDialog progressDialog;
     private EditText nameField, descField, priceField, locField;
-    private CheckBox free;
+    private CheckBox free, forExchangeCB;
     private ArrayAdapter<String> typeAdapter;
     private PlacesClient placesClient;
     List<Place.Field> placeFields = Arrays.asList(Place.Field.ID,Place.Field.NAME,Place.Field.ADDRESS);
@@ -104,6 +101,9 @@ public class CreateGeneralListingActivity extends AppCompatActivity {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 3;
 
 // TODO: type implementaion (fiction/nonfiction)
+
+    // We use the boardNumber field for storing whether it is fiction or non fiction
+    // Fiction: 101, nonfiction: 201
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,6 +116,7 @@ public class CreateGeneralListingActivity extends AppCompatActivity {
         priceField = findViewById(R.id.priceField_g);
         free = findViewById(R.id.freeOrNot_g);
         mBookImage = findViewById(R.id.book_image_g);
+        forExchangeCB = findViewById(R.id.forExchangeCB);
         userPref = this.getSharedPreferences(getString(R.string.UserPref),0);
 
         phoneNumber  = getIntent().getStringExtra("PHONE_NUMBER");
@@ -245,25 +246,6 @@ public class CreateGeneralListingActivity extends AppCompatActivity {
     }
 
 
-    public static boolean checkConnection(Context context) {
-        final ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        if (connMgr != null) {
-            NetworkInfo activeNetworkInfo = connMgr.getActiveNetworkInfo();
-
-            if (activeNetworkInfo != null) { // connected to the internet
-                // connected to the mobile provider's data plan
-                if (activeNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-                    // connected to wifi
-                    return true;
-                } else return activeNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE;
-            }
-        }
-        return false;
-    }
-
-
-
     private void uploadBook() {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Posting...");
@@ -275,7 +257,7 @@ public class CreateGeneralListingActivity extends AppCompatActivity {
             if(userId == null){
                 userId = mAuth.getCurrentUser().getPhoneNumber();
             }
-            Book book = BookUtil.addBook(userId,isTextbook,bookName,bookDescription,0,0,bookPrice,bookAddress,book_lat,book_lng);
+            Book book = BookUtil.addBook(userId,false,bookName,bookDescription,0,genType,bookPrice,bookAddress,book_lat,book_lng);
             book.setGeneral(true);
             if(book_photo_url != null && !book_photo_url.isEmpty()){
                 // book.setBookPhoto();
@@ -580,8 +562,6 @@ public class CreateGeneralListingActivity extends AppCompatActivity {
             CropImage.activity(picUri)
                     .setInitialCropWindowPaddingRatio(0)
                     .setRequestedSize(1080,1080)
-//                    .setMaxCropResultSize(1080,1080)
-//                    .setMinCropResultSize(1000,1000)
                     .start(this);
         } catch (ActivityNotFoundException e) {
             Toast.makeText(this, "Your device doesn't support the crop action!", Toast.LENGTH_SHORT).show();
@@ -616,9 +596,14 @@ public class CreateGeneralListingActivity extends AppCompatActivity {
         bookName = nameField.getText().toString().trim();
         bookDescription = descField.getText().toString().trim();
         bookAddress = locField.getText().toString().trim();
+        if (typeSpinner.getSelectedItemPosition()==0) {
+            genType = 101;
+        }
+        else {
+            genType = 201;
+        }
         isTextbook = typeSpinner.getSelectedItemPosition()==0;
         String bps = priceField.getText().toString().trim();
-        String bys;
 
         if (selectedImageUri==null) {
             showSnackbar("Please take or select a picture of your book");
@@ -638,9 +623,6 @@ public class CreateGeneralListingActivity extends AppCompatActivity {
         else if (bps.length()==0) {
             showSnackbar("Please enter a price or give it for free");
         }
-/*                else if (book_photo_url==null || book_photo_url.length()==0) {
-                    showSnackbar("Please take a picture of your book");
-                }*/
         else {
             bookPrice = Integer.parseInt(bps);
             uploadBook();
@@ -657,10 +639,6 @@ public class CreateGeneralListingActivity extends AppCompatActivity {
             builder.setPositiveButton("Stay", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-//                            Intent homeIntent = new Intent(UserProfileActivity.this, HomeActivity.class);
-//                            homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-//                            homeIntent.putExtra("SNACKBAR_MSG", "Your profile has been saved");
-//                            startActivity(homeIntent);
 
                 }
             });
