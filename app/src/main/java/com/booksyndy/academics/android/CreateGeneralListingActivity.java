@@ -48,7 +48,6 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -89,7 +88,6 @@ public class CreateGeneralListingActivity extends AppCompatActivity {
     private ArrayAdapter<String> typeAdapter;
     private PlacesClient placesClient;
     List<Place.Field> placeFields = Arrays.asList(Place.Field.ID,Place.Field.NAME,Place.Field.ADDRESS);
-    AutocompleteSupportFragment places_fragment;
     private ImageView mBookImage;
     private String imageFilePath;
     private Uri selectedImageUri;
@@ -259,6 +257,7 @@ public class CreateGeneralListingActivity extends AppCompatActivity {
             }
             Book book = BookUtil.addBook(userId,false,bookName,bookDescription,0,genType,bookPrice,bookAddress,book_lat,book_lng);
             book.setGeneral(true);
+            book.setForExchange(forExchangeCB.isChecked());
             if(book_photo_url != null && !book_photo_url.isEmpty()){
                 // book.setBookPhoto();
                 book.setBookPhoto(book_photo_url);

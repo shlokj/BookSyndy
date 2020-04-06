@@ -451,7 +451,7 @@ public class PendingRequestFragment extends Fragment implements View.OnClickList
                 noFilter = false;
             }
             else {
-                filters.setBookDistance(-1);
+                filters.setBookDistance(20);
             }
         }
 

@@ -162,6 +162,18 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         populateUserDetails();
         handleOtherIntent();
 
+        NavigationView navigationView = findViewById(R.id.nav_view);
+
+        // get menu from navigationView
+        Menu menu = navigationView.getMenu();
+
+        if (userPref.getBoolean(getString(R.string.preferGeneral),false)) {
+            menu.findItem(R.id.nav_switchmode).setTitle("Switch to academics mode");
+        }
+        else {
+            menu.findItem(R.id.nav_switchmode).setTitle("Switch to general mode");
+        }
+
         try {
             PackageInfo pInfo = getApplicationContext().getPackageManager().getPackageInfo(getPackageName(), 0);
             version = pInfo.versionName;
