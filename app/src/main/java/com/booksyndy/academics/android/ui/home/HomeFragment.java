@@ -310,7 +310,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             mQuery = mFirestore.collection("books").whereEqualTo("general",true).whereEqualTo("bookSold", false);
         }
         else {
-            mQuery = mFirestore.collection("books")/*.whereEqualTo("general",false)*/.whereEqualTo("bookSold", false); // TODO: uncomment when all books have the general field
+            mQuery = mFirestore.collection("books").whereEqualTo("general",false).whereEqualTo("bookSold", false); // TODO: uncomment when all books have the general field
         }
         //default filters
 
@@ -477,7 +477,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             fQuery = mFirestore.collection("books").whereEqualTo("general", true).whereEqualTo("bookSold", false);
         }
         else {
-            fQuery = mFirestore.collection("books")/*.whereEqualTo("general", false)*/.whereEqualTo("bookSold", false); // TODO: same as above
+            fQuery = mFirestore.collection("books").whereEqualTo("general", false).whereEqualTo("bookSold", false); // TODO: same as above
 
 
             if (filters.hasBookBoard()) {
@@ -734,6 +734,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         Intent bookDetails = new Intent(getActivity(), BookDetailsActivity.class);
         bookDetails.putExtra("bookid", book_id);
         bookDetails.putExtra("isHome", true);
+        bookDetails.putExtra("USER_PHONE",userPref.getString(getString(R.string.p_userphone),"0"));
         startActivity(bookDetails);
     }
 

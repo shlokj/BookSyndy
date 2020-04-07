@@ -608,7 +608,7 @@ public class CreateGeneralListingActivity extends AppCompatActivity {
             showSnackbar("Please take or select a picture of your book");
         }
         else if (progress<99.9) {
-            showSnackbar("Please wait while we upload the picture...");
+            showSnackbar("Uploading the picture... just a moment");
         }
         else if (bookName.length()<10) {
             showSnackbar("Please enter at least 10 characters for your book's name");

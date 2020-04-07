@@ -213,6 +213,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             Intent bookDetails = new Intent(HomeActivity.this, BookDetailsActivity.class);
             bookDetails.putExtra("bookid", dynamicBookId);
             bookDetails.putExtra("isHome", true);
+            bookDetails.putExtra("USER_PHONE",userPref.getString(getString(R.string.p_userphone),"0"));
             startActivity(bookDetails);
         }
 //        else if (getIntent().getBooleanExtra("openChat", false)) {

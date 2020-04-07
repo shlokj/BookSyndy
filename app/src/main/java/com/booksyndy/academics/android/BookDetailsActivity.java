@@ -56,7 +56,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
 
     // TODO: accomodate general books
     private String bookid, defaultMessage;
-    private boolean isHome, saved, isBookmarks, isUserProfile;
+    private boolean isHome, saved, isBookmarks, isUserProfile, sameUser;
     private FirebaseFirestore mFirestore;
     private Book currentBook;
     private User bookOwner;
@@ -91,9 +91,17 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         isHome = getIntent().getBooleanExtra("isHome", false);
         isUserProfile = getIntent().getBooleanExtra("isProfile", false);
         isBookmarks = getIntent().getBooleanExtra("isBookmarks", false);
+        String tPhone = getIntent().getStringExtra("USER_PHONE");
         userPref = this.getSharedPreferences(getString(R.string.UserPref), 0);
         initFireStore();
         getUserLocation();
+
+//        Toast.makeText(this, "tPhone is "+tPhone, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "cau is"+curAppUser, Toast.LENGTH_SHORT).show();
+
+        if (tPhone!=null) {
+            sameUser = tPhone.equals(curAppUser);
+        }
 
         view_bookname = findViewById(R.id.book_name);
         view_address = findViewById(R.id.book_address);
@@ -104,6 +112,8 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         view_grade_and_board = findViewById(R.id.book_grade_and_board);
         sellerDp = findViewById(R.id.seller_dp);
         sellerName = findViewById(R.id.sellerName);
+
+
 
         View.OnClickListener toOpenProfile = new View.OnClickListener() {
             @Override
@@ -117,6 +127,8 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 startActivity(viewProfile);
             }
         };
+
+
 
         sellerName.setOnClickListener(toOpenProfile);
         sellerDp.setOnClickListener(toOpenProfile);
@@ -198,76 +210,88 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
             else {
                 view_address.setText(address);
             }
-            int gradeNumber = currentBook.getGradeNumber();
-            int boardNumber = currentBook.getBoardNumber();
-            int year = currentBook.getBookYear();
 
-            if (currentBook.isTextbook()) {
-                view_grade_and_board.setText("Textbook " + getString(R.string.divider_bullet) + " ");
-            } else {
-                view_grade_and_board.setText("Notes / material " + getString(R.string.divider_bullet) + " ");
+            if (currentBook.isGeneral()) {
+                if (currentBook.getBoardNumber()==101) {
+                    view_grade_and_board.setText("Fiction");
+                }
+                else if (currentBook.getBoardNumber()==201) {
+                    view_grade_and_board.setText("Non-fiction");
+                }
             }
+            else {
 
-            if (boardNumber == 20) {
-                view_grade_and_board.append("Competitive exams");
-            } else {
-                if (gradeNumber == 1) {
-                    view_grade_and_board.append(getString(R.string.g5b));
-                } else if (gradeNumber == 2) {
-                    view_grade_and_board.append(getString(R.string.g68));
-                } else if (gradeNumber == 3) {
-                    view_grade_and_board.append(getString(R.string.g9));
-                } else if (gradeNumber == 4) {
-                    view_grade_and_board.append(getString(R.string.g10));
-                } else if (gradeNumber == 5) {
-                    view_grade_and_board.append(getString(R.string.g11));
-                } else if (gradeNumber == 6) {
-                    view_grade_and_board.append(getString(R.string.g12));
-                } else if (gradeNumber == 7) {
-                    view_grade_and_board.append(getString(R.string.undergraduate));
+                int gradeNumber = currentBook.getGradeNumber();
+                int boardNumber = currentBook.getBoardNumber();
+                int year = currentBook.getBookYear();
+
+                if (currentBook.isTextbook()) {
+                    view_grade_and_board.setText("Textbook " + getString(R.string.divider_bullet) + " ");
+                } else {
+                    view_grade_and_board.setText("Notes / material " + getString(R.string.divider_bullet) + " ");
+                }
+
+                if (boardNumber == 20) {
+                    view_grade_and_board.append("Competitive exams");
+                } else {
+                    if (gradeNumber == 1) {
+                        view_grade_and_board.append(getString(R.string.g5b));
+                    } else if (gradeNumber == 2) {
+                        view_grade_and_board.append(getString(R.string.g68));
+                    } else if (gradeNumber == 3) {
+                        view_grade_and_board.append(getString(R.string.g9));
+                    } else if (gradeNumber == 4) {
+                        view_grade_and_board.append(getString(R.string.g10));
+                    } else if (gradeNumber == 5) {
+                        view_grade_and_board.append(getString(R.string.g11));
+                    } else if (gradeNumber == 6) {
+                        view_grade_and_board.append(getString(R.string.g12));
+                    } else if (gradeNumber == 7) {
+                        view_grade_and_board.append(getString(R.string.undergraduate));
 //                Toast.makeText(getApplicationContext(),"Grade number: 7\nBoard number: "+boardNumber,Toast.LENGTH_SHORT).show();
 
-                    if (boardNumber == 7) {
-                        view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " B. Tech");
-                    } else if (boardNumber == 8) {
-                        view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " B. Sc");
-                    } else if (boardNumber == 9) {
-                        view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " B. Com");
-                    } else if (boardNumber == 10) {
-                        view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " BA");
-                    } else if (boardNumber == 11) {
-                        view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " BBA");
-                    } else if (boardNumber == 12) {
-                        view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " BCA");
-                    } else if (boardNumber == 13) {
-                        view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " B. Ed");
-                    } else if (boardNumber == 14) {
-                        view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " LLB");
-                    } else if (boardNumber == 15) {
-                        view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " MBBS");
-                    } else if (boardNumber == 16) {
-                        view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " Other degree");
+                        if (boardNumber == 7) {
+                            view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " B. Tech");
+                        } else if (boardNumber == 8) {
+                            view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " B. Sc");
+                        } else if (boardNumber == 9) {
+                            view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " B. Com");
+                        } else if (boardNumber == 10) {
+                            view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " BA");
+                        } else if (boardNumber == 11) {
+                            view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " BBA");
+                        } else if (boardNumber == 12) {
+                            view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " BCA");
+                        } else if (boardNumber == 13) {
+                            view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " B. Ed");
+                        } else if (boardNumber == 14) {
+                            view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " LLB");
+                        } else if (boardNumber == 15) {
+                            view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " MBBS");
+                        } else if (boardNumber == 16) {
+                            view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " Other degree");
+                        }
+
+                        if (year != 0) {
+                            view_grade_and_board.append(", " + ordinal(year) + " year");
+                        }
                     }
 
-                    if (year != 0) {
-                        view_grade_and_board.append(", " + ordinal(year) + " year");
+                    if (boardNumber == 1) {
+                        view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " CBSE");
+                    } else if (boardNumber == 2) {
+                        view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " ICSE/ISC");
+                    } else if (boardNumber == 3) {
+                        view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " IB");
+                    } else if (boardNumber == 4) {
+                        view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " IGCSE/CAIE");
+                    } else if (boardNumber == 5) {
+                        view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " state board");
+                    } else if (boardNumber == 6) {
+                        view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " other board");
                     }
-                }
 
-                if (boardNumber == 1) {
-                    view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " CBSE");
-                } else if (boardNumber == 2) {
-                    view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " ICSE/ISC");
-                } else if (boardNumber == 3) {
-                    view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " IB");
-                } else if (boardNumber == 4) {
-                    view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " IGCSE/CAIE");
-                } else if (boardNumber == 5) {
-                    view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " state board");
-                } else if (boardNumber == 6) {
-                    view_grade_and_board.append(" " + getString(R.string.divider_bullet) + " other board");
                 }
-
             }
             view_price.setText("₹" + currentBook.getBookPrice());
             if (currentBook.isTextbook()) {
@@ -429,7 +453,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         super.onStart();
         mBookRegistration = bookRef.addSnapshotListener(this);
 
-        if (isHome) {
+        if (isHome && !sameUser) {
             findViewById(R.id.fab_chat).setVisibility(View.VISIBLE);
         } else {
             findViewById(R.id.fab_chat).setVisibility(View.INVISIBLE);
@@ -473,7 +497,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if (!isHome) {
+        if (!isHome || sameUser) {
             if (!isBookmarks && !isUserProfile) {
                 menu.clear();
                 int tmp = 0;
