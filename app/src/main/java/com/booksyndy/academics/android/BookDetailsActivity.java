@@ -54,6 +54,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class BookDetailsActivity extends AppCompatActivity implements View.OnClickListener, EventListener<DocumentSnapshot> {
 
+    // TODO: accomodate general books
     private String bookid, defaultMessage;
     private boolean isHome, saved, isBookmarks, isUserProfile;
     private FirebaseFirestore mFirestore;

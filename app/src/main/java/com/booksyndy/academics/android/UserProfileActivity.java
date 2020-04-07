@@ -132,9 +132,6 @@ public class UserProfileActivity extends AppCompatActivity {
         boardLL = findViewById(R.id.boardLL);
         yearLL = findViewById(R.id.profileYearLL);
 
-        saveChanges = findViewById(R.id.fab_save);
-        saveChanges.hide();
-
         gradeAdapter = new ArrayAdapter<String>(UserProfileActivity.this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.grades));
         gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

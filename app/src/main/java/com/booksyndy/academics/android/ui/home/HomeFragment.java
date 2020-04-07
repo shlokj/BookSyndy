@@ -306,20 +306,28 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         /* firestore */
         mFirestore = FirebaseFirestore.getInstance();
         curUserId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
-        mQuery = mFirestore.collection("books").whereEqualTo("bookSold", false);
+        if (preferGeneral) {
+            mQuery = mFirestore.collection("books").whereEqualTo("general",true).whereEqualTo("bookSold", false);
+        }
+        else {
+            mQuery = mFirestore.collection("books")/*.whereEqualTo("general",false)*/.whereEqualTo("bookSold", false); // TODO: uncomment when all books have the general field
+        }
         //default filters
+
 
         int grade = userPref.getInt(getString(R.string.p_grade), -1);
         int board = userPref.getInt(getString(R.string.p_board), -1);
-        Log.d(TAG, "initFireStore: userGrade: " + grade);
-        if (grade != -1 && grade <= 5) {
-            mQuery = mQuery.whereIn("gradeNumber", Arrays.asList(grade, grade + 1));
-        } else if (grade != -1) {
-            mQuery = mQuery.whereEqualTo("gradeNumber", grade);
-        }
-        if(board != -1)
-            mQuery = mQuery.whereEqualTo("boardNumber", board);
 
+        if (!preferGeneral) {
+            Log.d(TAG, "initFireStore: userGrade: " + grade);
+            if (grade != -1 && grade <= 5) {
+                mQuery = mQuery.whereIn("gradeNumber", Arrays.asList(grade, grade + 1));
+            } else if (grade != -1) {
+                mQuery = mQuery.whereEqualTo("gradeNumber", grade);
+            }
+            if (board != -1)
+                mQuery = mQuery.whereEqualTo("boardNumber", board);
+        }
         mQuery = mQuery.orderBy("createdAt", Query.Direction.DESCENDING);
         booksRegistration = mQuery.limit(10).addSnapshotListener(this);
         setDefaultFilters(grade,board);
@@ -461,104 +469,106 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     @Override
     public void onFilter(final Filters filters) {
 
-        Query fQuery = mFirestore.collection("books").whereEqualTo("bookSold", false);
+        Query fQuery;
+
         boolean noFilter = true;
 
-        if (filters.hasBookBoard()) {
-            //filters are applied
-            noFilter = false;
-
-            List<Integer> fBoards = filters.getBookBoard();
-
-            fQuery = fQuery.whereEqualTo("boardNumber", fBoards.get(0));
-
-            boards = "board: ";
-            if (fBoards.contains(1)) {
-                boards = boards + "CBSE";
-            }
-            else if (fBoards.contains(2)) {
-                boards = boards + "ICSE/ISC";
-            }
-            else if (fBoards.contains(3)) {
-                boards = boards + "IB";
-            }
-            else if (fBoards.contains(4)) {
-                boards = boards + "IGCSE/CAIE";
-            }
-            else if (fBoards.contains(5)) {
-                boards = boards + "State board";
-            }
-            else if (fBoards.contains(6)) {
-                boards = boards + "other board";
-            }
-            else if (fBoards.contains(20)) {
-                grades = "";
-                boards = "competitive exams";
-            }
-
-        }
-
-        //grade
-        if (filters.hasBookGrade()) {
-            noFilter = false;
-
-            List<Integer> fGrades = filters.getBookGrade();
-
-
-            fQuery = fQuery.whereIn("gradeNumber", fGrades);
-
-            grades = "grades: ";
-            if (fGrades.size() == 1) {
-                if (fGrades.contains(1)) {
-                    grades = grades + "5-";
-                } else if (fGrades.contains(2)) {
-                    grades = grades + "6-8";
-                } else if (fGrades.contains(3)) {
-                    grades = grades + "9";
-                } else if (fGrades.contains(4)) {
-                    grades = grades + "10";
-                } else if (fGrades.contains(5)) {
-                    grades = grades + "11";
-                } else if (fGrades.contains(6)) {
-                    grades = grades + "12";
-                }
-            } else if (fGrades.size() >= 2) {
-                if (fGrades.contains(1)) {
-                    grades = grades + "5-, ";
-                }
-                if (fGrades.contains(2)) {
-                    grades = grades + "6-8, ";
-                }
-                if (fGrades.contains(3)) {
-                    grades = grades + "9, ";
-                }
-                if (fGrades.contains(4)) {
-                    grades = grades + "10, ";
-                }
-                if (fGrades.contains(5)) {
-                    grades = grades + "11, ";
-                }
-                if (fGrades.contains(6)) {
-                    grades = grades + "12, ";
-                }
-            }
-            if (grades.substring(grades.length() - 2).equals(", ")) {
-                grades = grades.substring(0, grades.length() - 2);
-            }
+        if (preferGeneral) {
+            fQuery = mFirestore.collection("books").whereEqualTo("general", true).whereEqualTo("bookSold", false);
         }
         else {
-            grades = "all grades";
-        }
+            fQuery = mFirestore.collection("books")/*.whereEqualTo("general", false)*/.whereEqualTo("bookSold", false); // TODO: same as above
 
-        if (!(filters.IsText() && filters.IsNotes())) {
-            noFilter = false;
 
-            if (filters.IsText()) {
-                fQuery = fQuery.whereEqualTo("textbook", true);
-            } else if (filters.IsNotes()) {
-                fQuery = fQuery.whereEqualTo("textbook", false);
+            if (filters.hasBookBoard()) {
+                //filters are applied
+                noFilter = false;
+
+                List<Integer> fBoards = filters.getBookBoard();
+
+                fQuery = fQuery.whereEqualTo("boardNumber", fBoards.get(0));
+
+                boards = "board: ";
+                if (fBoards.contains(1)) {
+                    boards = boards + "CBSE";
+                } else if (fBoards.contains(2)) {
+                    boards = boards + "ICSE/ISC";
+                } else if (fBoards.contains(3)) {
+                    boards = boards + "IB";
+                } else if (fBoards.contains(4)) {
+                    boards = boards + "IGCSE/CAIE";
+                } else if (fBoards.contains(5)) {
+                    boards = boards + "State board";
+                } else if (fBoards.contains(6)) {
+                    boards = boards + "other board";
+                } else if (fBoards.contains(20)) {
+                    grades = "";
+                    boards = "competitive exams";
+                }
+
             }
 
+            //grade
+            if (filters.hasBookGrade()) {
+                noFilter = false;
+
+                List<Integer> fGrades = filters.getBookGrade();
+
+
+                fQuery = fQuery.whereIn("gradeNumber", fGrades);
+
+                grades = "grades: ";
+                if (fGrades.size() == 1) {
+                    if (fGrades.contains(1)) {
+                        grades = grades + "5-";
+                    } else if (fGrades.contains(2)) {
+                        grades = grades + "6-8";
+                    } else if (fGrades.contains(3)) {
+                        grades = grades + "9";
+                    } else if (fGrades.contains(4)) {
+                        grades = grades + "10";
+                    } else if (fGrades.contains(5)) {
+                        grades = grades + "11";
+                    } else if (fGrades.contains(6)) {
+                        grades = grades + "12";
+                    }
+                } else if (fGrades.size() >= 2) {
+                    if (fGrades.contains(1)) {
+                        grades = grades + "5-, ";
+                    }
+                    if (fGrades.contains(2)) {
+                        grades = grades + "6-8, ";
+                    }
+                    if (fGrades.contains(3)) {
+                        grades = grades + "9, ";
+                    }
+                    if (fGrades.contains(4)) {
+                        grades = grades + "10, ";
+                    }
+                    if (fGrades.contains(5)) {
+                        grades = grades + "11, ";
+                    }
+                    if (fGrades.contains(6)) {
+                        grades = grades + "12, ";
+                    }
+                }
+                if (grades.substring(grades.length() - 2).equals(", ")) {
+                    grades = grades.substring(0, grades.length() - 2);
+                }
+            } else {
+                grades = "all grades";
+            }
+
+            if (!(filters.IsText() && filters.IsNotes())) {
+                noFilter = false;
+
+                if (filters.IsText()) {
+                    fQuery = fQuery.whereEqualTo("textbook", true);
+                } else if (filters.IsNotes()) {
+                    fQuery = fQuery.whereEqualTo("textbook", false);
+                }
+
+            }
         }
 
         //price

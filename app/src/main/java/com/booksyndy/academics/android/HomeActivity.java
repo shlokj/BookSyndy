@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -84,7 +85,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private String snackbarMessage, version;
     private SharedPreferences userPref;
     private SharedPreferences.Editor editor;
-    private boolean sbLong;
+    private boolean sbLong, preferGeneral;
     private static boolean showGPS = false;
     private String dynamicBookId;
     private NavController navController;
@@ -162,12 +163,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         populateUserDetails();
         handleOtherIntent();
 
+
+        preferGeneral = userPref.getBoolean(getString(R.string.preferGeneral),false);
+
         NavigationView navigationView = findViewById(R.id.nav_view);
 
         // get menu from navigationView
         Menu menu = navigationView.getMenu();
 
-        if (userPref.getBoolean(getString(R.string.preferGeneral),false)) {
+        if (preferGeneral) {
             menu.findItem(R.id.nav_switchmode).setTitle("Switch to academics mode");
         }
         else {
@@ -467,6 +471,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         if (navigationView.getCheckedItem() != null && navigationView.getCheckedItem().getItemId() == R.id.nav_home) {
+
+            ActionBar ab = getSupportActionBar();
+
+            if (preferGeneral) {
+                ab.setTitle(ab.getTitle() + " (general)");
+            }
+            else {
+                ab.setTitle(ab.getTitle() + " (academics)");
+            }
+
+
             if (toolbar != null && toolbar.getChildCount() > 1) {
                 final View view = toolbar.getChildAt(1);
 
