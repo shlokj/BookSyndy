@@ -628,11 +628,15 @@ public class UserProfileActivity extends AppCompatActivity {
                 return;
             }
 
+            String nUsername = uName.getText().toString().toLowerCase().trim();
+            if (!(fName.getText().toString().length() == 0 || lName.getText().toString().length() == 0 || nUsername.length() == 0 /*|| year.getText().toString().length()==0*/)) {
+                boolean isAvailableUsername = checkUserName(nUsername);
 
-            if (!(fName.getText().toString().length() == 0 || lName.getText().toString().length() == 0 || uName.getText().toString().toLowerCase().length() == 0 /*|| year.getText().toString().length()==0*/)) {
-                boolean isAvailableUsername = checkUserName(uName.getText().toString().toLowerCase().trim());
-
-                if (!isAvailableUsername) {
+                if (nUsername.length()<4) {
+                    showSnackbar("This username is too short.");
+//                    return;
+                }
+                else if (!isAvailableUsername) {
                     showSnackbar("This username is not available. Please try another");
                     return;
                 } else {
@@ -684,7 +688,7 @@ public class UserProfileActivity extends AppCompatActivity {
                     editor.putBoolean(getString(R.string.preferGuidedMode), preferGuidedMode.isChecked());
                     editor.putString(getString(R.string.p_firstname), fName.getText().toString().trim());
                     editor.putString(getString(R.string.p_lastname), lName.getText().toString().trim());
-                    editor.putString(getString(R.string.p_userid), uName.getText().toString().toLowerCase().trim());
+                    editor.putString(getString(R.string.p_userid), nUsername);
                     editor.putString(getString(R.string.p_imageurl), book_photo_url);
                     editor.putInt(getString(R.string.p_grade), gradeSpinner.getSelectedItemPosition() + 1);
                     editor.putInt(getString(R.string.p_board), board);

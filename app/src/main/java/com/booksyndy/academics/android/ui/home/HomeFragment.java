@@ -310,7 +310,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             mQuery = mFirestore.collection("books").whereEqualTo("general",true).whereEqualTo("bookSold", false);
         }
         else {
-            mQuery = mFirestore.collection("books").whereEqualTo("general",false).whereEqualTo("bookSold", false); // TODO: uncomment when all books have the general field
+            mQuery = mFirestore.collection("books").whereEqualTo("general",false).whereEqualTo("bookSold", false);
         }
         //default filters
 

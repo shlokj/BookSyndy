@@ -79,7 +79,7 @@
     <string name="display_username">Display username</string>
     <string name="last_seen">Last Seen</string>
     <string name="title_activity_chat">Chat Activity</string>
-    <string name="name_question">Great! What\'s your name?</string>
+    <string name="name_question">What\'s your name?</string>
     <string name="username">Username</string>
     <string name="search">Search</string>
     <string name="free_only">Free only</string>

@@ -98,8 +98,6 @@ public class CreateGeneralListingActivity extends AppCompatActivity {
     private double progress;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 3;
 
-// TODO: type implementaion (fiction/nonfiction)
-
     // We use the boardNumber field for storing whether it is fiction or non fiction
     // Fiction: 101, nonfiction: 201
     @Override
