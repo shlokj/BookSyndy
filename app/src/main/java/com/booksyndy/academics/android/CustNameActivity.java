@@ -30,11 +30,10 @@ import java.util.List;
 
 public class CustNameActivity extends AppCompatActivity {
 
-    private boolean isParent, isValidUsername, isAvailableUsername=true, phoneNumberPublic;
+    private boolean isValidUsername, isAvailableUsername=true, phoneNumberPublic;
     private EditText firstNameField, lastNameField, userIdField;
     private TextInputLayout fnf,lnf,uif;
     private String firstName, lastName, username;
-    private int userType;
     private TextWatcher pUsername;
 
     private static String TAG = "CUSTNAMEACTIVITY";
@@ -50,8 +49,8 @@ public class CustNameActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Sign up");
 
         parentLayout = findViewById(android.R.id.content);
-        isParent = getIntent().getBooleanExtra("IS_PARENT",false);
-        userType = getIntent().getIntExtra("USER_TYPE",1);
+//        isParent = getIntent().getBooleanExtra("IS_PARENT",false);
+//        userType = getIntent().getIntExtra("USER_TYPE",1);
 
         userIdField = (EditText) findViewById(R.id.usernameField);
         firstNameField = (EditText) findViewById(R.id.firstName);
@@ -74,7 +73,7 @@ public class CustNameActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 userIdField.setText(firstNameField.getText().toString().toLowerCase()+lastNameField.getText().toString().toLowerCase());
-                userIdField.setError(null);
+                uif.setError(null);
             }
 
             @Override
@@ -91,7 +90,7 @@ public class CustNameActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                userIdField.setError(null);
+                uif.setError(null);
             }
 
             @Override
@@ -141,54 +140,26 @@ public class CustNameActivity extends AppCompatActivity {
                 }
 
                 else if (!(isValidUsername && isAvailableUsername)) {
-//                    userIdField.getBackground().setColorFilter("#EE0000", PorterDuff.Mode.SRC_IN);
                     if (!isValidUsername) {
                         uif.setError("The username you entered is not valid.");
-//                        showSnackbar("The username you entered is not valid.");
                     }
                     else if (!isAvailableUsername) {
                         uif.setError("This username is taken. Please try another.");
-//                        showSnackbar("This username is taken. Please try another.");
                     }
                 }
 
                 else if (username.length()<4) {
                     uif.setError("This username is too short.");
-//                    showSnackbar("This username is too short.");
                 }
-/*                else if(!passwordsMatch) {
-                    showSnackbar("The entered passwords don't match.");
-                }
-                else if (password.length()==0) {
-                    showSnackbar("Please enter a password");
-                }
-                else if (password.length()<6) {
-                    showSnackbar("Your password must be at least 6 characters long.");
-                }*/
-                else {
-                    if (userType==4) {
 
-                        Intent completeSignUp = new Intent(CustNameActivity.this, GetJoinPurposeActivity.class);
-                        completeSignUp.putExtra("IS_PARENT", isParent);
-                        completeSignUp.putExtra("FIRST_NAME", firstName);
-                        completeSignUp.putExtra("LAST_NAME", lastName);
-                        completeSignUp.putExtra("USERNAME", username);
-                        completeSignUp.putExtra("USER_TYPE", userType);
-                        completeSignUp.putExtra("GRADE_NUMBER",4);
-                        completeSignUp.putExtra("BOARD_NUMBER",1);
-                        completeSignUp.putExtra("PUBLIC_PHONE",phoneNumberPublic);
-                        startActivity(completeSignUp);
-                    }
-                    else {
-                        Intent getGrade = new Intent(CustNameActivity.this, GetGradeActivity.class);
-                        getGrade.putExtra("IS_PARENT", isParent);
-                        getGrade.putExtra("FIRST_NAME", firstName);
-                        getGrade.putExtra("LAST_NAME", lastName);
-                        getGrade.putExtra("USERNAME", username);
-                        getGrade.putExtra("USER_TYPE", userType);
-                        getGrade.putExtra("PUBLIC_PHONE",phoneNumberPublic);
-                        startActivity(getGrade);
-                    }
+                else {
+
+                    Intent getParOrStud = new Intent(CustNameActivity.this, GetModeActivity.class);
+                    getParOrStud.putExtra("FIRST_NAME", firstName);
+                    getParOrStud.putExtra("LAST_NAME", lastName);
+                    getParOrStud.putExtra("USERNAME", username);
+                    getParOrStud.putExtra("PUBLIC_PHONE",phoneNumberPublic);
+                    startActivity(getParOrStud);
                 }
             }
         });

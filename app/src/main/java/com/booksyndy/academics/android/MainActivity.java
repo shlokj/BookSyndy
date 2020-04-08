@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 } else {
                                     //new user
-                                    Intent startposact = new Intent(MainActivity.this, ParOrStudActivity.class);
+                                    Intent startposact = new Intent(MainActivity.this, CustNameActivity.class);
                                     startposact.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(startposact);
                                     MainActivity.this.finish();

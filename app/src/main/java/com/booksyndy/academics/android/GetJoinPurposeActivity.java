@@ -54,6 +54,7 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
             String username = getIntent().getStringExtra("USERNAME");
             int userType = getIntent().getIntExtra("USER_TYPE", 1);
             boolean phoneNumberPublic = getIntent().getBooleanExtra("PUBLIC_PHONE", true);
+            boolean preferGeneral = getIntent().getBooleanExtra("PREF_GEN",false);
 
             if (gradeNumber <3 || gradeNumber >6) {
                 competitiveExam =false;
@@ -64,6 +65,7 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
             curFirebaseUser.setUserType(userType);
             curFirebaseUser.setCreationDate(date);
             curFirebaseUser.setPhoneNumberPublic(phoneNumberPublic);
+            curFirebaseUser.setPreferGeneral(preferGeneral);
             FirebaseFirestore db = FirebaseFirestore.getInstance();
 
             // Add a new document with a generated ID

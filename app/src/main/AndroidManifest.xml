@@ -23,7 +23,8 @@
         android:roundIcon="@drawable/ic_booksyndy_circle_transparent"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SignUpQuestionsActivity"></activity>
+        <activity android:name=".GetModeActivity"></activity>
+        <activity android:name=".SignUpQuestionsActivity" />
         <activity android:name=".CreateGeneralListingActivity" />
         <activity android:name=".SignIn2Activity" />
         <activity
@@ -54,9 +55,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ConfirmListingActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".GetCollegeBranchActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
