@@ -15,13 +15,13 @@ import com.google.android.material.snackbar.Snackbar;
 
 public class GetBoardActivity extends AppCompatActivity {
 
-    boolean isParent, phoneNumberPublic;
-    TextView boardQuestion;
-    RadioGroup boards;
-    String firstName, lastName, username;
-    int gradeNumber, board, boardNumber;
-    Intent getFinalAnswer;
-    CheckBox competitiveExam;
+    private boolean isParent, phoneNumberPublic, modeSwitched;
+    private TextView boardQuestion;
+    private RadioGroup boards;
+    private String firstName, lastName, username;
+    private int gradeNumber, board, boardNumber;
+    private Intent getFinalAnswer;
+    private CheckBox competitiveExam;
     private int userType;
 
 
@@ -37,7 +37,7 @@ public class GetBoardActivity extends AppCompatActivity {
         username = getIntent().getStringExtra("USERNAME");
         userType = getIntent().getIntExtra("USER_TYPE",1);
         phoneNumberPublic = getIntent().getBooleanExtra("PUBLIC_PHONE",true);
-
+        modeSwitched = getIntent().getBooleanExtra("MODE_SWITCHED",false);
 
 //        password = getIntent().getStringExtra("PASSWORD");
         boardQuestion =  findViewById(R.id.boardQuestionTV);
@@ -56,6 +56,7 @@ public class GetBoardActivity extends AppCompatActivity {
         getFinalAnswer.putExtra("USERNAME",username);
         getFinalAnswer.putExtra("USER_TYPE",userType);
         getFinalAnswer.putExtra("PUBLIC_PHONE",phoneNumberPublic);
+        getFinalAnswer.putExtra("MODE_SWITCHED",modeSwitched);
 
 //        getFinalAnswer.putExtra("PASSWORD",password);
         competitiveExam =  findViewById(R.id.competitiveExam);

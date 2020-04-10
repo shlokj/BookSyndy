@@ -80,7 +80,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private CheckBox compExams, preferGuidedMode, pnpcb;
     private TextView boardLabel;
     private LinearLayout gradeLL,boardLL,yearLL;
-    private boolean detailsChanged = false, tempCE, editing, phoneNumberPublic;
+    private boolean detailsChanged = false, tempCE, editing, phoneNumberPublic, preferGeneral;
     private FirebaseFirestore mFirestore;
     private ArrayAdapter<String> boardAdapter, degreeAdapter, gradeAdapter;
     private SharedPreferences userPref;
@@ -326,6 +326,7 @@ public class UserProfileActivity extends AppCompatActivity {
             lastName = userPref.getString(getString(R.string.p_lastname), "");
             userId = userPref.getString(getString(R.string.p_userid), "");
             userType = userPref.getInt(getString(R.string.p_usertype),1);
+            preferGeneral = userPref.getBoolean(getString(R.string.preferGeneral),false);
             phoneNumberPublic = userPref.getBoolean(getString(R.string.phoneNumberPublic),false);
 
             pnpcb.setChecked(phoneNumberPublic);
@@ -362,12 +363,14 @@ public class UserProfileActivity extends AppCompatActivity {
                 year.setText(yearNumber + "");
             }
 
-            if (userType==4) {
+            if (userType==4 || preferGeneral) {
                 boardLL.setVisibility(View.GONE);
                 gradeLL.setVisibility(View.GONE);
                 compExams.setVisibility(View.GONE);
                 year.setVisibility(View.GONE);
-                getSupportActionBar().setTitle("Profile (vendor)");
+                if (userType==4) {
+                    getSupportActionBar().setTitle("Profile (vendor)");
+                }
             }
             fName.setText(firstName);
             lName.setText(lastName);

@@ -87,8 +87,18 @@ public class MainActivity extends AppCompatActivity {
                                     Intent homeActivity;
                                     if (userPhone == null) {
                                         homeActivity = new Intent(MainActivity.this, WelcomeActivity.class);
-                                    } else {
+                                    }
+                                    else if ((user.getUserType()==0 || user.getGradeNumber()==0 || user.getBoardNumber()==0) && !user.isPreferGeneral()) {
+                                        homeActivity = new Intent(MainActivity.this,ParOrStudActivity.class);
+                                        homeActivity.putExtra("MODE_SWITCHED",true);
+                                    }
+
+                                    else {
                                         homeActivity = new Intent(MainActivity.this, HomeActivity.class); //changed to welcome activity
+                                        homeActivity.putExtra("FIRST_NAME", user.getFirstName());
+                                        homeActivity.putExtra("LAST_NAME", user.getLastName());
+                                        homeActivity.putExtra("USERNAME", user.getUserId());
+                                        homeActivity.putExtra("PUBLIC_PHONE",user.isPhoneNumberPublic());
                                     }
 
                                     editor = userPref.edit();

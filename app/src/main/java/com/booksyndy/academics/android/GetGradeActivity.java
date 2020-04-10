@@ -12,12 +12,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 public class GetGradeActivity extends AppCompatActivity {
-    boolean isParent, phoneNumberPublic;
-    TextView gradeQuestion, gradeInstructions;
-    RadioGroup grades;
-    String firstName, lastName, username;
-    int grade;
-    int gradeNumber;
+    private boolean isParent, phoneNumberPublic, modeSwitched;
+    private TextView gradeQuestion, gradeInstructions;
+    private RadioGroup grades;
+    private String firstName, lastName, username;
+    private int grade, gradeNumber;
 //     Grade numbers:
 //     1 to 5: 1
 //     6 to 8: 2
@@ -25,6 +24,7 @@ public class GetGradeActivity extends AppCompatActivity {
 //     10: 4
 //     11:5
 //     12: 6
+//     UG: 7
 
     boolean tmp=true;
     Intent getBoard;
@@ -42,6 +42,7 @@ public class GetGradeActivity extends AppCompatActivity {
         username = getIntent().getStringExtra("USERNAME");
         userType = getIntent().getIntExtra("USER_TYPE",1);
         phoneNumberPublic = getIntent().getBooleanExtra("PUBLIC_PHONE",true);
+        modeSwitched = getIntent().getBooleanExtra("MODE_SWITCHED",false);
 
 //        password = getIntent().getStringExtra("PASSWORD");
         gradeQuestion = (TextView) findViewById(R.id.gradeQuestionTV);
@@ -59,6 +60,7 @@ public class GetGradeActivity extends AppCompatActivity {
         getBoard.putExtra("USERNAME",username);
         getBoard.putExtra("USER_TYPE",userType);
         getBoard.putExtra("PUBLIC_PHONE",phoneNumberPublic);
+        getBoard.putExtra("MODE_SWITCHED",modeSwitched);
 
         gradeInstructions = findViewById(R.id.settingGradeInstructions);
 //        getBoard.putExtra("PASSWORD",password);
@@ -110,6 +112,7 @@ public class GetGradeActivity extends AppCompatActivity {
                     getDegree.putExtra("USERNAME",username);
                     getDegree.putExtra("USER_TYPE",userType);
                     getDegree.putExtra("PUBLIC_PHONE",phoneNumberPublic);
+                    getDegree.putExtra("MODE_SWITCHED",modeSwitched);
 //                    getDegree.putExtra("PASSWORD",password);
                     startActivity(getDegree);
                     tmp = false;

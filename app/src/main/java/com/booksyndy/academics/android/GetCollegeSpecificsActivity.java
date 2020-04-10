@@ -14,7 +14,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 public class GetCollegeSpecificsActivity extends AppCompatActivity {
 
-    boolean isParent, validYear, phoneNumberPublic;
+    boolean isParent, validYear, phoneNumberPublic, modeSwitched;
     TextView degreeQuestion;
     RadioGroup degrees;
     String firstName, lastName, username;
@@ -37,6 +37,7 @@ public class GetCollegeSpecificsActivity extends AppCompatActivity {
         username = getIntent().getStringExtra("USERNAME");
         userType = getIntent().getIntExtra("USER_TYPE",1);
         phoneNumberPublic = getIntent().getBooleanExtra("PUBLIC_PHONE",true);
+        modeSwitched = getIntent().getBooleanExtra("MODE_SWITCHED",false);
 
 //        password = getIntent().getStringExtra("PASSWORD");
         degreeQuestion = (TextView) findViewById(R.id.degreeQuestionTV);
@@ -50,6 +51,7 @@ public class GetCollegeSpecificsActivity extends AppCompatActivity {
         getFinalAnswer.putExtra("USERNAME",username);
         getFinalAnswer.putExtra("USER_TYPE",userType);
         getFinalAnswer.putExtra("PUBLIC_PHONE",phoneNumberPublic);
+        getFinalAnswer.putExtra("MODE_SWITCHED",modeSwitched);
 //        getFinalAnswer.putExtra("PASSWORD",password);
 
         if (userType==3) {

@@ -111,7 +111,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
-        android:text="@string/get_started"
+        android:text=""
         android:textColor="@color/colorTextBlack"
         android:textSize="22sp"
         android:fontFamily="@font/roboto_light"

@@ -2,6 +2,7 @@ package com.booksyndy.academics.android;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
@@ -26,6 +28,14 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
 
     private User curFirebaseUser;
 
+    boolean competitiveExam,isParent,phoneNumberPublic,preferGeneral;
+    String firstName,lastName,username,phoneNumber;
+    int gradeNumber,boardNumber,yearNumber,userType;
+
+    private static final String TAG = "REG_USER";
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +43,32 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Sign up");
         getSupportActionBar().hide();
 
-        registerUser();
+        competitiveExam = getIntent().getBooleanExtra("COMPETITIVE_EXAM", false);
+        isParent = getIntent().getBooleanExtra("IS_PARENT", false);
+        firstName = getIntent().getStringExtra("FIRST_NAME");
+        lastName = getIntent().getStringExtra("LAST_NAME");
+        gradeNumber = getIntent().getIntExtra("GRADE_NUMBER", 4);
+        boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 6);
+        boardNumber = getIntent().getIntExtra("DEGREE_NUMBER", boardNumber);
+        yearNumber = getIntent().getIntExtra("YEAR_NUMBER", 0);
+        username = getIntent().getStringExtra("USERNAME");
+        userType = getIntent().getIntExtra("USER_TYPE", 1);
+        phoneNumberPublic = getIntent().getBooleanExtra("PUBLIC_PHONE", true);
+        preferGeneral = getIntent().getBooleanExtra("PREF_GEN",false);
+        boolean modeSwitched = getIntent().getBooleanExtra("MODE_SWITCHED",false);
+
+
+        if (gradeNumber <3 || gradeNumber >6) {
+            competitiveExam =false;
+        }
+        phoneNumber = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
+
+        if (modeSwitched) {
+            updateUserForAcads();
+        }
+        else {
+            registerUser();
+        }
     }
 
     private void registerUser() {
@@ -43,23 +78,6 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             String date = dateFormat.format(calendar.getTime());
 
-            boolean competitiveExam = getIntent().getBooleanExtra("COMPETITIVE_EXAM", false);
-            boolean isParent = getIntent().getBooleanExtra("IS_PARENT", false);
-            String firstName = getIntent().getStringExtra("FIRST_NAME");
-            String lastName = getIntent().getStringExtra("LAST_NAME");
-            int gradeNumber = getIntent().getIntExtra("GRADE_NUMBER", 4);
-            int boardNumber = getIntent().getIntExtra("BOARD_NUMBER", 6);
-            boardNumber = getIntent().getIntExtra("DEGREE_NUMBER", boardNumber);
-            int yearNumber = getIntent().getIntExtra("YEAR_NUMBER", 0);
-            String username = getIntent().getStringExtra("USERNAME");
-            int userType = getIntent().getIntExtra("USER_TYPE", 1);
-            boolean phoneNumberPublic = getIntent().getBooleanExtra("PUBLIC_PHONE", true);
-            boolean preferGeneral = getIntent().getBooleanExtra("PREF_GEN",false);
-
-            if (gradeNumber <3 || gradeNumber >6) {
-                competitiveExam =false;
-            }
-            String phoneNumber = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
             curFirebaseUser = new User(firstName, lastName, phoneNumber, isParent, gradeNumber, boardNumber, competitiveExam, username, default_pic_url);
             curFirebaseUser.setYear(yearNumber);
             curFirebaseUser.setUserType(userType);
@@ -87,9 +105,42 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
             });
 
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "User Register Failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "User register failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
+
+
+    public void updateUserForAcads() {
+
+        FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
+
+//        final String curPhone = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
+
+
+        DocumentReference userReference = mFirestore.collection("users").document(phoneNumber);
+        userReference.update("competitiveExam", competitiveExam,
+                "userType",userType,
+                "year", yearNumber,
+                "gradeNumber", gradeNumber,
+                "boardNumber", boardNumber)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+//                        saveToken(curPhone); // TODO: uncomment this line if required
+                        startMain();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+                Log.d(TAG, "onFailure: update user", e);
+                Toast.makeText(getApplicationContext(), "Update Failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+    }
+
 
     private void saveToken(final String userId) {
         FirebaseInstanceId.getInstance().getInstanceId()
