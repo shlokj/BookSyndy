@@ -23,7 +23,6 @@
         android:roundIcon="@drawable/ic_booksyndy_circle_transparent"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SearchActivity"></activity>
         <activity android:name=".GetModeActivity" />
         <activity android:name=".SignUpQuestionsActivity" />
         <activity android:name=".CreateGeneralListingActivity" />

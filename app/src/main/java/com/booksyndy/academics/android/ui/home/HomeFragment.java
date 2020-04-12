@@ -29,6 +29,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.algolia.search.saas.AlgoliaException;
+import com.algolia.search.saas.Client;
+import com.algolia.search.saas.CompletionHandler;
+import com.algolia.search.saas.Index;
 import com.booksyndy.academics.android.Adapters.HomeAdapter;
 import com.booksyndy.academics.android.BookDetailsActivity;
 import com.booksyndy.academics.android.CreateGeneralListingActivity;
@@ -38,7 +42,6 @@ import com.booksyndy.academics.android.Data.OnFilterSelectionListener;
 import com.booksyndy.academics.android.Data.User;
 import com.booksyndy.academics.android.GetBookPictureActivity;
 import com.booksyndy.academics.android.R;
-import com.booksyndy.academics.android.SearchActivity;
 import com.booksyndy.academics.android.util.Filters;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -53,6 +56,10 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -166,7 +173,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         bookList = new ArrayList<>();
         bookListFull = new ArrayList<>();
         // specify an adapter
-        mAdapter = new HomeAdapter(getContext(), bookList, this) {
+        mAdapter = new HomeAdapter(getContext(), bookList, this,userLat,userLng) {
 
             @Override
             public void onDataChanged() {
@@ -365,79 +372,84 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         menu.add(0, MENU_CHAT, Menu.FIRST, "Chats").setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         menu.getItem(0).setIcon(R.drawable.ic_chat_white_24px);
 
+        Client client = new Client("B2XKIGCNXW", "8cfa545e393f40c1e03c35f834b7c6b6");
+        final Index index = client.getIndex("books_dev");
+
+
         filterItem = menu.findItem(R.id.filter);
-//        searchView = (SearchView) searchItem.getActionView();
-//        searchView.setQueryHint("Search");
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                onQueryTextChange(query);
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//
-//                if (sb != null && newText.length() == 0 && sb.isShown()) {
-//                    sb.dismiss();
-//                }
-//
-//                if (newText == null || newText.trim().isEmpty()) {
-//
-//                    searchView.clearFocus();
-//
-//                    if (sb != null && newText.length() == 0 && sb.isShown()) {
-//                        sb.dismiss();
-//                    }
-//                    mAdapter.setBookList(bookList);
-//                    return true;
-//                }
-//
-//                String filterPattern = newText.toLowerCase().trim();
-//                final String[] qws = filterPattern.split("\\W+");
-//
-//                mQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-//
-//                        if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
-//                            bookListFull.clear();
-//                            bookListFull.addAll(queryDocumentSnapshots.toObjects(Book.class));
-//                        }
-//                        List<Book> filteredList1 = new ArrayList<>();
-//                        for (Book book : bookListFull) {
-////                    int foundIndex = book.getBookName().toLowerCase().indexOf(filterPattern);
-//                            String[] tags = book.getBookName().toLowerCase().split("\\W+");
-//                            for (String tag : tags) {
-//                                for (String qw : qws) {
-//                                    if (tag.indexOf(qw) == 0) {
-//                                        if (!filteredList1.contains(book)) {
-//                                            filteredList1.add(book);
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                        }
-//
-//                        mAdapter.setBookList(filteredList1);
-//
-//                    }
-//                });
-//                return false;
-//            }
-//        });
+        searchView = (SearchView) searchItem.getActionView();
+        searchView.setQueryHint("Search");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                onQueryTextChange(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                if (sb != null && newText.length() == 0 && sb.isShown()) {
+                    sb.dismiss();
+                }
+
+                if (newText == null || newText.trim().isEmpty()) {
+
+                    searchView.clearFocus();
+
+                    if (sb != null && newText.length() == 0 && sb.isShown()) {
+                        sb.dismiss();
+                    }
+                    mAdapter.setBookList(bookList);
+                    return true;
+                }
+
+                com.algolia.search.saas.Query query = new com.algolia.search.saas.Query(newText)
+                        .setFilters("book.textbook=1")
+                        .setFilters("book.bookSold=0")
+                        .setHitsPerPage(20);
+                index.searchAsync(query, new CompletionHandler() {
+                    @Override
+                    public void requestCompleted(@Nullable JSONObject jsonObject, @Nullable AlgoliaException e) {
+
+                        try {
+                            JSONArray hits = jsonObject.getJSONArray("hits");
+                            List<Book> filteredList1 = new ArrayList<>();
+                            for (int i = 0; i < hits.length(); i++) {
+                                JSONObject rootObject = hits.getJSONObject(i);
+                                JSONObject bookObject = rootObject.getJSONObject("book");
+                                Book book = new Book();
+                                book.setDocumentId(rootObject.getString("objectID"));
+                                book.setBookName(bookObject.getString("bookName"));
+                                book.setBookAddress(bookObject.getString("bookAddress"));
+                                book.setBookTime(bookObject.getString("bookTime"));
+                                book.setBookPhoto(bookObject.getString("bookPhoto"));
+                                book.setBookPrice(bookObject.getInt("bookPrice"));
+                                filteredList1.add(book);
+                            }
+                            mAdapter.setBookList(filteredList1);
+                        } catch (JSONException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                });
+
+
+                return false;
+            }
+        });
 
         searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                startActivity(new Intent(getActivity(), SearchActivity.class));
-//                searchView.onActionViewExpanded();
-//                searchView.requestFocus();
-//                if ((grades!=null && grades.trim()!="") && (boards!=null && boards.trim()!=""))
-//                    sb = Snackbar.make(parentLayout, "Searching in " + grades + " and " + boards, Snackbar.LENGTH_LONG);
-//                else
-//                    sb = Snackbar.make(parentLayout, "Searching in your filters" + boards, Snackbar.LENGTH_LONG);
-//                sb.show();
+//                startActivity(new Intent(getActivity(), SearchActivity.class));
+                searchView.onActionViewExpanded();
+                searchView.requestFocus();
+                if ((grades!=null && grades.trim()!="") && (boards!=null && boards.trim()!=""))
+                    sb = Snackbar.make(parentLayout, "Searching in " + grades + " and " + boards, Snackbar.LENGTH_LONG);
+                else
+                    sb = Snackbar.make(parentLayout, "Searching in your filters" + boards, Snackbar.LENGTH_LONG);
+                sb.show();
                 return true;
             }
         });

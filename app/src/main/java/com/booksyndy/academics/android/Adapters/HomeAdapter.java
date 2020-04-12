@@ -42,12 +42,13 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
 
     }
 
-    public HomeAdapter(Context context,List<Book> bookList,OnBookSelectedListener listener){
+    public HomeAdapter(Context context,List<Book> bookList,OnBookSelectedListener listener,double latA,double lngA){
         this.context = context;
         this.bookList = bookList;
         mListener = listener;
         mFireStore = FirebaseFirestore.getInstance();
-        getUserLocation();
+        this.latA = latA;
+        this.lngA = lngA;
     }
 
     public List<Book> getBookList() {
@@ -118,24 +119,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
 
     }
 
-    //init user location
-    public void getUserLocation() {
-        final String curUserId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
-        mFireStore.collection("address").document(curUserId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.e("BOOK_ADAPTER_INNER", "onEvent: exception", e);
-                    return;
-                }
-                if(snapshot.getDouble("lat") != null && snapshot.getDouble("lng") != null) {
-                    latA = snapshot.getDouble("lat");
-                    lngA = snapshot.getDouble("lng");
-                }
 
-            }
-        });
-    }
 
     //determine books distance
     private String addDistance(double latitude,double longitude){
