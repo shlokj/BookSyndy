@@ -45,20 +45,20 @@ public class FilterDialogFragment extends DialogFragment implements TabLayout.On
         mViewPager = mRootView.findViewById(R.id.filters_viewpager);
         mTabLayout = mRootView.findViewById(R.id.filters_tab);
         if(curGrade <= 5){
-            mFilterAdapter = new FilterAdapter(getChildFragmentManager(),1);
+            mFilterAdapter = new FilterAdapter(getChildFragmentManager(),1,false);
             mViewPager.setAdapter(mFilterAdapter);
             //mViewPager.setCurrentItem(0);
             mTabLayout.removeTabAt(1);
         }
         else if(curGrade == 6){
-            mFilterAdapter = new FilterAdapter(getChildFragmentManager(),mTabLayout.getTabCount());
+            mFilterAdapter = new FilterAdapter(getChildFragmentManager(),mTabLayout.getTabCount(),false);
             mViewPager.setAdapter(mFilterAdapter);
             mTabLayout.addOnTabSelectedListener(this);
             mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
 
         }
         else{
-            mFilterAdapter = new FilterAdapter(getChildFragmentManager(),1);
+            mFilterAdapter = new FilterAdapter(getChildFragmentManager(),1,true);
             mViewPager.setAdapter(mFilterAdapter);
 //            mViewPager.setCurrentItem(1);
             mTabLayout.removeTabAt(0);
