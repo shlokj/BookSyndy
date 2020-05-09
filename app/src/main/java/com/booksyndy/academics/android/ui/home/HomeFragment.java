@@ -134,7 +134,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 //        recyclerView.setHorizontalScrollBarEnabled(false);
 
         preferGuidedMode = userPref.getBoolean(getString(R.string.preferGuidedMode), false);
-        preferGeneral = userPref.getBoolean(getString(R.string.preferGeneral),false);
+        preferGeneral = userPref.getBoolean(getString(R.string.preferGeneral), false);
         userLat = userPref.getFloat(getString(R.string.p_lat), 0.0f);
         userLng = userPref.getFloat(getString(R.string.p_lng), 0.0f);
 
@@ -151,8 +151,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                     startBookPub.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startBookPub.putExtra("USER_TYPE", userType);
                     startBookPub.putExtra("PHONE_NUMBER", currentUser.getPhone());
-                }
-                else {
+                } else {
                     if (preferGuidedMode) {
                         startBookPub = new Intent(getActivity(), GetBookPictureActivity.class);
                     } else {
@@ -173,7 +172,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         bookList = new ArrayList<>();
         bookListFull = new ArrayList<>();
         // specify an adapter
-        mAdapter = new HomeAdapter(getContext(), bookList, this,userLat,userLng) {
+        mAdapter = new HomeAdapter(getContext(), bookList, this, userLat, userLng) {
 
             @Override
             public void onDataChanged() {
@@ -230,13 +229,14 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         });
 
 
-
         return root;
     }
 
     private void loadMoreBooks() {
         Log.d(TAG, "loadMoreBooks: called");
-        mQuery = mQuery.startAfter(lastVisibleItem).limit(5);
+        if (lastVisibleItem != null) {
+            mQuery = mQuery.startAfter(lastVisibleItem).limit(5);
+        }
         mQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -255,6 +255,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 
             }
         });
+
     }
 //
 //    @Override
@@ -315,10 +316,9 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         mFirestore = FirebaseFirestore.getInstance();
         curUserId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
         if (preferGeneral) {
-            mQuery = mFirestore.collection("books").whereEqualTo("general",true).whereEqualTo("bookSold", false);
-        }
-        else {
-            mQuery = mFirestore.collection("books").whereEqualTo("general",false).whereEqualTo("bookSold", false);
+            mQuery = mFirestore.collection("books").whereEqualTo("general", true).whereEqualTo("bookSold", false);
+        } else {
+            mQuery = mFirestore.collection("books").whereEqualTo("general", false).whereEqualTo("bookSold", false);
         }
         //default filters
 
@@ -338,7 +338,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         }
         mQuery = mQuery.orderBy("createdAt", Query.Direction.DESCENDING);
         booksRegistration = mQuery.limit(10).addSnapshotListener(this);
-        setDefaultFilters(grade,board);
+        setDefaultFilters(grade, board);
     }
 
 
@@ -373,7 +373,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         menu.getItem(0).setIcon(R.drawable.ic_chat_white_24px);
 
         Client client = new Client("B2XKIGCNXW", "8cfa545e393f40c1e03c35f834b7c6b6");
-        final Index index = client.getIndex("books_dev");
+        final Index index = client.getIndex("prod_books");
 
 
         filterItem = menu.findItem(R.id.filter);
@@ -392,22 +392,21 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                 if (sb != null && newText.length() == 0 && sb.isShown()) {
                     sb.dismiss();
                 }
-
                 if (newText == null || newText.trim().isEmpty()) {
-
                     searchView.clearFocus();
-
                     if (sb != null && newText.length() == 0 && sb.isShown()) {
                         sb.dismiss();
                     }
                     mAdapter.setBookList(bookList);
                     return true;
                 }
-
                 com.algolia.search.saas.Query query = new com.algolia.search.saas.Query(newText)
-                        .setFilters("book.textbook=1")
-                        .setFilters("book.bookSold=0")
-                        .setHitsPerPage(20);
+                        .setFilters("book.bookSold=0");
+                if (preferGeneral)
+                    query = query.setFilters("book.general=1");
+                else
+                    query = query.setFilters("book.general=0");
+                query = query.setHitsPerPage(20);
                 index.searchAsync(query, new CompletionHandler() {
                     @Override
                     public void requestCompleted(@Nullable JSONObject jsonObject, @Nullable AlgoliaException e) {
@@ -445,7 +444,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 //                startActivity(new Intent(getActivity(), SearchActivity.class));
                 searchView.onActionViewExpanded();
                 searchView.requestFocus();
-                if ((grades!=null && grades.trim()!="") && (boards!=null && boards.trim()!=""))
+                if ((grades != null && grades.trim() != "") && (boards != null && boards.trim() != ""))
                     sb = Snackbar.make(parentLayout, "Searching in " + grades + " and " + boards, Snackbar.LENGTH_LONG);
                 else
                     sb = Snackbar.make(parentLayout, "Searching in your filters" + boards, Snackbar.LENGTH_LONG);
@@ -489,8 +488,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 
         if (preferGeneral) {
             fQuery = mFirestore.collection("books").whereEqualTo("general", true).whereEqualTo("bookSold", false);
-        }
-        else {
+        } else {
             fQuery = mFirestore.collection("books").whereEqualTo("general", false).whereEqualTo("bookSold", false); // TODO: same as above
 
 
@@ -617,8 +615,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                         bookListFull.addAll(queryDocumentSnapshots.toObjects(Book.class));
                         mAdapter.setBookList(bookList);
                         sortBooks(filters);
-                    }
-                    else if (queryDocumentSnapshots.isEmpty()){
+                    } else if (queryDocumentSnapshots.isEmpty()) {
                         Toast.makeText(getActivity(), "No listings match your filters. Showing listings that match your previous filters, if any.", Toast.LENGTH_SHORT).show();
                     }
 
@@ -648,9 +645,9 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         }
 
 
-        if(filters.hasSortBy()){
+        if (filters.hasSortBy()) {
 
-            if(filters.getSortBy().equalsIgnoreCase("time")) {
+            if (filters.getSortBy().equalsIgnoreCase("time")) {
                 //sort by book duration
                 try {
                     Collections.sort(bookList, new Comparator<Book>() {
@@ -671,16 +668,14 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                         }
                     });
 
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     // don't tell the user anything as the app is still usable
 //                    Toast.makeText(getActivity(),"Ran into an issue while filtering/sorting. Please contact the developer, or provide details in the feedback section.",Toast.LENGTH_LONG).show();
                 }
-            }
-            else{
+            } else {
                 //sort by book distance
 
-                if(userLat != 0.0 && userLng != 0.0) {
+                if (userLat != 0.0 && userLng != 0.0) {
 
                     Collections.sort(bookList, new Comparator<Book>() {
                         @Override
@@ -698,16 +693,14 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                             B2.setLatitude(o2.getLat());
 
 
-                            if(B1.distanceTo(userLocation) > B2.distanceTo(userLocation)){
+                            if (B1.distanceTo(userLocation) > B2.distanceTo(userLocation)) {
                                 return 1;
-                            }
-                            else{
+                            } else {
                                 return -1;
                             }
                         }
                     });
-                }
-                else {
+                } else {
                     showSnackbar("Error fetching location");
                     filters.setSortBy("Relevance");
                 }
@@ -721,7 +714,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     }
 
 
-    private void setDefaultFilters(int grade,int board) {
+    private void setDefaultFilters(int grade, int board) {
 
         Filters defaultFilters = new Filters();
         List<Integer> gradesList = new ArrayList<Integer>();
@@ -748,7 +741,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         Intent bookDetails = new Intent(getActivity(), BookDetailsActivity.class);
         bookDetails.putExtra("bookid", book_id);
         bookDetails.putExtra("isHome", true);
-        bookDetails.putExtra("USER_PHONE",userPref.getString(getString(R.string.p_userphone),"0"));
+        bookDetails.putExtra("USER_PHONE", userPref.getString(getString(R.string.p_userphone), "0"));
         startActivity(bookDetails);
     }
 
