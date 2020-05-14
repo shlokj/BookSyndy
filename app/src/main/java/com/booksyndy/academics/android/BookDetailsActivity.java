@@ -69,7 +69,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
     private DocumentReference bookMarkRef;
     private Menu menu;
     private ListenerRegistration mBookUserRegistration, mBookRegistration, mBookMarkRegistration;
-    private String curAppUser, shareableLink = "";
+    private String curAppUser, shareableLink = "",tPhone="";
     private double latA, lngA;
     private SharedPreferences userPref;
     private ProgressDialog progressDialog;
@@ -91,13 +91,15 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         isHome = getIntent().getBooleanExtra("isHome", false);
         isUserProfile = getIntent().getBooleanExtra("isProfile", false);
         isBookmarks = getIntent().getBooleanExtra("isBookmarks", false);
-        String tPhone = getIntent().getStringExtra("USER_PHONE");
+//        String tPhone = getIntent().getStringExtra("USER_PHONE");
         userPref = this.getSharedPreferences(getString(R.string.UserPref), 0);
         initFireStore();
         getUserLocation();
 
-//        Toast.makeText(this, "tPhone is "+tPhone, Toast.LENGTH_SHORT).show();
+
+        Toast.makeText(this, "tPhone is "+tPhone+", cau is"+curAppUser, Toast.LENGTH_SHORT).show();
 //        Toast.makeText(this, "cau is"+curAppUser, Toast.LENGTH_SHORT).show();
+
 
         if (tPhone!=null) {
             sameUser = tPhone.equals(curAppUser);
@@ -318,6 +320,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                         Glide.with(sellerDp.getContext())
                                 .load(bookOwner.getImageUrl())
                                 .into(sellerDp);
+                        tPhone = bookOwner.getPhone();
                     }
 
                 }
@@ -453,6 +456,9 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         super.onStart();
         mBookRegistration = bookRef.addSnapshotListener(this);
 
+
+//        Toast.makeText(this, "isHome is "+isHome, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "sameuser is "+sameUser, Toast.LENGTH_SHORT).show();
         if (isHome && !sameUser) {
             findViewById(R.id.fab_chat).setVisibility(View.VISIBLE);
         } else {

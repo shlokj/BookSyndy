@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -163,8 +164,9 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
             /* firestore */
             mFirestore = FirebaseFirestore.getInstance();
             String userId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
-            mQuery = mFirestore.collection("books").whereEqualTo("userId", userId).whereEqualTo("bookSold",false).orderBy("createdAt", Query.Direction.DESCENDING);
+            mQuery = mFirestore.collection("books").whereEqualTo("userId", userId).whereEqualTo("bookSold",false)/*.orderBy("createdAt", Query.Direction.DESCENDING)*/;
             populateBookAdapter();
+//            Toast.makeText(getActivity(), userId+"", Toast.LENGTH_SHORT).show();
 
         } catch (Exception e) {
             Log.e(TAG, "initFireStore: ", e);
@@ -177,7 +179,7 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
         if (mQuery == null) {
             Log.w(TAG, "No query, not initializing RecyclerView");
         }
-        mQuery = mQuery.orderBy("createdAt", Query.Direction.DESCENDING);
+//        mQuery = mQuery.orderBy("createdAt", Query.Direction.DESCENDING);
 
         options = new FirestoreRecyclerOptions.Builder<Book>()
                 .setQuery(mQuery, Book.class)
@@ -201,10 +203,9 @@ public class BookAvailableFragment extends Fragment implements BookAdapter.OnBoo
             @Override
             public void onError(FirebaseFirestoreException e) {
 
-                Log.e(TAG, "Error: check logs for info.");
+                Log.e(TAG, "Error: check logs for info");
             }
         };
-
     }
 
         @Override
