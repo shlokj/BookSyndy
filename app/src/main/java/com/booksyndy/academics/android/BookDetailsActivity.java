@@ -96,14 +96,12 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         initFireStore();
         getUserLocation();
 
+        findViewById(R.id.fab_chat).setVisibility(View.INVISIBLE);
 
-        Toast.makeText(this, "tPhone is "+tPhone+", cau is"+curAppUser, Toast.LENGTH_SHORT).show();
+
+//        Toast.makeText(this, "tPhone is "+tPhone+", cau is"+curAppUser, Toast.LENGTH_SHORT).show();
 //        Toast.makeText(this, "cau is"+curAppUser, Toast.LENGTH_SHORT).show();
 
-
-        if (tPhone!=null) {
-            sameUser = tPhone.equals(curAppUser);
-        }
 
         view_bookname = findViewById(R.id.book_name);
         view_address = findViewById(R.id.book_address);
@@ -142,15 +140,6 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-
-/*        new MaterialShowcaseView.Builder(this)
-                .setTarget(findViewById(R.id.fab_chat))
-                .setDismissText("GOT IT")
-                .setContentText("Tap here to message the seller")
-                .setDismissOnTargetTouch(true)
-                .setDelay(200)
-                .singleUse("10111")
-                .show();*/
 
 
     }
@@ -321,6 +310,19 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                                 .load(bookOwner.getImageUrl())
                                 .into(sellerDp);
                         tPhone = bookOwner.getPhone();
+
+//                        Toast.makeText(getApplicationContext(), "tPhone is "+tPhone+", cau is"+curAppUser, Toast.LENGTH_SHORT).show();
+
+
+                        if (tPhone!=null) {
+                            sameUser = tPhone.equals(curAppUser);
+                        }
+
+                        if (!sameUser) {
+                            findViewById(R.id.fab_chat).setVisibility(View.VISIBLE);
+                        } else {
+                            findViewById(R.id.fab_chat).setVisibility(View.INVISIBLE);
+                        }
                     }
 
                 }
@@ -459,11 +461,11 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
 
 //        Toast.makeText(this, "isHome is "+isHome, Toast.LENGTH_SHORT).show();
 //        Toast.makeText(this, "sameuser is "+sameUser, Toast.LENGTH_SHORT).show();
-        if (isHome && !sameUser) {
+/*        if (isHome && !sameUser) {
             findViewById(R.id.fab_chat).setVisibility(View.VISIBLE);
         } else {
             findViewById(R.id.fab_chat).setVisibility(View.INVISIBLE);
-        }
+        }*/
     }
 
     @Override
