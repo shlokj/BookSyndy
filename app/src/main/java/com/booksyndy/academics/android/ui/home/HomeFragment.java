@@ -103,6 +103,8 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     private final int MENU_CHAT = 789;
     private DocumentSnapshot lastVisibleItem;
 
+    //TODO: progressbar for search
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -729,7 +731,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         defaultFilters.setBookBoard(boardsList);
         defaultFilters.setIsText(true);
         defaultFilters.setIsNotes(true);
-        defaultFilters.setBookDistance(-1);
+        defaultFilters.setBookDistance(20);
         homeViewModel.setFilters(defaultFilters);
 
     }
