@@ -43,7 +43,7 @@
                     android:text="Price" />
 
                 <CheckBox
-                    android:id="@+id/freeOnlyCB"
+                    android:id="@+id/freeOnlyCB_g"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -68,13 +68,13 @@
                     android:text="@string/type" />
 
                 <CheckBox
-                    android:id="@+id/filterTextbook"
+                    android:id="@+id/filterTextbook_g"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/textbook" />
 
                 <CheckBox
-                    android:id="@+id/filterNotes"
+                    android:id="@+id/filterNotes_g"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/notes" />
@@ -102,7 +102,7 @@
                     android:text="Within distance" />
 
                 <Spinner
-                    android:id="@+id/distanceSpinner"
+                    android:id="@+id/distanceSpinner_g"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -137,7 +137,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/clear_filter_button"
+                android:id="@+id/clear_filter_button_g"
                 android:padding="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -158,7 +158,7 @@
                 android:layout_weight="1" />
 
             <Button
-                android:id="@+id/button_cancel"
+                android:id="@+id/button_cancel_g"
                 style="@style/Base.Widget.AppCompat.Button.Borderless"
                 android:layout_width="wrap_content"
                 android:layout_marginTop="16dp"
@@ -170,7 +170,7 @@
 
 
             <Button
-                android:id="@+id/button_apply"
+                android:id="@+id/button_apply_g"
                 android:layout_marginTop="16dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

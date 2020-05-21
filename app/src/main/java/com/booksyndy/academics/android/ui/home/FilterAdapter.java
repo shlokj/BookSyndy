@@ -9,11 +9,20 @@ public class FilterAdapter extends FragmentPagerAdapter {
 
     private int numOfTabs;
     private boolean onlyCollege;
+    private boolean generalMode;
 
     FilterAdapter(@NonNull FragmentManager fm, int numOfTabs,boolean onlyCollege) {
         super(fm, numOfTabs);
         this.numOfTabs = numOfTabs;
         this.onlyCollege = onlyCollege;
+        this.generalMode = false;
+    }
+
+    FilterAdapter(@NonNull FragmentManager fm,boolean generalMode, int numOfTabs) {
+        super(fm, numOfTabs);
+        this.numOfTabs = numOfTabs;
+        this.generalMode = generalMode;
+        this.onlyCollege = false;
     }
 
     @NonNull
@@ -21,7 +30,10 @@ public class FilterAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position){
             case 0:
-                if(onlyCollege) {
+                if(generalMode){
+                    return new FilterGeneralFragment();
+                }
+                else if(onlyCollege) {
                     return new FilterCollegeFragment();
                 }
                 return new FilterSchoolFragment();

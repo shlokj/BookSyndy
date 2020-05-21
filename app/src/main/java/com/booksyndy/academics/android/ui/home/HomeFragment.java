@@ -124,7 +124,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         parentLayout = root;
         userPref = getActivity().getSharedPreferences(getString(R.string.UserPref), 0);
         userGrade = userPref.getInt(getString(R.string.p_grade), 4);
-        mFilterDialog = new FilterDialogFragment(userPref.getInt(getString(R.string.p_grade), 4));
+        mFilterDialog = new FilterDialogFragment(userPref.getInt(getString(R.string.p_grade), 4),userPref.getBoolean(getString(R.string.preferGeneral), false));
         setHasOptionsMenu(true);
         /* recycler view */
         recyclerView = root.findViewById(R.id.home_recycler_view);
