@@ -476,10 +476,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             ActionBar ab = getSupportActionBar();
 
             if (preferGeneral) {
-                ab.setTitle(ab.getTitle() + " (general)");
+                ab.setTitle(ab.getTitle() + " (General)");
             }
             else {
-                ab.setTitle(ab.getTitle() + " (academics)");
+                ab.setTitle(ab.getTitle() + " (Academics)");
             }
 
 

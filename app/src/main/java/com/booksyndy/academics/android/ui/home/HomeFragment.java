@@ -743,6 +743,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         Intent bookDetails = new Intent(getActivity(), BookDetailsActivity.class);
         bookDetails.putExtra("bookid", book_id);
         bookDetails.putExtra("isHome", true);
+        bookDetails.putExtra("PREF_GEN",preferGeneral);
         bookDetails.putExtra("USER_PHONE", userPref.getString(getString(R.string.p_userphone), "0"));
         startActivity(bookDetails);
     }

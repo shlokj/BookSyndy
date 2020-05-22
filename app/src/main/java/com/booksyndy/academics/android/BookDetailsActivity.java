@@ -56,7 +56,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
 
     // TODO: accomodate general books
     private String bookid, defaultMessage;
-    private boolean isHome, saved, isBookmarks, isUserProfile, sameUser;
+    private boolean isHome, saved, isBookmarks, isUserProfile, sameUser, preferGeneral;
     private FirebaseFirestore mFirestore;
     private Book currentBook;
     private User bookOwner;
@@ -91,6 +91,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
         isHome = getIntent().getBooleanExtra("isHome", false);
         isUserProfile = getIntent().getBooleanExtra("isProfile", false);
         isBookmarks = getIntent().getBooleanExtra("isBookmarks", false);
+        preferGeneral = getIntent().getBooleanExtra("PREF_GEN", false);
 //        String tPhone = getIntent().getStringExtra("USER_PHONE");
         userPref = this.getSharedPreferences(getString(R.string.UserPref), 0);
         initFireStore();
@@ -172,7 +173,7 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                 return;
             }
 
-            if (currentBook.isTextbook()) {
+            if (currentBook.isTextbook() || preferGeneral) {
                 defaultMessage = "Hi, I'm interested in your book " + currentBook.getBookName() + ".";
             }
             else {
