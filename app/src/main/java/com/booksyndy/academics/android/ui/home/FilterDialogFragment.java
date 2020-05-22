@@ -11,6 +11,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.booksyndy.academics.android.R;
+import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 
 public class FilterDialogFragment extends DialogFragment implements TabLayout.OnTabSelectedListener{
@@ -23,6 +24,8 @@ public class FilterDialogFragment extends DialogFragment implements TabLayout.On
     private TabLayout mTabLayout;
     private FilterAdapter mFilterAdapter;
     private int curGrade;
+    private boolean generalMode;
+    private TabLayout.Tab generalTab;
 
     // TODO: save filters for the same session
 
@@ -30,8 +33,9 @@ public class FilterDialogFragment extends DialogFragment implements TabLayout.On
 
     }
 
-    public FilterDialogFragment(int grade){
+    public FilterDialogFragment(int grade,boolean generalMode){
         curGrade = grade;
+        this.generalMode = generalMode;
     }
 
     public static FilterDialogFragment newInstance() {
@@ -44,7 +48,18 @@ public class FilterDialogFragment extends DialogFragment implements TabLayout.On
         mRootView =  inflater.inflate(R.layout.filter_dialog_fragment, container, false);
         mViewPager = mRootView.findViewById(R.id.filters_viewpager);
         mTabLayout = mRootView.findViewById(R.id.filters_tab);
-        if(curGrade <= 5){
+
+        if(generalMode){
+            mFilterAdapter = new FilterAdapter(getChildFragmentManager(),true,1);
+            mViewPager.setAdapter(mFilterAdapter);
+            //mViewPager.setCurrentItem(0);
+            generalTab =  mTabLayout.getTabAt(0);
+            if(generalTab != null){
+                generalTab.setText("GENERAL");
+            }
+            mTabLayout.removeTabAt(1);
+        }
+        else if(curGrade <= 5){
             mFilterAdapter = new FilterAdapter(getChildFragmentManager(),1,false);
             mViewPager.setAdapter(mFilterAdapter);
             //mViewPager.setCurrentItem(0);
