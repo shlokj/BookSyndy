@@ -399,16 +399,16 @@ public class BookDetailsActivity extends AppCompatActivity implements View.OnCli
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             if(documentSnapshot != null && documentSnapshot.exists()){
                                 User bookOwner = documentSnapshot.toObject(User.class);
-                            Intent chatIntent = new Intent(BookDetailsActivity.this, ChatActivity.class);
-                            chatIntent.putExtra("visit_user_id", bookOwner.getPhone()); // phone number
-                            chatIntent.putExtra("visit_user_name", bookOwner.getUserId());
-                            chatIntent.putExtra("visit_image", bookOwner.getImageUrl());
-                            chatIntent.putExtra("default_message",defaultMessage);
-                            chatIntent.putExtra("PUBLIC_PHONE",bookOwner.isPhoneNumberPublic());
-                            if(progressDialog.isShowing()){
-                                progressDialog.dismiss();
-                            }
-                            startActivity(chatIntent);
+                                Intent chatIntent = new Intent(BookDetailsActivity.this, ChatActivity.class);
+                                chatIntent.putExtra("visit_user_id", bookOwner.getPhone()); // phone number
+                                chatIntent.putExtra("visit_user_name", bookOwner.getUserId());
+                                chatIntent.putExtra("visit_image", bookOwner.getImageUrl());
+                                chatIntent.putExtra("default_message",defaultMessage);
+                                chatIntent.putExtra("PUBLIC_PHONE",bookOwner.isPhoneNumberPublic());
+                                if(progressDialog.isShowing()){
+                                    progressDialog.dismiss();
+                                }
+                                startActivity(chatIntent);
                             }
                         }
                     }).addOnFailureListener(new OnFailureListener() {

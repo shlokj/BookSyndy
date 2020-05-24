@@ -72,7 +72,7 @@ public class CustNameActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                userIdField.setText(firstNameField.getText().toString().toLowerCase()+lastNameField.getText().toString().toLowerCase());
+                userIdField.setText((firstNameField.getText().toString().toLowerCase()+lastNameField.getText().toString().toLowerCase()).replaceAll("\\s", ""));
                 uif.setError(null);
             }
 
