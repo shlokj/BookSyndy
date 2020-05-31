@@ -493,8 +493,19 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                 sequence.setConfig(config);
 
-                sequence.addSequenceItem(view,
-                        "Here's the menu", "GOT IT"); // TODO: change this string after gen mode is complete
+                if (userPref.getBoolean(getString(R.string.preferGeneral),false)) {
+                    sequence.addSequenceItem(view,
+                            "Here's the menu. You can switch to academics mode here.", "GOT IT");
+                }
+
+                else {
+                    sequence.addSequenceItem(view,
+                            "Here's the menu. You can switch to general mode here.", "GOT IT");
+
+                }
+
+//                sequence.addSequenceItem(view,
+//                        "Here's the menu.", "GOT IT"); // TODO: change this string after gen mode is complete
 
                 sequence.addSequenceItem(toolbar.getChildAt(2),"Search for material you need and chat with other users here.","GOT IT");
 
