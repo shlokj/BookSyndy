@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 public class CreateBundleListingActivity extends AppCompatActivity {
 
+    // for donations
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

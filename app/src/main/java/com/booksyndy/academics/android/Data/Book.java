@@ -25,7 +25,7 @@ public class Book {
     private String DocumentId;
 
 
-    public  Book(){
+    public Book(){
 
     }
     //for user entry
