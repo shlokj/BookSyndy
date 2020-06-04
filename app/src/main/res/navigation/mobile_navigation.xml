@@ -42,6 +42,12 @@
         tools:layout="@layout/fragment_shareapp" />
 
     <fragment
+        android:id="@+id/nav_donate"
+        android:name="com.booksyndy.academics.android.ui.donate.DonateFragment"
+        android:label="Donate books"
+        tools:layout="@layout/fragment_donate_initial" />
+
+    <fragment
         android:id="@+id/nav_help"
         android:name="com.booksyndy.academics.android.ui.help.HelpFragment"
         android:label="@string/menu_share"

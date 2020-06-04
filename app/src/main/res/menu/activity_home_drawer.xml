@@ -32,6 +32,11 @@
             android:title="Switch mode" />
 
         <item
+            android:id="@+id/nav_donate"
+            android:icon="@drawable/ic_donate_tab"
+            android:title="Donate books" />
+
+        <item
             android:id="@+id/nav_help"
             android:icon="@drawable/ic_help_outline_24px"
             android:title="@string/help" />
