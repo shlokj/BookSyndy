@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.booksyndy.academics.android.CreateBundleListingActivity;
 import com.booksyndy.academics.android.R;
 import com.booksyndy.academics.android.ui.shareApp.ShareAppViewModel;
 
@@ -33,6 +34,12 @@ public class DonateFragment extends Fragment {
                 ViewModelProviders.of(this).get(DonateViewModel.class);
         View root = inflater.inflate(R.layout.fragment_donate_initial, container, false);
 
+        root.findViewById(R.id.donateGetStarted).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), CreateBundleListingActivity.class));
+            }
+        });
 
 
 

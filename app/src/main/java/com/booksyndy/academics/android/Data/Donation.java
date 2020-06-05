@@ -7,7 +7,7 @@ public class Donation {
 
     private String donationName,donationDescription,donationPhoto;
     private int status, approxWeight;
-    private String userId,donationListingTime;
+    private String userId,donationListingTime,address;
     private double lat,lng;
     private long createdAt;
     @com.google.firebase.firestore.DocumentId
@@ -18,7 +18,7 @@ public class Donation {
 
     }
     //for user entry
-    public Donation(String userId, String donationName, String donationDescription, String donationPhoto,String donationListingTime,double lat,double lng, int status, int approxWeight){
+    public Donation(String userId, String donationName, String donationDescription, String donationPhoto,String donationListingTime,double lat,double lng, int status, int approxWeight, long createdAt){
 
         this.userId = userId;
         this.donationName = donationName;
@@ -29,6 +29,7 @@ public class Donation {
         this.lng = lng;
         this.status = status;
         this.approxWeight = approxWeight;
+        this.createdAt = createdAt;
     }
 
     public long getCreatedAt() {
@@ -111,11 +112,20 @@ public class Donation {
         return donationPhoto;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(int status) { // 1: uploaded, 2: received/picked up by foundation
         this.status = status;
     }
 
     public int getStatus() {
         return status;
     }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
 }

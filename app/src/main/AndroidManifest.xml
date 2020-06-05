@@ -17,15 +17,16 @@
         android:required="true" />
 
     <application
-        tools:ignore="LockedOrientationActivity"
         android:name="androidx.multidex.MultiDexApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_booksyndy_logo_hs"
         android:label="@string/app_name"
         android:roundIcon="@drawable/ic_booksyndy_circle_transparent"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".GetDonorAddressActivity"></activity>
+        android:theme="@style/AppTheme"
+        tools:ignore="LockedOrientationActivity">
+        <activity android:name=".MyDonationsActivity"></activity>
+        <activity android:name=".GetDonorAddressActivity" />
         <activity android:name=".CreateBundleListingActivity" />
         <activity android:name=".GetModeActivity" />
         <activity android:name=".SignUpQuestionsActivity" />
@@ -33,8 +34,7 @@
         <activity android:name=".SignIn2Activity" />
         <activity
             android:name=".RequestDetailsActivity"
-            android:screenOrientation="portrait"
-             />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".EditListingActivity"
             android:screenOrientation="portrait" />

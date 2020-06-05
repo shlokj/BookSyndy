@@ -29,11 +29,11 @@
             android:textStyle="bold"
             app:autoSizeTextType="uniform" />
 
-        <!--TODO: change image source when ready-->
+
         <ImageView
             android:layout_width="@dimen/img_width_height"
             android:layout_height="@dimen/img_width_height"
-            android:src="@drawable/ic_find_book" />
+            android:src="@drawable/ic_donate_graphic" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -48,7 +48,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/donateGetStarted"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"

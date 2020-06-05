@@ -110,48 +110,7 @@
         </LinearLayout>
 
 
-        <LinearLayout
-            android:id="@+id/locLL_d"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:orientation="vertical"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bookDescLL2_d">
 
-            <TextView
-                android:id="@+id/locLabel"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:text="@string/location" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:id="@+id/locField2_d"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="5"
-                    android:ems="10"
-                    android:enabled="false"
-                    android:hint="@string/getting_loc"
-                    android:inputType="textCapWords"
-                    android:lines="5" />
-
-                <ImageButton
-                    android:id="@+id/btn_search_listing_d"
-                    android:src="@drawable/ic_search_24px"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
-
-        </LinearLayout>
 
 
         <LinearLayout
@@ -161,41 +120,26 @@
             android:layout_margin="16dp"
             android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/locLL_d">
+            app:layout_constraintTop_toBottomOf="@+id/bookDescLL2_d">
 
             <TextView
                 android:id="@+id/priceLabel_d"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Approximate value (optional)" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal">
+                android:text="Approximate weight in kgs (optional)" />
 
 
-                <TextView
-                    android:id="@+id/rupeeSymTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/rupee_symbol"
-                    android:textColor="@color/colorTextBlack"
-                    android:textSize="16sp" />
+            <EditText
+                android:id="@+id/weightField_d"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:ems="10"
+                android:maxLength="3"
+                android:hint="Weight"
+                android:inputType="number" />
 
-                <EditText
-                    android:id="@+id/priceField_d"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:ems="10"
-                    android:maxLength="4"
-                    android:hint="@string/price"
-                    android:inputType="number" />
-
-            </LinearLayout>
 
         </LinearLayout>
 
@@ -207,7 +151,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginEnd="16dp"
             android:layout_weight="1"
-            android:text="Submit for donation"
+            android:text="Continue"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
