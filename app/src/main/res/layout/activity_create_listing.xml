@@ -148,7 +148,7 @@
                 android:id="@+id/gradeSpinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 />
+                />
 
         </LinearLayout>
 
@@ -276,36 +276,36 @@
                 android:layout_weight="1"
                 android:text="@string/location" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <EditText
-                android:id="@+id/locField2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="5"
-                android:ems="10"
-                android:enabled="false"
-                android:hint="@string/getting_loc"
-                android:inputType="textCapWords"
-                android:lines="5" />
-
-            <ImageButton
-                android:id="@+id/btn_search_listing"
-                android:src="@drawable/ic_search_24px"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
-           <!-- <fragment android:id="@+id/autocomplete_fragment2"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
-                /> -->
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/locField2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:ems="10"
+                    android:enabled="false"
+                    android:hint="@string/getting_loc"
+                    android:inputType="textCapWords"
+                    android:lines="5" />
+
+                <ImageButton
+                    android:id="@+id/btn_search_listing"
+                    android:src="@drawable/ic_search_24px"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <!-- <fragment android:id="@+id/autocomplete_fragment2"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+                 /> -->
 
         </LinearLayout>
 
