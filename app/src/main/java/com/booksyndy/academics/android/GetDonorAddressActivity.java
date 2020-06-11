@@ -325,9 +325,7 @@ public class GetDonorAddressActivity extends AppCompatActivity {
                 deleteDoc();
 //                String picUrl = getIntent().getStringExtra("PIC_URL");
 //                Toast.makeText(getApplicationContext(), picUrl, Toast.LENGTH_SHORT).show();
-                Intent homeActivity = new Intent(GetDonorAddressActivity.this, HomeActivity.class);
-                startActivity(homeActivity);
-                finish();
+
             }
         });
         builder.show();
@@ -380,10 +378,10 @@ public class GetDonorAddressActivity extends AppCompatActivity {
 
     private void deleteDoc() {
 //        Toast.makeText(this, picUrl, Toast.LENGTH_SHORT).show();
-
+//        Toast.makeText(this, "Doc na", Toast.LENGTH_SHORT).show();
         try {
-            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(picUrl);
-//            StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(picUrl);
+//            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(picUrl);
+            StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(picUrl);
             storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
@@ -402,13 +400,16 @@ public class GetDonorAddressActivity extends AppCompatActivity {
             cProgressDialog.setCancelable(false);
             cProgressDialog.show();
             FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection("donations").document(docId)
+            db.collection("donations").document(docName)
                     .delete()
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             cProgressDialog.dismiss();
                             Toast.makeText(GetDonorAddressActivity.this, "Donation doc removed successfully", Toast.LENGTH_SHORT).show();
+                            Intent homeActivity = new Intent(GetDonorAddressActivity.this, HomeActivity.class);
+                            startActivity(homeActivity);
+                            finish();
                             Log.d(TAG, "DocumentSnapshot successfully deleted!");
                         }
                     })
