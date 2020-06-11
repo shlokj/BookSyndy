@@ -566,7 +566,6 @@ public class CreateListingActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         showSnackbar("File error: please try again");
                     }
-
                 }
                 break;
 

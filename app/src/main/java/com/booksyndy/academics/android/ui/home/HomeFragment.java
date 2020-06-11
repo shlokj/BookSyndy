@@ -740,6 +740,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     @Override
     public void onBookSelected(Book book) {
         String book_id = book.getDocumentId();
+//        Toast.makeText(getActivity(), "book_id:"+book_id, Toast.LENGTH_SHORT).show();
         Intent bookDetails = new Intent(getActivity(), BookDetailsActivity.class);
         bookDetails.putExtra("bookid", book_id);
         bookDetails.putExtra("isHome", true);

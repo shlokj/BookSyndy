@@ -142,7 +142,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/locLL_d">
         <EditText
-            android:id="@+id/firstName"
+            android:id="@+id/hnbnET"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -180,17 +180,17 @@
 
         <EditText
             android:id="@+id/pincodeET"
+            android:maxLength="6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Pincode"
-            tools:layout_editor_absoluteX="47dp"
-            tools:layout_editor_absoluteY="246dp" />
+            android:inputType="number"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/confirmDonationBtn"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:text="Confirm"

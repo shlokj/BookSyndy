@@ -57,6 +57,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
+import java.util.UUID;
 
 public class CreateBundleListingActivity extends AppCompatActivity {
 
@@ -97,6 +99,7 @@ public class CreateBundleListingActivity extends AppCompatActivity {
         mBookImage = findViewById(R.id.book_image_d);
 
         postButton = findViewById(R.id.postButton_d);
+
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -292,6 +295,7 @@ public class CreateBundleListingActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<Uri> task) {
                     if (task.isSuccessful()) {
                         donation_photo_url = task.getResult().toString();
+//                        Toast.makeText(CreateBundleListingActivity.this, donation_photo_url, Toast.LENGTH_LONG).show();
 //                        Toast.makeText(getApplicationContext(), "upload success", Toast.LENGTH_SHORT).show();
                         progressDialog.dismiss();
                         Log.d(TAG, "onComplete: success url: " + donation_photo_url);
@@ -339,8 +343,8 @@ public class CreateBundleListingActivity extends AppCompatActivity {
 
     private void uploadBook() {
         final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Posting...");
-        progressDialog.setTitle("Submitting your donation request");
+        progressDialog.setTitle("Posting...");
+        progressDialog.setMessage("Submitting your donation request");
         progressDialog.setCancelable(false);
         progressDialog.show();
         try {
@@ -354,7 +358,10 @@ public class CreateBundleListingActivity extends AppCompatActivity {
 
             String donListTime = new SimpleDateFormat("yyyy MM dd HH:mm:ss",Locale.getDefault()).format(new Date());
 
-            final Donation donation = new Donation(userId, donationName, donationDescription, "", donListTime, 0.0, 0.0, 1, approxWeight, new Date().getTime());
+            long ca = new Date().getTime();
+
+            final Donation donation = new Donation(userId, donationName, donationDescription, "", donListTime, 0.0, 0.0, 0, approxWeight, ca);
+            donation.setDocumentId(userId + "_" + ca);
             if(donation_photo_url != null && !donation_photo_url.isEmpty()){
                 // book.setBookPhoto();
                 donation.setDonationPhoto(donation_photo_url);
@@ -365,12 +372,18 @@ public class CreateBundleListingActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<DocumentReference> task) {
                     if(task.isSuccessful()){
-                        Log.d("Add Book","onComplete: Book added successfully");
+                        Log.d("Add donation","onComplete: Donation added successfully");
                         progressDialog.dismiss();
                         //TODO: get address intent here
                         Intent getDonorAddress = new Intent(CreateBundleListingActivity.this, GetDonorAddressActivity.class);
                         getDonorAddress.putExtra("DON_DOC_ID",donation.getDocumentId());
+//                        Toast.makeText(CreateBundleListingActivity.this, "doc id: " + donation.getDocumentId(), Toast.LENGTH_SHORT).show();
+                        getDonorAddress.putExtra("PIC_URL",donation_photo_url);
+                        getDonorAddress.putExtra("DON_DOC_NAME",task.getResult().getId());
                         startActivity(getDonorAddress);
+//                        task.getResult().getId();
+
+//                        Toast.makeText(CreateBundleListingActivity.this, "id: "+task.getResult().getId(), Toast.LENGTH_SHORT).show();
                     }
                     else{
                         Log.d(TAG, "onComplete: failed with",task.getException());
@@ -445,7 +458,7 @@ public class CreateBundleListingActivity extends AppCompatActivity {
 
     private File createImageFile() throws IOException {
 
-        String imageFileName = "BOOK" + "_";
+        String imageFileName = "DONATION" + "_";
         File storageDir =
                 getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
@@ -455,6 +468,9 @@ public class CreateBundleListingActivity extends AppCompatActivity {
         );
 
         imageFilePath = image.getAbsolutePath();
+
+//        Toast.makeText(this, "image file path: " + imageFilePath + "image file name: " + imageFileName, Toast.LENGTH_SHORT).show();
+
         return image;
     }
 
@@ -505,4 +521,13 @@ public class CreateBundleListingActivity extends AppCompatActivity {
         }
     }
 
+    public static String generateRandomString(int min, int max, int size) {
+        String result = "";
+        for (int i = 0; i < size; i++) {
+            result += String.valueOf((char)(new Random().nextInt((max - min) + 1) + min));
+        }
+        return result;
+    }
 }
+
+
