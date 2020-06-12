@@ -62,7 +62,7 @@ public class GetDonorAddressActivity extends AppCompatActivity {
     private Button confirmDonation;
     private LinearLayout mapsSearchLL;
     private SharedPreferences userPref;
-//    private TextWatcher clearErr;
+    //    private TextWatcher clearErr;
     private static final int AUTOCOMPLETE_REQUEST_CODE = 108;
 
 
@@ -71,7 +71,8 @@ public class GetDonorAddressActivity extends AppCompatActivity {
     private FirebaseStorage mFirebaseStorage;
     private StorageReference bookPhotosStorageReference;
 
-    private String docId, userId, picUrl, docName;
+    private String docId, userId, picUrl, docName, mapsLoc, hnbn, street, pinCode;
+    private boolean valid;
     private double book_lat,book_lng;
 
     private static String TAG = "GETDONORADDRESS";
@@ -165,33 +166,47 @@ public class GetDonorAddressActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                AlertDialog.Builder cBuilder = new AlertDialog.Builder(GetDonorAddressActivity.this); // TODO: change to create bundle
+//                Toast.makeText(GetDonorAddressActivity.this, "valid is" + valid, Toast.LENGTH_SHORT).show();
+
+                valid = true;
+                mapsLoc = locField.getText().toString().trim();
+                hnbn = hnbnField.getText().toString().trim();
+                street = streetField.getText().toString().trim();
+                pinCode = pincodeField.getText().toString().trim();
+
+/*                        if (mapsLoc.isEmpty()) {
+                            Toast.makeText(GetDonorAddressActivity.this, "Couldn't get your location. Please search for it manually.", Toast.LENGTH_SHORT).show();
+                        }*/
+
+                if (hnbn.isEmpty()) {
+                    hnbnTIL.setError("Please fill in this field");
+                    valid = false;
+                }
+
+                if (street.isEmpty()) {
+                    streetTIL.setError("Please fill in this field");
+                    valid = false;
+                }
+
+                if (pinCode.isEmpty()) {
+                    pincodeTIL.setError("Please fill in this field");
+                    valid = false;
+                }
+
+                else if (pinCode.length()<6) {
+                    pincodeTIL.setError("Invalid pincode");
+                    valid = false;
+                }
+
+
+                final AlertDialog.Builder cBuilder = new AlertDialog.Builder(GetDonorAddressActivity.this); // TODO: change to create bundle
                 cBuilder.setTitle("Confirm donation");
                 cBuilder.setMessage("By clicking confirm, you agree that the details you provided will be shared with a representative of the Foundation and you may be contacted for pickup-related issues.");
                 cBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
-                        String mapsLoc = locField.getText().toString().trim();
-                        String hnbn = hnbnField.getText().toString().trim();
-                        String street = streetField.getText().toString().trim();
-                        String pinCode = pincodeField.getText().toString().trim();
 
-/*                        if (mapsLoc.isEmpty()) {
-                            Toast.makeText(GetDonorAddressActivity.this, "Couldn't get your location. Please search for it manually.", Toast.LENGTH_SHORT).show();
-                        }*/
-
-                        if (hnbn.isEmpty()) {
-                            hnbnTIL.setError("Please fill in this field");
-                        }
-
-                        if (street.isEmpty()) {
-                            streetTIL.setError("Please fill in this field");
-                        }
-
-                        if (pinCode.isEmpty()) {
-                            pincodeTIL.setError("Please fill in this field");
-                        }
                         final ProgressDialog sProgressDialog = new ProgressDialog(GetDonorAddressActivity.this);
                         sProgressDialog.setMessage("Just a moment...");
                         sProgressDialog.setTitle("Submitting");
@@ -209,22 +224,27 @@ public class GetDonorAddressActivity extends AppCompatActivity {
 
                         DocumentReference donReference = mFirestore.collection("donations").document(docName);
 
-                        donReference.update("lat", book_lat,"lng", book_lng, "address", pickupAddress, "status",1)
+                        donReference.update("lat", book_lat, "lng", book_lng, "address", pickupAddress, "status", 1)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                startActivity(new Intent(GetDonorAddressActivity.this, MyDonationsActivity.class));
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        startActivity(new Intent(GetDonorAddressActivity.this, MyDonationsActivity.class));
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 sProgressDialog.dismiss();
                                 Toast.makeText(getApplicationContext(), "Failed to submit request. Please try again after some time.", Toast.LENGTH_SHORT).show();
                             }
                         });
+
+
                     }
                 });
-                cBuilder.show();
+                if (valid) {
+                    cBuilder.show();
+                }
+
             }
         });
 

@@ -1,6 +1,7 @@
 package com.booksyndy.academics.android.ui.donate;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.booksyndy.academics.android.CreateBundleListingActivity;
 import com.booksyndy.academics.android.GetDonorAddressActivity;
+import com.booksyndy.academics.android.MyDonationsActivity;
 import com.booksyndy.academics.android.R;
 import com.booksyndy.academics.android.ui.shareApp.ShareAppViewModel;
 
@@ -33,14 +35,33 @@ public class DonateFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         donateViewModel =
                 ViewModelProviders.of(this).get(DonateViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_donate_initial, container, false);
 
-        root.findViewById(R.id.donateGetStarted).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), CreateBundleListingActivity.class));
-            }
-        });
+        View root = inflater.inflate(R.layout.fragment_donate_loading, container, false);
+
+        final SharedPreferences userPref = getActivity().getSharedPreferences(getString(R.string.UserPref), 0);
+        boolean startedDonate = userPref.getBoolean(getString(R.string.p_useddon), false);
+
+        Intent goToDonate = new Intent(getActivity(), MyDonationsActivity.class);
+
+        if (startedDonate) {
+            startActivity(goToDonate);
+        }
+
+        else {
+            root = inflater.inflate(R.layout.fragment_donate_initial, container, false);
+
+            root.findViewById(R.id.donateGetStarted).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SharedPreferences.Editor editor = userPref.edit();
+                    editor.putBoolean(getString(R.string.p_useddon),true);
+                    editor.apply();
+                    startActivity(new Intent(getActivity(), CreateBundleListingActivity.class));
+                }
+            });
+        }
+
+
 
 
 
