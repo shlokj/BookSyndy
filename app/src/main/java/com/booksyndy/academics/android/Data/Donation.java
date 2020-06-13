@@ -112,7 +112,7 @@ public class Donation {
         return donationPhoto;
     }
 
-    public void setStatus(int status) { // 1: uploaded, 2: confirmed, 3: received/picked up by foundation
+    public void setStatus(int status) { // 1: uploaded (received by us)1, 2: confirmed, 3: received/picked up by foundation
         this.status = status;
     }
 

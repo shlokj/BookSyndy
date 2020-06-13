@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -189,6 +190,13 @@ public class BookSoldFragment extends Fragment implements BookAdapter.OnBookSele
                 Log.e(TAG, "Error: check logs for info.");
             }
         };
+
+        if (mAdapter==null) {
+            Toast.makeText(getActivity(), "mAdapter null", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Toast.makeText(getActivity(), "mAdapter not null", Toast.LENGTH_SHORT).show();
+        }
 
 
     }
