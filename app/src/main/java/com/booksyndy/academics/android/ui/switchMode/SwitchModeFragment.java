@@ -1,9 +1,12 @@
 package com.booksyndy.academics.android.ui.switchMode;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,59 +60,83 @@ public class SwitchModeFragment extends Fragment {
             switchToMode = "General Mode?";
         }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Switch to "+switchToMode);
-        if (preferGeneral) {
-            builder.setMessage("You will see academics-related books on your home screen. Everything else will remain the same, and you can switch back anytime.");
+        if (checkConnection(getActivity())) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Switch to " + switchToMode);
+            if (preferGeneral) {
+                builder.setMessage("You will see academics-related books on your home screen. Everything else will remain the same, and you can switch back anytime.");
+            } else {
+                builder.setMessage("You will see non-academic books on your home screen. Everything else will remain the same, and you can switch back anytime.");
+            }
+            builder.setPositiveButton("Switch", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                    progressDialog = new ProgressDialog(getActivity());
+                    progressDialog.setMessage("Just a moment...");
+                    progressDialog.setTitle("Switching mode");
+                    progressDialog.setCancelable(false);
+                    progressDialog.show();
+                    DocumentReference userReference = mFirestore.collection("users").document(phoneNumber);
+                    userReference.update("preferGeneral", !preferGeneral).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            editor.putBoolean(getString(R.string.preferGeneral), !preferGeneral);
+                            progressDialog.dismiss();
+                            startActivity(new Intent(getActivity(), MainActivity.class));
+                            getActivity().finish();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Toast.makeText(getActivity(), "Failed to switch mode", Toast.LENGTH_SHORT).show();
+                            startActivity(getActivity().getIntent());
+                            getActivity().finish();
+                        }
+                    });
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
+
+            builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    startActivity(getActivity().getIntent());
+                    getActivity().finish();
+                }
+            });
+
+            builder.show();
+
         }
         else {
-            builder.setMessage("You will see non-academic books on your home screen. Everything else will remain the same, and you can switch back anytime.");
+            Toast.makeText(getActivity(), "Please check your internet connection", Toast.LENGTH_SHORT).show();
+            startActivity(getActivity().getIntent());
+            getActivity().finish();
         }
-        builder.setPositiveButton("Switch", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-                progressDialog = new ProgressDialog(getActivity());
-                progressDialog.setMessage("Just a moment...");
-                progressDialog.setTitle("Switching mode");
-                progressDialog.setCancelable(false);
-                progressDialog.show();
-                DocumentReference userReference = mFirestore.collection("users").document(phoneNumber);
-                userReference.update("preferGeneral",!preferGeneral).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        editor.putBoolean(getString(R.string.preferGeneral),!preferGeneral);
-                        progressDialog.dismiss();
-                        startActivity(new Intent(getActivity(), MainActivity.class));
-                        getActivity().finish();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
-                        Toast.makeText(getActivity(), "Failed to switch mode", Toast.LENGTH_SHORT).show();
-                        startActivity(getActivity().getIntent());
-                        getActivity().finish();
-                    }
-                });
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        });
-
-        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                startActivity(getActivity().getIntent());
-                getActivity().finish();
-            }
-        });
-
-        builder.show();
         return root;
+    }
+
+    public static boolean checkConnection(Context context) {
+        final ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (connMgr != null) {
+            NetworkInfo activeNetworkInfo = connMgr.getActiveNetworkInfo();
+
+            if (activeNetworkInfo != null) { // connected to the internet
+                // connected to the mobile provider's data plan
+                if (activeNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+                    // connected to wifi
+                    return true;
+                } else return activeNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE;
+            }
+        }
+        return false;
     }
 }
