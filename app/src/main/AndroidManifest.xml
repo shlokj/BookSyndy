@@ -25,7 +25,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="LockedOrientationActivity">
-        <activity android:name=".DonationDetailsActivity"></activity>
+        <activity android:name=".VolunteerWelcomeActivity"></activity>
+        <activity android:name=".GetVolunteerDetailsActivity" />
+        <activity android:name=".DonationDetailsActivity" />
         <activity android:name=".MyDonationsActivity" />
         <activity android:name=".GetDonorAddressActivity" />
         <activity android:name=".CreateBundleListingActivity" />

@@ -15,7 +15,7 @@
         android:layout_marginTop="16dp"
         android:fontFamily="@font/roboto_light"
         android:gravity="center|start"
-        android:text="Welcome to the Book Syndicate, a library of all things academic!"
+        android:text="Welcome to the Book Syndicate, a one-stop platform to buy, sell and donate used books!"
         android:textColor="#242424"
         android:textSize="24sp"
         android:scrollbars="vertical"
