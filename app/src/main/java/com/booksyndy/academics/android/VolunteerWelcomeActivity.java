@@ -113,7 +113,7 @@ public class VolunteerWelcomeActivity extends AppCompatActivity {
 
     private void launchHomeScreen() {
 //        prefManager.setFirstTimeLaunch(false);
-        startActivity(new Intent(VolunteerWelcomeActivity.this, HomeActivity.class));
+        startActivity(new Intent(VolunteerWelcomeActivity.this, GetVolunteerAddressActivity.class));
         finish();
     }
 

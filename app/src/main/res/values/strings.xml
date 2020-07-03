@@ -161,6 +161,11 @@
     <string name="p_area">AREA</string>
     <string name="p_city">CITY</string>
     <string name="p_useddon">USEDDON</string>
+    <string name="p_usertype">USERTYPE</string>
+    <string name="p_userhasaddr">USERHASADDR</string>
+    <string name="p_userhnbn">USERHNBN</string>
+    <string name="p_userstreet">USERSTREET</string>
+    <string name="p_userpincode">USERPINCODE</string>
 
     <string name="save">Save</string>
     <string name="report_user">Report user</string>
@@ -197,7 +202,6 @@
     <string name="vendor_b_l">Vendor / bookstore / library</string>
     <string name="vendor">Vendor</string>
     <string name="which_grade_teacher">Which grade do you teach? Select one.</string>
-    <string name="p_usertype">USERTYPE</string>
     <string name="about_feedback">We value your feedback. If you\'d like to tell us how we can improve our app, or where we\'re going wrong or simply what you think of the app, this is the place. Enter your feedback below. We\'ll get back to you if needed.</string>
     <string name="send_feedback">Send feedback</string>
     <string name="show_on_profile">Show on profile</string>

@@ -36,7 +36,7 @@ public class DonateFragment extends Fragment {
         donateViewModel =
                 ViewModelProviders.of(this).get(DonateViewModel.class);
 
-        View root = inflater.inflate(R.layout.fragment_donate_loading, container, false);
+        View root = inflater.inflate(R.layout.screen_loading, container, false);
 
         final SharedPreferences userPref = getActivity().getSharedPreferences(getString(R.string.UserPref), 0);
         boolean startedDonate = userPref.getBoolean(getString(R.string.p_useddon), false);
