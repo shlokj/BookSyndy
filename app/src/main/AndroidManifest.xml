@@ -25,7 +25,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="LockedOrientationActivity">
-        <activity android:name=".VolunteerDashboardActivity"></activity>
+        <activity android:name=".LogBookCollectionActivity"></activity>
+        <activity android:name=".VolunteerDashboardActivity" />
         <activity android:name=".ConfirmVolunteeringSignUpActivity" />
         <activity android:name=".GetVolunteerAddressActivity" />
         <activity android:name=".VolunteerWelcomeActivity" />

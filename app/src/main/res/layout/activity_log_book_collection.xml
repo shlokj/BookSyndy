@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".LogBookCollectionActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/picLL_l"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/photoLabel_l"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Photo" />
+
+        <ImageView
+            android:id="@+id/book_image_l"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="8dp"
+            app:srcCompat="@drawable/ic_add_a_photo_24px_opacity88" />
+
+    </LinearLayout>
+
+
+
+
+    <LinearLayout
+        android:id="@+id/bookDescLL2_l"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="242dp"
+        app:layout_constraintTop_toBottomOf="@id/picLL_l">
+
+        <TextView
+            android:id="@+id/bookDescLabel2_l"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/description" />
+
+        <EditText
+            android:id="@+id/bookDescField2_l"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="The number of books you received and all other relevant details"
+            android:inputType="textCapSentences|textMultiLine"
+            android:maxLength="1000"
+            android:singleLine="false" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/confirmCollectButton"
+        android:layout_width="0dp"
+        android:layout_height="72dp"
+        android:layout_margin="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_weight="1"
+        android:text="Confirm collection"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/logBookPicInstr"
+        android:layout_width="0dp"
+        android:layout_margin="8dp"
+        android:text="A picture that adequately shows all the books you received"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/picLL_l"
+        app:layout_constraintStart_toEndOf="@+id/picLL_l"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/picLL_l" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
