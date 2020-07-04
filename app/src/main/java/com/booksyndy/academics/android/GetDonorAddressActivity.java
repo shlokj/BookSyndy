@@ -443,7 +443,7 @@ public class GetDonorAddressActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(Void aVoid) {
                             cProgressDialog.dismiss();
-                            Toast.makeText(GetDonorAddressActivity.this, "Donation doc removed successfully", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(GetDonorAddressActivity.this, "Donation doc removed successfully", Toast.LENGTH_SHORT).show();
                             Intent homeActivity = new Intent(GetDonorAddressActivity.this, HomeActivity.class);
                             startActivity(homeActivity);
                             finish();
@@ -475,7 +475,7 @@ public class GetDonorAddressActivity extends AppCompatActivity {
         switch (requestCode) {
             case AUTOCOMPLETE_REQUEST_CODE: // for places search
                 if (resultCode == RESULT_OK) {
-                    Toast.makeText(this, "RESULT_OK", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(this, "RESULT_OK", Toast.LENGTH_SHORT).show();
                     Place place = Autocomplete.getPlaceFromIntent(imageReturnedIntent);
                     //Log.i(TAG, "Place: " + place.getName() + ", " + place.getId() + ", " + place.getAddress());
                     //Toast.makeText(CreateListingActivity.this, "ID: " + place.getId() + "address:" + place.getAddress() + "Name:" + place.getName() + " latlong: " + place.getLatLng(), Toast.LENGTH_LONG).show();
@@ -490,9 +490,9 @@ public class GetDonorAddressActivity extends AppCompatActivity {
                     Geocoder geocoder;
                     List<Address> addresses = new ArrayList<>();
                     geocoder = new Geocoder(this, Locale.getDefault());
-
-                    book_lat = userPref.getFloat(getString(R.string.p_lat),0.0f);
-                    book_lng = userPref.getFloat(getString(R.string.p_lng),0.0f);
+//
+//                    book_lat = userPref.getFloat(getString(R.string.p_lat),0.0f);
+//                    book_lng = userPref.getFloat(getString(R.string.p_lng),0.0f);
 
                     try {
                         addresses = geocoder.getFromLocation(book_lat, book_lng, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5

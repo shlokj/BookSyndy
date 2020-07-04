@@ -4,7 +4,7 @@ public class User {
 
     private String firstName,lastName,phone,userId,imageUrl,creationDate;
     private boolean isParent,toSell,competitiveExam,phoneNumberPublic,preferGeneral;
-    private int userType,gradeNumber,boardNumber,year;
+    private int userType,gradeNumber,boardNumber,year,volunteerStatus;
 
     public User() {
 
@@ -154,5 +154,13 @@ public class User {
 
     public boolean isPreferGeneral() {
         return preferGeneral;
+    }
+
+    public void setVolunteerStatus(int volunteerStatus) {
+        this.volunteerStatus = volunteerStatus;
+    }
+    // 0: never signed up, 1: signed up not not approved, 2: signed up, approved, active, 3: signed up earlier but is no longer a volunteer
+    public int getVolunteerStatus() {
+        return volunteerStatus;
     }
 }
