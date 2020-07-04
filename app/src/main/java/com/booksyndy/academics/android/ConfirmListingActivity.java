@@ -47,7 +47,7 @@ public class ConfirmListingActivity extends AppCompatActivity {
     private FirebaseStorage mFirebaseStorage;
     private FirebaseAuth mAuth;
     private FirebaseFirestore mFireStore;
-    ImageView bookPicFinal;
+    private ImageView bookPicFinal;
     private ProgressDialog progressDialog;
 
     @Override

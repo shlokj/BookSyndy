@@ -62,7 +62,8 @@ public class GetDonorAddressActivity extends AppCompatActivity {
     private Button confirmDonation;
     private LinearLayout mapsSearchLL;
     private SharedPreferences userPref;
-    //    private TextWatcher clearErr;
+    private SharedPreferences.Editor editor;
+
     private static final int AUTOCOMPLETE_REQUEST_CODE = 108;
 
 
@@ -108,6 +109,17 @@ public class GetDonorAddressActivity extends AppCompatActivity {
         confirmDonation = findViewById(R.id.confirmDonationBtn);
 
         userPref = this.getSharedPreferences(getString(R.string.UserPref),0);
+
+        boolean hasAddr = userPref.getBoolean(getString(R.string.p_userhasaddr), false);
+
+        if (hasAddr) {
+            hnbnField.setText(userPref.getString(getString(R.string.p_userhnbn),""));
+            streetField.setText(userPref.getString(getString(R.string.p_userstreet),""));
+            pincodeField.setText(userPref.getString(getString(R.string.p_userpincode),""));
+        }
+
+        editor = userPref.edit();
+
 
         initFirebase();
 
@@ -193,7 +205,7 @@ public class GetDonorAddressActivity extends AppCompatActivity {
                     valid = false;
                 }
 
-                else if (pinCode.length()<6) {
+                else if (pinCode.length()<6 || pinCode.substring(0,1).equals("0")) {
                     pincodeTIL.setError("Invalid pincode");
                     valid = false;
                 }
@@ -206,6 +218,11 @@ public class GetDonorAddressActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
+                        editor.putBoolean(getString(R.string.p_userhasaddr),true);
+                        editor.putString(getString(R.string.p_userhnbn), hnbn);
+                        editor.putString(getString(R.string.p_userstreet),street);
+                        editor.putString(getString(R.string.p_userpincode),pinCode);
+                        editor.apply();
 
                         final ProgressDialog sProgressDialog = new ProgressDialog(GetDonorAddressActivity.this);
                         sProgressDialog.setMessage("Just a moment...");
@@ -449,57 +466,6 @@ public class GetDonorAddressActivity extends AppCompatActivity {
         }
 
     }
-/*
-
-    private void deleteDocWithoutPic() {
-
-        try {
-            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(picUrl);
-//            StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(picUrl);
-            storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    Log.d("firebasestorage", "onSuccess: deleted photo");
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    Log.e("firebasestorage", "onFailure: did not delete photo");
-                }
-            });
-
-            final ProgressDialog cProgressDialog = new ProgressDialog(this);
-            cProgressDialog.setTitle("Removing...");
-            cProgressDialog.setMessage("Cancelling your donation request, just a moment");
-            cProgressDialog.setCancelable(false);
-            cProgressDialog.show();
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection("donations").document(docId)
-                    .delete()
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            cProgressDialog.dismiss();
-                            Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            cProgressDialog.dismiss();
-                            Log.w(TAG, "Error deleting document", e);
-                        }
-                    });
-
-        }
-
-        catch (Exception storageExc) {
-            Toast.makeText(this, "Oops, ran into an error", Toast.LENGTH_SHORT).show();
-            Toast.makeText(this, "URL: "+picUrl, Toast.LENGTH_SHORT).show();
-        }
-
-    }
-*/
 
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);

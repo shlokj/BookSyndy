@@ -188,7 +188,7 @@ public class GetVolunteerAddressActivity extends AppCompatActivity {
                     valid = false;
                 }
 
-                else if (pinCode.length()<6) {
+                else if (pinCode.length()<6 || pinCode.substring(0,1).equals("0")) {
                     pincodeTIL.setError("Invalid pincode");
                     valid = false;
                 }
@@ -201,12 +201,18 @@ public class GetVolunteerAddressActivity extends AppCompatActivity {
                     editor.apply();
 
                     Intent confirmVolunteer = new Intent(GetVolunteerAddressActivity.this,ConfirmVolunteeringSignUpActivity.class);
+                    confirmVolunteer.putExtra("VOL_NAME",userPref.getString(getString(R.string.p_firstname),"") + " " + userPref.getString(getString(R.string.p_lastname),""));
+                    confirmVolunteer.putExtra("VOL_PHONE",userPref.getString(getString(R.string.p_userphone),""));
+                    confirmVolunteer.putExtra("VOL_HNBN",hnbn);
+                    confirmVolunteer.putExtra("VOL_STREET",street);
+                    confirmVolunteer.putExtra("VOL_PINCODE",pinCode);
+
                     startActivity(confirmVolunteer);
 
                 }
-                else {
+/*                else {
                     showSnackbar("Please check your inputs");
-                }
+                }*/
 
             }
         });
