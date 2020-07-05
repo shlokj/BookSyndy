@@ -27,6 +27,8 @@ import java.util.Locale;
 
 public class DonationAdapter extends FirestoreRecyclerAdapter<Donation, DonationAdapter.ViewHolder> {
 
+
+
     public interface OnDonationSelectedListener {
 
         void onDonationSelected(DocumentSnapshot snapshot);
@@ -38,7 +40,6 @@ public class DonationAdapter extends FirestoreRecyclerAdapter<Donation, Donation
         void onDonationLongSelected(DocumentSnapshot snapshot);
 
     }
-
     private DonationAdapter.OnDonationSelectedListener mListener;
     private DonationAdapter.OnDonationLongSelectedListener mLongListener;
 
@@ -54,7 +55,7 @@ public class DonationAdapter extends FirestoreRecyclerAdapter<Donation, Donation
     public DonationAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        return new DonationAdapter.ViewHolder(inflater.inflate(R.layout.home_list_item, parent, false));
+        return new DonationAdapter.ViewHolder(inflater.inflate(R.layout.donation_item, parent, false));
 
     }
 
@@ -79,7 +80,7 @@ public class DonationAdapter extends FirestoreRecyclerAdapter<Donation, Donation
             nameView = itemView.findViewById(R.id.donationName);
             statusView = itemView.findViewById(R.id.statusTV);
             dateView = itemView.findViewById(R.id.donationDate);
-            mFirestore = FirebaseFirestore.getInstance();
+//            mFirestore = FirebaseFirestore.getInstance();
 
         }
 
@@ -97,6 +98,17 @@ public class DonationAdapter extends FirestoreRecyclerAdapter<Donation, Donation
                     .into(imageView);
 
             nameView.setText(donation.getDonationName());
+
+            if (donation.getStatus() == 1) {
+                statusView.setText("Pending");
+            }
+            else if(donation.getStatus() == 0){
+                statusView.setText("In Progress");
+            }
+            else{
+                statusView.setText("Completed");
+            }
+
             addBookTime(donation.getDonationListingTime());
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

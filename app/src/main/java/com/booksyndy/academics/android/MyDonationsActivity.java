@@ -122,7 +122,9 @@ public class MyDonationsActivity extends AppCompatActivity implements DonationAd
         if (mQuery == null) {
             Log.w(TAG, "No query, not initializing RecyclerView");
         }
+        mQuery = mQuery.orderBy("status");
         mQuery = mQuery.orderBy("createdAt", Query.Direction.DESCENDING);
+
         options = new FirestoreRecyclerOptions.Builder<Donation>()
                 .setQuery(mQuery, Donation.class)
                 .build();
