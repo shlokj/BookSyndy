@@ -100,12 +100,15 @@ public class DonationAdapter extends FirestoreRecyclerAdapter<Donation, Donation
             nameView.setText(donation.getDonationName());
 
             if (donation.getStatus() == 1) {
-                statusView.setText("Pending");
+                statusView.setText("Submitted");
             }
             else if(donation.getStatus() == 0){
-                statusView.setText("In Progress");
+                statusView.setText("Cancelled/rejected");
             }
-            else{
+            else if(donation.getStatus() == 2){
+                statusView.setText("Accepted by volunteer");
+            }
+            else if(donation.getStatus() == 3){
                 statusView.setText("Completed");
             }
 

@@ -69,6 +69,7 @@
         <item name="question8">Do you charge / take commission for using your platform?</item>
         <item name="question9">Can I post non-academics books, like storybooks?</item>
         <item name="question10">What if I can’t find what I want?</item>
+        <item name="question11">What if I want to change details after I have requested a donation?</item>
         <item name="questionLast">Still have a question?</item>
     </string-array>
 
@@ -83,6 +84,7 @@
         <item name="answer8">No. This platform is entirely free for everyone to use.</item>
         <item name="answer9">Not as of now. BookSyndy currently focuses deeply on academics, to help students find what they need. If you feel we should accept a broader range of books, do let us know in the feedback section.</item>
         <item name="answer10">No problem! Go to the requests section and request what you want. Other users can message you if they have it.</item>
+        <item name="answer11">Cancel your existing donation request and start another.</item>
         <item name="answerLast">Write to us at connect@booksyndy.com</item>
     </string-array>
 </resources>

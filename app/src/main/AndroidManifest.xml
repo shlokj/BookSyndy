@@ -31,7 +31,8 @@
         <activity android:name=".GetVolunteerAddressActivity" />
         <activity android:name=".VolunteerWelcomeActivity" />
         <activity android:name=".GetVolunteerDetailsActivity" />
-        <activity android:name=".DonationDetailsActivity" />
+        <activity android:name=".MyDonationDetailsActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".MyDonationsActivity" />
         <activity android:name=".GetDonorAddressActivity" />
         <activity android:name=".CreateBundleListingActivity" />

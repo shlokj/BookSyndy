@@ -171,8 +171,22 @@ public class MyDonationsActivity extends AppCompatActivity implements DonationAd
     public void onDonationSelected(DocumentSnapshot snapshot) {
        String don_id = snapshot.getId();
 
-       Intent donDetails = new Intent(MyDonationsActivity.this, DonationDetailsActivity.class);
+       Donation curDonation = snapshot.toObject(Donation.class);
+
+       Intent donDetails = new Intent(MyDonationsActivity.this, MyDonationDetailsActivity.class);
        donDetails.putExtra("DON_DOC_NAME",don_id);
+       try {
+           donDetails.putExtra("DON_WEIGHT", curDonation.getApproxWeight());
+       }
+       catch (Exception exc) {
+           donDetails.putExtra("DON_WEIGHT", 0);
+       }
+
+       donDetails.putExtra("DON_TITLE",curDonation.getDonationName());
+       donDetails.putExtra("DON_DESC",curDonation.getDonationDescription());
+       donDetails.putExtra("DON_PIC",curDonation.getDonationPhoto());
+       donDetails.putExtra("DON_STATUS",curDonation.getStatus());
+
        startActivity(donDetails);
 
     }
@@ -224,7 +238,6 @@ public class MyDonationsActivity extends AppCompatActivity implements DonationAd
                 }
             }
         });
-
         builder.show();
     }
 
@@ -248,6 +261,5 @@ public class MyDonationsActivity extends AppCompatActivity implements DonationAd
         }
         return true;
     }
-
 
 }
