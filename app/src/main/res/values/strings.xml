@@ -211,5 +211,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="no_donations">You haven\'t submitted any donation requests so far. Tap the blue floating button to donate books.</string>
+    <string name="pending_requests">Pending requests</string>
+    <string name="accepted_by_you">Accepted by you</string>
 
 </resources>

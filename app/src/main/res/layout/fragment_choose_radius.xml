@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RadioGroup
+        android:id="@+id/radiusButtonList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="24dp">
+
+        <RadioButton
+            android:id="@+id/km1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/roboto_light"
+            android:text="1 km"
+            android:textSize="20sp" />
+
+        <RadioButton
+            android:id="@+id/km2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/roboto_light"
+            android:text="2 km"
+            android:textSize="20sp" />
+
+        <RadioButton
+            android:id="@+id/km3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/roboto_light"
+            android:text="3 km"
+            android:textSize="20sp" />
+
+        <RadioButton
+            android:id="@+id/km4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/roboto_light"
+            android:text="4 km"
+            android:textSize="20sp" />
+
+        <RadioButton
+            android:id="@+id/km5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/roboto_light"
+            android:text="5 km"
+            android:textSize="20sp" />
+
+        <RadioButton
+            android:id="@+id/km7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/roboto_light"
+            android:text="7 km"
+            android:textSize="20sp" />
+
+        <RadioButton
+            android:id="@+id/km10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/roboto_light"
+            android:text="10 km"
+            android:textSize="20sp" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/gradeQuestionTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_light"
+        android:text="Choose a radius you're comfortable collecting books within."
+        android:layout_margin="16dp"
+        android:textSize="20sp"
+        android:layout_alignParentStart="true"
+        android:layout_above="@id/radiusButtonList"
+        android:textColor="@color/colorTextBlack"/>
+
+
+</RelativeLayout>

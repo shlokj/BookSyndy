@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.booksyndy.academics.android.VolunteerDashboardActivity">
+
+    <item
+        android:id="@+id/setRadLoc"
+        android:title="Set collection radius"
+        android:icon="@drawable/ic_set_radius_loc"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/reportListing"
+        android:title="Terminate volunteering"
+        app:showAsAction="never"/>
+</menu>
