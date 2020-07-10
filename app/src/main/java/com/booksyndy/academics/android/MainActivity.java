@@ -115,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
                                     editor.putInt(getString(R.string.p_usertype),user.getUserType());
                                     editor.putBoolean(getString(R.string.phoneNumberPublic),user.isPhoneNumberPublic());
                                     editor.putBoolean(getString(R.string.preferGeneral),user.isPreferGeneral());
+                                    editor.putInt(getString(R.string.p_uservolstatus),user.getVolunteerStatus());
                                     editor.apply();
 
                                     homeActivity.putExtra("username", user.getFirstName() + " " + user.getLastName());

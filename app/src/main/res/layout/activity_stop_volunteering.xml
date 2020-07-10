@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".StopVolunteeringActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".StopVolunteeringActivity">
+
+        <TextView
+            android:id="@+id/stsyg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:fontFamily="@font/roboto_light"
+            android:text="@string/stsyg"
+            android:textColor="@color/colorTextBlack"
+            android:textSize="22sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/vol_stop_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="Thank you for volunteering with us. We hope to see you back soon.\n\nIf you collected a significant number of books, you may be eligible for an e-certificate stating your work. Please write to connect@booksyndy.com or booksyndy@gmail.com to know whether you're eligible.\n\nIf you have any suggestions for us, please enter them in the feedback box below."
+            android:textColor="@color/colorTextBlack"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/stsyg" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/volunteerFeedbackTIL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/vol_stop_main">
+
+            <EditText
+                android:id="@+id/volunteerFeedbackET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:ems="10"
+                android:hint="Feedback"
+                android:inputType="textCapWords|textPersonName" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/vol_stop_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="To confirm, tap the button below."
+            android:textColor="@color/colorTextBlack"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/volunteerFeedbackTIL" />
+
+        <Button
+            android:id="@+id/confirmStopVol"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_margin="36dp"
+            android:text="Terminate volunteering"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/vol_stop_confirm"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

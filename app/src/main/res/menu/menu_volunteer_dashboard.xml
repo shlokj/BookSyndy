@@ -10,7 +10,7 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/reportListing"
+        android:id="@+id/stopVolunteering"
         android:title="Terminate volunteering"
         app:showAsAction="never"/>
 </menu>

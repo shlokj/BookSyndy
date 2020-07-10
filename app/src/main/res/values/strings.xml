@@ -139,6 +139,20 @@
     <string name="preferGuidedMode">preferGuidedMode</string>
     <string name="phoneNumberPublic">phoneNumberPublic</string>
     <string name="preferGeneral">preferGeneral</string>
+    <string name="p_grade">USERGRADE</string>
+    <string name="p_board">USERBOARD</string>
+    <string name="p_year">USERYEAR</string>
+    <string name="p_competitive">COMPETITIVE</string>
+    <string name="year">Year</string>
+    <string name="p_area">AREA</string>
+    <string name="p_city">CITY</string>
+    <string name="p_useddon">USEDDON</string>
+    <string name="p_usertype">USERTYPE</string>
+    <string name="p_userhasaddr">USERHASADDR</string>
+    <string name="p_userhnbn">USERHNBN</string>
+    <string name="p_userstreet">USERSTREET</string>
+    <string name="p_userpincode">USERPINCODE</string>
+    <string name="p_uservolstatus">USERVOLSTATUS</string>
 
     <!--For walkthrough-->
     <string name="title_activity_welcome">Home Screen</string>
@@ -153,19 +167,6 @@
     <string name="slide_3_desc">Join a network of readers and students across the country</string>
     <string name="play_again">Play Again</string>
 
-    <string name="p_grade">USERGRADE</string>
-    <string name="p_board">USERBOARD</string>
-    <string name="p_year">USERYEAR</string>
-    <string name="p_competitive">COMPETITIVE</string>
-    <string name="year">Year</string>
-    <string name="p_area">AREA</string>
-    <string name="p_city">CITY</string>
-    <string name="p_useddon">USEDDON</string>
-    <string name="p_usertype">USERTYPE</string>
-    <string name="p_userhasaddr">USERHASADDR</string>
-    <string name="p_userhnbn">USERHNBN</string>
-    <string name="p_userstreet">USERSTREET</string>
-    <string name="p_userpincode">USERPINCODE</string>
 
     <string name="save">Save</string>
     <string name="report_user">Report user</string>
@@ -213,5 +214,6 @@
     <string name="no_donations">You haven\'t submitted any donation requests so far. Tap the blue floating button to donate books.</string>
     <string name="pending_requests">Pending requests</string>
     <string name="accepted_by_you">Accepted by you</string>
+    <string name="stsyg">Sorry to see you go.</string>
 
 </resources>

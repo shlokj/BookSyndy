@@ -53,7 +53,7 @@ public class SendFeedbackActivity extends AppCompatActivity {
 
         getSupportActionBar().setTitle("Send feedback");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,7 +89,7 @@ public class SendFeedbackActivity extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(), "Feedback sent!", Toast.LENGTH_SHORT).show();
                                     onBackPressed();
                                 } else {
-                                    Toast.makeText(getApplicationContext(), "Failed to send feedback. Please contact the developer.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "Failed to send feedback. Please contact us.", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });

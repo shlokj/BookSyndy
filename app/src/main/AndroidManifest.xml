@@ -25,13 +25,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="LockedOrientationActivity">
-        <activity android:name=".LogBookCollectionActivity"></activity>
+        <activity android:name=".StopVolunteeringActivity"></activity>
+        <activity android:name=".LogBookCollectionActivity" />
         <activity android:name=".VolunteerDashboardActivity" />
         <activity android:name=".ConfirmVolunteeringSignUpActivity" />
         <activity android:name=".GetVolunteerAddressActivity" />
         <activity android:name=".VolunteerWelcomeActivity" />
         <activity android:name=".GetVolunteerDetailsActivity" />
-        <activity android:name=".MyDonationDetailsActivity"
+        <activity
+            android:name=".MyDonationDetailsActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".MyDonationsActivity" />
         <activity android:name=".GetDonorAddressActivity" />

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -101,6 +102,10 @@ public class ConfirmVolunteeringSignUpActivity extends AppCompatActivity {
             userReference.update("volunteerStatus", 1).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
+//                    SharedPreferences userPref = getSharedPreferences(getString(R.string.UserPref),0);
+                    SharedPreferences.Editor editor = getSharedPreferences(getString(R.string.UserPref),0).edit();
+                    editor.putInt(getString(R.string.p_uservolstatus),1);
+                    editor.apply();
                     if (ts1) {
                         startActivity(new Intent(ConfirmVolunteeringSignUpActivity.this,VolunteerDashboardActivity.class));
                     }
