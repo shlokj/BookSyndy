@@ -104,6 +104,7 @@ public class StopVolunteeringActivity extends AppCompatActivity {
                             Intent homeActivity = new Intent(StopVolunteeringActivity.this, HomeActivity.class);
                             homeActivity.putExtra("SNACKBAR_MSG","You have resigned as a volunteer. You can go back to the donate section to rejoin anytime.");
                             homeActivity.putExtra("SB_LONG",true);
+                            homeActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(homeActivity);
                             finish();
                         }
