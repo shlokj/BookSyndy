@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="Thank you for volunteering with us. We hope to see you back soon.\n\nIf you collected a significant number of books, you may be eligible for an e-certificate stating your work. Please write to connect@booksyndy.com or booksyndy@gmail.com to know whether you're eligible.\n\nIf you have any suggestions for us, please enter them in the feedback box below."
+            android:text="Thank you for volunteering with us. We hope to see you back soon.\n\nIf you collected a significant number of books, you may be eligible for an e-certificate stating your work. Please write to connect@booksyndy.com or booksyndy@gmail.com to know whether you're eligible.\n\nIf you have any suggestions for us, please enter them in this feedback box."
             android:textColor="@color/colorTextBlack"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -41,7 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/vol_stop_main">

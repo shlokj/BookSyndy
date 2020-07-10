@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -43,8 +44,12 @@ public class MyDonationsActivity extends AppCompatActivity implements DonationAd
 
     private FloatingActionButton donateFab;
 
+    private SharedPreferences userPref;
+    private SharedPreferences.Editor editor;
     private FirebaseFirestore mFirestore;
     private Query mQuery;
+
+    private int volStat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,18 +59,16 @@ public class MyDonationsActivity extends AppCompatActivity implements DonationAd
         getSupportActionBar().setTitle("Your donations");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        userPref = this.getSharedPreferences(getString(R.string.UserPref), 0);
+
+        volStat = userPref.getInt(getString(R.string.p_uservolstatus),0);
+
+        Toast.makeText(this, volStat+"", Toast.LENGTH_SHORT).show();
         recyclerView = findViewById(R.id.donation_recycler_view);
         mEmptyView = findViewById(R.id.view_empty_d);
         optionsList = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1);
 
         initFirestore();
-
-/*        if (mDonAdapter==null) {
-            Toast.makeText(this, "mDonAdapter null", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            Toast.makeText(this, "mDonAdapter not null", Toast.LENGTH_SHORT).show();
-        }*/
 
         donateFab = findViewById(R.id.fab_donate);
 
@@ -83,7 +86,7 @@ public class MyDonationsActivity extends AppCompatActivity implements DonationAd
             mDonAdapter.startListening();
         }
         catch (Exception e) {
-            Toast.makeText(this, "mDonAdapter null", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "mDonAdapter null", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -151,12 +154,12 @@ public class MyDonationsActivity extends AppCompatActivity implements DonationAd
             }
         };
 
-        if (mDonAdapter==null) {
+/*        if (mDonAdapter==null) {
             Toast.makeText(this, "mDonAdapter null", Toast.LENGTH_SHORT).show();
         }
         else {
             Toast.makeText(this, "mDonAdapter not null", Toast.LENGTH_SHORT).show();
-        }
+        }*/
 
 
     }
@@ -244,7 +247,13 @@ public class MyDonationsActivity extends AppCompatActivity implements DonationAd
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_donation, menu);
+
+        if (volStat==1 || volStat==2) {
+            getMenuInflater().inflate(R.menu.menu_donation_volreg, menu);
+        }
+        else {
+            getMenuInflater().inflate(R.menu.menu_donation, menu);
+        }
 //        this.menu = menu;
         return true;
     }
@@ -257,6 +266,9 @@ public class MyDonationsActivity extends AppCompatActivity implements DonationAd
                 break;
             case android.R.id.home:
                 onBackPressed();
+                break;
+            case R.id.openVolDash:
+                startActivity(new Intent(MyDonationsActivity.this,VolunteerDashboardActivity.class));
                 break;
         }
         return true;

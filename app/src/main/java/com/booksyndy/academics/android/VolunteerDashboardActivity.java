@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class VolunteerDashboardActivity extends AppCompatActivity {
 
@@ -39,9 +40,9 @@ public class VolunteerDashboardActivity extends AppCompatActivity {
             case R.id.setRadLoc:
                 // TODO: show dialog with different radii, neutral button will be to change the location
                 break;
-
             case R.id.stopVolunteering:
-
+//                Toast.makeText(this, "stop clicked", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(VolunteerDashboardActivity.this,StopVolunteeringActivity.class));
                 break;
         }
 

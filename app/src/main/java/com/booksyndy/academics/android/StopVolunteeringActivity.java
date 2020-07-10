@@ -121,8 +121,6 @@ public class StopVolunteeringActivity extends AppCompatActivity {
             }
         });
 
-
-
     }
 
     private void initFirebase() {
