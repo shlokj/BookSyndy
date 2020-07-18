@@ -163,7 +163,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
                 Date dateBefore = myFormat.parse(currentDate);
                 Date dateAfter = myFormat.parse(bookTime);
                 long difference = dateBefore.getTime() - dateAfter.getTime();
-                Log.d("BookAdapter", "addBookTime: " + difference);
+                //Log.d("BookAdapter", "addBookTime: " + difference);
                 float daysBetween = (difference / (1000 * 60 * 60 * 24));
                 /* You can also convert the milliseconds to days using this method
                  * float daysBetween =

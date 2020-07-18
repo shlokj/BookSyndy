@@ -2,6 +2,7 @@ package com.booksyndy.academics.android;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,16 +10,44 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-public class VolunteerDashboardActivity extends AppCompatActivity {
+import com.booksyndy.academics.android.ui.volunteerDashboard.PageAdapter;
+import com.google.android.material.tabs.TabItem;
+import com.google.android.material.tabs.TabLayout;
+
+public class VolunteerDashboardActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener {
+
+    private static String TAG = "VOLUNTEER_DASHBOARD";
+    private ViewPager mViewPager;
+    private TabLayout mTabLayout;
+    private TabItem tab_unaccepted,tab_accepted;
+    private com.booksyndy.academics.android.ui.volunteerDashboard.PageAdapter mPageAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_volunteer_dashboard);
-
         getSupportActionBar().setTitle("Volunteer Dashboard");
 
+        /*
+        view pager code here
+         */
+        mViewPager = findViewById(R.id.donations_viewpager);
+        mTabLayout = findViewById(R.id.donation_listings_tab);
+        tab_unaccepted = findViewById(R.id.tab_unaccepted);
+        tab_accepted = findViewById(R.id.tab_accepted);
+        mPageAdapter = new PageAdapter(getSupportFragmentManager(),mTabLayout.getTabCount());
+        mViewPager.setAdapter(mPageAdapter);
+        mTabLayout.addOnTabSelectedListener(this);
+        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
+
+
     }
+
+
+
+
+
     @Override
     public void onBackPressed() {
         Intent homeActivity = new Intent(VolunteerDashboardActivity.this, MyDonationsActivity.class);
@@ -47,5 +76,22 @@ public class VolunteerDashboardActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+
+
+    /*
+  tab selected callbacks
+   */
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        mViewPager.setCurrentItem(tab.getPosition());
+    }
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
     }
 }

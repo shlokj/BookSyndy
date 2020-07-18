@@ -136,14 +136,14 @@ public class DonationAdapter extends FirestoreRecyclerAdapter<Donation, Donation
         private void addBookTime(String bookTime) {
             if (bookTime != null && !bookTime.isEmpty()) {
                 dateView.setVisibility(View.VISIBLE);
-                SimpleDateFormat myFormat = new SimpleDateFormat("dd MM yyyy HH", Locale.getDefault());
+                SimpleDateFormat myFormat = new SimpleDateFormat("yyyy MM dd HH:mm:ss", Locale.getDefault());
                 String currentDate = myFormat.format(new Date());
 
                 try {
                     Date dateBefore = myFormat.parse(currentDate);
                     Date dateAfter = myFormat.parse(bookTime);
                     long difference = dateBefore.getTime() - dateAfter.getTime();
-                    Log.d("BookAdapter", "addBookTime: " + difference);
+//                    Log.d("BookAdapter", "addBookTime: " + difference);
                     /* You can also convert the milliseconds to days using this method
                      * float daysBetween =
                      *         TimeUnit.DAYS.convert(difference, TimeUnit.MILLISECONDS)
