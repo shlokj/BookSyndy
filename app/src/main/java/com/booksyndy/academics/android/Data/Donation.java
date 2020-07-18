@@ -5,7 +5,7 @@ import com.google.firebase.firestore.DocumentId;
 public class Donation {
 
 
-    private String donationName,donationDescription,donationPhoto;
+    private String donationName,donationDescription,donationPhoto,acceptedByPhone,acceptedByName;
     private int status, approxWeight;
     private String userId,donationListingTime,address;
     private double lat,lng;
@@ -29,7 +29,25 @@ public class Donation {
         this.lng = lng;
         this.status = status;
         this.approxWeight = approxWeight;
+        this.acceptedByPhone = null;
+        this.acceptedByName = null;
         this.createdAt = createdAt;
+    }
+
+    public String getAcceptedByPhone() {
+        return acceptedByPhone;
+    }
+
+    public void setAcceptedByPhone(String acceptedByPhone) {
+        this.acceptedByPhone = acceptedByPhone;
+    }
+
+    public String getAcceptedByName() {
+        return acceptedByName;
+    }
+
+    public void setAcceptedByName(String acceptedByName) {
+        this.acceptedByName = acceptedByName;
     }
 
     public long getCreatedAt() {
