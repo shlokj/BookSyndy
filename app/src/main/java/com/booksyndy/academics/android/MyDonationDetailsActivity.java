@@ -54,6 +54,7 @@ public class MyDonationDetailsActivity extends AppCompatActivity implements Even
         setContentView(R.layout.activity_my_donation_details);
 
         getSupportActionBar().setTitle("Your donation details");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         don_id = getIntent().getStringExtra("DON_DOC_NAME");
         donTitle = getIntent().getStringExtra("DON_TITLE");
         donDesc = getIntent().getStringExtra("DON_DESC");

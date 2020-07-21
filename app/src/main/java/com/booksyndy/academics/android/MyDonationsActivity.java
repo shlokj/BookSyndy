@@ -31,6 +31,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
+
 public class MyDonationsActivity extends AppCompatActivity implements DonationAdapter.OnDonationSelectedListener, DonationAdapter.OnDonationLongSelectedListener {
 
     public static String TAG = "MY_DONATION_ACTIVITY";
@@ -89,6 +92,23 @@ public class MyDonationsActivity extends AppCompatActivity implements DonationAd
 //            Toast.makeText(this, "mDonAdapter null", Toast.LENGTH_SHORT).show();
         }
 
+        showcaseViews();
+
+    }
+
+    private void showcaseViews() {
+
+        ShowcaseConfig config = new ShowcaseConfig();
+        config.setDelay(200); // half second between each showcase view
+
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, "Home showcase");
+
+        sequence.setConfig(config);
+
+        sequence.addSequenceItem(donateFab,
+                "Welcome to the Donate section!\n\nTap here to list a bundle of books for donation.", "GOT IT");
+
+        sequence.start();
     }
 
     @Override

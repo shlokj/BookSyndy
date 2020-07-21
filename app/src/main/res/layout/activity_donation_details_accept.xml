@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-
+<!--TODO: the same layout will be used even after the the volunteer has accepted it.
+Replace "Posted on" with "Accepted" and use the textiew below this label to display d days ago.
+Also, make the button background red and its text ABANDON. A volunteer cannot abandon more than 3 donation requests in a month.-->
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -149,6 +151,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="(weight)"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/colorTextBlack"
+                android:fontFamily="@font/roboto_light"
+                android:textSize="20sp"/>
+
+
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginTop="16dp"
+                android:text="Posted on" />
+
+            <TextView
+                android:id="@+id/donDate_d"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="dd/MM/yyyy"
                 android:layout_marginTop="8dp"
                 android:textColor="@color/colorTextBlack"
                 android:fontFamily="@font/roboto_light"

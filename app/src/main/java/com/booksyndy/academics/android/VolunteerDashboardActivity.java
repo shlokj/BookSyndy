@@ -1,9 +1,11 @@
 package com.booksyndy.academics.android;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -67,11 +69,28 @@ public class VolunteerDashboardActivity extends AppCompatActivity implements Tab
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.setRadLoc:
-                // TODO: show dialog with different radii, neutral button will be to change the location
+                // TODO: show dialog with different radii, neutral button will be to change the location. currently takes user to change address class (for testing)
+
+                startActivity(new Intent(VolunteerDashboardActivity.this,ChangeVolunteerAddressActivity.class));
                 break;
             case R.id.stopVolunteering:
 //                Toast.makeText(this, "stop clicked", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(VolunteerDashboardActivity.this,StopVolunteeringActivity.class));
+                AlertDialog.Builder builder = new AlertDialog.Builder(VolunteerDashboardActivity.this);
+                builder.setTitle("Terminate volunteering");
+                builder.setMessage("Are you sure you want to resign as a volunteer?");
+                builder.setPositiveButton("No, stay", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                builder.setNegativeButton("Yes, terminate", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        startActivity(new Intent(VolunteerDashboardActivity.this,StopVolunteeringActivity.class));
+                    }
+                });
+                builder.show();
                 break;
         }
 

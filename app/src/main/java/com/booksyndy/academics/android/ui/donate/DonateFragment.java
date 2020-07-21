@@ -56,7 +56,7 @@ public class DonateFragment extends Fragment {
                     SharedPreferences.Editor editor = userPref.edit();
                     editor.putBoolean(getString(R.string.p_useddon),true);
                     editor.apply();
-                    startActivity(new Intent(getActivity(), CreateBundleListingActivity.class));
+                    startActivity(new Intent(getActivity(), MyDonationsActivity.class));
                 }
             });
         }

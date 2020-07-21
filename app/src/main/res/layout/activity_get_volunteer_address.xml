@@ -1,134 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".GetVolunteerDetailsActivity">
-
-
-    <TextView
-        android:id="@+id/volAddrIntroTV"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:text="Thank you for choosing to volunteer with BookSyndy! Please enter your address so we know which area you'll be working in."
-        android:textColor="@color/colorTextBlack"
-        android:textSize="18sp"
-        android:fontFamily="@font/roboto_light"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/locLL_v"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/volAddrIntroTV">
 
         <TextView
-            android:id="@+id/locLabel_v"
+            android:id="@+id/volAddrIntroTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/location" />
+            android:layout_margin="16dp"
+            android:text="Thank you for choosing to volunteer with BookSyndy! Please enter your address so we know which area you'll be working in."
+            android:textColor="@color/colorTextBlack"
+            android:textSize="18sp"
+            android:fontFamily="@font/roboto_light"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <LinearLayout
+            android:id="@+id/locLL_v"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_margin="16dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/volAddrIntroTV">
 
-            <EditText
-                android:id="@+id/locField2_v"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="5"
-                android:ems="10"
-                android:enabled="false"
-                android:hint="@string/getting_loc"
-                android:inputType="textCapWords"
-                android:lines="5" />
-
-            <ImageButton
-                android:id="@+id/btn_search_listing_v"
-                android:layout_width="0dp"
+            <TextView
+                android:id="@+id/locLabel_v"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/ic_search_24px" />
+                android:text="@string/location" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/locField2_v"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:ems="10"
+                    android:enabled="false"
+                    android:hint="@string/getting_loc"
+                    android:inputType="textCapWords"
+                    android:lines="5" />
+
+                <ImageButton
+                    android:id="@+id/btn_search_listing_v"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_search_24px" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
 
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/hnbnTIL_v"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_margin="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/locLL_v">
-        <EditText
-            android:id="@+id/hnbnET_v"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/hnbnTIL_v"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="House number and building name"
-            android:inputType="textCapWords|textPersonName" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_weight="1"
+            android:layout_margin="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/locLL_v">
+            <EditText
+                android:id="@+id/hnbnET_v"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="House number and building name"
+                android:inputType="textCapWords|textPersonName" />
+        </com.google.android.material.textfield.TextInputLayout>
 
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/streetNameTIL_v"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_margin="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hnbnTIL_v">
-
-        <EditText
-            android:id="@+id/streetNameET_v"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/streetNameTIL_v"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Street name and other details"/>
+            android:layout_weight="1"
+            android:layout_margin="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/hnbnTIL_v">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <EditText
+                android:id="@+id/streetNameET_v"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Street name and other details"/>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/pincodeTIL_v"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:layout_weight="1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/streetNameTIL_v">
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
-            android:id="@+id/pincodeET_v"
-            android:maxLength="6"
-            android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/pincodeTIL_v"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Pincode"
-            android:inputType="number"/>
+            android:layout_margin="16dp"
+            android:layout_weight="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/streetNameTIL_v">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <EditText
+                android:id="@+id/pincodeET_v"
+                android:maxLength="6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Pincode"
+                android:inputType="number"/>
 
-    <Button
-        android:id="@+id/continueVolSignUp"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:text="Continue"
-        android:textSize="20sp"
-        android:layout_margin="36dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/continueVolSignUp"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:text="Continue"
+            android:textSize="20sp"
+            android:layout_margin="24dp"
+            app:layout_constraintTop_toBottomOf="@id/pincodeTIL_v"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
