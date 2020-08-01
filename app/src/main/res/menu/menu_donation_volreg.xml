@@ -6,7 +6,7 @@
     <item
         android:id="@+id/openVolDash"
         android:title="Open volunteer dashboard"
-        android:icon="@drawable/ic_volunteer_dashboard_icon"
+        android:icon="@drawable/ic_volunteer_dashboard"
         app:showAsAction="always" />
 
 </menu>

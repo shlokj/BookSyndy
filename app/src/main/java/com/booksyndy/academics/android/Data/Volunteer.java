@@ -3,7 +3,7 @@ package com.booksyndy.academics.android.Data;
 public class Volunteer {
 
     private String name, phone, hnbn, street, pincode;
-//    private int status;
+    private int totalBooks;
     private double lat, lng;
     private long createdAt;
 
@@ -89,5 +89,17 @@ public class Volunteer {
 
     public long getCreatedAt() {
         return createdAt;
+    }
+
+    public void setTotalBooks(int totalBooks) {
+        this.totalBooks = totalBooks;
+    }
+
+    public int getTotalBooks() {
+        return totalBooks;
+    }
+
+    public void increaseBookCount(int addn) {
+        this.totalBooks = this.totalBooks + addn;
     }
 }
