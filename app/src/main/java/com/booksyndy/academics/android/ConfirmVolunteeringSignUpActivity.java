@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -18,17 +19,23 @@ import android.widget.Toast;
 
 import com.booksyndy.academics.android.Data.User;
 import com.booksyndy.academics.android.Data.Volunteer;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 public class ConfirmVolunteeringSignUpActivity extends AppCompatActivity {
+
+
 
     private TextView volName, volPhone, volAddress;
     private String name, phone, hnbn, street, pincode;
@@ -66,7 +73,7 @@ public class ConfirmVolunteeringSignUpActivity extends AppCompatActivity {
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: firebase
+
                 if (checkConnection(getApplicationContext())) {
                     registerVolunteer();
                 }
@@ -97,6 +104,7 @@ public class ConfirmVolunteeringSignUpActivity extends AppCompatActivity {
                 public void onSuccess(Void aVoid) {
 //                    startActivity(new Intent(ConfirmVolunteeringSignUpActivity.this,VolunteerDashboardActivity.class));
                     ts1 = true;
+                    saveToken(phone);
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -134,6 +142,27 @@ public class ConfirmVolunteeringSignUpActivity extends AppCompatActivity {
         }
     }
 
+
+    private void saveToken(final String userId) {
+        try {
+            FirebaseInstanceId.getInstance().getInstanceId()
+                    .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                            if (!task.isSuccessful()) {
+                                return;
+                            }
+
+                            // Get new Instance ID token
+                            String token = task.getResult().getToken();
+                            FirebaseFirestore.getInstance().collection("volunteers").document(userId).update("token", token);
+                        }
+                    });
+        } catch (Exception e) {
+            //Log.e(TAG, "saveToken: ", e);
+        }
+
+    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
