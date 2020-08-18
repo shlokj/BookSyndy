@@ -283,16 +283,13 @@ public class ChangeVolunteerAddressActivity extends AppCompatActivity {
     }
 
     public void onSearchCalled() {
-        if (!Places.isInitialized()) {
-            Places.initialize(getApplicationContext(), getString(R.string.places_api_key));
-        }
         // Set the fields to specify which types of place data to return.
         List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG);
         // Start the autocomplete intent.
-        Intent mapsAC = new Autocomplete.IntentBuilder(
-                AutocompleteActivityMode.FULLSCREEN, fields).setCountry("IN")//.setInitialQuery("saket c")
+        Intent intent = new Autocomplete.IntentBuilder(
+                AutocompleteActivityMode.FULLSCREEN, fields).setCountry("IN") //NIGERIA
                 .build(this);
-        startActivityForResult(mapsAC, AUTOCOMPLETE_REQUEST_CODE);
+        startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
     }
 
 
