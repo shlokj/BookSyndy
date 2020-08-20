@@ -86,7 +86,7 @@ public class GetDonorAddressActivity extends AppCompatActivity {
         setContentView(R.layout.activity_get_donor_address);
 
         getSupportActionBar().setTitle("Set pickup address");
-
+        initFirebase();
         docId = getIntent().getStringExtra("DON_DOC_ID");
         docName = getIntent().getStringExtra("DON_DOC_NAME");
 
@@ -100,7 +100,7 @@ public class GetDonorAddressActivity extends AppCompatActivity {
 
         mapsSearchLL = findViewById(R.id.locLL_d);
 
-        mapsSearchLL.setVisibility(View.GONE);
+        //mapsSearchLL.setVisibility(View.GONE);
 
         hnbnTIL = findViewById(R.id.hnbnTIL);
         streetTIL = findViewById(R.id.streetNameTIL);
@@ -121,7 +121,7 @@ public class GetDonorAddressActivity extends AppCompatActivity {
         editor = userPref.edit();
 
 
-        initFirebase();
+
 
         hnbnField.addTextChangedListener(new TextWatcher() {
             @Override
@@ -189,6 +189,11 @@ public class GetDonorAddressActivity extends AppCompatActivity {
 /*                        if (mapsLoc.isEmpty()) {
                             Toast.makeText(GetDonorAddressActivity.this, "Couldn't get your location. Please search for it manually.", Toast.LENGTH_SHORT).show();
                         }*/
+
+                if (book_lat == 0.0 || book_lng == 0.0) {
+                    locField.setError("Please fill in this field");
+                    valid = false;
+                }
 
                 if (hnbn.isEmpty()) {
                     hnbnTIL.setError("Please fill in this field");

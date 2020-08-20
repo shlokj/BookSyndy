@@ -65,7 +65,7 @@ public class ConfirmVolunteeringSignUpActivity extends AppCompatActivity {
         lat = getIntent().getDoubleExtra("VOL_LAT",0);
         lng = getIntent().getDoubleExtra("VOL_LNG",0);
 
-        Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
         volName.setText(name);
         volPhone.setText(phone.substring(0,3) + " " + phone.substring(3));
         volAddress.setText(hnbn + ", " + street + ", " + pincode);

@@ -21,11 +21,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.common.api.Status;
+import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,6 +59,7 @@ public class GetVolunteerAddressActivity extends AppCompatActivity {
 
         getSupportActionBar().setTitle("Enter your address");
 
+        initFirestore();
 
         locField = findViewById(R.id.locField2_v);
         hnbnField = findViewById(R.id.hnbnET_v);
@@ -147,6 +150,12 @@ public class GetVolunteerAddressActivity extends AppCompatActivity {
                 street = streetField.getText().toString().trim();
                 pinCode = pincodeField.getText().toString().trim();
 
+                if (book_lat == 0.0 || book_lng == 0.0) {
+                    locField.setError("Please fill in this field");
+                    valid = false;
+                }
+
+
                 if (hnbn.isEmpty()) {
                     hnbnTIL.setError("Please fill in this field");
                     valid = false;
@@ -168,6 +177,8 @@ public class GetVolunteerAddressActivity extends AppCompatActivity {
                 }
 
                 if (valid) {
+
+
                     editor.putBoolean(getString(R.string.p_userhasaddr),true);
                     editor.putString(getString(R.string.p_userhnbn), hnbn);
                     editor.putString(getString(R.string.p_userstreet),street);
@@ -204,12 +215,32 @@ public class GetVolunteerAddressActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.locField2_v).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onSearchCalled();
+            }
+        });
+
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     LOCATION_PERMISSION_REQUEST_CODE);
+        }
+
+    }
+
+    private void initFirestore() {
+        try {
+            /* firestore */
+
+            if (!Places.isInitialized()) {
+                Places.initialize(getApplicationContext(), getString(R.string.places_api_key));
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "initFireStore: ", e);
         }
 
     }
