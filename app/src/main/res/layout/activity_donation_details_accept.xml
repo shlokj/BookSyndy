@@ -8,6 +8,7 @@ Also, make the button background red and its text ABANDON. A volunteer cannot ab
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".DonationDetailsAcceptActivity"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent">
 
 
@@ -24,7 +25,7 @@ Also, make the button background red and its text ABANDON. A volunteer cannot ab
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/book_image_d"
+                android:id="@+id/don_image_v"
                 android:layout_width="140dp"
                 android:layout_height="140dp"
                 android:layout_gravity="center"
@@ -166,7 +167,7 @@ Also, make the button background red and its text ABANDON. A volunteer cannot ab
                 android:text="Posted on" />
 
             <TextView
-                android:id="@+id/donDate_d"
+                android:id="@+id/donDate_v"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="dd/MM/yyyy"
@@ -180,8 +181,9 @@ Also, make the button background red and its text ABANDON. A volunteer cannot ab
         <Button
             android:id="@+id/acceptDonReqBtn"
             android:layout_width="0dp"
+            android:visibility="gone"
             android:layout_height="72dp"
-            android:layout_margin="20dp"
+            android:layout_marginBottom="20dp"
             android:layout_marginEnd="16dp"
             android:layout_weight="1"
             android:text="Accept"
@@ -190,6 +192,38 @@ Also, make the button background red and its text ABANDON. A volunteer cannot ab
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/donDistLL" />
+
+        <Button
+            android:id="@+id/logDonBtn"
+            android:visibility="gone"
+            android:layout_width="0dp"
+            android:layout_height="72dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="1"
+            android:text="Log Completion"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/donDistLL" />
+
+        <Button
+            android:id="@+id/rejectDonBtn"
+            android:visibility="gone"
+            android:layout_width="0dp"
+            android:layout_height="72dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="1"
+            android:text="Cancel Donation"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/logDonBtn" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

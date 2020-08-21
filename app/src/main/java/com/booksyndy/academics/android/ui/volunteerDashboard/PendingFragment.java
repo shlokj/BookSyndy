@@ -18,6 +18,7 @@ import com.booksyndy.academics.android.Adapters.DonationAdapter;
 import com.booksyndy.academics.android.Adapters.RequestAdapter;
 import com.booksyndy.academics.android.Data.Donation;
 import com.booksyndy.academics.android.Data.OnFilterSelectionListener;
+import com.booksyndy.academics.android.DonationDetailsAcceptActivity;
 import com.booksyndy.academics.android.MyDonationDetailsActivity;
 import com.booksyndy.academics.android.R;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -150,7 +151,7 @@ public class PendingFragment extends Fragment implements  DonationAdapter.OnDona
 
         Donation curDonation = snapshot.toObject(Donation.class);
 
-        Intent donDetails = new Intent(getActivity(), MyDonationDetailsActivity.class);
+        Intent donDetails = new Intent(getActivity(), DonationDetailsAcceptActivity.class);
         donDetails.putExtra("DON_DOC_NAME",don_id);
         try {
             donDetails.putExtra("DON_WEIGHT", curDonation.getApproxWeight());

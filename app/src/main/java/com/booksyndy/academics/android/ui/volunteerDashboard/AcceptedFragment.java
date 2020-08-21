@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 
 import com.booksyndy.academics.android.Adapters.DonationAdapter;
 import com.booksyndy.academics.android.Data.Donation;
+import com.booksyndy.academics.android.DonationDetailsAcceptActivity;
 import com.booksyndy.academics.android.MyDonationDetailsActivity;
 import com.booksyndy.academics.android.R;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -81,6 +82,7 @@ public class AcceptedFragment extends Fragment implements  DonationAdapter.OnDon
             mFirestore = FirebaseFirestore.getInstance();
             String userId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
             mQuery = mFirestore.collection("donations").whereEqualTo("acceptedByPhone", userId);
+            mQuery = mQuery.whereEqualTo("status", 2);
             populateDonationAdapter();
 /*            if (mDonAdapter==null) {
                 Toast.makeText(this, "mDonAdapter null", Toast.LENGTH_SHORT).show();
@@ -146,7 +148,7 @@ public class AcceptedFragment extends Fragment implements  DonationAdapter.OnDon
 
         Donation curDonation = snapshot.toObject(Donation.class);
 
-        Intent donDetails = new Intent(getActivity(), MyDonationDetailsActivity.class);
+        Intent donDetails = new Intent(getActivity(), DonationDetailsAcceptActivity.class);
         donDetails.putExtra("DON_DOC_NAME",don_id);
         try {
             donDetails.putExtra("DON_WEIGHT", curDonation.getApproxWeight());
