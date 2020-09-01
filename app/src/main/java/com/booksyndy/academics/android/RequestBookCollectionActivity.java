@@ -1,23 +1,26 @@
 package com.booksyndy.academics.android;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.booksyndy.academics.android.Data.Feedback;
+import com.booksyndy.academics.android.Data.PickupRequest;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -27,14 +30,15 @@ import com.google.firebase.storage.FirebaseStorage;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class SendFeedbackActivity extends AppCompatActivity {
+public class RequestBookCollectionActivity extends AppCompatActivity {
 
-    private static String TAG = "SENDFEEDBACK";
-    private EditText feedbackField;
+    private static String TAG = "REQUESTDONATIONPICKUP";
+    private EditText descField;
+    private TextInputLayout descTIL;
     private Button sendButton;
     private Calendar calendar;
     private SimpleDateFormat dateFormat;
-    private String fMessage, date, userId;
+    private String comments, date, userId;
     private FirebaseFirestore mFireStore;
     private FirebaseAuth mAuth;
     private ProgressDialog progressDialog;
@@ -43,29 +47,46 @@ public class SendFeedbackActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_send_feedback);
+        setContentView(R.layout.activity_request_book_collection);
 
-        feedbackField = findViewById(R.id.feedback_field);
-        sendButton = findViewById(R.id.send_fb_button);
+
+        descField = findViewById(R.id.pickupReqCommentsET);
+        descTIL = findViewById(R.id.pickupReqCommentsTIL);
+        sendButton = findViewById(R.id.submitPickupReq);
+
+        descField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                descTIL.setError(null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         initFirebase();
 
-        getSupportActionBar().setTitle("Send feedback");
+        getSupportActionBar().setTitle("Request pickup");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fMessage = feedbackField.getText().toString().trim();
-                if (fMessage.length()<10) {
-                    Snackbar.make(findViewById(android.R.id.content), "Please enter at least 10 characters", Snackbar.LENGTH_SHORT).show();
+                comments = descField.getText().toString().trim();
+
+                if (comments.length()<10) {
+                    descTIL.setError("Please enter at least 10 characters.");
                 }
                 else {
-                    // send the feedback
 
-                    progressDialog = new ProgressDialog(SendFeedbackActivity.this);
-                    progressDialog.setMessage("Sending feedback");
+                    progressDialog = new ProgressDialog(RequestBookCollectionActivity.this);
+                    progressDialog.setMessage("Submitting request");
                     progressDialog.setTitle("Just a moment");
                     progressDialog.setCancelable(false);
                     progressDialog.show();
@@ -73,29 +94,28 @@ public class SendFeedbackActivity extends AppCompatActivity {
                     try {
 
                         calendar = Calendar.getInstance();
-                        dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                        dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                         date = dateFormat.format(calendar.getTime());
-                        Feedback mFeedback = new Feedback(fMessage, date, userId);
+                        PickupRequest pickupRequest = new PickupRequest(comments, date, userId);
 
-                        CollectionReference feedbackMessages = mFireStore.collection("feedback");
+                        CollectionReference pickupReqRef = mFireStore.collection("pickupRequests");
 
-                        feedbackMessages.add(mFeedback).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                        pickupReqRef.add(pickupRequest).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentReference> task) {
                                 if (task.isSuccessful()) {
-                                    Log.d(TAG, "onComplete: sent feedback");
+                                    Log.d(TAG, "onComplete: submitted pickup req");
                                     progressDialog.dismiss();
-                                    Toast.makeText(getApplicationContext(), "Feedback sent!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "Submitted your request! We'll be in touch shortly.", Toast.LENGTH_SHORT).show();
                                     onBackPressed();
                                 } else {
-                                    Toast.makeText(getApplicationContext(), "Failed to send feedback. Please contact us.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "Failed to submit. Please contact us.", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
-                    }
-                    catch (Exception e) {
-                        Toast.makeText(getApplicationContext(), "Send feedback failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                        if(progressDialog.isShowing())
+                    } catch (Exception e) {
+                        Toast.makeText(getApplicationContext(), "Submit pickup req failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        if (progressDialog.isShowing())
                             progressDialog.dismiss();
                     }
                 }
@@ -127,4 +147,3 @@ public class SendFeedbackActivity extends AppCompatActivity {
         return true;
     }
 }
-

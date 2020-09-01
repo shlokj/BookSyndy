@@ -5,11 +5,11 @@ import com.google.firebase.firestore.DocumentId;
 public class Donation {
 
 
-    private String donationName,donationDescription,donationPhoto,acceptedByPhone,acceptedByName;
+    private String donationName,donationDescription,donationPhoto,acceptedByPhone,acceptedByName,mapsAddress;
     private int status, approxWeight;
-    private String userId,donationListingTime,address;
+    private String userId,donationListingTime,donationAcceptedTime,address,donorName;
     private double lat,lng;
-    private long createdAt;
+    private long createdAt,acceptedAt;
     @com.google.firebase.firestore.DocumentId
     private String DocumentId;
 
@@ -18,7 +18,7 @@ public class Donation {
 
     }
     //for user entry
-    public Donation(String userId, String donationName, String donationDescription, String donationPhoto,String donationListingTime,double lat,double lng, int status, int approxWeight, long createdAt){
+    public Donation(String userId, String donationName, String donationDescription, String donationPhoto,String donationListingTime,double lat,double lng, int status, int approxWeight, long createdAt, String donorName){
 
         this.userId = userId;
         this.donationName = donationName;
@@ -32,6 +32,7 @@ public class Donation {
         this.acceptedByPhone = null;
         this.acceptedByName = null;
         this.createdAt = createdAt;
+        this.donorName = donorName;
     }
 
     public String getAcceptedByPhone() {
@@ -146,4 +147,35 @@ public class Donation {
         return address;
     }
 
+    public void setDonationAcceptedTime(String donationAcceptedTime) {
+        this.donationAcceptedTime = donationAcceptedTime;
+    }
+
+    public String getDonationAcceptedTime() {
+        return donationAcceptedTime;
+    }
+
+    public void setAcceptedAt(long acceptedAt) {
+        this.acceptedAt = acceptedAt;
+    }
+
+    public long getAcceptedAt() {
+        return acceptedAt;
+    }
+
+    public void setDonorName(String donorName) {
+        this.donorName = donorName;
+    }
+
+    public String getDonorName() {
+        return donorName;
+    }
+
+    public void setMapsAddress(String mapsAddress) {
+        this.mapsAddress = mapsAddress;
+    }
+
+    public String getMapsAddress() {
+        return mapsAddress;
+    }
 }

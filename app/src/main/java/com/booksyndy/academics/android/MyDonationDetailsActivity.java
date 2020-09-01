@@ -9,7 +9,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -118,7 +117,7 @@ public class MyDonationDetailsActivity extends AppCompatActivity implements Even
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_don_details, menu);
+        getMenuInflater().inflate(R.menu.menu_my_donation_details, menu);
         this.menu = menu;
 
         return true;

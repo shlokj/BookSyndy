@@ -234,19 +234,17 @@ public class GetDonorAddressActivity extends AppCompatActivity {
                         sProgressDialog.setTitle("Submitting");
                         sProgressDialog.setCancelable(false);
                         sProgressDialog.show();
-                        String pickupAddress = "Maps address: " + mapsLoc + ",\n";
-                        pickupAddress = pickupAddress + "House number and building name:" + hnbn + ",\n";
+
+                        String pickupAddress = hnbn + ", " + street + ", " + pinCode;
 
 /*                        if (!streetField.getText().toString().trim().isEmpty()) {
                             pickupAddress = pickupAddress + "Street name and other details: " + streetField.getText().toString().trim();
                         }*/
 
-                        pickupAddress = pickupAddress + "Street name and other details: " + street;
-                        pickupAddress = pickupAddress + "Pincode: " + pinCode;
 
                         DocumentReference donReference = mFirestore.collection("donations").document(docName);
 
-                        donReference.update("lat", book_lat, "lng", book_lng, "address", pickupAddress, "status", 1)
+                        donReference.update("lat", book_lat, "lng", book_lng, "address", pickupAddress, "status", 1, "mapsAddress", mapsLoc)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {

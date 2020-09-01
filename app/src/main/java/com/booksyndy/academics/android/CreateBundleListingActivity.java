@@ -60,7 +60,7 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.UUID;
 
-public class CreateBundleListingActivity extends AppCompatActivity {
+public class CreateBundleListingActivity  extends AppCompatActivity { // alias: RequestDonationActivity
 
     // for donations
 
@@ -100,6 +100,7 @@ public class CreateBundleListingActivity extends AppCompatActivity {
 
         postButton = findViewById(R.id.postButton_d);
 
+        userPref = getSharedPreferences(getString(R.string.UserPref),0);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -360,7 +361,9 @@ public class CreateBundleListingActivity extends AppCompatActivity {
 
             long ca = new Date().getTime();
 
-            final Donation donation = new Donation(userId, donationName, donationDescription, "", donListTime, 0.0, 0.0, 0, approxWeight, ca);
+            String donorName = userPref.getString(getString(R.string.p_firstname),"")  + " " + userPref.getString(getString(R.string.p_lastname),"");
+
+            final Donation donation = new Donation(userId, donationName, donationDescription, "", donListTime, 0.0, 0.0, 0, approxWeight, ca, donorName);
             donation.setDocumentId(userId + "_" + ca);
             if(donation_photo_url != null && !donation_photo_url.isEmpty()){
                 // book.setBookPhoto();

@@ -122,7 +122,7 @@
     <string name="school">SCHOOL</string>
     <string name="college">COLLEGE</string>
     <string name="clear_filter">Clear filters</string>
-
+    <string name="nearby_pending">Nearby Pending</string>
     <string name="pending">Pending</string>
     <string name="MyRequests">Your Requests</string>
 

@@ -25,7 +25,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="LockedOrientationActivity">
-        <activity android:name=".ChangeVolunteerAddressActivity"></activity>
+        <activity android:name=".RequestBookCollectionActivity"></activity>
+        <activity android:name=".ChangeVolunteerAddressActivity" />
         <activity android:name=".DonationDetailsAcceptActivity" />
         <activity android:name=".StopVolunteeringActivity" />
         <activity android:name=".LogBookCollectionActivity" />

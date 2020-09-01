@@ -92,6 +92,9 @@ public class VolunteerDashboardActivity extends AppCompatActivity implements Tab
                 });
                 builder.show();
                 break;
+            case R.id.requestPickup:
+                startActivity(new Intent(VolunteerDashboardActivity.this,RequestBookCollectionActivity.class));
+                break;
         }
 
         return true;

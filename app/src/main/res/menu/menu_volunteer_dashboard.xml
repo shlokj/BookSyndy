@@ -13,4 +13,9 @@
         android:id="@+id/stopVolunteering"
         android:title="Terminate volunteering"
         app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/requestPickup"
+        android:title="Request books pickup"
+        app:showAsAction="never"/>
 </menu>

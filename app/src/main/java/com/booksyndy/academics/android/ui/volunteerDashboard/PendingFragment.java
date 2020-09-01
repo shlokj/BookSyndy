@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import com.booksyndy.academics.android.Adapters.DonationAdapter;
 import com.booksyndy.academics.android.Adapters.RequestAdapter;
@@ -29,6 +30,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -160,10 +165,27 @@ public class PendingFragment extends Fragment implements  DonationAdapter.OnDona
             donDetails.putExtra("DON_WEIGHT", 0);
         }
 
+        String donTS = curDonation.getDonationListingTime();
+
+
+        DateFormat originalFormat = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
+        DateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = new Date();
+        try {
+            date = originalFormat.parse(donTS);
+        }
+        catch (Exception e) {
+            Toast.makeText(getActivity(), "Date parsing error", Toast.LENGTH_SHORT).show();
+        }
+
+        String formattedDate = targetFormat.format(date);
+
+
         donDetails.putExtra("DON_TITLE",curDonation.getDonationName());
         donDetails.putExtra("DON_DESC",curDonation.getDonationDescription());
         donDetails.putExtra("DON_PIC",curDonation.getDonationPhoto());
         donDetails.putExtra("DON_STATUS",curDonation.getStatus());
+        donDetails.putExtra("DON_LISTDATE",formattedDate);
 
         startActivity(donDetails);
 

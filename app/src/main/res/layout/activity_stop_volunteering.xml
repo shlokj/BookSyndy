@@ -53,7 +53,7 @@
                 android:layout_margin="16dp"
                 android:ems="10"
                 android:hint="Feedback"
-                android:inputType="textCapWords|textPersonName" />
+                android:inputType="textCapSentences|textMultiLine" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView

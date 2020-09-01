@@ -161,7 +161,9 @@ public class AcceptedFragment extends Fragment implements  DonationAdapter.OnDon
         donDetails.putExtra("DON_DESC",curDonation.getDonationDescription());
         donDetails.putExtra("DON_PIC",curDonation.getDonationPhoto());
         donDetails.putExtra("DON_STATUS",curDonation.getStatus());
-
+        donDetails.putExtra("DON_DONORNAME",curDonation.getDonorName());
+        donDetails.putExtra("DON_PHONE",curDonation.getUserId());
+        donDetails.putExtra("DON_ADDRESS",curDonation.getAddress());
         startActivity(donDetails);
 
     }
