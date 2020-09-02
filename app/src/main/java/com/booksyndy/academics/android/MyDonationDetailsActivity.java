@@ -105,6 +105,20 @@ public class MyDonationDetailsActivity extends AppCompatActivity implements Even
         }
     }
 
+
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        try{
+            this.finish();
+        }
+        catch (Exception e){
+
+        }
+        return true;
+    }
+
+
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
 

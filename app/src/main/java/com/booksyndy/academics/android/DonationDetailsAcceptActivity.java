@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,6 +34,7 @@ public class DonationDetailsAcceptActivity extends AppCompatActivity  {
 
     private String don_id, donTitle, donDesc, donPic,curUserName,curUserPhone,listDate,donorName,donorPhone,donorAddress;
     private int donWeight, donStatus;
+    private double don_lat,don_lng,user_lat,user_lng;
     private Donation selectedDonation;
     private User donationOwner;
     private SharedPreferences userPref;
@@ -62,6 +64,8 @@ public class DonationDetailsAcceptActivity extends AppCompatActivity  {
         donWeight = getIntent().getIntExtra("DON_WEIGHT",0);
         donStatus = getIntent().getIntExtra("DON_STATUS",0);
         listDate = getIntent().getStringExtra("DON_LISTDATE");
+         don_lat = getIntent().getDoubleExtra("DON_LAT",0.0);
+         don_lng = getIntent().getDoubleExtra("DON_LNG",0.0);
 
         userPref = this.getSharedPreferences(getString(R.string.UserPref), 0);
 
@@ -91,8 +95,6 @@ public class DonationDetailsAcceptActivity extends AppCompatActivity  {
         titleView.setText(donTitle);
         descView.setText(donDesc);
         donDateView.setText(listDate);
-
-
         if (donWeight>0) {
             weightView.setText(donWeight + " kgs");
         }
@@ -207,6 +209,33 @@ public class DonationDetailsAcceptActivity extends AppCompatActivity  {
 
     }
 
+
+//    calculate and show distance from volunteer to donation
+private void addDistance() {
+    float res;
+    if (user_lat != 0.0 && user_lng != 0.0 && don_lat != 0.0 && don_lng != 0.0) {
+        Location locationA = new Location("point A");
+        Location locationB = new Location("point B");
+
+        locationA.setLatitude(user_lat);
+        locationA.setLongitude(user_lng);
+        locationB.setLatitude(don_lat);
+        locationB.setLongitude(don_lng);
+        res = locationA.distanceTo(locationB);
+        if (res > 0.0f && res < 1000f) {
+            res = Math.round(res);
+            if (res > 0.0f)
+                distanceView.append("  " + getString(R.string.divider_bullet) + " " + (int) res + " m");
+        } else if (res > 1000f) {
+            res = Math.round(res / 100);
+            res = res / 10;
+            if (res > 0.0f)
+                distanceView.append(" " + getString(R.string.divider_bullet) + " " + res + " km");
+        }
+    }
+}
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (donStatus==2) {
@@ -260,6 +289,9 @@ public class DonationDetailsAcceptActivity extends AppCompatActivity  {
             donationRef = mFirestore.collection("donations").document(don_id);
             curUserPhone = userPref.getString(getString(R.string.p_userphone), "");
             curUserName = userPref.getString(getString(R.string.p_firstname), "");
+            user_lat = userPref.getFloat(getString(R.string.p_lat),0.0f);
+            user_lng = userPref.getFloat(getString(R.string.p_lng),0.0f);
+            addDistance();
             String lastName  = userPref.getString(getString(R.string.p_lastname), null);
             if(lastName != null){
                 curUserName += " "+lastName;

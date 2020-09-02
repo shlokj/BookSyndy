@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import com.booksyndy.academics.android.Adapters.DonationAdapter;
 import com.booksyndy.academics.android.Data.Donation;
@@ -25,6 +26,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -157,6 +162,22 @@ public class AcceptedFragment extends Fragment implements  DonationAdapter.OnDon
             donDetails.putExtra("DON_WEIGHT", 0);
         }
 
+        String donTS = curDonation.getDonationListingTime();
+
+
+        DateFormat originalFormat = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
+        DateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = new Date();
+        try {
+            date = originalFormat.parse(donTS);
+        }
+        catch (Exception e) {
+            Toast.makeText(getActivity(), "Date parsing error", Toast.LENGTH_SHORT).show();
+        }
+
+        String formattedDate = targetFormat.format(date);
+
+
         donDetails.putExtra("DON_TITLE",curDonation.getDonationName());
         donDetails.putExtra("DON_DESC",curDonation.getDonationDescription());
         donDetails.putExtra("DON_PIC",curDonation.getDonationPhoto());
@@ -164,6 +185,10 @@ public class AcceptedFragment extends Fragment implements  DonationAdapter.OnDon
         donDetails.putExtra("DON_DONORNAME",curDonation.getDonorName());
         donDetails.putExtra("DON_PHONE",curDonation.getUserId());
         donDetails.putExtra("DON_ADDRESS",curDonation.getAddress());
+        donDetails.putExtra("DON_LISTDATE",formattedDate);
+        donDetails.putExtra("DON_LAT",curDonation.getLat());
+        donDetails.putExtra("DON_LNG",curDonation.getLng());
+
         startActivity(donDetails);
 
     }

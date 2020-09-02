@@ -186,6 +186,8 @@ public class PendingFragment extends Fragment implements  DonationAdapter.OnDona
         donDetails.putExtra("DON_PIC",curDonation.getDonationPhoto());
         donDetails.putExtra("DON_STATUS",curDonation.getStatus());
         donDetails.putExtra("DON_LISTDATE",formattedDate);
+        donDetails.putExtra("DON_LAT",curDonation.getLat());
+        donDetails.putExtra("DON_LNG",curDonation.getLng());
 
         startActivity(donDetails);
 

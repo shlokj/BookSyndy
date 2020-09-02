@@ -119,7 +119,6 @@ Also, add a menu item for abandon. A volunteer cannot abandon more than 3 donati
                 android:id="@+id/donDist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="(distance)"
                 android:layout_marginTop="8dp"
                 android:textColor="@color/colorTextBlack"
                 android:fontFamily="@font/roboto_light"

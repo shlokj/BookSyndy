@@ -2,6 +2,10 @@ apply plugin: 'com.android.application'
 
 
 android {
+    lintOptions {
+        checkReleaseBuilds false
+    }
+
     signingConfigs {
         debug {
             storeFile file('C:\\Users\\shlok\\Documents\\Android KS\\BookSyndy_KS_new.jks')

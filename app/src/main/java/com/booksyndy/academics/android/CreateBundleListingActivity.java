@@ -172,7 +172,7 @@ public class CreateBundleListingActivity  extends AppCompatActivity { // alias: 
             mAuth = FirebaseAuth.getInstance();
             userId = mAuth.getCurrentUser().getPhoneNumber();
             mFirebaseStorage = FirebaseStorage.getInstance();
-            bookPhotosStorageReference = mFirebaseStorage.getReference().child("book_photos");
+            bookPhotosStorageReference = mFirebaseStorage.getReference().child("donation_photos");
 
             if (!Places.isInitialized()) {
                 Places.initialize(getApplicationContext(), getString(R.string.places_api_key));
@@ -276,7 +276,7 @@ public class CreateBundleListingActivity  extends AppCompatActivity { // alias: 
                     new SimpleDateFormat("yyyyMMdd_HHmmss",
                             Locale.getDefault()).format(new Date());
             // Get a reference to store file at book_photos/<FILENAME>
-            final StorageReference photoRef = bookPhotosStorageReference.child(timeStamp + "_" + selectedImageUri.getLastPathSegment());
+            final StorageReference photoRef = bookPhotosStorageReference.child(userId+"_"+ timeStamp + "_" + selectedImageUri.getLastPathSegment());
 
             // Upload file to Firebase Storage
             UploadTask uploadTask = photoRef.putBytes(compressedImage);

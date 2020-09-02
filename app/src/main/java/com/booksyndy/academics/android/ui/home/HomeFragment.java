@@ -105,7 +105,6 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 
     //TODO: progressbar for search
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
