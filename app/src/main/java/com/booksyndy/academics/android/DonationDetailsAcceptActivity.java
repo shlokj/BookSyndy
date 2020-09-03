@@ -5,11 +5,17 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Build;
 import android.location.Location;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,7 +54,7 @@ public class DonationDetailsAcceptActivity extends AppCompatActivity  {
     private final int MENU_CANCEL = 799;
     // view related vars
     private TextView titleView, descView, weightView, statusView,donDateView,distanceView, weightLabel, donorNameView, phoneView, addressView;
-    private ImageView donPicView;
+    private ImageView donPicView, copyAction, callAction, contactsAction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +92,11 @@ public class DonationDetailsAcceptActivity extends AppCompatActivity  {
         donorNameLL = findViewById(R.id.donorNameLL);
         donorPhoneLL = findViewById(R.id.donorPhoneLL);
         donorAddressLL = findViewById(R.id.donAddrLL);
+
+        copyAction = findViewById(R.id.copyDPhone);
+        callAction = findViewById(R.id.callDonor);
+        contactsAction = findViewById(R.id.addDContacts);
+
 
 
         Glide.with(donPicView.getContext())
@@ -125,6 +136,34 @@ public class DonationDetailsAcceptActivity extends AppCompatActivity  {
             donorNameView.setText(donorName);
             phoneView.setText(donorPhone);
             addressView.setText(donorAddress);
+
+            copyAction.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("book donor phone", donorPhone);
+                    clipboard.setPrimaryClip(clip);
+                    Toast.makeText(DonationDetailsAcceptActivity.this, "Phone number copied", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            callAction.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent dial = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", donorPhone,null));
+                    startActivity(dial);
+                }
+            });
+
+            contactsAction.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent addContact = new Intent(ContactsContract.Intents.Insert.ACTION);
+                    addContact.setType(ContactsContract.RawContacts.CONTENT_TYPE);
+                    addContact.putExtra(ContactsContract.Intents.Insert.PHONE, donorPhone).putExtra(ContactsContract.Intents.Insert.PHONE_TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE).putExtra(ContactsContract.Intents.Insert.NAME, donorName);
+                    startActivity(addContact);
+                }
+            });
 
         }
 

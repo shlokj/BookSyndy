@@ -268,7 +268,7 @@ public class MyDonationsActivity extends AppCompatActivity implements DonationAd
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        if (volStat==1 || volStat==2) {
+        if (volStat==1 || volStat==2 || volStat ==-1) {
             getMenuInflater().inflate(R.menu.menu_donation_volreg, menu);
         }
         else {
@@ -288,10 +288,39 @@ public class MyDonationsActivity extends AppCompatActivity implements DonationAd
                 onBackPressed();
                 break;
             case R.id.openVolDash:
-                startActivity(new Intent(MyDonationsActivity.this,VolunteerDashboardActivity.class));
+                if (volStat==1) {
+                    showVolunteerApprovalStatus("Your request is still under review. Please check back later.",false);
+                }
+                else if (volStat==-1) {
+                    showVolunteerApprovalStatus("Sorry, we were unable to find a volunteering spot for you. You can try applying again later.",true);
+                }
+                else if (volStat==2) {
+                    startActivity(new Intent(MyDonationsActivity.this,VolunteerDashboardActivity.class));
+                }
                 break;
         }
         return true;
+    }
+
+    public void showVolunteerApprovalStatus(String message, boolean allowApply) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MyDonationsActivity.this);
+        builder.setTitle("Approval status");
+        builder.setMessage(message);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        if (allowApply) {
+            builder.setPositiveButton("Apply again", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    startActivity(new Intent(MyDonationsActivity.this,GetVolunteerAddressActivity.class));
+                }
+            });
+        }
+        builder.show();
     }
 
 }

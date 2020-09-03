@@ -159,7 +159,7 @@ public class User {
     public void setVolunteerStatus(int volunteerStatus) {
         this.volunteerStatus = volunteerStatus;
     }
-    // 0: never signed up, 1: signed up but not approved, 2: signed up, approved, active, 3: signed up earlier but is no longer a volunteer
+    // 0: never signed up, 1: signed up but not approved, 2: signed up, approved, active, 3: signed up earlier but is no longer a volunteer, -1: rejected
     public int getVolunteerStatus() {
         return volunteerStatus;
     }
