@@ -198,16 +198,13 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             public void onRefresh() {
                 //code to reload with new books
                 if (checkConnection(getContext())) {
-                    if (mSwipeRefreshLayout.isRefreshing()) {
-                        mSwipeRefreshLayout.setRefreshing(false);
-                    }
-//                    refreshHome();
+                    //                    refreshHome();
 //                    sortBooks(homeViewModel.getFilters());
                 } else {
                     showSnackbar("Check your internet!");
-                    if (mSwipeRefreshLayout.isRefreshing()) {
-                        mSwipeRefreshLayout.setRefreshing(false);
-                    }
+                }
+                if (mSwipeRefreshLayout.isRefreshing()) {
+                    mSwipeRefreshLayout.setRefreshing(false);
                 }
             }
         });
@@ -234,7 +231,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
     }
 
     private void loadMoreBooks() {
-        Log.d(TAG, "loadMoreBooks: called");
+        //Log.d(TAG, "loadMoreBooks: called");
         if (lastVisibleItem != null) {
             mQuery = mQuery.startAfter(lastVisibleItem).limit(5);
         }
@@ -308,7 +305,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
 
 
     private void initFireStore() {
-        Log.d(TAG, "initFireStore: entered");
+       // Log.d(TAG, "initFireStore: entered");
         if (mSwipeRefreshLayout != null && !mSwipeRefreshLayout.isRefreshing())
             mSwipeRefreshLayout.setRefreshing(true);
 
@@ -498,7 +495,7 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                 noFilter = false;
 
                 List<Integer> fBoards = filters.getBookBoard();
-
+                Log.d(TAG, "onFilter Boards selected: "+fBoards.get(0));
                 fQuery = fQuery.whereEqualTo("boardNumber", fBoards.get(0));
 
                 boards = "board: ";
@@ -587,18 +584,16 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
         //price
         if (filters.hasPrice()) {
             noFilter = false;
-
             fQuery = fQuery.whereEqualTo("bookPrice", 0);
         }
 
         fQuery = fQuery.orderBy("createdAt", Query.Direction.DESCENDING);
 
+        homeViewModel.setFilters(filters);
         if (noFilter) {
-            homeViewModel.setFilters(filters);
             refreshHome();
             sortBooks(filters);
         } else {
-            homeViewModel.setFilters(filters);
 
             mQuery = fQuery;
             mQuery.limit(10).addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -641,6 +636,9 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
                 bookListFull.clear();
                 bookListFull.addAll(bookList);
 //                mAdapter.setBookList(filterList);
+            }
+            else{
+                showSnackbar("Error getting your location");
             }
 
         }

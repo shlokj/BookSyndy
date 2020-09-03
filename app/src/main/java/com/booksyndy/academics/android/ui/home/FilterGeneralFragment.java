@@ -108,13 +108,13 @@ public class FilterGeneralFragment extends Fragment implements View.OnClickListe
         filterTextbook.setChecked(false);
         filterNotes.setChecked(false);
         distSpinner.setSelection(distAdapter.getCount() - 2);
-        sortBySpinner.setSelection(1);
+        //sortBySpinner.setSelection(1);
 
     }
 
     public void onFilterApplied() {
 
-        Log.d(TAG, "onFilterApplied: search clicked:");
+       // Log.d(TAG, "onFilterApplied: search clicked:");
         if (mOnFilterSelectedListener != null)
             mOnFilterSelectedListener.onFilter(getFilters());
         if (parentFragment != null)
