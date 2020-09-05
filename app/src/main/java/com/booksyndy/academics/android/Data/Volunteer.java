@@ -3,7 +3,7 @@ package com.booksyndy.academics.android.Data;
 public class Volunteer {
 
     private String name, phone, hnbn, street, pincode;
-    private int totalBooks,radiusPreference;
+    private int totalBooks,radiusPreference = 5;
     private double lat, lng;
     private long createdAt;
 

@@ -290,7 +290,7 @@ public class MyDonationDetailsActivity extends AppCompatActivity implements Even
                                                     }).addOnFailureListener(new OnFailureListener() {
                                                 @Override
                                                 public void onFailure(@NonNull Exception e) {
-                                                    Log.d(TAG, "onFailure:cancelAcceptedDonation ",e);
+                                                    //Log.d(TAG, "onFailure:cancelAcceptedDonation ",e);
                                                     sProgressDialog.dismiss();
                                                     Toast.makeText(getApplicationContext(), "Failed to cancel. Please try again after some time.", Toast.LENGTH_SHORT).show();
                                                 }
@@ -299,7 +299,7 @@ public class MyDonationDetailsActivity extends AppCompatActivity implements Even
                                     }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Log.d(TAG, "onFailure:cancelAcceptedDonation ",e);
+                                    //Log.d(TAG, "onFailure:cancelAcceptedDonation ",e);
                                     sProgressDialog.dismiss();
                                     Toast.makeText(getApplicationContext(), "Failed to cancel. Please try again after some time", Toast.LENGTH_SHORT).show();
                                 }
@@ -323,7 +323,7 @@ public class MyDonationDetailsActivity extends AppCompatActivity implements Even
                                                     }).addOnFailureListener(new OnFailureListener() {
                                                 @Override
                                                 public void onFailure(@NonNull Exception e) {
-                                                    Log.d(TAG, "onFailure:cancelAcceptedDonation ",e);
+                                                   // Log.d(TAG, "onFailure:cancelAcceptedDonation ",e);
                                                     sProgressDialog.dismiss();
                                                     Toast.makeText(getApplicationContext(), "Failed to cancel. Please try again after some time.", Toast.LENGTH_SHORT).show();
                                                 }
@@ -332,7 +332,7 @@ public class MyDonationDetailsActivity extends AppCompatActivity implements Even
                                     }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Log.d(TAG, "onFailure:cancelAcceptedDonation ",e);
+                                   // Log.d(TAG, "onFailure:cancelAcceptedDonation ",e);
                                     sProgressDialog.dismiss();
                                     Toast.makeText(getApplicationContext(), "Failed to cancel. Please try again after some time", Toast.LENGTH_SHORT).show();
                                 }

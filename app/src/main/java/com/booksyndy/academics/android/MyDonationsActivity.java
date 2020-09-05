@@ -35,6 +35,7 @@ import com.google.firebase.firestore.Query;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
@@ -110,7 +111,7 @@ public class MyDonationsActivity extends AppCompatActivity implements DonationAd
                                         isValid = false;
                                     }
 
-                                    SimpleDateFormat currentMonthFormat = new SimpleDateFormat("MMM_yyyy");
+                                    SimpleDateFormat currentMonthFormat = new SimpleDateFormat("MMM_yyyy", Locale.getDefault());
                                     String currentMonth =  currentMonthFormat.format(new Date());
                                     if(result.get("donMonth") != null && currentMonth.equalsIgnoreCase(result.get("donMonth").toString()) && result.get("donCount") != null && Integer.parseInt(result.get("donCount").toString()) > 3){
                                         isValid = false;
