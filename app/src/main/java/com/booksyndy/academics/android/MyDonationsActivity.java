@@ -6,10 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,6 +33,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Map;
+
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
@@ -51,6 +57,7 @@ public class MyDonationsActivity extends AppCompatActivity implements DonationAd
     private SharedPreferences.Editor editor;
     private FirebaseFirestore mFirestore;
     private Query mQuery;
+    private String curUserPhone;
 
     private int volStat;
 
@@ -65,8 +72,8 @@ public class MyDonationsActivity extends AppCompatActivity implements DonationAd
         userPref = this.getSharedPreferences(getString(R.string.UserPref), 0);
 
         volStat = userPref.getInt(getString(R.string.p_uservolstatus),0);
-
-        Toast.makeText(this, volStat+"", Toast.LENGTH_SHORT).show();
+        curUserPhone = userPref.getString(getString(R.string.p_userphone),null);
+        //Toast.makeText(this, volStat+"", Toast.LENGTH_SHORT).show();
         recyclerView = findViewById(R.id.donation_recycler_view);
         mEmptyView = findViewById(R.id.view_empty_d);
         optionsList = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1);
@@ -78,7 +85,81 @@ public class MyDonationsActivity extends AppCompatActivity implements DonationAd
         donateFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MyDonationsActivity.this, CreateBundleListingActivity.class));
+
+                final ProgressDialog progressDialog = new ProgressDialog(MyDonationsActivity.this);
+                progressDialog.setTitle("Verifying User");
+                progressDialog.setMessage("please wait...");
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+
+                DocumentReference donReference = mFirestore.collection("bannedUsers").document(curUserPhone);
+
+                donReference.get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                try{
+
+                                    if(progressDialog.isShowing())
+                                        progressDialog.dismiss();
+                                boolean isValid = true;
+                                String message = "User Banned by Admin";
+                                if(documentSnapshot != null && documentSnapshot.exists()){
+                                    Map<String, Object> result = documentSnapshot.getData();
+                                    if(result.get("isBanned") != null && Boolean.parseBoolean(result.get("isBanned").toString())){
+                                        isValid = false;
+                                    }
+
+                                    SimpleDateFormat currentMonthFormat = new SimpleDateFormat("MMM_yyyy");
+                                    String currentMonth =  currentMonthFormat.format(new Date());
+                                    if(result.get("donMonth") != null && currentMonth.equalsIgnoreCase(result.get("donMonth").toString()) && result.get("donCount") != null && Integer.parseInt(result.get("donCount").toString()) > 3){
+                                        isValid = false;
+                                        message = "Donation Banned for this Month.";
+                                    }
+
+                                    if(isValid){
+                                        startActivity(new Intent(MyDonationsActivity.this, CreateBundleListingActivity.class));
+                                    }
+                                    else{
+
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(MyDonationsActivity.this);
+                                        builder.setTitle("Donation Banned");
+                                        builder.setMessage(message);
+
+
+                                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                            }
+                                        });
+
+                                        builder.show();
+                                    }
+
+                                }
+                                else{
+                                    startActivity(new Intent(MyDonationsActivity.this, CreateBundleListingActivity.class));
+                                }
+
+                                }
+                                catch (Exception e){
+                                    if(progressDialog.isShowing())
+                                    progressDialog.dismiss();
+                                    Log.d(TAG, "ondonateActivityCheckFailed ",e);
+                                    Toast.makeText(getApplicationContext(), "Failed to open Donate Page. Please try again after some time.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                if(progressDialog.isShowing())
+                                    progressDialog.dismiss();
+                                Toast.makeText(getApplicationContext(), "Failed to open Donate Page. Please try again after some time.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
             }
         });
 
@@ -209,6 +290,7 @@ public class MyDonationsActivity extends AppCompatActivity implements DonationAd
        donDetails.putExtra("DON_DESC",curDonation.getDonationDescription());
        donDetails.putExtra("DON_PIC",curDonation.getDonationPhoto());
        donDetails.putExtra("DON_STATUS",curDonation.getStatus());
+        donDetails.putExtra("DON_OWNER",curDonation.getUserId());
 
        startActivity(donDetails);
 
