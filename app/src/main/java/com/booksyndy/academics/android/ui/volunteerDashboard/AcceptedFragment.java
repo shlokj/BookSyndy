@@ -30,6 +30,7 @@ import com.google.firebase.firestore.Query;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -154,7 +155,7 @@ public class AcceptedFragment extends Fragment implements  DonationAdapter.OnDon
         Donation curDonation = snapshot.toObject(Donation.class);
 
         Intent donDetails = new Intent(getActivity(), DonationDetailsAcceptActivity.class);
-        donDetails.putExtra("DON_DOC_NAME",don_id);
+
         try {
             donDetails.putExtra("DON_WEIGHT", curDonation.getApproxWeight());
         }
@@ -165,8 +166,8 @@ public class AcceptedFragment extends Fragment implements  DonationAdapter.OnDon
         String donTS = curDonation.getDonationListingTime();
 
 
-        DateFormat originalFormat = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
-        DateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat originalFormat = new SimpleDateFormat("yyyy MM dd HH:mm:ss", Locale.getDefault());
+        DateFormat targetFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         Date date = new Date();
         try {
             date = originalFormat.parse(donTS);
@@ -178,6 +179,8 @@ public class AcceptedFragment extends Fragment implements  DonationAdapter.OnDon
         String formattedDate = targetFormat.format(date);
 
 
+
+        donDetails.putExtra("DON_DOC_NAME",don_id);
         donDetails.putExtra("DON_TITLE",curDonation.getDonationName());
         donDetails.putExtra("DON_DESC",curDonation.getDonationDescription());
         donDetails.putExtra("DON_PIC",curDonation.getDonationPhoto());

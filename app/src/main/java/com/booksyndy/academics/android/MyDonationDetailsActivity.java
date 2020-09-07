@@ -65,8 +65,8 @@ public class MyDonationDetailsActivity extends AppCompatActivity implements Even
         donTitle = getIntent().getStringExtra("DON_TITLE");
         donDesc = getIntent().getStringExtra("DON_DESC");
         donPic = getIntent().getStringExtra("DON_PIC");
-        donWeight = getIntent().getIntExtra("DON_WEIGHT",0);
-        donStatus = getIntent().getIntExtra("DON_STATUS",0);
+        donWeight = getIntent().getIntExtra("DON_WEIGHT", 0);
+        donStatus = getIntent().getIntExtra("DON_STATUS", 0);
         donationOwner = getIntent().getStringExtra("DON_OWNER");
 
         initFireStore();
@@ -86,41 +86,34 @@ public class MyDonationDetailsActivity extends AppCompatActivity implements Even
         titleView.setText(donTitle);
         descView.setText(donDesc);
 
-        if (donStatus==0) {
+        if (donStatus == 0) {
             statusView.append("Incomplete/rejected");
 //            menu.add(0, MENU_CANCEL, Menu.FIRST, "cancel").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 
-        }
-        else if (donStatus==1) {
+        } else if (donStatus == 1) {
             statusView.append("Submitted, waiting for acceptance");
 //            menu.add(0, MENU_CANCEL, Menu.FIRST, "cancel").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-        }
-        else if (donStatus==2) {
+        } else if (donStatus == 2) {
             statusView.append("Accepted by volunteer");
-        }
-        else if (donStatus==3) {
+        } else if (donStatus == 3) {
             statusView.append("Completed and received");
-        }
-        else {
+        } else {
             statusView.setText("");
         }
 
-        if (donWeight>0) {
+        if (donWeight > 0) {
             weightView.setText(donWeight + " kgs");
-        }
-        else {
+        } else {
             weightView.setVisibility(View.INVISIBLE);
         }
     }
 
 
-
     @Override
     public boolean onSupportNavigateUp() {
-        try{
+        try {
             this.finish();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
 
         }
         return true;
@@ -130,7 +123,7 @@ public class MyDonationDetailsActivity extends AppCompatActivity implements Even
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
 
-        if (donStatus==3 ) {
+        if (donStatus == 3) {
             menu.clear();
         }
 
@@ -174,8 +167,8 @@ public class MyDonationDetailsActivity extends AppCompatActivity implements Even
         }
     }
 
-    private void populateDonationDetails(Donation donation){
-        if(donation == null){
+    private void populateDonationDetails(Donation donation) {
+        if (donation == null) {
             Log.d(TAG, "populateDonationDetails: param error");
             return;
         }
@@ -190,7 +183,7 @@ public class MyDonationDetailsActivity extends AppCompatActivity implements Even
                 AlertDialog.Builder cBuilder = new AlertDialog.Builder(MyDonationDetailsActivity.this);
                 cBuilder.setTitle("Cancel donation request");
                 // cancel when status is submitted:1
-                if(donStatus == 1){
+                if (donStatus == 1) {
                     cBuilder.setMessage("Are you sure you want to cancel this donation request?");
                     cBuilder.setPositiveButton("No, don't cancel", new DialogInterface.OnClickListener() {
                         @Override
@@ -205,7 +198,7 @@ public class MyDonationDetailsActivity extends AppCompatActivity implements Even
                     });
                 }
                 // cancel when accepted by volunteer
-                else{
+                else {
                     cBuilder.setMessage("Volunteer has accepted your request. Are you sure you want to cancel this donation request?");
                     cBuilder.setPositiveButton("No, don't cancel", new DialogInterface.OnClickListener() {
                         @Override
@@ -262,21 +255,21 @@ public class MyDonationDetailsActivity extends AppCompatActivity implements Even
         sProgressDialog.show();
 
 
-       final DocumentReference donReference = mFirestore.collection("donations").document(don_id);
+        final DocumentReference donReference = mFirestore.collection("donations").document(don_id);
 
-       final DocumentReference cancelRef = mFirestore.collection("bannedUsers").document(donationOwner);
+        final DocumentReference cancelRef = mFirestore.collection("bannedUsers").document(donationOwner);
 
         cancelRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if(documentSnapshot == null || !documentSnapshot.exists()) {
+                        if (documentSnapshot == null || !documentSnapshot.exists()) {
                             // record the cancellation
                             SimpleDateFormat currentMonthFormat = new SimpleDateFormat("MMM_yyyy", Locale.getDefault());
-                            String currentMonth =  currentMonthFormat.format(new Date());
-                            HashMap<String,Object> o = new HashMap<>();
-                            o.put("donMonth",currentMonth);
-                            o.put("donCount",1);
+                            String currentMonth = currentMonthFormat.format(new Date());
+                            HashMap<String, Object> o = new HashMap<>();
+                            o.put("donMonth", currentMonth);
+                            o.put("donCount", 1);
                             cancelRef.set(o)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
@@ -305,38 +298,71 @@ public class MyDonationDetailsActivity extends AppCompatActivity implements Even
                                 }
                             });
 
-                        }
-                        else{
+                        } else {
                             // record the cancellation
+                            Map<String, Object> result = documentSnapshot.getData();
                             SimpleDateFormat currentMonthFormat = new SimpleDateFormat("MMM_yyyy", Locale.getDefault());
-                            String currentMonth =  currentMonthFormat.format(new Date());
-                            cancelRef.update("donMonth", currentMonth,"donCount", FieldValue.increment(1))
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            donReference.update("status", 0)
-                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                        @Override
-                                                        public void onSuccess(Void aVoid) {
-                                                            startActivity(new Intent(MyDonationDetailsActivity.this, MyDonationsActivity.class));
-                                                        }
-                                                    }).addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                   // Log.d(TAG, "onFailure:cancelAcceptedDonation ",e);
-                                                    sProgressDialog.dismiss();
-                                                    Toast.makeText(getApplicationContext(), "Failed to cancel. Please try again after some time.", Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                   // Log.d(TAG, "onFailure:cancelAcceptedDonation ",e);
-                                    sProgressDialog.dismiss();
-                                    Toast.makeText(getApplicationContext(), "Failed to cancel. Please try again after some time", Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                            String currentMonth = currentMonthFormat.format(new Date());
+
+                            //check for new/current month
+                            if (result.get("volMonth") != null && !currentMonth.equalsIgnoreCase(result.get("volMonth").toString())) {
+
+                                cancelRef.update("donMonth", currentMonth, "donCount", 1)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                donReference.update("status", 0)
+                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                            @Override
+                                                            public void onSuccess(Void aVoid) {
+                                                                startActivity(new Intent(MyDonationDetailsActivity.this, MyDonationsActivity.class));
+                                                            }
+                                                        }).addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        // Log.d(TAG, "onFailure:cancelAcceptedDonation ",e);
+                                                        sProgressDialog.dismiss();
+                                                        Toast.makeText(getApplicationContext(), "Failed to cancel. Please try again after some time.", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        // Log.d(TAG, "onFailure:cancelAcceptedDonation ",e);
+                                        sProgressDialog.dismiss();
+                                        Toast.makeText(getApplicationContext(), "Failed to cancel. Please try again after some time", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            } else {
+                                cancelRef.update("donMonth", currentMonth, "donCount", FieldValue.increment(1))
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                donReference.update("status", 0)
+                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                            @Override
+                                                            public void onSuccess(Void aVoid) {
+                                                                startActivity(new Intent(MyDonationDetailsActivity.this, MyDonationsActivity.class));
+                                                            }
+                                                        }).addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        // Log.d(TAG, "onFailure:cancelAcceptedDonation ",e);
+                                                        sProgressDialog.dismiss();
+                                                        Toast.makeText(getApplicationContext(), "Failed to cancel. Please try again after some time.", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        // Log.d(TAG, "onFailure:cancelAcceptedDonation ",e);
+                                        sProgressDialog.dismiss();
+                                        Toast.makeText(getApplicationContext(), "Failed to cancel. Please try again after some time", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
                         }
                     }
                 })
@@ -345,12 +371,8 @@ public class MyDonationDetailsActivity extends AppCompatActivity implements Even
                     public void onFailure(@NonNull Exception e) {
                         sProgressDialog.dismiss();
                         Toast.makeText(getApplicationContext(), "Failed to cancel. Please try again after some time", Toast.LENGTH_SHORT).show();
-
                     }
                 });
-
-
-
 
     }
 }

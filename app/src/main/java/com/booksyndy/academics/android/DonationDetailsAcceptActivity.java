@@ -37,6 +37,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -64,7 +65,7 @@ public class DonationDetailsAcceptActivity extends AppCompatActivity {
     // view related vars
     private TextView titleView, descView, weightView, statusView, donDateView, distanceView, weightLabel, donorNameView, phoneView, addressView;
     private ImageView donPicView, copyAction, callAction, contactsAction;
-    private boolean newEntry = true;
+    private boolean newEntry = true, resetCounter = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +74,7 @@ public class DonationDetailsAcceptActivity extends AppCompatActivity {
 
         getSupportActionBar().setTitle("Donation details");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         don_id = getIntent().getStringExtra("DON_DOC_NAME");
         donTitle = getIntent().getStringExtra("DON_TITLE");
         donDesc = getIntent().getStringExtra("DON_DESC");
@@ -191,7 +193,7 @@ public class DonationDetailsAcceptActivity extends AppCompatActivity {
                         .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                if(sProgressDialog.isShowing())
+                                if (sProgressDialog.isShowing())
                                     sProgressDialog.dismiss();
 
                                 try {
@@ -284,25 +286,20 @@ public class DonationDetailsAcceptActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
 
 
-                        final ProgressDialog sProgressDialog = new ProgressDialog(DonationDetailsAcceptActivity.this);
-                        sProgressDialog.setMessage("Just a moment...");
-                        sProgressDialog.setTitle("Processing");
-                        sProgressDialog.setCancelable(false);
-                        sProgressDialog.show();
+                        Intent logBookCollection = new Intent(DonationDetailsAcceptActivity.this,LogBookCollectionActivity.class);
+                        logBookCollection.putExtra("DON_DOC_NAME",don_id);
+                        logBookCollection.putExtra("CUR_USER_NAME",curUserName);
+                        logBookCollection.putExtra("CUR_USER_PHONE",curUserPhone);
+//                        logBookCollection.putExtra("DON_TITLE",donTitle);
+//                        logBookCollection.putExtra("DON_DESC",donDesc);
+//                        logBookCollection.putExtra("DON_PIC",donPic);
+//                        logBookCollection.putExtra("DON_STATUS",donStatus);
+//                        logBookCollection.putExtra("DON_DONORNAME",donorName);
+//                        logBookCollection.putExtra("DON_PHONE",donorPhone);
+//                        logBookCollection.putExtra("DON_ADDRESS",donorAddress);
+//                        logBookCollection.putExtra("DON_LISTDATE",listDate);
 
-                        donationRef.update("acceptedByName", curUserName, "acceptedByPhone", curUserPhone, "status", 3)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        startActivity(new Intent(DonationDetailsAcceptActivity.this, VolunteerDashboardActivity.class));
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                sProgressDialog.dismiss();
-                                Toast.makeText(getApplicationContext(), "Failed to submit request. Please try again after some time.", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        startActivity(logBookCollection);
                     }
                 });
                 cBuilder.show();
@@ -372,9 +369,17 @@ public class DonationDetailsAcceptActivity extends AppCompatActivity {
 
                                     SimpleDateFormat currentMonthFormat = new SimpleDateFormat("MMM_yyyy", Locale.getDefault());
                                     String currentMonth = currentMonthFormat.format(new Date());
+                                    //check for cancel count for current month
                                     if (result.get("volMonth") != null && currentMonth.equalsIgnoreCase(result.get("volMonth").toString()) && result.get("volCount") != null && Integer.parseInt(result.get("volCount").toString()) == 3) {
                                         flag = true;
                                     }
+
+                                    //check for new/current month
+                                    if (result.get("volMonth") != null && !currentMonth.equalsIgnoreCase(result.get("volMonth").toString())) {
+                                        resetCounter = true;
+                                    }
+
+
                                 }
 
 
@@ -464,21 +469,40 @@ public class DonationDetailsAcceptActivity extends AppCompatActivity {
 
                             } else {
                                 // record the cancellation
-                                cancelRef.update("volMonth", currentMonth, "volCount", FieldValue.increment(1))
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                startActivity(new Intent(DonationDetailsAcceptActivity.this, VolunteerDashboardActivity.class));
-                                            }
-                                        }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        //Log.d(TAG, "onFailure:cancelAcceptedDonation ",e);
-                                        if (sProgressDialog.isShowing())
-                                            sProgressDialog.dismiss();
-                                        Toast.makeText(getApplicationContext(), "Failed to submit request. Please try again after some time.", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
+                                if (resetCounter) {
+                                    cancelRef.update("volMonth", currentMonth, "volCount", 1)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    startActivity(new Intent(DonationDetailsAcceptActivity.this, VolunteerDashboardActivity.class));
+                                                }
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            //Log.d(TAG, "onFailure:cancelAcceptedDonation ",e);
+                                            if (sProgressDialog.isShowing())
+                                                sProgressDialog.dismiss();
+                                            Toast.makeText(getApplicationContext(), "Failed to submit request. Please try again after some time.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                } else {
+                                    cancelRef.update("volMonth", currentMonth, "volCount", FieldValue.increment(1))
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    startActivity(new Intent(DonationDetailsAcceptActivity.this, VolunteerDashboardActivity.class));
+                                                }
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            //Log.d(TAG, "onFailure:cancelAcceptedDonation ",e);
+                                            if (sProgressDialog.isShowing())
+                                                sProgressDialog.dismiss();
+                                            Toast.makeText(getApplicationContext(), "Failed to submit request. Please try again after some time.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+
                             }
 
                         }
