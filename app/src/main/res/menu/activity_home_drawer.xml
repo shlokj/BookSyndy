@@ -37,6 +37,12 @@
             android:title="Donate books" />
 
         <item
+            android:id="@+id/nav_volDashboard"
+            android:icon="@drawable/ic_volunteer_dashboard_icon_black"
+            android:title="Volunteer Dashboard" />
+
+
+        <item
             android:id="@+id/nav_help"
             android:icon="@drawable/ic_help_outline_24px"
             android:title="@string/help" />

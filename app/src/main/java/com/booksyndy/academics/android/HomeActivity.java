@@ -110,12 +110,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_requests, R.id.nav_booklist, R.id.nav_chats,
-                R.id.nav_starred, R.id.nav_switchmode, R.id.nav_donate, R.id.nav_help, R.id.nav_share, R.id.nav_signout)
+                R.id.nav_starred, R.id.nav_switchmode, R.id.nav_donate,R.id.nav_volDashboard, R.id.nav_help, R.id.nav_share, R.id.nav_signout)
                 .setDrawerLayout(drawer)
                 .build();
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+        checkVolunteer();
         View headerView = navigationView.getHeaderView(0);
         navUsername = headerView.findViewById(R.id.user_title);
         navUserphone = headerView.findViewById(R.id.user_phone);
@@ -205,6 +206,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         }
                     }
                 });
+
+    }
+
+    private void checkVolunteer() {
+        if(userPref.getInt(getString(R.string.p_uservolstatus),0) != 2){
+            navigationView = (NavigationView) findViewById(R.id.nav_view);
+            Menu nav_Menu = navigationView.getMenu();
+            nav_Menu.findItem(R.id.nav_volDashboard).setVisible(false);
+        }
 
     }
 

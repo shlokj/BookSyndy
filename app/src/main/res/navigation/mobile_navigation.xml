@@ -47,6 +47,13 @@
         android:label="Donate books"
         tools:layout="@layout/fragment_donate_initial" />
 
+    <activity
+        android:id="@+id/nav_volDashboard"
+        android:name="com.booksyndy.academics.android.VolunteerDashboardActivity"
+        android:label="Volunteer Dashboard"
+        tools:layout="@layout/activity_volunteer_dashboard"
+         />
+
     <fragment
         android:id="@+id/nav_help"
         android:name="com.booksyndy.academics.android.ui.help.HelpFragment"
