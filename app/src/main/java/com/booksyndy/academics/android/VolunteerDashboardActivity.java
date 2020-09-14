@@ -8,8 +8,12 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.booksyndy.academics.android.ui.volunteerDashboard.PageAdapter;
@@ -23,6 +27,7 @@ public class VolunteerDashboardActivity extends AppCompatActivity implements Tab
     private TabLayout mTabLayout;
     private TabItem tab_unaccepted,tab_accepted;
     private com.booksyndy.academics.android.ui.volunteerDashboard.PageAdapter mPageAdapter;
+    private RadioGroup rRadioGroup;
 
 
     @Override
@@ -70,27 +75,80 @@ public class VolunteerDashboardActivity extends AppCompatActivity implements Tab
         switch (item.getItemId()) {
             case R.id.setRadLoc:
                 // TODO: show dialog with different radii, neutral button will be to change the location. currently takes user to change address class (for testing)
-
-                startActivity(new Intent(VolunteerDashboardActivity.this,ChangeVolunteerAddressActivity.class));
-                break;
-            case R.id.stopVolunteering:
-//                Toast.makeText(this, "stop clicked", Toast.LENGTH_SHORT).show();
                 AlertDialog.Builder builder = new AlertDialog.Builder(VolunteerDashboardActivity.this);
-                builder.setTitle("Terminate volunteering");
-                builder.setMessage("Are you sure you want to resign as a volunteer?");
-                builder.setPositiveButton("No, stay", new DialogInterface.OnClickListener() {
+//                builder.setTitle("Change radius preference");
+                builder.setView(R.layout.fragment_choose_radius);
+
+                AlertDialog rad = builder.create();
+
+                rRadioGroup = (RadioGroup) rad.findViewById(R.id.radiusButtonList);
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        int selRadOpt=0;
+                        switch (selRadOpt) {
+                            case R.id.km1:
+
+                                break;
+                            case R.id.km2:
+
+                                break;
+                            case R.id.km3:
+
+                                break;
+                            case R.id.km4:
+
+                                break;
+                            case R.id.km5:
+
+                                break;
+                            case R.id.km7:
+
+                                break;
+                            case R.id.km10:
+
+                                break;
+                        }
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
                     }
                 });
-                builder.setNegativeButton("Yes, terminate", new DialogInterface.OnClickListener() {
+                builder.setNeutralButton("Change Address", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        startActivity(new Intent(VolunteerDashboardActivity.this,ChangeVolunteerAddressActivity.class));
+                    }
+                });
+
+
+                builder.show();
+                rRadioGroup = rad.findViewById(R.id.radiusButtonList);
+
+
+                break;
+            case R.id.stopVolunteering:
+//                Toast.makeText(this, "stop clicked", Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder sBuilder = new AlertDialog.Builder(VolunteerDashboardActivity.this);
+                sBuilder.setTitle("Terminate volunteering");
+                sBuilder.setMessage("Are you sure you want to resign as a volunteer?");
+                sBuilder.setPositiveButton("No, stay", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                sBuilder.setNegativeButton("Yes, terminate", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         startActivity(new Intent(VolunteerDashboardActivity.this,StopVolunteeringActivity.class));
                     }
                 });
-                builder.show();
+                sBuilder.show();
                 break;
             case R.id.requestPickup:
                 startActivity(new Intent(VolunteerDashboardActivity.this,RequestBookCollectionActivity.class));

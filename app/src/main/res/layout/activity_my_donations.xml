@@ -62,6 +62,7 @@
         <TextView
             android:id="@+id/nothinghereTV_d"
             style="@style/AppTheme.Body1"
+            android:layout_margin="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_light"

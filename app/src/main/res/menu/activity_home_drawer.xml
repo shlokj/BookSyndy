@@ -38,7 +38,7 @@
 
         <item
             android:id="@+id/nav_volDashboard"
-            android:icon="@drawable/ic_volunteer_dashboard_icon_black"
+            android:icon="@drawable/ic_volunteer_dashboard"
             android:title="Volunteer Dashboard" />
 
 

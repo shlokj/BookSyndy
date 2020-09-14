@@ -8,8 +8,8 @@
         android:id="@+id/radiusButtonList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/aboutChRadTV"
         android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
         android:layout_marginStart="24dp">
 
         <RadioButton
@@ -77,16 +77,16 @@
     </RadioGroup>
 
     <TextView
-        android:id="@+id/gradeQuestionTV"
+        android:id="@+id/aboutChRadTV"
+        android:layout_margin="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:fontFamily="@font/roboto_light"
         android:text="Choose a radius you're comfortable collecting books within."
-        android:layout_margin="16dp"
-        android:textSize="20sp"
-        android:layout_alignParentStart="true"
-        android:layout_above="@id/radiusButtonList"
-        android:textColor="@color/colorTextBlack"/>
+        android:textColor="@color/colorTextBlack"
+        android:textSize="20sp" />
 
 
 </RelativeLayout>
