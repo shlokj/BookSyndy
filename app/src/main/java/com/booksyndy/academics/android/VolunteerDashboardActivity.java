@@ -5,9 +5,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,8 +19,14 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.booksyndy.academics.android.ui.volunteerDashboard.PageAdapter;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.libraries.places.api.Places;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 
 public class VolunteerDashboardActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener {
 
@@ -28,6 +36,7 @@ public class VolunteerDashboardActivity extends AppCompatActivity implements Tab
     private TabItem tab_unaccepted,tab_accepted;
     private com.booksyndy.academics.android.ui.volunteerDashboard.PageAdapter mPageAdapter;
     private RadioGroup rRadioGroup;
+    private int newValue;
 
 
     @Override
@@ -53,8 +62,6 @@ public class VolunteerDashboardActivity extends AppCompatActivity implements Tab
 
 
 
-
-
     @Override
     public void onBackPressed() {
         Intent homeActivity = new Intent(VolunteerDashboardActivity.this, HomeActivity.class);
@@ -66,7 +73,6 @@ public class VolunteerDashboardActivity extends AppCompatActivity implements Tab
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_volunteer_dashboard, menu);
-
         return true;
     }
 
@@ -76,39 +82,47 @@ public class VolunteerDashboardActivity extends AppCompatActivity implements Tab
             case R.id.setRadLoc:
                 // TODO: show dialog with different radii, neutral button will be to change the location. currently takes user to change address class (for testing)
                 AlertDialog.Builder builder = new AlertDialog.Builder(VolunteerDashboardActivity.this);
-//                builder.setTitle("Change radius preference");
-                builder.setView(R.layout.fragment_choose_radius);
+           builder.setTitle("You're comfortable collecting books within");
+//                builder.setView(R.layout.fragment_choose_radius);
+            String[] radiusList = {"1 Km","2 Km","3 Km","4 Km","5 Km","7 Km","10 Km"};
 
-                AlertDialog rad = builder.create();
+                int oldValue = 4; // cow
 
-                rRadioGroup = (RadioGroup) rad.findViewById(R.id.radiusButtonList);
+                builder.setSingleChoiceItems(radiusList, oldValue, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // user checked an item
+                        newValue = which;
+                    }
+                });
 
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        int selRadOpt=0;
-                        switch (selRadOpt) {
-                            case R.id.km1:
 
+                        switch (newValue) {
+                            case 0:
+                                updateRadiusPreference(1);
                                 break;
-                            case R.id.km2:
-
+                            case 1:
+                                updateRadiusPreference(2);
                                 break;
-                            case R.id.km3:
-
+                            case 2:
+                                updateRadiusPreference(3);
                                 break;
-                            case R.id.km4:
-
+                            case 3:
+                                updateRadiusPreference(4);
                                 break;
-                            case R.id.km5:
-
+                            case 4:
+                                updateRadiusPreference(5);
                                 break;
-                            case R.id.km7:
-
+                            case 5:
+                                updateRadiusPreference(7);
                                 break;
-                            case R.id.km10:
-
+                            case 6:
+                                updateRadiusPreference(10);
                                 break;
+                            default:break;
                         }
                     }
                 });
@@ -125,7 +139,7 @@ public class VolunteerDashboardActivity extends AppCompatActivity implements Tab
                     }
                 });
 
-
+                AlertDialog rad = builder.create();
                 builder.show();
                 rRadioGroup = rad.findViewById(R.id.radiusButtonList);
 
@@ -158,6 +172,51 @@ public class VolunteerDashboardActivity extends AppCompatActivity implements Tab
         return true;
     }
 
+    private void updateRadiusPreference(int radiusPreference){
+        final ProgressDialog sProgressDialog = new ProgressDialog(VolunteerDashboardActivity.this);
+        sProgressDialog.setMessage("Just a moment...");
+        sProgressDialog.setTitle("Processing");
+        sProgressDialog.setCancelable(false);
+        sProgressDialog.show();
+        try {
+            if(radiusPreference < 1){
+                Toast.makeText(getApplicationContext(), "Invalid Radius Preference", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+
+            FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
+            String curUserPhone = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
+            mFirestore.collection("volunteers").document(curUserPhone).update("radiusPreference",radiusPreference)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            if(sProgressDialog.isShowing()){
+                                sProgressDialog.dismiss();
+                            }
+                            Toast.makeText(getApplicationContext(), "Your Preference Updated", Toast.LENGTH_SHORT).show();
+
+                        }
+                    })
+
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            if(sProgressDialog.isShowing()){
+                                sProgressDialog.dismiss();
+                            }
+                            Toast.makeText(getApplicationContext(), "Failed to Update Preference", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+        catch (NullPointerException e){
+            if(sProgressDialog.isShowing()){
+                sProgressDialog.dismiss();
+            }
+            Toast.makeText(getApplicationContext(), "Server Error, Try Again", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "initFireBase: getCurrentUser error", e);
+        }
+    }
 
     /*
   tab selected callbacks

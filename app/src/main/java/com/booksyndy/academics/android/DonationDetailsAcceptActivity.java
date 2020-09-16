@@ -230,7 +230,7 @@ public class DonationDetailsAcceptActivity extends AppCompatActivity {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
 
-                                                donationRef.update("acceptedByName", curUserName, "acceptedByPhone", curUserPhone, "status", 2)
+                                                donationRef.update("acceptedByName", curUserName, "acceptedByPhone", curUserPhone, "status", 2,"acceptedAt",new Date().getTime())
                                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                             @Override
                                                             public void onSuccess(Void aVoid) {
