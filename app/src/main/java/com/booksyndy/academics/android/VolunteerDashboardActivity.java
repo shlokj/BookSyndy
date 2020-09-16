@@ -8,6 +8,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,7 +37,10 @@ public class VolunteerDashboardActivity extends AppCompatActivity implements Tab
     private TabItem tab_unaccepted,tab_accepted;
     private com.booksyndy.academics.android.ui.volunteerDashboard.PageAdapter mPageAdapter;
     private RadioGroup rRadioGroup;
-    private int newValue;
+    private int newValue,oldValue;
+    private SharedPreferences userPref;
+    private SharedPreferences.Editor editor;
+
 
 
     @Override
@@ -56,7 +60,8 @@ public class VolunteerDashboardActivity extends AppCompatActivity implements Tab
         mViewPager.setAdapter(mPageAdapter);
         mTabLayout.addOnTabSelectedListener(this);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
-
+        userPref = this.getSharedPreferences(getString(R.string.UserPref),0);
+        oldValue = userPref.getInt(getString(R.string.p_volradiusPref),5);
 
     }
 
@@ -86,7 +91,6 @@ public class VolunteerDashboardActivity extends AppCompatActivity implements Tab
 //                builder.setView(R.layout.fragment_choose_radius);
             String[] radiusList = {"1 Km","2 Km","3 Km","4 Km","5 Km","7 Km","10 Km"};
 
-                int oldValue = 4; // cow
 
                 builder.setSingleChoiceItems(radiusList, oldValue, new DialogInterface.OnClickListener() {
                     @Override
@@ -99,6 +103,10 @@ public class VolunteerDashboardActivity extends AppCompatActivity implements Tab
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+
+                        if(newValue == oldValue){
+                            return;
+                        }
 
                         switch (newValue) {
                             case 0:
@@ -172,7 +180,7 @@ public class VolunteerDashboardActivity extends AppCompatActivity implements Tab
         return true;
     }
 
-    private void updateRadiusPreference(int radiusPreference){
+    private void updateRadiusPreference(final int radiusPreference){
         final ProgressDialog sProgressDialog = new ProgressDialog(VolunteerDashboardActivity.this);
         sProgressDialog.setMessage("Just a moment...");
         sProgressDialog.setTitle("Processing");
@@ -194,6 +202,10 @@ public class VolunteerDashboardActivity extends AppCompatActivity implements Tab
                             if(sProgressDialog.isShowing()){
                                 sProgressDialog.dismiss();
                             }
+                            oldValue = newValue;
+                            editor = userPref.edit();
+                            editor.putInt(getString(R.string.p_volradiusPref),newValue);
+                            editor.apply();
                             Toast.makeText(getApplicationContext(), "Your Preference Updated", Toast.LENGTH_SHORT).show();
 
                         }

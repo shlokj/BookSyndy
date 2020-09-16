@@ -153,6 +153,7 @@
     <string name="p_userstreet">USERSTREET</string>
     <string name="p_userpincode">USERPINCODE</string>
     <string name="p_uservolstatus">USERVOLSTATUS</string>
+    <string name="p_volradiusPref">VOLRADIUSPREF</string>
 
     <!--For walkthrough-->
     <string name="title_activity_welcome">Home Screen</string>
