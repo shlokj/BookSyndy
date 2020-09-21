@@ -87,8 +87,8 @@ public class AcceptedFragment extends Fragment implements  DonationAdapter.OnDon
             /* firestore */
             mFirestore = FirebaseFirestore.getInstance();
             String userId = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
-            mQuery = mFirestore.collection("donations").whereEqualTo("acceptedByPhone", userId);
-            mQuery = mQuery.whereEqualTo("status", 2);
+            mQuery = mFirestore.collection("donations").whereEqualTo("acceptedByPhone", userId).orderBy("status",Query.Direction.ASCENDING);
+//            mQuery = mQuery.whereEqualTo("status", 2);
             populateDonationAdapter();
 /*            if (mDonAdapter==null) {
                 Toast.makeText(this, "mDonAdapter null", Toast.LENGTH_SHORT).show();

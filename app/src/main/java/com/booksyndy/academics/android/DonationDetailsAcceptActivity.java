@@ -312,6 +312,9 @@ public class DonationDetailsAcceptActivity extends AppCompatActivity {
     //    calculate and show distance from volunteer to donation
     private void addDistance() {
         float res;
+        if (distanceView==null) {
+            distanceView = findViewById(R.id.donDist);
+        }
         if (user_lat != 0.0 && user_lng != 0.0 && don_lat != 0.0 && don_lng != 0.0) {
             Location locationA = new Location("point A");
             Location locationB = new Location("point B");
@@ -324,12 +327,12 @@ public class DonationDetailsAcceptActivity extends AppCompatActivity {
             if (res > 0.0f && res < 1000f) {
                 res = Math.round(res);
                 if (res > 0.0f)
-                    distanceView.append("  " + getString(R.string.divider_bullet) + " " + (int) res + " m");
+                    distanceView.append((int) res + " m");
             } else if (res > 1000f) {
                 res = Math.round(res / 100);
                 res = res / 10;
                 if (res > 0.0f)
-                    distanceView.append(" " + getString(R.string.divider_bullet) + " " + res + " km");
+                    distanceView.append(res + " km");
             }
         }
     }
@@ -541,6 +544,7 @@ public class DonationDetailsAcceptActivity extends AppCompatActivity {
 
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "Server error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 

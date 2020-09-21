@@ -85,11 +85,11 @@ public class VolunteerDashboardActivity extends AppCompatActivity implements Tab
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.setRadLoc:
-                // TODO: show dialog with different radii, neutral button will be to change the location. currently takes user to change address class (for testing)
+                // show dialog with different radii, neutral button will be to change the location
                 AlertDialog.Builder builder = new AlertDialog.Builder(VolunteerDashboardActivity.this);
-           builder.setTitle("You're comfortable collecting books within");
+                builder.setTitle("Change radius preference");
 //                builder.setView(R.layout.fragment_choose_radius);
-            String[] radiusList = {"1 Km","2 Km","3 Km","4 Km","5 Km","7 Km","10 Km"};
+                String[] radiusList = {"1 km","2 km","3 km","4 km","5 km","7 km","10 km"};
 
 
                 builder.setSingleChoiceItems(radiusList, oldValue, new DialogInterface.OnClickListener() {
@@ -206,7 +206,7 @@ public class VolunteerDashboardActivity extends AppCompatActivity implements Tab
                             editor = userPref.edit();
                             editor.putInt(getString(R.string.p_volradiusPref),newValue);
                             editor.apply();
-                            Toast.makeText(getApplicationContext(), "Your Preference Updated", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Radius preference updated", Toast.LENGTH_SHORT).show();
 
                         }
                     })
