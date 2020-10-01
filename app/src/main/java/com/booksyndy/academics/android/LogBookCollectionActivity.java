@@ -46,8 +46,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
-import io.opencensus.internal.StringUtils;
-
 public class LogBookCollectionActivity extends AppCompatActivity {
 
     // after a volunteer collects books, they use this to provide proof and confirmation that the books have been collected

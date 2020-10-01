@@ -100,7 +100,8 @@ public class SwitchModeFragment extends Fragment {
             builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-
+                    startActivity(getActivity().getIntent());
+                    getActivity().finish();
                 }
             });
 

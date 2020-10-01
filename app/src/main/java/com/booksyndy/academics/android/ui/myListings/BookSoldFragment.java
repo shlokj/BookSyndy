@@ -191,12 +191,12 @@ public class BookSoldFragment extends Fragment implements BookAdapter.OnBookSele
             }
         };
 
-        if (mAdapter==null) {
+/*        if (mAdapter==null) {
             Toast.makeText(getActivity(), "mAdapter null", Toast.LENGTH_SHORT).show();
         }
         else {
             Toast.makeText(getActivity(), "mAdapter not null", Toast.LENGTH_SHORT).show();
-        }
+        }*/
 
 
     }

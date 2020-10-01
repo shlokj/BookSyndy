@@ -639,6 +639,8 @@ public class HomeFragment extends Fragment implements HomeAdapter.OnBookSelected
             }
             else{
                 showSnackbar("Error getting your location");
+                bookListFull.clear();
+                bookListFull.addAll(bookList);
             }
 
         }
