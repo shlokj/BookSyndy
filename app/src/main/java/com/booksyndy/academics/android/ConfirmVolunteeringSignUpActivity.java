@@ -124,7 +124,10 @@ public class ConfirmVolunteeringSignUpActivity extends AppCompatActivity {
                     editor.putInt(getString(R.string.p_uservolstatus),1);
                     editor.apply();
                     if (ts1) {
-                        startActivity(new Intent(ConfirmVolunteeringSignUpActivity.this,VolunteerDashboardActivity.class));
+                        Intent homeAct = new Intent(ConfirmVolunteeringSignUpActivity.this,HomeActivity.class);
+                        homeAct.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        Toast.makeText(ConfirmVolunteeringSignUpActivity.this, "Your request has been submitted for review. The volunteer dashboard will be available if approved. Thanks for volunteering!", Toast.LENGTH_LONG).show();
+                        startActivity(homeAct);
                     }
                 }
             }).addOnFailureListener(new OnFailureListener() {

@@ -126,7 +126,7 @@ public class GetJoinPurposeActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-//                        saveToken(curPhone); // TODO: uncomment this line if required
+//                        saveToken(curPhone); // uncomment this line if required
                         startMain();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
